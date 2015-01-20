@@ -3,14 +3,15 @@ package org.tuxdevelop.spring.batch.lightmin.service;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.util.Collection;
 import java.util.Set;
 
 /**
- * Created by marbecker on 1/19/15.
+ * Created by Marcel Becker on 1/19/15.
  */
-public interface JobService {
+public interface JobService extends InitializingBean{
 
     /**
      *
@@ -47,4 +48,11 @@ public interface JobService {
      * @return
      */
     Collection<JobExecution> getJobExecutions(JobInstance jobInstance);
+
+    /**
+     *
+     * @param jobExecutionId
+     * @return
+     */
+	JobExecution getJobExecution(Long jobExecutionId);
 }

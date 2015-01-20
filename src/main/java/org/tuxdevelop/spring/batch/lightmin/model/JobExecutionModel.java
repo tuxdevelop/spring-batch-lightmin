@@ -8,7 +8,9 @@ import java.io.Serializable;
 @Data
 public class JobExecutionModel implements Serializable{
 
-    private Long jobInstanceId;
+	private static final long serialVersionUID = 1L;
+
+	private Long jobInstanceId;
     private JobExecution jobExecution;
 
 }
