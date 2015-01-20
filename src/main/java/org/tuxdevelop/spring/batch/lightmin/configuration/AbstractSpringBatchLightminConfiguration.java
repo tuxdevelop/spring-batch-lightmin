@@ -11,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.DuplicateJobException;
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
@@ -32,8 +30,7 @@ import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 import org.tuxdevelop.spring.batch.lightmin.util.CommonJobFactory;
 
 @Slf4j
-@Import(value = { JobController.class, StepController.class,
-		SpringBatchLightminWebConfiguration.class })
+@Import(value = { JobController.class, StepController.class, SpringBatchLightminWebConfiguration.class })
 public abstract class AbstractSpringBatchLightminConfiguration {
 
 	@Autowired(required = false)
@@ -52,18 +49,14 @@ public abstract class AbstractSpringBatchLightminConfiguration {
 		stringBuilder.append("Create DefaultSpringBatchLightminConfiguration ");
 		if (dataSource != null) {
 			if (tablePrefix != null) {
-				configuration = new DefaultSpringBatchLightminConfiguration(
-						dataSource, tablePrefix);
-				stringBuilder.append("with dataSource and tablePrefix: "
-						+ tablePrefix);
+				configuration = new DefaultSpringBatchLightminConfiguration(dataSource, tablePrefix);
+				stringBuilder.append("with dataSource and tablePrefix: " + tablePrefix);
 			} else {
-				configuration = new DefaultSpringBatchLightminConfiguration(
-						dataSource);
+				configuration = new DefaultSpringBatchLightminConfiguration(dataSource);
 				stringBuilder.append("with dataSource");
 			}
 		} else if (tablePrefix != null) {
-			configuration = new DefaultSpringBatchLightminConfiguration(
-					tablePrefix);
+			configuration = new DefaultSpringBatchLightminConfiguration(tablePrefix);
 			stringBuilder.append("with tablePrefix: " + tablePrefix);
 		} else {
 			configuration = new DefaultSpringBatchLightminConfiguration();
@@ -122,31 +115,17 @@ public abstract class AbstractSpringBatchLightminConfiguration {
 		return defaultSpringBatchLightminConfiguration().getJobRepository();
 	}
 
-	@Bean
-	public StepBuilderFactory stepBuilderFactory() {
-		return new StepBuilderFactory(jobRepository(),
-				defaultSpringBatchLightminConfiguration()
-						.getTransactionManager());
-	}
-
-	@Bean
-	public JobBuilderFactory jobBuilderFactory() {
-		return new JobBuilderFactory(jobRepository());
-	}
-
 	/*
 	 * Register jobs of the current application context
 	 */
 	@PostConstruct
 	public void registerJobs() throws DuplicateJobException, IOException {
-		final Map<String, Job> jobs = applicationContext
-				.getBeansOfType(Job.class);
+		final Map<String, Job> jobs = applicationContext.getBeansOfType(Job.class);
 		if (jobs != null) {
-			for (Map.Entry<String, Job> jobEntry : jobs.entrySet()) {
+			for (final Map.Entry<String, Job> jobEntry : jobs.entrySet()) {
 				final Job job = jobEntry.getValue();
 				final String jobName = job.getName();
-				final CommonJobFactory commonJobFactory = new CommonJobFactory(
-						job, jobName);
+				final CommonJobFactory commonJobFactory = new CommonJobFactory(job, jobName);
 				jobRegistry().register(commonJobFactory);
 			}
 		}
