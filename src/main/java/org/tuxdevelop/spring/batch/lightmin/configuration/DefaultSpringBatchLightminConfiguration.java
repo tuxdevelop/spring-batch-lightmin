@@ -144,8 +144,9 @@ public class DefaultSpringBatchLightminConfiguration implements BatchConfigurer 
 			} else {
 				createMapComponents();
 			}
-			this.jobOperator = createJobOperator();
+			this.jobLauncher = createJobLauncher();
 			this.jobRegistry = createJobRegistry();
+			this.jobOperator = createJobOperator();
 			this.jobService = createJobService();
 			this.stepService = createStepService();
 		} catch (Exception e) {
@@ -245,6 +246,7 @@ public class DefaultSpringBatchLightminConfiguration implements BatchConfigurer 
 		jobOperator.setJobExplorer(jobExplorer);
 		jobOperator.setJobLauncher(jobLauncher);
 		jobOperator.setJobRepository(jobRepository);
+		jobOperator.setJobRegistry(jobRegistry);
 		jobOperator.afterPropertiesSet();
 		return jobOperator;
 	}
@@ -265,5 +267,6 @@ public class DefaultSpringBatchLightminConfiguration implements BatchConfigurer 
 		stepService.afterPropertiesSet();
 		return stepService;
 	}
+
 
 }

@@ -3,7 +3,6 @@ package org.tuxdevelop.spring.batch.lightmin.service;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.repository.dao.StepExecutionDao;
-import org.springframework.beans.factory.InitializingBean;
 
 public class StepServiceBean implements StepService{
 

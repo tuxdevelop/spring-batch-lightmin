@@ -1,9 +1,15 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
+import java.io.IOException;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.configuration.DuplicateJobException;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -13,15 +19,24 @@ import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.batch.core.repository.dao.StepExecutionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.tuxdevelop.spring.batch.lightmin.controller.JobController;
+import org.tuxdevelop.spring.batch.lightmin.controller.StepController;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 import org.tuxdevelop.spring.batch.lightmin.service.StepService;
+import org.tuxdevelop.spring.batch.lightmin.util.CommonJobFactory;
 
 @Slf4j
+@Import(value = { JobController.class, StepController.class })
 public abstract class AbstractSpringBatchLightminConfiguration {
 
 	@Autowired(required = false)
 	private DataSource dataSource;
+
+	@Autowired
+	private ApplicationContext applicationContext;
 
 	@Value("${table.prefix}")
 	private String tablePrefix;
@@ -96,6 +111,24 @@ public abstract class AbstractSpringBatchLightminConfiguration {
 	@Bean
 	public JobExplorer jobExplorer() {
 		return defaultSpringBatchLightminConfiguration().getJobExplorer();
+	}
+
+	/*
+	 * Register jobs of the current application context
+	 */
+	@PostConstruct
+	public void registerJobs() throws DuplicateJobException, IOException {
+		final Map<String, Job> jobs = applicationContext
+				.getBeansOfType(Job.class);
+		if (jobs != null) {
+			for (Map.Entry<String, Job> jobEntry : jobs.entrySet()) {
+				final Job job = jobEntry.getValue();
+				final String jobName = job.getName();
+				final CommonJobFactory commonJobFactory = new CommonJobFactory(
+						job, jobName);
+				jobRegistry().register(commonJobFactory);
+			}
+		}
 	}
 
 }
