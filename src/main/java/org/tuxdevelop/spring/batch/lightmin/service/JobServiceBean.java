@@ -27,7 +27,7 @@ public class JobServiceBean implements JobService, InitializingBean {
         this.jobOperator = jobOperator;
         this.jobRegistry = jobRegistry;
         this.jobInstanceDao = jobInstanceDao;
-        this.jobInstanceDao = jobInstanceDao;
+        this.jobExecutionDao = jobExecutionDao;
     }
 
     @Override
@@ -57,12 +57,11 @@ public class JobServiceBean implements JobService, InitializingBean {
         return jobInstanceDao.getJobInstances(jobName, startIndex, pageSize);
     }
 
-    public Collection<JobExecution> getJobExecutions(final Collection<JobInstance> jobInstances) {
+    @Override
+    public Collection<JobExecution> getJobExecutions(final JobInstance jobInstance) {
         final Collection<JobExecution> jobExecutions = new LinkedList<JobExecution>();
-        for(final JobInstance jobInstance : jobInstances) {
-            final List<JobExecution> jobExecutionList = jobExecutionDao.findJobExecutions(jobInstance);
-            jobExecutions.addAll(jobExecutionList);
-        }
+        final List<JobExecution> jobExecutionList = jobExecutionDao.findJobExecutions(jobInstance);
+        jobExecutions.addAll(jobExecutionList);
         return jobExecutions;
     }
 

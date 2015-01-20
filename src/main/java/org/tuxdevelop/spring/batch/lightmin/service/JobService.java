@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 
 import java.util.Collection;
@@ -31,5 +32,19 @@ public interface JobService {
      */
     Job getJobByName(String jobName);
 
+    /**
+     *
+     * @param jobName
+     * @param startIndex
+     * @param pageSize
+     * @return
+     */
     Collection<JobInstance> getJobInstances(String jobName, int startIndex, int pageSize);
+
+    /**
+     *
+     * @param jobInstance
+     * @return
+     */
+    Collection<JobExecution> getJobExecutions(JobInstance jobInstance);
 }
