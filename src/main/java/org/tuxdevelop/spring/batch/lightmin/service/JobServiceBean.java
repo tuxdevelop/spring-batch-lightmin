@@ -23,16 +23,15 @@ import org.springframework.batch.core.repository.dao.JobInstanceDao;
  *
  */
 @Slf4j
-public class JobServiceBean implements JobService{
+public class JobServiceBean implements JobService {
 
-	private JobOperator jobOperator;
-	private JobRegistry jobRegistry;
-	private JobInstanceDao jobInstanceDao;
-	private JobExecutionDao jobExecutionDao;
+	private final JobOperator jobOperator;
+	private final JobRegistry jobRegistry;
+	private final JobInstanceDao jobInstanceDao;
+	private final JobExecutionDao jobExecutionDao;
 
-	public JobServiceBean(final JobOperator jobOperator,
-			final JobRegistry jobRegistry, final JobInstanceDao jobInstanceDao,
-			final JobExecutionDao jobExecutionDao) {
+	public JobServiceBean(final JobOperator jobOperator, final JobRegistry jobRegistry,
+			final JobInstanceDao jobInstanceDao, final JobExecutionDao jobExecutionDao) {
 		this.jobOperator = jobOperator;
 		this.jobRegistry = jobRegistry;
 		this.jobInstanceDao = jobInstanceDao;
@@ -41,8 +40,13 @@ public class JobServiceBean implements JobService{
 
 	@Override
 	public int getJobInstanceCount(final String jobName) {
-		// fix me
-		return 0;
+		int jobInstanceCount = 0;
+		try {
+			jobInstanceCount = jobInstanceDao.getJobInstanceCount(jobName);
+		} catch (final NoSuchJobException e) {
+			log.info(e.getMessage(), e);
+		}
+		return jobInstanceCount;
 	}
 
 	@Override
@@ -55,7 +59,7 @@ public class JobServiceBean implements JobService{
 		Job job;
 		try {
 			job = jobRegistry.getJob(jobName);
-		} catch (NoSuchJobException e) {
+		} catch (final NoSuchJobException e) {
 			log.info("Could not find job with jobName: " + jobName);
 			job = null;
 		}
@@ -63,17 +67,14 @@ public class JobServiceBean implements JobService{
 	}
 
 	@Override
-	public Collection<JobInstance> getJobInstances(final String jobName,
-			final int startIndex, final int pageSize) {
+	public Collection<JobInstance> getJobInstances(final String jobName, final int startIndex, final int pageSize) {
 		return jobInstanceDao.getJobInstances(jobName, startIndex, pageSize);
 	}
 
 	@Override
-	public Collection<JobExecution> getJobExecutions(
-			final JobInstance jobInstance) {
+	public Collection<JobExecution> getJobExecutions(final JobInstance jobInstance) {
 		final Collection<JobExecution> jobExecutions = new LinkedList<JobExecution>();
-		final List<JobExecution> jobExecutionList = jobExecutionDao
-				.findJobExecutions(jobInstance);
+		final List<JobExecution> jobExecutionList = jobExecutionDao.findJobExecutions(jobInstance);
 		jobExecutions.addAll(jobExecutionList);
 		return jobExecutions;
 	}
@@ -85,9 +86,9 @@ public class JobServiceBean implements JobService{
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		assert (jobOperator != null);
-		assert (jobRegistry != null);
-		assert (jobInstanceDao != null);
-		assert (jobExecutionDao != null);
+		assert jobOperator != null;
+		assert jobRegistry != null;
+		assert jobInstanceDao != null;
+		assert jobExecutionDao != null;
 	}
 }

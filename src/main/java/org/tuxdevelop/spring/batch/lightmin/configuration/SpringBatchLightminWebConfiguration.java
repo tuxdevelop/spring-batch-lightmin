@@ -12,14 +12,11 @@ public class SpringBatchLightminWebConfiguration {
 	public WebMvcConfigurerAdapter webMvcConfigurerAdapter() {
 		return new WebMvcConfigurerAdapter() {
 			@Override
-			public void addViewControllers(
-					final ViewControllerRegistry viewControllerRegistry) {
-				viewControllerRegistry.addViewController("/").setViewName(
-						"index");
-				viewControllerRegistry.addViewController("/index").setViewName(
-						"index");
-				viewControllerRegistry.addViewController("/jobs").setViewName(
-						"jobs");
+			public void addViewControllers(final ViewControllerRegistry viewControllerRegistry) {
+				viewControllerRegistry.addViewController("/").setViewName("index");
+				viewControllerRegistry.addViewController("/index").setViewName("index");
+				viewControllerRegistry.addViewController("/jobs").setViewName("jobs");
+				viewControllerRegistry.addViewController("/jobs/{jobName}").setViewName("job");
 			}
 		};
 	}

@@ -27,15 +27,14 @@
 			<table class="table table-bordered table-striped">
 				<thead>
 					<tr>
-						<td>Name</td>
-						<td>Instance Count</td>
+						<td>Job Instance Id</td>
+						<td>Job Executions Count</td>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="job : ${jobs}">
-						<td><a href="#" th:href="@{/jobs/{jobName}(jobName=${job.jobName})}"
-							th:text="${job.jobName}"> </a></td>
-						<td th:text="${job.instanceCount}" />
+					<tr th:each="jobInstance : ${jobInstances}">
+						<td th:text="${jobInstance.jobInstanceId}" />
+						<td th:text="${jobInstance.jobExecutions.size()}" />
 					</tr>
 				</tbody>
 			</table>

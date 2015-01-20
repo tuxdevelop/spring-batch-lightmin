@@ -42,48 +42,44 @@ public class JobController {
 	}
 
 	@RequestMapping(value = "/{jobName}", method = RequestMethod.GET)
-	public String getJob(
-			final ModelMap modelMap,
-			@PathVariable("jobName") final String jobName,
-			@RequestParam(value = "startIndex", defaultValue = "0") int startIndex,
-			@RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-		final JobInstanceModel jobInstanceModel = new JobInstanceModel();
+	public String getJob(final Model model, @PathVariable("jobName") final String jobName,
+			@RequestParam(value = "startIndex", defaultValue = "0") final int startIndex,
+			@RequestParam(value = "pageSize", defaultValue = "10") final int pageSize) {
+		final Collection<JobInstanceModel> jobInstanceModels = new LinkedList<JobInstanceModel>();
 		final Job job = jobService.getJobByName(jobName);
 		if (job != null) {
-			final Collection<JobInstance> jobInstances = jobService
-					.getJobInstances(jobName, startIndex, pageSize);
-			jobInstanceModel.setJobName(jobName);
-			enrichJobInstanceModel(jobInstanceModel, jobInstances);
+			final Collection<JobInstance> jobInstances = jobService.getJobInstances(jobName, startIndex, pageSize);
+			for (final JobInstance jobInstance : jobInstances) {
+				final JobInstanceModel jobInstanceModel = new JobInstanceModel();
+				jobInstanceModel.setJobName(jobName);
+				jobInstanceModel.setJobInstanceId(jobInstance.getInstanceId());
+				enrichJobInstanceModel(jobInstanceModel, jobInstance);
+				jobInstanceModels.add(jobInstanceModel);
+			}
 		}
-		return "/jobs/job";
+		model.addAttribute("jobInstances", jobInstanceModels);
+		return "job";
 	}
 
 	@RequestMapping(value = "/{jobExecutionId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JobExecutionModel getJobExecution(final ModelMap modelMap,
 			@PathVariable(value = "jobExecutionId") final Long jobExecutionId) {
-		final JobExecution jobExecution = jobService
-				.getJobExecution(jobExecutionId);
+		final JobExecution jobExecution = jobService.getJobExecution(jobExecutionId);
 		final JobExecutionModel jobExecutionModel = new JobExecutionModel();
 		jobExecutionModel.setJobExecution(jobExecution);
-		jobExecutionModel.setJobInstanceId(jobExecution.getJobInstance()
-				.getId());
+		jobExecutionModel.setJobInstanceId(jobExecution.getJobInstance().getId());
 		modelMap.put("jobExecution", jobExecutionModel);
 		return jobExecutionModel;
 	}
 
-	private void enrichJobInstanceModel(
-			final JobInstanceModel jobInstanceModel,
-			final Collection<JobInstance> jobInstances) {
+	private void enrichJobInstanceModel(final JobInstanceModel jobInstanceModel, final JobInstance jobInstance) {
 		final Collection<JobExecutionModel> jobExecutionModels = new LinkedList<JobExecutionModel>();
-		for (final JobInstance jobInstance : jobInstances) {
-			final Collection<JobExecution> jobExecutions = jobService
-					.getJobExecutions(jobInstance);
-			for (final JobExecution jobExecution : jobExecutions) {
-				final JobExecutionModel jobExecutionModel = new JobExecutionModel();
-				jobExecutionModel.setJobInstanceId(jobInstance.getInstanceId());
-				jobExecutionModel.setJobExecution(jobExecution);
-				jobExecutionModels.add(jobExecutionModel);
-			}
+		final Collection<JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance);
+		for (final JobExecution jobExecution : jobExecutions) {
+			final JobExecutionModel jobExecutionModel = new JobExecutionModel();
+			jobExecutionModel.setJobInstanceId(jobInstance.getInstanceId());
+			jobExecutionModel.setJobExecution(jobExecution);
+			jobExecutionModels.add(jobExecutionModel);
 		}
 		jobInstanceModel.setJobExecutions(jobExecutionModels);
 	}
