@@ -11,9 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.DuplicateJobException;
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.dao.JobExecutionDao;
 import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.batch.core.repository.dao.StepExecutionDao;
@@ -29,7 +32,8 @@ import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 import org.tuxdevelop.spring.batch.lightmin.util.CommonJobFactory;
 
 @Slf4j
-@Import(value = { JobController.class, StepController.class })
+@Import(value = { JobController.class, StepController.class,
+		SpringBatchLightminWebConfiguration.class })
 public abstract class AbstractSpringBatchLightminConfiguration {
 
 	@Autowired(required = false)
@@ -111,6 +115,23 @@ public abstract class AbstractSpringBatchLightminConfiguration {
 	@Bean
 	public JobExplorer jobExplorer() {
 		return defaultSpringBatchLightminConfiguration().getJobExplorer();
+	}
+
+	@Bean
+	public JobRepository jobRepository() {
+		return defaultSpringBatchLightminConfiguration().getJobRepository();
+	}
+
+	@Bean
+	public StepBuilderFactory stepBuilderFactory() {
+		return new StepBuilderFactory(jobRepository(),
+				defaultSpringBatchLightminConfiguration()
+						.getTransactionManager());
+	}
+
+	@Bean
+	public JobBuilderFactory jobBuilderFactory() {
+		return new JobBuilderFactory(jobRepository());
 	}
 
 	/*
