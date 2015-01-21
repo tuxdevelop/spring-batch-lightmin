@@ -3,14 +3,16 @@ package org.tuxdevelop.spring.batch.lightmin.controller;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.StepExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,14 +20,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.tuxdevelop.spring.batch.lightmin.model.JobExecutionModel;
 import org.tuxdevelop.spring.batch.lightmin.model.JobInfoModel;
 import org.tuxdevelop.spring.batch.lightmin.model.JobInstanceModel;
+import org.tuxdevelop.spring.batch.lightmin.model.StepExecutionModel;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
+import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 
+@Slf4j
 @Controller
 @RequestMapping(value = "/jobs")
 public class JobController {
 
 	@Autowired
 	private JobService jobService;
+
+	@Autowired
+	private StepService stepService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public void getJobs(final Model model) {
@@ -82,10 +90,27 @@ public class JobController {
 			@PathVariable(value = "jobExecutionId") final Long jobExecutionId) {
 		final JobExecution jobExecution = jobService.getJobExecution(jobExecutionId);
 		final JobExecutionModel jobExecutionModel = new JobExecutionModel();
+		jobService.attachJobInstance(jobExecution);
 		jobExecutionModel.setJobExecution(jobExecution);
-		jobExecutionModel.setJobInstanceId(jobExecution.getJobInstance().getId());
+		jobExecutionModel.setJobInstanceId(jobExecution.getJobInstance().getInstanceId());
+		jobExecutionModel.setJobName(jobExecution.getJobInstance().getJobName());
+		stepService.attachStepExecutions(jobExecution);
+		enrichJobExecution(jobExecutionModel, jobExecution.getStepExecutions());
 		modelMap.put("jobExecution", jobExecutionModel);
 		return "jobExecution";
+	}
+
+	private void
+			enrichJobExecution(final JobExecutionModel jobExecutionModel, Collection<StepExecution> stepExecutions) {
+		log.info(String.valueOf(stepExecutions.size()));
+		final Collection<StepExecutionModel> stepExecutionModels = new LinkedList<StepExecutionModel>();
+		for (final StepExecution stepExecution : stepExecutions) {
+			final StepExecutionModel stepExecutionModel = new StepExecutionModel();
+			stepExecutionModel.setStepExecution(stepExecution);
+			stepExecutionModel.setJobInstanceId(jobExecutionModel.getJobInstanceId());
+			stepExecutionModels.add(stepExecutionModel);
+		}
+		jobExecutionModel.setStepExecutions(stepExecutionModels);
 	}
 
 	private void enrichJobInstanceModel(final JobInstanceModel jobInstanceModel, final JobInstance jobInstance) {

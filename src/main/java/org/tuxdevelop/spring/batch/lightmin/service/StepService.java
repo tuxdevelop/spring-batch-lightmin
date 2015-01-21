@@ -15,4 +15,10 @@ public interface StepService extends InitializingBean {
 	StepExecution getStepExecution(JobExecution jobExecution,
 			Long stepExecutionId);
 
+	/**
+	 *
+	 * @param jobExecution
+	 */
+	void attachStepExecutions(JobExecution jobExecution);
+
 }

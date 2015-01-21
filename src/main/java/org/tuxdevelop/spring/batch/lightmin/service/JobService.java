@@ -62,4 +62,10 @@ public interface JobService extends InitializingBean{
 	 * @return
 	 */
 	JobInstance getJobInstance(Long jobInstanceId);
+
+	/**
+	 *
+	 * @param jobExecution
+	 */
+	void attachJobInstance(JobExecution jobExecution);
 }

@@ -30,6 +30,7 @@
 						<td>Job Instance Id</td>
 						<td>Job Execution Id</td>
 						<td>Job Name</td>
+						<td>Creation Time</td>
 						<td>Launch Time</td>
 						<td>Duration</td>
 						<td>End Time</td>
@@ -40,8 +41,11 @@
 				<tbody>
 					<tr th:each="jobExecution : ${jobExecutions}">
 						<td th:text="${jobExecution.jobInstanceId}" />
-						<td th:text="${jobExecution.jobExecution.jobId}" />
+						<td><a href="#"
+							th:href="@{/jobs/execution/{jobExecutionId}(jobExecutionId=${jobExecution.jobExecution.jobId})}"
+							th:text="${jobExecution.jobExecution.jobId}"></a></td>
 						<td th:text="${jobExecution.jobName}" />
+						<td th:text="${jobExecution.jobExecution.createTime}" />
 						<td th:text="${jobExecution.jobExecution.startTime}" />
 						<td th:text="${jobExecution.duration}" />
 						<td th:text="${jobExecution.jobExecution.endTime}" />

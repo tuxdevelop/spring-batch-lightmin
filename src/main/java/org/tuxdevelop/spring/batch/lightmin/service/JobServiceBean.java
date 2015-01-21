@@ -85,8 +85,14 @@ public class JobServiceBean implements JobService {
 	}
 
 	@Override
-	public JobInstance getJobInstance(final Long jobInstanceId){
+	public JobInstance getJobInstance(final Long jobInstanceId) {
 		return jobInstanceDao.getJobInstance(jobInstanceId);
+	}
+
+	@Override
+	public void attachJobInstance(final JobExecution jobExecution) {
+		final JobInstance jobInstance = jobInstanceDao.getJobInstance(jobExecution);
+		jobExecution.setJobInstance(jobInstance);
 	}
 
 	@Override

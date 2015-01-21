@@ -24,20 +24,88 @@
 	<div th:include="fragments/header :: header"></div>
 	<div class="container">
 		<div class="hero-unit">
-			<table class="table table-bordered table-striped">
-				<thead>
-					<tr>
-						<td>Job Instance Id</td>
-						<td>Job Executions Count</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="jobInstance : ${jobInstances}">
-						<td th:text="${jobInstance.jobInstanceId}" />
-						<td th:text="${jobInstance.jobExecutions.size()}" />
-					</tr>
-				</tbody>
-			</table>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Job Execution Summary</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<td>Property</td>
+								<td>Value</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Job Instance Id</td>
+								<td th:text="${jobExecution.jobInstanceId}" />
+							</tr>
+							<tr>
+								<td>Job Execution Id</td>
+								<td th:text="${jobExecution.jobExecution.id}"/>
+							</tr>
+							<tr>
+								<td>Job Name</td>
+								<td th:text="${jobExecution.jobName}" />
+							</tr>
+							<tr>
+								<td>Launch Time</td>
+								<td th:text="${jobExecution.jobExecution.startTime}" />
+							</tr>
+							<tr>
+								<td>Duration</td>
+								<td th:text="${jobExecution.duration}" />
+							</tr>
+							<tr>
+								<td>End Time</td>
+								<td th:text="${jobExecution.jobExecution.endTime}" />
+							</tr>
+							<tr>
+								<td>Status</td>
+								<td th:text="${jobExecution.jobExecution.status}" />
+							</tr>
+							<tr>
+								<td>Exit Code</td>
+								<td th:text="${jobExecution.jobExecution.exitStatus.exitCode}" />
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="panel-footer">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Step Executions
+						</div>
+						<div class="panel-body">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<td>Step Name</td>
+										<td>Read</td>
+										<td>Writes</td>
+										<td>Commits</td>
+										<td>Rollbacks</td>
+										<td>Duration</td>
+										<td>Step Status</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="stepExecution : ${jobExecution.stepExecutions}">
+										<td th:text="${stepExecution.stepExecution.stepName}"/>
+										<td th:text="${stepExecution.stepExecution.readCount}"/>
+										<td th:text="${stepExecution.stepExecution.writeCount}"/>
+										<td th:text="${stepExecution.stepExecution.commitCount}"/>
+										<td th:text="${stepExecution.stepExecution.rollbackCount}"/>
+										<td th:text="${stepExecution.duration}"/>
+										<td th:text="${stepExecution.stepExecution.exitStatus.exitCode}"/>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>

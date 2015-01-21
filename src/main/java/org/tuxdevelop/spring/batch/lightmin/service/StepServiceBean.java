@@ -18,6 +18,11 @@ public class StepServiceBean implements StepService{
 	}
 
 	@Override
+	public void attachStepExecutions(final JobExecution jobExecution){
+		stepExecutionDao.addStepExecutions(jobExecution);
+	}
+
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		assert(stepExecutionDao != null);
 	}
