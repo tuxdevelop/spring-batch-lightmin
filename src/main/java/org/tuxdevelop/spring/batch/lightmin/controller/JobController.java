@@ -7,10 +7,10 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,9 +42,9 @@ public class JobController {
 	}
 
 	@RequestMapping(value = "/{jobName}", method = RequestMethod.GET)
-	public String getJob(final Model model, @PathVariable("jobName") final String jobName,
-			@RequestParam(value = "startIndex", defaultValue = "0") final int startIndex,
-			@RequestParam(value = "pageSize", defaultValue = "10") final int pageSize) {
+	public String getJob(final Model model, @PathVariable("jobName") final String jobName, @RequestParam(
+			value = "startIndex", defaultValue = "0") final int startIndex, @RequestParam(value = "pageSize",
+			defaultValue = "10") final int pageSize) {
 		final Collection<JobInstanceModel> jobInstanceModels = new LinkedList<JobInstanceModel>();
 		final Job job = jobService.getJobByName(jobName);
 		if (job != null) {
@@ -61,15 +61,35 @@ public class JobController {
 		return "job";
 	}
 
-	@RequestMapping(value = "/{jobExecutionId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JobExecutionModel getJobExecution(final ModelMap modelMap,
+	@RequestMapping(value = "/executions/{jobInstanceId}", method = RequestMethod.GET)
+	public String getJobExecutions(final Model model, @PathVariable("jobInstanceId") final Long jobInstanceId,
+			@ModelAttribute("jobInstances") final Collection<JobInstanceModel> jobInstances) {
+		JobInstanceModel currentJobInstanceModel = null;
+		for (final JobInstanceModel jobInstanceModel : jobInstances) {
+			final Long currentJobInstanceId = jobInstanceModel.getJobInstanceId();
+			if (currentJobInstanceId != null) {
+				if (currentJobInstanceId.equals(jobInstanceId)) {
+					currentJobInstanceModel = jobInstanceModel;
+					break;
+				}
+			}
+		}
+		if (currentJobInstanceModel != null) {
+			final Collection<JobExecutionModel> jobExecutionModels = currentJobInstanceModel.getJobExecutions();
+			model.addAttribute("jobExecutions", jobExecutionModels);
+		}
+		return "executions";
+	}
+
+	@RequestMapping(value = "/execution/{jobExecutionId}", method = RequestMethod.GET)
+	public String getJobExecution(final ModelMap modelMap,
 			@PathVariable(value = "jobExecutionId") final Long jobExecutionId) {
 		final JobExecution jobExecution = jobService.getJobExecution(jobExecutionId);
 		final JobExecutionModel jobExecutionModel = new JobExecutionModel();
 		jobExecutionModel.setJobExecution(jobExecution);
 		jobExecutionModel.setJobInstanceId(jobExecution.getJobInstance().getId());
 		modelMap.put("jobExecution", jobExecutionModel);
-		return jobExecutionModel;
+		return "execution";
 	}
 
 	private void enrichJobInstanceModel(final JobInstanceModel jobInstanceModel, final JobInstance jobInstance) {
