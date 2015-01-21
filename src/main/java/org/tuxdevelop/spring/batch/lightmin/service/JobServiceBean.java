@@ -85,6 +85,11 @@ public class JobServiceBean implements JobService {
 	}
 
 	@Override
+	public JobInstance getJobInstance(final Long jobInstanceId){
+		return jobInstanceDao.getJobInstance(jobInstanceId);
+	}
+
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		assert jobOperator != null;
 		assert jobRegistry != null;

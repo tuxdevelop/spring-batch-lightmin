@@ -28,14 +28,25 @@
 				<thead>
 					<tr>
 						<td>Job Instance Id</td>
-						<td>Job Executions Count</td>
+						<td>Job Execution Id</td>
+						<td>Job Name</td>
+						<td>Launch Time</td>
+						<td>Duration</td>
+						<td>End Time</td>
+						<td>Status</td>
+						<td>Exit Code</td>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="jobInstance : ${jobInstances}">
-						<td><a href="#" th:href="@{/jobs/executions/{jobInstanceId}(jobInstanceId=${jobInstance.jobInstanceId})}"
-							th:text="${jobInstance.jobInstanceId}"> </a></td>
-						<td th:text="${jobInstance.jobExecutions.size()}" />
+					<tr th:each="jobExecution : ${jobExecutions}">
+						<td th:text="${jobExecution.jobInstanceId}" />
+						<td th:text="${jobExecution.jobExecution.jobId}" />
+						<td th:text="${jobExecution.jobName}" />
+						<td th:text="${jobExecution.jobExecution.startTime}" />
+						<td th:text="${jobExecution.duration}" />
+						<td th:text="${jobExecution.jobExecution.endTime}" />
+						<td th:text="${jobExecution.jobExecution.status}" />
+						<td th:text="${jobExecution.jobExecution.exitStatus.exitCode}" />
 					</tr>
 				</tbody>
 			</table>

@@ -29,7 +29,7 @@ public interface JobService extends InitializingBean{
     /**
      *
      * @param jobName
-     * @return
+     * @return the job or null
      */
     Job getJobByName(String jobName);
 
@@ -55,4 +55,11 @@ public interface JobService extends InitializingBean{
      * @return
      */
 	JobExecution getJobExecution(Long jobExecutionId);
+
+	/**
+	 *
+	 * @param jobInstanceId
+	 * @return
+	 */
+	JobInstance getJobInstance(Long jobInstanceId);
 }

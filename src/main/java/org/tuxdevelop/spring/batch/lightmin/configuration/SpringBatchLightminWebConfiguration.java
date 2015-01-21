@@ -17,6 +17,7 @@ public class SpringBatchLightminWebConfiguration {
 				viewControllerRegistry.addViewController("/index").setViewName("index");
 				viewControllerRegistry.addViewController("/jobs").setViewName("jobs");
 				viewControllerRegistry.addViewController("/jobs/{jobName}").setViewName("job");
+				viewControllerRegistry.addViewController("/jobs/executions/{jobInstanceId}").setViewName("jobExecutions");
 			}
 		};
 	}

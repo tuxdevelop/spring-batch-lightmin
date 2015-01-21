@@ -20,7 +20,7 @@ public class StepController {
 	@Autowired
 	private StepService stepService;
 
-	@RequestMapping(value = "/{stepExecutionId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/execution/{stepExecutionId}", method = RequestMethod.GET)
 	public String getStepExecution(final ModelMap modelMap,
 			@ModelAttribute("jobExecution") final JobExecutionModel jobExecutionModel,
 			@PathVariable("stepExecutionId") final Long stepExecutionId) {

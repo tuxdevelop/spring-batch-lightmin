@@ -62,23 +62,19 @@ public class JobController {
 	}
 
 	@RequestMapping(value = "/executions/{jobInstanceId}", method = RequestMethod.GET)
-	public String getJobExecutions(final Model model, @PathVariable("jobInstanceId") final Long jobInstanceId,
-			@ModelAttribute("jobInstances") final Collection<JobInstanceModel> jobInstances) {
-		JobInstanceModel currentJobInstanceModel = null;
-		for (final JobInstanceModel jobInstanceModel : jobInstances) {
-			final Long currentJobInstanceId = jobInstanceModel.getJobInstanceId();
-			if (currentJobInstanceId != null) {
-				if (currentJobInstanceId.equals(jobInstanceId)) {
-					currentJobInstanceModel = jobInstanceModel;
-					break;
-				}
-			}
+	public String getJobExecutions(final Model model, @PathVariable("jobInstanceId") final Long jobInstanceId) {
+		final JobInstance jobInstance = jobService.getJobInstance(jobInstanceId);
+		Collection<JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance);
+		final Collection<JobExecutionModel> jobExecutionModels = new LinkedList<JobExecutionModel>();
+		for (final JobExecution jobExecution : jobExecutions) {
+			final JobExecutionModel jobExecutionModel = new JobExecutionModel();
+			jobExecutionModel.setJobExecution(jobExecution);
+			jobExecutionModel.setJobInstanceId(jobInstanceId);
+			jobExecutionModel.setJobName(jobInstance.getJobName());
+			jobExecutionModels.add(jobExecutionModel);
 		}
-		if (currentJobInstanceModel != null) {
-			final Collection<JobExecutionModel> jobExecutionModels = currentJobInstanceModel.getJobExecutions();
-			model.addAttribute("jobExecutions", jobExecutionModels);
-		}
-		return "executions";
+		model.addAttribute("jobExecutions", jobExecutionModels);
+		return "jobExecutions";
 	}
 
 	@RequestMapping(value = "/execution/{jobExecutionId}", method = RequestMethod.GET)
@@ -89,7 +85,7 @@ public class JobController {
 		jobExecutionModel.setJobExecution(jobExecution);
 		jobExecutionModel.setJobInstanceId(jobExecution.getJobInstance().getId());
 		modelMap.put("jobExecution", jobExecutionModel);
-		return "execution";
+		return "jobExecution";
 	}
 
 	private void enrichJobInstanceModel(final JobInstanceModel jobInstanceModel, final JobInstance jobInstance) {
@@ -99,6 +95,7 @@ public class JobController {
 			final JobExecutionModel jobExecutionModel = new JobExecutionModel();
 			jobExecutionModel.setJobInstanceId(jobInstance.getInstanceId());
 			jobExecutionModel.setJobExecution(jobExecution);
+			jobExecutionModel.setJobName(jobInstanceModel.getJobName());
 			jobExecutionModels.add(jobExecutionModel);
 		}
 		jobInstanceModel.setJobExecutions(jobExecutionModels);
