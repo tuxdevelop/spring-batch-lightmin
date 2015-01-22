@@ -43,23 +43,23 @@ public abstract class AbstractSpringBatchLightminConfiguration {
 	private String tablePrefix;
 
 	@Bean
-	public DefaultSpringBatchLightminConfiguration defaultSpringBatchLightminConfiguration() {
-		final DefaultSpringBatchLightminConfiguration configuration;
+	public DefaultSpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator() {
+		final DefaultSpringBatchLightminConfigurator configuration;
 		final StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("Create DefaultSpringBatchLightminConfiguration ");
 		if (dataSource != null) {
 			if (tablePrefix != null) {
-				configuration = new DefaultSpringBatchLightminConfiguration(dataSource, tablePrefix);
+				configuration = new DefaultSpringBatchLightminConfigurator(dataSource, tablePrefix);
 				stringBuilder.append("with dataSource and tablePrefix: " + tablePrefix);
 			} else {
-				configuration = new DefaultSpringBatchLightminConfiguration(dataSource);
+				configuration = new DefaultSpringBatchLightminConfigurator(dataSource);
 				stringBuilder.append("with dataSource");
 			}
 		} else if (tablePrefix != null) {
-			configuration = new DefaultSpringBatchLightminConfiguration(tablePrefix);
+			configuration = new DefaultSpringBatchLightminConfigurator(tablePrefix);
 			stringBuilder.append("with tablePrefix: " + tablePrefix);
 		} else {
-			configuration = new DefaultSpringBatchLightminConfiguration();
+			configuration = new DefaultSpringBatchLightminConfigurator();
 		}
 		log.info(stringBuilder.toString());
 		return configuration;
@@ -67,52 +67,52 @@ public abstract class AbstractSpringBatchLightminConfiguration {
 
 	@Bean
 	public JobService jobService() {
-		return defaultSpringBatchLightminConfiguration().getJobService();
+		return defaultSpringBatchLightminConfigurator().getJobService();
 	}
 
 	@Bean
 	public StepService stepService() {
-		return defaultSpringBatchLightminConfiguration().getStepService();
+		return defaultSpringBatchLightminConfigurator().getStepService();
 	}
 
 	@Bean
 	public JobExecutionDao jobExecutionDao() {
-		return defaultSpringBatchLightminConfiguration().getJobExecutionDao();
+		return defaultSpringBatchLightminConfigurator().getJobExecutionDao();
 	}
 
 	@Bean
 	public JobInstanceDao jobInstanceDao() {
-		return defaultSpringBatchLightminConfiguration().getJobInstanceDao();
+		return defaultSpringBatchLightminConfigurator().getJobInstanceDao();
 	}
 
 	@Bean
 	public StepExecutionDao stepExecutionDao() {
-		return defaultSpringBatchLightminConfiguration().getStepExecutionDao();
+		return defaultSpringBatchLightminConfigurator().getStepExecutionDao();
 	}
 
 	@Bean
 	public JobOperator jobOperator() {
-		return defaultSpringBatchLightminConfiguration().getJobOperator();
+		return defaultSpringBatchLightminConfigurator().getJobOperator();
 	}
 
 	@Bean
 	public JobLauncher jobLauncher() {
-		return defaultSpringBatchLightminConfiguration().getJobLauncher();
+		return defaultSpringBatchLightminConfigurator().getJobLauncher();
 	}
 
 	@Bean
 	public JobRegistry jobRegistry() {
-		return defaultSpringBatchLightminConfiguration().getJobRegistry();
+		return defaultSpringBatchLightminConfigurator().getJobRegistry();
 	}
 
 	@Bean
 	public JobExplorer jobExplorer() {
-		return defaultSpringBatchLightminConfiguration().getJobExplorer();
+		return defaultSpringBatchLightminConfigurator().getJobExplorer();
 	}
 
 	@Bean
 	public JobRepository jobRepository() {
-		return defaultSpringBatchLightminConfiguration().getJobRepository();
+		return defaultSpringBatchLightminConfigurator().getJobRepository();
 	}
 
 	/*

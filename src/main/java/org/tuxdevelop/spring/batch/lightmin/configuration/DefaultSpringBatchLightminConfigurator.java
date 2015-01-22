@@ -41,7 +41,7 @@ import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 import org.tuxdevelop.spring.batch.lightmin.service.StepServiceBean;
 
 @Slf4j
-public class DefaultSpringBatchLightminConfiguration implements BatchConfigurer {
+public class DefaultSpringBatchLightminConfigurator implements BatchConfigurer {
 
 	private JobService jobService;
 	private StepService stepService;
@@ -65,18 +65,18 @@ public class DefaultSpringBatchLightminConfiguration implements BatchConfigurer 
 		}
 	};
 
-	public DefaultSpringBatchLightminConfiguration() {
+	public DefaultSpringBatchLightminConfigurator() {
 	}
 
-	public DefaultSpringBatchLightminConfiguration(final String tablePrefix) {
+	public DefaultSpringBatchLightminConfigurator(final String tablePrefix) {
 		this.tablePrefix = tablePrefix;
 	}
 
-	public DefaultSpringBatchLightminConfiguration(final DataSource dataSource) {
+	public DefaultSpringBatchLightminConfigurator(final DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 
-	public DefaultSpringBatchLightminConfiguration(final DataSource dataSource,
+	public DefaultSpringBatchLightminConfigurator(final DataSource dataSource,
 			final String tablePrefix) {
 		setDataSource(dataSource);
 		this.tablePrefix = tablePrefix;
