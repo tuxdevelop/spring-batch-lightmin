@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.tuxdevelop.spring.batch.lightmin.model.JobExecutionModel;
 import org.tuxdevelop.spring.batch.lightmin.model.JobInfoModel;
 import org.tuxdevelop.spring.batch.lightmin.model.JobInstanceModel;
+import org.tuxdevelop.spring.batch.lightmin.model.PageModel;
 import org.tuxdevelop.spring.batch.lightmin.model.StepExecutionModel;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 import org.tuxdevelop.spring.batch.lightmin.service.StepService;
@@ -53,6 +54,9 @@ public class JobController {
 	public String getJob(final Model model, @PathVariable("jobName") final String jobName, @RequestParam(
 			value = "startIndex", defaultValue = "0") final int startIndex, @RequestParam(value = "pageSize",
 			defaultValue = "10") final int pageSize) {
+		final PageModel pageModel = new PageModel();
+		pageModel.setStartIndex(startIndex);
+		pageModel.setPageSize(pageSize);
 		final Collection<JobInstanceModel> jobInstanceModels = new LinkedList<JobInstanceModel>();
 		final Job job = jobService.getJobByName(jobName);
 		if (job != null) {
@@ -65,6 +69,8 @@ public class JobController {
 				jobInstanceModels.add(jobInstanceModel);
 			}
 		}
+		model.addAttribute("jobName",jobName);
+		model.addAttribute("jobPage",pageModel);
 		model.addAttribute("jobInstances", jobInstanceModels);
 		return "job";
 	}
