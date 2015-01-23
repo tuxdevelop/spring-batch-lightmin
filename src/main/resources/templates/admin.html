@@ -23,39 +23,31 @@
 <body>
 	<div th:include="fragments/header :: header"></div>
 	<div class="container">
+		<div class="navbar-collapse collapse">
+			<ul class="nav nav-pills">
+				<li><a href="#" th:href="@{/jobs}">Schedule Configuration</a></li>
+			</ul>
+		</div>
 		<div class="hero-unit">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3 th:text="${jobName}" class="panel-title">Job Execution Summary</h3>
+					<h3 class="panel-title">Edit Job Configurations</h3>
 				</div>
 				<div class="panel-body">
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<td>Job Instance Id</td>
-								<td>Job Execution Id</td>
-								<td>Job Name</td>
-								<td>Creation Time</td>
-								<td>Launch Time</td>
-								<td>Duration</td>
-								<td>End Time</td>
-								<td>Status</td>
-								<td>Exit Code</td>
+								<td>Name</td>
+								<td></td>
 							</tr>
 						</thead>
 						<tbody>
-							<tr th:each="jobExecution : ${jobExecutions}">
-								<td th:text="${jobExecution.jobInstanceId}" />
-								<td><a href="#"
-									th:href="@{/jobs/execution/{jobExecutionId}(jobExecutionId=${jobExecution.jobExecution.jobId})}"
-									th:text="${jobExecution.jobExecution.jobId}"></a></td>
-								<td th:text="${jobExecution.jobName}" />
-								<td th:text="${jobExecution.jobExecution.createTime}" />
-								<td th:text="${jobExecution.jobExecution.startTime}" />
-								<td th:text="${jobExecution.duration}" />
-								<td th:text="${jobExecution.jobExecution.endTime}" />
-								<td th:text="${jobExecution.jobExecution.status}" />
-								<td th:text="${jobExecution.jobExecution.exitStatus.exitCode}" />
+							<tr th:each="jobName : ${jobNames}">
+								<td th:text="${jobName}"/>
+								<td><a href="#">
+										<button ttype="button"
+											class="btn btn-primary btn-xs">edit</button>
+								</a></td>
 							</tr>
 						</tbody>
 					</table>

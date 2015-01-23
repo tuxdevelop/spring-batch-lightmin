@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.tuxdevelop.spring.batch.lightmin.controller.AdminController;
 import org.tuxdevelop.spring.batch.lightmin.controller.JobController;
 import org.tuxdevelop.spring.batch.lightmin.controller.StepController;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
@@ -30,7 +31,8 @@ import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 import org.tuxdevelop.spring.batch.lightmin.util.CommonJobFactory;
 
 @Slf4j
-@Import(value = { JobController.class, StepController.class, SpringBatchLightminWebConfiguration.class })
+@Import(value = { JobController.class, StepController.class, AdminController.class,
+		SpringBatchLightminWebConfiguration.class })
 public abstract class AbstractSpringBatchLightminConfiguration {
 
 	@Autowired(required = false)

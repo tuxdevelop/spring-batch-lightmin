@@ -69,8 +69,8 @@ public class JobController {
 				jobInstanceModels.add(jobInstanceModel);
 			}
 		}
-		model.addAttribute("jobName",jobName);
-		model.addAttribute("jobPage",pageModel);
+		model.addAttribute("jobName", jobName);
+		model.addAttribute("jobPage", pageModel);
 		model.addAttribute("jobInstances", jobInstanceModels);
 		return "job";
 	}
@@ -87,6 +87,7 @@ public class JobController {
 			jobExecutionModel.setJobName(jobInstance.getJobName());
 			jobExecutionModels.add(jobExecutionModel);
 		}
+		model.addAttribute("jobName", jobInstance.getJobName());
 		model.addAttribute("jobExecutions", jobExecutionModels);
 		return "jobExecutions";
 	}
