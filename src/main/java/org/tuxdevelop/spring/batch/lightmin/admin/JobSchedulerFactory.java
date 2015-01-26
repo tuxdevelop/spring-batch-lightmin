@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.admin;
 
 
-public class JobScheduler {
+public class JobSchedulerFactory {
 
 
 }
