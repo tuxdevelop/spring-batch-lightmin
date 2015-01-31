@@ -1,5 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +10,9 @@ import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParametersIncrementer;
 import org.springframework.batch.core.JobParametersValidator;
 import org.springframework.batch.core.StepExecution;
+import org.tuxdevelop.spring.batch.lightmin.admin.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.JobSchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.JobSchedulerType;
 
 public class TestHelper {
 
@@ -35,7 +39,7 @@ public class TestHelper {
 			}
 
 			@Override
-			public void execute(JobExecution execution) {
+			public void execute(final JobExecution execution) {
 			}
 		};
 	}
@@ -70,4 +74,21 @@ public class TestHelper {
 		return new StepExecution(stepName, jobExecution);
 	}
 
+	public static JobConfiguration createJobConfiguration(final JobSchedulerConfiguration jobSchedulerConfiguration) {
+		final JobConfiguration jobConfiguration = new JobConfiguration();
+		jobConfiguration.setAddDateParameter(Boolean.TRUE);
+		jobConfiguration.setJobParameters(new HashMap<String, Object>());
+		jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
+		return jobConfiguration;
+	}
+
+	public static JobSchedulerConfiguration createJobSchedulerConfiguration(final String cronExpression,
+			final Long fixedDelay, final Long initialDelay, final JobSchedulerType jobSchedulerType) {
+		final JobSchedulerConfiguration jobSchedulerConfiguration = new JobSchedulerConfiguration();
+		jobSchedulerConfiguration.setCronExpression(cronExpression);
+		jobSchedulerConfiguration.setFixedDelay(fixedDelay);
+		jobSchedulerConfiguration.setInitialDelay(initialDelay);
+		jobSchedulerConfiguration.setJobSchedulerType(jobSchedulerType);
+		return jobSchedulerConfiguration;
+	}
 }
