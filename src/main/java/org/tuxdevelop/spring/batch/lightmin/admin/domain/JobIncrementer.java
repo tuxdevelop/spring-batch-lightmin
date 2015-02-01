@@ -4,12 +4,12 @@ import lombok.Getter;
 
 public enum JobIncrementer {
 
-	DATE("DATE_INCREMETER");
+	DATE("DATE_INCREMENTER");
 
 	@Getter
-	private String incremeterIdentifier;
+	private String incrementerIdentifier;
 
-	private JobIncrementer(final String incrementIdentifier) {
-		this.incremeterIdentifier = incrementIdentifier;
+	private JobIncrementer(final String incrementerIdentifier) {
+		this.incrementerIdentifier = incrementerIdentifier;
 	}
 }

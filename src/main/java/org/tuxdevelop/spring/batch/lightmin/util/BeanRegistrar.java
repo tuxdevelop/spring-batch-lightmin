@@ -18,11 +18,11 @@ public class BeanRegistrar {
                              final Set<String> constructorReferences, final Map<String, Object> propertyValues, final
     Map<String, String> propertyReferences, final Set<String> dependsOnBeans) {
         final BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(beanClass);
-        addConstructorArgReferences(builder,constructorReferences);
-        addConstructorArgValues(builder,constructorValues);
-        addPropertyReference(builder,propertyReferences);
-        addPropertyValues(builder,propertyValues);
-        addDependsOnBean(builder,dependsOnBeans);
+        addConstructorArgReferences(builder, constructorReferences);
+        addConstructorArgValues(builder, constructorValues);
+        addPropertyReference(builder, propertyReferences);
+        addPropertyValues(builder, propertyValues);
+        addDependsOnBean(builder, dependsOnBeans);
         final DefaultListableBeanFactory factory = (DefaultListableBeanFactory) context.getBeanFactory();
         factory.registerBeanDefinition(beanName, builder.getBeanDefinition());
     }

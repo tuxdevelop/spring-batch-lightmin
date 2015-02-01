@@ -1,22 +1,16 @@
 package org.tuxdevelop.spring.batch.lightmin;
 
-import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.batch.item.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Slf4j
 @Configuration
@@ -27,9 +21,6 @@ public class ITJobConfiguration {
 
 	@Autowired
 	private StepBuilderFactory stepBuilderFactory;
-
-	@Autowired
-	private JobLauncher jobLauncher;
 
 	@Bean
 	public Job simpleJob() {
@@ -48,7 +39,7 @@ public class ITJobConfiguration {
 		private int index = 0;
 
 		@Override
-		public Long read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+		public Long read() throws Exception {
 			final Long value = index >= values.length ? null : values[index];
 			index++;
 			return value;

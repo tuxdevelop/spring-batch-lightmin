@@ -12,62 +12,60 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
 
 import java.util.Date;
-import java.util.Map;
 
 public abstract class AbstractScheduler implements InitializingBean {
 
-	@Getter
-	@Setter
-	private SchedulerStatus status;
+    @Getter
+    @Setter
+    private SchedulerStatus status;
 
-	protected abstract void schedule();
+    protected abstract void schedule();
 
-	protected abstract void terminate();
+    protected abstract void terminate();
 
-	protected static class JobRunner implements Runnable {
+    protected static class JobRunner implements Runnable {
 
-		@Getter
-		private final Job job;
-		private final JobLauncher jobLauncher;
-		@Getter
-		private final JobParameters jobParameters;
-		private final JobIncrementer jobIncrementer;
+        @Getter
+        private final Job job;
+        private final JobLauncher jobLauncher;
+        @Getter
+        private final JobParameters jobParameters;
+        private final JobIncrementer jobIncrementer;
 
-		public JobRunner(final Job job, final JobLauncher jobLauncher, final JobParameters jobParameters,
-				final JobIncrementer jobIncrementer) {
-			this.job = job;
-			this.jobLauncher = jobLauncher;
-			this.jobParameters = jobParameters;
-			this.jobIncrementer = jobIncrementer;
-			attacheJobIncremeter(jobParameters);
-		}
+        public JobRunner(final Job job, final JobLauncher jobLauncher, final JobParameters jobParameters,
+                         final JobIncrementer jobIncrementer) {
+            this.job = job;
+            this.jobLauncher = jobLauncher;
+            this.jobParameters = jobParameters;
+            this.jobIncrementer = jobIncrementer;
+            attacheJobIncrementer(jobParameters);
+        }
 
-		// TODO exception handling
-		@Override
-		public void run() {
-			try {
-				jobLauncher.run(job, jobParameters);
-			} catch (final JobExecutionAlreadyRunningException e) {
-				e.printStackTrace();
-			} catch (final JobRestartException e) {
-				e.printStackTrace();
-			} catch (final JobInstanceAlreadyCompleteException e) {
-				e.printStackTrace();
-			} catch (final JobParametersInvalidException e) {
-				e.printStackTrace();
-			}
-		}
+        // TODO exception handling
+        @Override
+        public void run() {
+            try {
+                jobLauncher.run(job, jobParameters);
+            } catch (final JobExecutionAlreadyRunningException e) {
+                e.printStackTrace();
+            } catch (final JobRestartException e) {
+                e.printStackTrace();
+            } catch (final JobInstanceAlreadyCompleteException e) {
+                e.printStackTrace();
+            } catch (final JobParametersInvalidException e) {
+                e.printStackTrace();
+            }
+        }
 
-		private void attacheJobIncremeter(JobParameters jobParameters) {
-			if (jobParameters == null) {
-				jobParameters = new JobParametersBuilder().toJobParameters();
-			}
-			if (JobIncrementer.DATE.equals(jobIncrementer)) {
-				final Map<String, JobParameter> stringJobParameterMap = jobParameters.getParameters();
-				stringJobParameterMap.put(JobIncrementer.DATE.getIncremeterIdentifier(), new JobParameter(new Date()));
-				jobParameters = new JobParameters(stringJobParameterMap);
-			}
-		}
+        private void attacheJobIncrementer(JobParameters jobParameters) {
+            if (jobParameters == null) {
+                jobParameters = new JobParametersBuilder().toJobParameters();
+            }
+            if (JobIncrementer.DATE.equals(jobIncrementer)) {
+                jobParameters.getParameters().put(JobIncrementer.DATE.getIncrementerIdentifier(),
+                        new JobParameter(new Date()));
+            }
+        }
 
-	}
+    }
 }
