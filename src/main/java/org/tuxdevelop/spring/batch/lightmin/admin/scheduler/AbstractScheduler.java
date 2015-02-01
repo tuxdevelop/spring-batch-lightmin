@@ -1,21 +1,18 @@
-package org.tuxdevelop.spring.batch.lightmin.admin;
-
-import java.util.Date;
-import java.util.Map;
+package org.tuxdevelop.spring.batch.lightmin.admin.scheduler;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameter;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.InitializingBean;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
+
+import java.util.Date;
+import java.util.Map;
 
 public abstract class AbstractScheduler implements InitializingBean {
 
@@ -34,14 +31,14 @@ public abstract class AbstractScheduler implements InitializingBean {
 		private final JobLauncher jobLauncher;
 		@Getter
 		private final JobParameters jobParameters;
-		private final JobIncremeter jobIncremeter;
+		private final JobIncrementer jobIncrementer;
 
 		public JobRunner(final Job job, final JobLauncher jobLauncher, final JobParameters jobParameters,
-				final JobIncremeter jobIncremeter) {
+				final JobIncrementer jobIncrementer) {
 			this.job = job;
 			this.jobLauncher = jobLauncher;
 			this.jobParameters = jobParameters;
-			this.jobIncremeter = jobIncremeter;
+			this.jobIncrementer = jobIncrementer;
 			attacheJobIncremeter(jobParameters);
 		}
 
@@ -65,9 +62,9 @@ public abstract class AbstractScheduler implements InitializingBean {
 			if (jobParameters == null) {
 				jobParameters = new JobParametersBuilder().toJobParameters();
 			}
-			if (JobIncremeter.DATE.equals(jobIncremeter)) {
+			if (JobIncrementer.DATE.equals(jobIncrementer)) {
 				final Map<String, JobParameter> stringJobParameterMap = jobParameters.getParameters();
-				stringJobParameterMap.put(JobIncremeter.DATE.getIncremeterIdentifier(), new JobParameter(new Date()));
+				stringJobParameterMap.put(JobIncrementer.DATE.getIncremeterIdentifier(), new JobParameter(new Date()));
 				jobParameters = new JobParameters(stringJobParameterMap);
 			}
 		}

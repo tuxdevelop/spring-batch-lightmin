@@ -6,11 +6,11 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.tuxdevelop.spring.batch.lightmin.admin.CronScheduler;
-import org.tuxdevelop.spring.batch.lightmin.admin.JobIncremeter;
-import org.tuxdevelop.spring.batch.lightmin.admin.JobSchedulerConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.JobSchedulerType;
-import org.tuxdevelop.spring.batch.lightmin.admin.PeriodScheduler;
+import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.CronScheduler;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
+import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
 
 @Configuration
 public class ITSchedulerConfiguration {
@@ -26,7 +26,7 @@ public class ITSchedulerConfiguration {
 				10L, 10L, JobSchedulerType.PERIOD);
 		final PeriodScheduler periodScheduler = new PeriodScheduler(
 				TestHelper.createJobConfiguration(jobSchedulerConfiguration), simpleJob,
-				new JobParametersBuilder().toJobParameters(), JobIncremeter.DATE, jobLauncher);
+				new JobParametersBuilder().toJobParameters(), JobIncrementer.DATE, jobLauncher);
 		return periodScheduler;
 	}
 
@@ -36,7 +36,7 @@ public class ITSchedulerConfiguration {
 				"0 0/5 * * * ?", null, null, JobSchedulerType.CRON);
 		final CronScheduler cronScheduler = new CronScheduler(
 				TestHelper.createJobConfiguration(jobSchedulerConfiguration), simpleJob,
-				new JobParametersBuilder().toJobParameters(), JobIncremeter.DATE, jobLauncher);
+				new JobParametersBuilder().toJobParameters(), JobIncrementer.DATE, jobLauncher);
 		return cronScheduler;
 	}
 }

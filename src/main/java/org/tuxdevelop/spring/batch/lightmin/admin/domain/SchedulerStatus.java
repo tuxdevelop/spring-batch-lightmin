@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.admin;
+package org.tuxdevelop.spring.batch.lightmin.admin.domain;
 
 import lombok.Getter;
 

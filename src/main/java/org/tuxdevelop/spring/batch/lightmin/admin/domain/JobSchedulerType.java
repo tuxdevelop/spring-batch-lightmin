@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.admin;
+package org.tuxdevelop.spring.batch.lightmin.admin.domain;
 
 import lombok.Getter;
 
@@ -20,7 +20,7 @@ public enum JobSchedulerType {
 		} else if (PERIOD.getId().equals(id)) {
 			type = PERIOD;
 		} else {
-			throw new IllegalArgumentException("Unknow id for JobSchedulerConfiguration:" + id);
+			throw new IllegalArgumentException("Unknown id for JobSchedulerConfiguration:" + id);
 		}
 		return type;
 	}

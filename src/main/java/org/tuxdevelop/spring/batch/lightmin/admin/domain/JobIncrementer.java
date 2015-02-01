@@ -1,15 +1,15 @@
-package org.tuxdevelop.spring.batch.lightmin.admin;
+package org.tuxdevelop.spring.batch.lightmin.admin.domain;
 
 import lombok.Getter;
 
-public enum JobIncremeter {
+public enum JobIncrementer {
 
 	DATE("DATE_INCREMETER");
 
 	@Getter
 	private String incremeterIdentifier;
 
-	private JobIncremeter(final String incrementIdentifier) {
+	private JobIncrementer(final String incrementIdentifier) {
 		this.incremeterIdentifier = incrementIdentifier;
 	}
 }

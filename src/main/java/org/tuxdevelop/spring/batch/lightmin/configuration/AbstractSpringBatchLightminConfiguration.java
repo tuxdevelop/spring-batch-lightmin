@@ -1,13 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
-import java.io.IOException;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
-
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.DuplicateJobException;
 import org.springframework.batch.core.configuration.JobRegistry;
@@ -28,7 +21,13 @@ import org.tuxdevelop.spring.batch.lightmin.controller.JobController;
 import org.tuxdevelop.spring.batch.lightmin.controller.StepController;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 import org.tuxdevelop.spring.batch.lightmin.service.StepService;
+import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 import org.tuxdevelop.spring.batch.lightmin.util.CommonJobFactory;
+
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.Map;
 
 @Slf4j
 @Import(value = { JobController.class, StepController.class, AdminController.class,
@@ -117,6 +116,10 @@ public abstract class AbstractSpringBatchLightminConfiguration {
 		return defaultSpringBatchLightminConfigurator().getJobRepository();
 	}
 
+    @Bean
+    public BeanRegistrar beanRegistrar(){
+         return new BeanRegistrar();
+    }
 	/*
 	 * Register jobs of the current application context
 	 */

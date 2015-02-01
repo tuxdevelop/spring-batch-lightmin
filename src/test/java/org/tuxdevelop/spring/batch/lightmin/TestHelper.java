@@ -1,18 +1,14 @@
 package org.tuxdevelop.spring.batch.lightmin;
 
+import org.springframework.batch.core.*;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
-import org.springframework.batch.core.JobParametersIncrementer;
-import org.springframework.batch.core.JobParametersValidator;
-import org.springframework.batch.core.StepExecution;
-import org.tuxdevelop.spring.batch.lightmin.admin.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.JobSchedulerConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.JobSchedulerType;
 
 public class TestHelper {
 
@@ -76,7 +72,8 @@ public class TestHelper {
 
 	public static JobConfiguration createJobConfiguration(final JobSchedulerConfiguration jobSchedulerConfiguration) {
 		final JobConfiguration jobConfiguration = new JobConfiguration();
-		jobConfiguration.setAddDateParameter(Boolean.TRUE);
+        jobConfiguration.setJobName("sampleJob");
+        jobConfiguration.setJobIncrementer(JobIncrementer.DATE);
 		jobConfiguration.setJobParameters(new HashMap<String, Object>());
 		jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
 		return jobConfiguration;
