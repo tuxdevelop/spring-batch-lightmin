@@ -8,11 +8,12 @@ import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobException;
 
 import java.util.Collection;
 
-public class JdbcJobConfigurationRepository implements JobConfigurationRepository,InitializingBean{
+//TODO implement me
+public class JdbcJobConfigurationRepository implements JobConfigurationRepository, InitializingBean {
 
     private JdbcTemplate jdbcTemplate;
 
-    private JdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate){
+    private JdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -44,6 +45,6 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        assert(jdbcTemplate != null);
+        assert (jdbcTemplate != null);
     }
 }

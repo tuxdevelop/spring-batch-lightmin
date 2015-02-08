@@ -36,7 +36,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
             }
         }
         if (jobConfiguration == null) {
-            final String message = "No jobConfiguration could ne found for id:" + jobConfiguration;
+            final String message = "No jobConfiguration could be found for id:" + jobConfiguration;
             log.error(message);
             throw new NoSuchJobConfigurationException(message);
         }
@@ -115,7 +115,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     }
 
     private synchronized Long getNextJobId() {
-        final Long nextJobId = new Long(currentJobId);
+        final Long nextJobId = Long.valueOf(currentJobId);
         currentJobId++;
         return nextJobId;
     }
