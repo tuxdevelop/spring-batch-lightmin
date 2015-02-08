@@ -13,9 +13,9 @@ import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.TaskExecutorType;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.CronScheduler;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
 import org.tuxdevelop.spring.batch.lightmin.execption.SpringBatchLightminConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
@@ -45,15 +45,26 @@ public class SchedulerServiceBean implements SchedulerService {
         final String beanName;
         switch (schedulerType) {
             case CRON:
-                beanName =registerCronScheduler(jobConfiguration);
+                beanName = registerCronScheduler(jobConfiguration);
                 break;
             case PERIOD:
-                beanName =registerPeriodScheduler(jobConfiguration);
+                beanName = registerPeriodScheduler(jobConfiguration);
                 break;
             default:
                 throw new SpringBatchLightminConfigurationException("Unknown Scheduler Type: " + schedulerType);
         }
         return beanName;
+    }
+
+    @Override
+    public void unregisterSchedulerForJob(final String beanName) {
+        beanRegistrar.unregisterBean(beanName);
+    }
+
+    @Override
+    public void refreshSchedulerForJob(final JobConfiguration jobConfiguration) {
+        this.unregisterSchedulerForJob(jobConfiguration.getJobSchedulerConfiguration().getBeanName());
+        this.registerPeriodScheduler(jobConfiguration);
     }
 
     @Override
@@ -67,17 +78,18 @@ public class SchedulerServiceBean implements SchedulerService {
     private String registerCronScheduler(final JobConfiguration jobConfiguration) {
         try {
             final Set<Object> constructorValues = new HashSet<Object>();
-            final JobLauncher jobLauncher = this.createJobLauncher(jobConfiguration.getJobSchedulerConfiguration().getTaskExecutorType());
+            final JobLauncher jobLauncher =
+                    this.createJobLauncher(jobConfiguration.getJobSchedulerConfiguration().getTaskExecutorType());
             final Job job = jobRegistry.getJob(jobConfiguration.getJobName());
             final JobParameters jobParameters = mapToJobParameters(jobConfiguration.getJobParameters());
             final JobSchedulerConfiguration jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
             final String beanName;
-            if(jobSchedulerConfiguration.getBeanName() == null || jobSchedulerConfiguration.getBeanName().isEmpty()) {
-                beanName= generateSchedulerBeanName(jobConfiguration.getJobName(), jobConfiguration
+            if (jobSchedulerConfiguration.getBeanName() == null || jobSchedulerConfiguration.getBeanName().isEmpty()) {
+                beanName = generateSchedulerBeanName(jobConfiguration.getJobName(), jobConfiguration
                                 .getJobConfigurationId(),
                         jobConfiguration.getJobSchedulerConfiguration().getJobSchedulerType());
-            }else{
-               beanName = jobSchedulerConfiguration.getBeanName();
+            } else {
+                beanName = jobSchedulerConfiguration.getBeanName();
             }
             constructorValues.add(jobLauncher);
             constructorValues.add(job);
@@ -93,16 +105,17 @@ public class SchedulerServiceBean implements SchedulerService {
     private String registerPeriodScheduler(final JobConfiguration jobConfiguration) {
         try {
             final Set<Object> constructorValues = new HashSet<Object>();
-            final JobLauncher jobLauncher = this.createJobLauncher(jobConfiguration.getJobSchedulerConfiguration().getTaskExecutorType());
+            final JobLauncher jobLauncher =
+                    this.createJobLauncher(jobConfiguration.getJobSchedulerConfiguration().getTaskExecutorType());
             final Job job = jobRegistry.getJob(jobConfiguration.getJobName());
             final JobParameters jobParameters = mapToJobParameters(jobConfiguration.getJobParameters());
             final JobSchedulerConfiguration jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
             final String beanName;
-            if(jobSchedulerConfiguration.getBeanName() == null || jobSchedulerConfiguration.getBeanName().isEmpty()) {
-                beanName= generateSchedulerBeanName(jobConfiguration.getJobName(), jobConfiguration
+            if (jobSchedulerConfiguration.getBeanName() == null || jobSchedulerConfiguration.getBeanName().isEmpty()) {
+                beanName = generateSchedulerBeanName(jobConfiguration.getJobName(), jobConfiguration
                                 .getJobConfigurationId(),
                         jobConfiguration.getJobSchedulerConfiguration().getJobSchedulerType());
-            }else{
+            } else {
                 beanName = jobSchedulerConfiguration.getBeanName();
             }
             constructorValues.add(jobLauncher);
@@ -119,7 +132,7 @@ public class SchedulerServiceBean implements SchedulerService {
     private JobLauncher createJobLauncher(final TaskExecutorType taskExecutorType) {
         final SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
         jobLauncher.setJobRepository(this.jobRepository);
-        if(TaskExecutorType.ASYNCHRONOUS.equals(taskExecutorType)){
+        if (TaskExecutorType.ASYNCHRONOUS.equals(taskExecutorType)) {
             final AsyncTaskExecutor taskExecutor = new ConcurrentTaskExecutor();
             jobLauncher.setTaskExecutor(taskExecutor);
         }
@@ -132,7 +145,7 @@ public class SchedulerServiceBean implements SchedulerService {
             for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
                 final String parameterName = parameter.getKey();
                 final Object parameterValue = parameter.getValue();
-                attachJobParameter(jobParametersBuilder,parameterName,parameterValue);
+                attachJobParameter(jobParametersBuilder, parameterName, parameterValue);
             }
         }
         return jobParametersBuilder.toJobParameters();
@@ -153,8 +166,7 @@ public class SchedulerServiceBean implements SchedulerService {
 
     private String generateSchedulerBeanName(final String jobName, final Long id,
                                              final JobSchedulerType jobSchedulerType) {
-        final String beanName = jobName + jobSchedulerType.name() + id;
-        return beanName;
+        return (jobName + jobSchedulerType.name() + id);
     }
 
 

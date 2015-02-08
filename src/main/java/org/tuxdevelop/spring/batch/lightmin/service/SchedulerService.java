@@ -11,4 +11,16 @@ public interface SchedulerService extends InitializingBean{
      * @return
      */
     String registerSchedulerForJob(JobConfiguration jobConfiguration);
+
+    /**
+     *
+     * @param beanName
+     */
+    void unregisterSchedulerForJob(String beanName);
+
+    /**
+     *
+     * @param jobConfiguration
+     */
+    void refreshSchedulerForJob(JobConfiguration jobConfiguration);
 }

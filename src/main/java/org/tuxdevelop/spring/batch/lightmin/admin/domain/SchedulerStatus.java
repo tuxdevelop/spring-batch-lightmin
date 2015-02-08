@@ -4,12 +4,12 @@ import lombok.Getter;
 
 public enum SchedulerStatus {
 
-	INITIALIZED("INITIALIZED"), RUNNING("RUNNING"), STOPPED("STOPPED"), IN_TERMINATION("IN TERMINATION");
+    INITIALIZED("INITIALIZED"), RUNNING("RUNNING"), STOPPED("STOPPED"), IN_TERMINATION("IN TERMINATION");
 
-	@Getter
-	private String value;
+    @Getter
+    private String value;
 
-	private SchedulerStatus(final String value) {
-		this.value = value;
-	}
+    private SchedulerStatus(final String value) {
+        this.value = value;
+    }
 }

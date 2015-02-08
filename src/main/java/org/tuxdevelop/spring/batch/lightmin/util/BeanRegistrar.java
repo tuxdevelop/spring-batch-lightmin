@@ -1,8 +1,10 @@
 package org.tuxdevelop.spring.batch.lightmin.util;
 
 
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -14,6 +16,16 @@ public class BeanRegistrar {
     @Autowired
     private ConfigurableApplicationContext context;
 
+    /**
+     *
+     * @param beanClass
+     * @param beanName
+     * @param constructorValues
+     * @param constructorReferences
+     * @param propertyValues
+     * @param propertyReferences
+     * @param dependsOnBeans
+     */
     public void registerBean(final Class beanClass, final String beanName, final Set<Object> constructorValues,
                              final Set<String> constructorReferences, final Map<String, Object> propertyValues, final
     Map<String, String> propertyReferences, final Set<String> dependsOnBeans) {
@@ -25,6 +37,20 @@ public class BeanRegistrar {
         addDependsOnBean(builder, dependsOnBeans);
         final DefaultListableBeanFactory factory = (DefaultListableBeanFactory) context.getBeanFactory();
         factory.registerBeanDefinition(beanName, builder.getBeanDefinition());
+    }
+
+    /**
+     *
+     * @param beanName
+     */
+    public void unregisterBean(final String beanName){
+        final BeanDefinitionRegistry factory =
+                (BeanDefinitionRegistry) context.getAutowireCapableBeanFactory();
+        if(factory.containsBeanDefinition(beanName)) {
+            factory.removeBeanDefinition(beanName);
+        }else{
+            throw new NoSuchBeanDefinitionException("No Bean definition exists for bean name: "+beanName);
+        }
     }
 
     private void addConstructorArgValues(final BeanDefinitionBuilder builder, Set<Object> constructorValues) {

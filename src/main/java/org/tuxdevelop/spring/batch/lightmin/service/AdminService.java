@@ -6,17 +6,24 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import java.util.Collection;
 
 public interface AdminService extends InitializingBean{
-    /**
-     *
-     * @param jobConfiguration
-     */
-    void registerSchedulerForJob(JobConfiguration jobConfiguration);
 
     /**
      *
      * @param jobConfiguration
      */
     void saveJobConfiguration(JobConfiguration jobConfiguration);
+
+    /**
+     *
+     * @param jobConfiguration
+     */
+    void updateJobConfiguration(JobConfiguration jobConfiguration);
+
+    /**
+     *
+     * @param jobConfigurationId
+     */
+    void deleteJobConfiguration(final Long jobConfigurationId);
 
     /**
      *

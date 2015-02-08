@@ -2,14 +2,15 @@ package org.tuxdevelop.spring.batch.lightmin.admin.scheduler;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.batch.core.*;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameter;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.InitializingBean;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
+import org.tuxdevelop.spring.batch.lightmin.execption.SpringBatchLightminApplicationException;
 
 import java.util.Date;
 
@@ -41,19 +42,12 @@ public abstract class AbstractScheduler implements InitializingBean {
             attacheJobIncrementer(jobParameters);
         }
 
-        // TODO exception handling
         @Override
         public void run() {
             try {
                 jobLauncher.run(job, jobParameters);
-            } catch (final JobExecutionAlreadyRunningException e) {
-                e.printStackTrace();
-            } catch (final JobRestartException e) {
-                e.printStackTrace();
-            } catch (final JobInstanceAlreadyCompleteException e) {
-                e.printStackTrace();
-            } catch (final JobParametersInvalidException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                throw new SpringBatchLightminApplicationException(e, e.getMessage());
             }
         }
 
