@@ -1,9 +1,10 @@
-package org.tuxdevelop.spring.batch.lightmin.admin;
+package org.tuxdevelop.spring.batch.lightmin.admin.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobException;
+import org.tuxdevelop.spring.batch.lightmin.execption.SpringBatchLightminApplicationException;
 
 import java.util.*;
 
@@ -87,12 +88,12 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     }
 
     @Override
-    public synchronized void delete(final JobConfiguration jobConfiguration)
-            throws NoSuchJobException, NoSuchJobConfigurationException {
+    public synchronized void delete(final JobConfiguration jobConfiguration) throws
+            NoSuchJobConfigurationException {
         final String jobName = jobConfiguration.getJobName();
         final Long jobConfigurationId = jobConfiguration.getJobConfigurationId();
         if (jobName == null) {
-            throw new IllegalArgumentException("jobName must not be null!");
+            throw new SpringBatchLightminApplicationException("jobName must not be null!");
         }
         final JobConfiguration jobConfigurationToDelete;
         if (jobConfigurations.containsKey(jobName)) {
@@ -107,9 +108,9 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
                 throw new NoSuchJobConfigurationException(message);
             }
         } else {
-            final String message =  "No configuration found for job: " + jobName + ". Nothing to delete";
+            final String message = "No configuration found for job: " + jobName + ". Nothing to delete";
             log.error(message);
-            throw new NoSuchJobException(message);
+            throw new NoSuchJobConfigurationException(message);
         }
 
     }

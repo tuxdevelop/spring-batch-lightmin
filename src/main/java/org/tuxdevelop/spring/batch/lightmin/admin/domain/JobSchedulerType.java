@@ -13,7 +13,7 @@ public enum JobSchedulerType {
 		this.id = id;
 	}
 
-	public JobSchedulerType getById(final Long id) {
+	public static JobSchedulerType getById(final Long id) {
 		final JobSchedulerType type;
 		if (CRON.getId().equals(id)) {
 			type = CRON;

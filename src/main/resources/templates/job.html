@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <title>Spring Batch Lightmin</title>
-<title tiles:fragment="title">login</title>
+<title tiles:fragment="title">Job</title>
 <!-- bootstrap -->
 <link rel="stylesheet" type="text/css"
 	href="/src/main/resources/static/css/bootstrap.min.css"
@@ -51,7 +51,7 @@
 							class="btn btn-primary btn-xs">prev</button>
 					</a> <a href="#"
 						th:href="@{/jobs/{jobName}(jobName=${jobName},startIndex=${jobPage.startIndex}+10)}">
-						<button th:if="${jobInstances.size()>0}" type="button"
+						<button th:if="${jobInstances.size()>10}" type="button"
 							class="btn btn-primary btn-xs">next</button>
 					</a>
 				</div>

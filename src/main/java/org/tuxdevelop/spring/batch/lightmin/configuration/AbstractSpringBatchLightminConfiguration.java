@@ -1,6 +1,5 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.DuplicateJobException;
@@ -18,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.tuxdevelop.spring.batch.lightmin.admin.JobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.controller.AdminController;
 import org.tuxdevelop.spring.batch.lightmin.controller.IndexController;
 import org.tuxdevelop.spring.batch.lightmin.controller.JobController;
@@ -46,10 +45,8 @@ public abstract class AbstractSpringBatchLightminConfiguration implements Initia
     @Value("${table.prefix}")
     private String tablePrefix;
 
-    @Setter
+    @Autowired
     private JobConfigurationRepository jobConfigurationRepository;
-
-    public abstract void initJobConfigurationRepository();
 
     @Bean
     public DefaultSpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator() {

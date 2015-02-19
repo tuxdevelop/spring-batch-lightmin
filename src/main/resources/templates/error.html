@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Spring Batch Lightmin</title>
+    <title tiles:fragment="title">Error</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css"
+          href="/src/main/resources/static/css/bootstrap.min.css"
+          th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css"
+          href="/src/main/resources/static/css/bootstrap.css"
+          th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css"
+          href="/src/main/resources/static/css/bootstrap-theme.css"
+          th:href="@{/css/bootstrap-theme.css}"/>
+    <link rel="stylesheet" type="text/css"
+          href="/src/main/resources/static/css/bootstrap-theme.min.css"
+          th:href="@{/css/bootstrap-theme.min.css}"/>
+    <link rel="shortcut icon" type="image/png"
+          href="/src/main/resources/static/favicon.ico" th:href="@{/favicon.ico}"/>
+</head>
+<body>
+<div th:include="fragments/header :: header"></div>
+<p th:if="${url}">
+    <b>Page:</b> <span th:text="${url}">Page URL</span>
+</p>
+
+<p th:if="${timestamp}" id='created'>
+    <b>Occurred:</b> <span th:text="${timestamp}">Timestamp</span>
+</p>
+
+<p th:if="${status}">
+    <b>Response Status:</b> <span th:text="${status}">status-code</span> <span
+        th:if="${error}" th:text="'('+${error}+')'">error ...</span>
+</p>
+
+<p>Application has encountered an error.</p>
+
+<div th:utext="'&lt;!--'" th:remove="tag"></div>
+<div th:utext="'Failed URL: ' +  ${url}" th:remove="tag">${url}</div>
+<div th:utext="'Exception: ' + ${exception.message}" th:remove="tag">${exception.message}</div>
+<ul th:remove="tag">
+    <li th:each="ste : ${exception.stackTrace}" th:remove="tag"><span
+            th:utext="${ste}" th:remove="tag">${ste}</span></li>
+</ul>
+<div th:utext="'--&gt;'" th:remove="tag"></div>
+
+<div th:substituteby="footer :: copy"></div>
+</body>
+</html>

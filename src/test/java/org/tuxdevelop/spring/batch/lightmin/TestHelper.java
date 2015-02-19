@@ -1,10 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin;
 
 import org.springframework.batch.core.*;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -86,6 +83,7 @@ public class TestHelper {
 		jobSchedulerConfiguration.setFixedDelay(fixedDelay);
 		jobSchedulerConfiguration.setInitialDelay(initialDelay);
 		jobSchedulerConfiguration.setJobSchedulerType(jobSchedulerType);
+        jobSchedulerConfiguration.setTaskExecutorType(TaskExecutorType.SYNCHRONOUS);
 		return jobSchedulerConfiguration;
 	}
 }

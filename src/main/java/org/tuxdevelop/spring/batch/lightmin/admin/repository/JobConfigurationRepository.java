@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.admin;
+package org.tuxdevelop.spring.batch.lightmin.admin.repository;
 
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobConfigurationException;
@@ -45,8 +45,7 @@ public interface JobConfigurationRepository {
      *
      * @param jobConfiguration
      * @throws {@link org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobConfigurationException}
-     *         {@link org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobException}
      */
-    void delete(JobConfiguration jobConfiguration) throws NoSuchJobException, NoSuchJobConfigurationException;
+    void delete(JobConfiguration jobConfiguration) throws NoSuchJobConfigurationException;
 
 }
