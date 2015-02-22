@@ -115,6 +115,15 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
 
     }
 
+    @Override
+    public Collection<JobConfiguration> getAllJobConfigurations() {
+        final Collection<JobConfiguration> jobConfigurationCollection = new LinkedList<JobConfiguration>();
+        for (Map.Entry<String, Set<JobConfiguration>> entry : jobConfigurations.entrySet()) {
+            jobConfigurationCollection.addAll(entry.getValue());
+        }
+        return jobConfigurationCollection;
+    }
+
     private synchronized Long getNextJobId() {
         final Long nextJobId = Long.valueOf(currentJobId);
         currentJobId++;

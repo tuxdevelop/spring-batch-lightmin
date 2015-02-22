@@ -134,13 +134,8 @@ public abstract class AbstractSpringBatchLightminConfiguration implements Initia
     }
 
     @Bean
-    public JobConfigurationRepository jobConfigurationRepository() {
-        return jobConfigurationRepository;
-    }
-
-    @Bean
     public AdminService adminService() {
-        return new AdminServiceBean(jobConfigurationRepository(), schedulerService());
+        return new AdminServiceBean(jobConfigurationRepository, schedulerService());
     }
 
     /*

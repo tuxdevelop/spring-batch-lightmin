@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div class="navbar-collapse collapse" th:fragment="adminMenu">
+    <div class="container">
+        <ul class="nav nav-pills">
+            <li><a href="#">Monitoring</a></li>
+            <li><a href="#" th:href="@{/jobConfigurations}">Job Configurations</a></li>
+            <li><a href="#" th:href="@{/jobLaunchers}">Job Launcher</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

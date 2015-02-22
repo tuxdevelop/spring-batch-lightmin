@@ -48,4 +48,10 @@ public interface JobConfigurationRepository {
      */
     void delete(JobConfiguration jobConfiguration) throws NoSuchJobConfigurationException;
 
+    /**
+     *
+     * @return
+     */
+    Collection<JobConfiguration> getAllJobConfigurations();
+
 }

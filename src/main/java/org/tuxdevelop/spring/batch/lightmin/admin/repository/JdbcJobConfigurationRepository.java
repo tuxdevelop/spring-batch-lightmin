@@ -106,6 +106,16 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     }
 
     @Override
+    public Collection<JobConfiguration> getAllJobConfigurations() {
+        final List<JobConfiguration> jobConfigurations = jobConfigurationDAO.getAll();
+        for (JobConfiguration jobConfiguration : jobConfigurations) {
+            jobSchedulerConfigurationDAO.attacheJobSchedulerConfiguration(jobConfiguration);
+            jobConfigurationParameterDAO.attacheParameters(jobConfiguration);
+        }
+        return jobConfigurations;
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         assert jdbcTemplate != null;
         assert tablePrefix != null;
@@ -130,7 +140,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
      */
     private static class JobConfigurationDAO {
 
-        private static final String TABLE_NAME = "%s_JOB_CONFIGURATION";
+        private static final String TABLE_NAME = "%sJOB_CONFIGURATION";
 
         private static final String GET_JOB_CONFIGURATION_QUERY = "SELECT * FROM " + TABLE_NAME + " WHERE " +
                 JobConfigurationDomain.JOB_CONFIGURATION_ID + " = ?";
@@ -153,6 +163,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         private static final String GET_JOB_NAME_COUNT_STATEMENT =
                 "SELECT COUNT(1) FROM " + TABLE_NAME + " WHERE" +
                         " " + JobConfigurationDomain.JOB_NAME + " = ?";
+
+        private static final String GET_ALL_JOB_CONFIGURATION_QUERY = "SELECT * FROM " + TABLE_NAME;
 
         private final JdbcTemplate jdbcTemplate;
         private final SimpleJdbcInsert simpleJdbcInsert;
@@ -206,6 +218,11 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
                     .queryForObject(sql, new Object[]{jobName}, new int[]{Types.VARCHAR}, Long.class);
         }
 
+        public List<JobConfiguration> getAll() {
+            final String sql = String.format(GET_ALL_JOB_CONFIGURATION_QUERY, tablePrefix);
+            return jdbcTemplate.query(sql, new JobConfigurationRowMapper());
+        }
+
         private Map<String, Object> map(final JobConfiguration jobConfiguration) {
             final Map<String, Object> keyValues = new HashMap<String, Object>();
             keyValues.put(JobConfigurationDomain.JOB_NAME, jobConfiguration.getJobName());
@@ -223,7 +240,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
      */
     private static class JobSchedulerConfigurationDAO {
 
-        private static final String TABLE_NAME = "%s_JOB_SCHEDULER_CONFIGURATION";
+        private static final String TABLE_NAME = "%sJOB_SCHEDULER_CONFIGURATION";
 
         private static final String GET_JOB_SCHEDULER_QUERY = "SELECT * FROM " + TABLE_NAME + " WHERE " +
                 JobSchedulerConfigurationDomain.JOB_CONFIGURATION_ID + " = ?";
@@ -303,7 +320,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
      */
     private static class JobConfigurationParameterDAO {
 
-        private static final String TABLE_NAME = "%s_JOB_CONFIGURATION_PARAMETERS";
+        private static final String TABLE_NAME = "%sJOB_CONFIGURATION_PARAMETERS";
 
         private static final String GET_JOB_PARAMETERS_QUERY = "SELECT * FROM " + TABLE_NAME + " WHERE " +
                 JobSchedulerConfigurationDomain.JOB_CONFIGURATION_ID + " = ?";
