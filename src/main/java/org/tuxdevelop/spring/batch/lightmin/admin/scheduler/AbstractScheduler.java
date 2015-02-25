@@ -3,7 +3,6 @@ package org.tuxdevelop.spring.batch.lightmin.admin.scheduler;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -20,17 +19,13 @@ public abstract class AbstractScheduler implements InitializingBean {
     @Setter
     private SchedulerStatus status;
 
-    protected abstract void schedule();
-
-    protected abstract void terminate();
-
     protected static class JobRunner implements Runnable {
 
         @Getter
         private final Job job;
         private final JobLauncher jobLauncher;
         @Getter
-        private final JobParameters jobParameters;
+        private JobParameters jobParameters;
         private final JobIncrementer jobIncrementer;
 
         public JobRunner(final Job job, final JobLauncher jobLauncher, final JobParameters jobParameters,
@@ -39,25 +34,27 @@ public abstract class AbstractScheduler implements InitializingBean {
             this.jobLauncher = jobLauncher;
             this.jobParameters = jobParameters;
             this.jobIncrementer = jobIncrementer;
-            attacheJobIncrementer(jobParameters);
+            this.jobParameters = jobParameters;
         }
 
         @Override
         public void run() {
             try {
+                attacheJobIncrementer();
                 jobLauncher.run(job, jobParameters);
             } catch (Exception e) {
                 throw new SpringBatchLightminApplicationException(e, e.getMessage());
             }
         }
 
-        private void attacheJobIncrementer(JobParameters jobParameters) {
+        private void attacheJobIncrementer() {
             if (jobParameters == null) {
                 jobParameters = new JobParametersBuilder().toJobParameters();
             }
             if (JobIncrementer.DATE.equals(jobIncrementer)) {
-                jobParameters.getParameters().put(JobIncrementer.DATE.getIncrementerIdentifier(),
-                        new JobParameter(new Date()));
+                final JobParametersBuilder jobParametersBuilder = new JobParametersBuilder(jobParameters);
+                jobParameters = jobParametersBuilder.addDate(JobIncrementer.DATE.getIncrementerIdentifier(), new Date())
+                        .toJobParameters();
             }
         }
 

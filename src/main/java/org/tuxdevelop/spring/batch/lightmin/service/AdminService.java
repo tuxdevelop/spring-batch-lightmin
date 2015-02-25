@@ -33,7 +33,18 @@ public interface AdminService extends InitializingBean {
      *
      * @return
      */
-    Map<String, Collection<JobConfiguration>> getJobConfigurations();
+    Map<String, Collection<JobConfiguration>> getJobConfigurationMap();
 
+    /**
+     *
+     * @return
+     */
+    Collection<JobConfiguration> getJobConfigurations();
+
+    /**
+     *
+     * @param jobConfigurationId
+     * @return
+     */
     JobConfiguration getJobConfigurationById(Long jobConfigurationId);
 }

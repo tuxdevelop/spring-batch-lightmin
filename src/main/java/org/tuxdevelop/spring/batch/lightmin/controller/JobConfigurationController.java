@@ -23,7 +23,7 @@ public class JobConfigurationController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public void getJobConfigurations(final Model model) {
-        final Map<String, Collection<JobConfiguration>> jobConfigurationMap = adminService.getJobConfigurations();
+        final Map<String, Collection<JobConfiguration>> jobConfigurationMap = adminService.getJobConfigurationMap();
         final Collection<JobConfigurationModel> jobConfigurationModels = new LinkedList<JobConfigurationModel>();
         for (final Map.Entry<String, Collection<JobConfiguration>> entry : jobConfigurationMap.entrySet
                 ()) {

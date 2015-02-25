@@ -83,7 +83,7 @@ public class AdminServiceBean implements AdminService {
     }
 
     @Override
-    public Map<String, Collection<JobConfiguration>> getJobConfigurations() {
+    public Map<String, Collection<JobConfiguration>> getJobConfigurationMap() {
         final Map<String, Collection<JobConfiguration>> jobConfigurationMap = new HashMap<String,
                 Collection<JobConfiguration>>();
         final Collection<JobConfiguration> jobConfigurations = jobConfigurationRepository.getAllJobConfigurations();
@@ -97,6 +97,11 @@ public class AdminServiceBean implements AdminService {
             jobConfigurationMap.get(jobName).add(jobConfiguration);
         }
         return jobConfigurationMap;
+    }
+
+    @Override
+    public Collection<JobConfiguration> getJobConfigurations() {
+        return jobConfigurationRepository.getAllJobConfigurations();
     }
 
     @Override

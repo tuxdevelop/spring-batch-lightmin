@@ -5,23 +5,33 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 @Configuration
 public class ITInfrastructureConfiguration {
 
-	@Autowired
-	private JobRepository jobRepository;
+    @Autowired
+    private JobRepository jobRepository;
 
-	@Bean
-	public StepBuilderFactory stepBuilderFactory() {
-		return new StepBuilderFactory(jobRepository, new ResourcelessTransactionManager());
-	}
+    @Bean
+    public StepBuilderFactory stepBuilderFactory() {
+        return new StepBuilderFactory(jobRepository, new ResourcelessTransactionManager());
+    }
 
-	@Bean
-	public JobBuilderFactory jobBuilderFactory() {
-		return new JobBuilderFactory(jobRepository);
-	}
+    @Bean
+    public JobBuilderFactory jobBuilderFactory() {
+        return new JobBuilderFactory(jobRepository);
+    }
+
+    @Bean
+    public static PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
+        final PropertyPlaceholderConfigurer propertyPlaceholderConfigurer = new PropertyPlaceholderConfigurer();
+        propertyPlaceholderConfigurer.setLocation(new ClassPathResource
+                ("application.properties"));
+        return propertyPlaceholderConfigurer;
+    }
 
 }

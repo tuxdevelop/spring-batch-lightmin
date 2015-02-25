@@ -10,11 +10,10 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.core.task.SyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.TaskExecutorType;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.CronScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
 import org.tuxdevelop.spring.batch.lightmin.execption.SpringBatchLightminConfigurationException;
@@ -91,10 +90,13 @@ public class SchedulerServiceBean implements SchedulerService {
             } else {
                 beanName = jobSchedulerConfiguration.getBeanName();
             }
-            constructorValues.add(jobLauncher);
-            constructorValues.add(job);
-            constructorValues.add(jobConfiguration.getJobIncrementer());
-            constructorValues.add(jobParameters);
+            final SchedulerConstructorWrapper schedulerConstructorWrapper = new SchedulerConstructorWrapper();
+            schedulerConstructorWrapper.setJobParameters(jobParameters);
+            schedulerConstructorWrapper.setJob(job);
+            schedulerConstructorWrapper.setJobLauncher(jobLauncher);
+            schedulerConstructorWrapper.setJobIncrementer(jobConfiguration.getJobIncrementer());
+            schedulerConstructorWrapper.setJobConfiguration(jobConfiguration);
+            constructorValues.add(schedulerConstructorWrapper);
             beanRegistrar.registerBean(CronScheduler.class, beanName, constructorValues, null, null, null, null);
             return beanName;
         } catch (Exception e) {
@@ -118,10 +120,13 @@ public class SchedulerServiceBean implements SchedulerService {
             } else {
                 beanName = jobSchedulerConfiguration.getBeanName();
             }
-            constructorValues.add(jobLauncher);
-            constructorValues.add(job);
-            constructorValues.add(jobConfiguration.getJobIncrementer());
-            constructorValues.add(jobParameters);
+            final SchedulerConstructorWrapper schedulerConstructorWrapper = new SchedulerConstructorWrapper();
+            schedulerConstructorWrapper.setJobParameters(jobParameters);
+            schedulerConstructorWrapper.setJob(job);
+            schedulerConstructorWrapper.setJobLauncher(jobLauncher);
+            schedulerConstructorWrapper.setJobIncrementer(jobConfiguration.getJobIncrementer());
+            schedulerConstructorWrapper.setJobConfiguration(jobConfiguration);
+            constructorValues.add(schedulerConstructorWrapper);
             beanRegistrar.registerBean(PeriodScheduler.class, beanName, constructorValues, null, null, null, null);
             return beanName;
         } catch (Exception e) {
@@ -134,6 +139,9 @@ public class SchedulerServiceBean implements SchedulerService {
         jobLauncher.setJobRepository(this.jobRepository);
         if (TaskExecutorType.ASYNCHRONOUS.equals(taskExecutorType)) {
             final AsyncTaskExecutor taskExecutor = new ConcurrentTaskExecutor();
+            jobLauncher.setTaskExecutor(taskExecutor);
+        } else if (TaskExecutorType.SYNCHRONOUS.equals(taskExecutorType)) {
+            final TaskExecutor taskExecutor = new SyncTaskExecutor();
             jobLauncher.setTaskExecutor(taskExecutor);
         }
         return jobLauncher;

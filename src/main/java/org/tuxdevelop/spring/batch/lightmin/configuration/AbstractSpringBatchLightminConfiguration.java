@@ -17,11 +17,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
-import org.tuxdevelop.spring.batch.lightmin.controller.AdminController;
-import org.tuxdevelop.spring.batch.lightmin.controller.IndexController;
-import org.tuxdevelop.spring.batch.lightmin.controller.JobController;
-import org.tuxdevelop.spring.batch.lightmin.controller.StepController;
+import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler;
+import org.tuxdevelop.spring.batch.lightmin.controller.*;
 import org.tuxdevelop.spring.batch.lightmin.service.*;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 import org.tuxdevelop.spring.batch.lightmin.util.CommonJobFactory;
@@ -29,11 +28,12 @@ import org.tuxdevelop.spring.batch.lightmin.util.CommonJobFactory;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
 
 @Slf4j
 @Import(value = {IndexController.class, JobController.class, StepController.class, AdminController.class,
-        SpringBatchLightminWebConfiguration.class})
+        JobConfigurationController.class, SpringBatchLightminWebConfiguration.class})
 public abstract class AbstractSpringBatchLightminConfiguration implements InitializingBean {
 
     @Autowired(required = false)
@@ -138,11 +138,9 @@ public abstract class AbstractSpringBatchLightminConfiguration implements Initia
         return new AdminServiceBean(jobConfigurationRepository, schedulerService());
     }
 
-    /*
-     * Register jobs of the current application context
-     */
     @PostConstruct
     public void registerJobs() throws DuplicateJobException, IOException {
+        //register jobs of the current application context
         final Map<String, Job> jobs = applicationContext.getBeansOfType(Job.class);
         if (jobs != null) {
             for (final Map.Entry<String, Job> jobEntry : jobs.entrySet()) {
@@ -152,6 +150,24 @@ public abstract class AbstractSpringBatchLightminConfiguration implements Initia
                 jobRegistry().register(commonJobFactory);
             }
         }
+
+        //register all stored jobConfigurations
+        final Collection<JobConfiguration> jobConfigurations = adminService().getJobConfigurations();
+        if(jobConfigurations!=null){
+            for (JobConfiguration jobConfiguration : jobConfigurations) {
+                schedulerService().registerSchedulerForJob(jobConfiguration);
+            }
+        }
+        //Schedule all registered schedulers
+        final Map<String, Scheduler> schedulerMap = applicationContext.getBeansOfType(Scheduler.class);
+        if (schedulerMap != null) {
+            for (Map.Entry<String, Scheduler> schedulerEntry : schedulerMap.entrySet()) {
+                log.debug("scheduling bean: " + schedulerEntry.getKey());
+                final Scheduler scheduler = schedulerEntry.getValue();
+                scheduler.schedule();
+            }
+        }
+
     }
 
     @Override

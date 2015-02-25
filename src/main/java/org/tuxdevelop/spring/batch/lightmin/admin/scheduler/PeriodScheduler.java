@@ -3,19 +3,17 @@ package org.tuxdevelop.spring.batch.lightmin.admin.scheduler;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerConstructorWrapper;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
 
 import java.util.Date;
 
 @Slf4j
 @Getter
-public class PeriodScheduler extends AbstractScheduler {
+public class PeriodScheduler extends AbstractScheduler implements Scheduler {
 
     private final JobConfiguration jobConfiguration;
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
@@ -23,22 +21,23 @@ public class PeriodScheduler extends AbstractScheduler {
     private final Job job;
     private final JobRunner jobRunner;
 
-    public PeriodScheduler(final JobConfiguration jobConfiguration, final Job job, final JobParameters jobParameters,
-                           final JobIncrementer jobIncrementer, final JobLauncher jobLauncher) {
-        this.jobConfiguration = jobConfiguration;
+    public PeriodScheduler(final SchedulerConstructorWrapper schedulerConstructorWrapper) {
+        this.jobConfiguration = schedulerConstructorWrapper.getJobConfiguration();
         threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
         threadPoolTaskScheduler.setPoolSize(1);
         threadPoolTaskScheduler.afterPropertiesSet();
         jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
-        this.job = job;
-        jobRunner = new JobRunner(job, jobLauncher, jobParameters, jobIncrementer);
+        this.job = schedulerConstructorWrapper.getJob();
+        jobRunner = new JobRunner(job, schedulerConstructorWrapper.getJobLauncher(),
+                schedulerConstructorWrapper.getJobParameters(),
+                schedulerConstructorWrapper.getJobIncrementer());
         setStatus(SchedulerStatus.INITIALIZED);
     }
 
     @Override
     public void schedule() {
         final Date initialDelay = new Date(System.currentTimeMillis() + jobSchedulerConfiguration.getInitialDelay());
-        log.info("Scheduling: " + jobRunner.getJob().getName() + " with Parameters: "
+        log.debug("Scheduling: " + jobRunner.getJob().getName() + " with Parameters: "
                 + jobRunner.getJobParameters().toProperties());
         threadPoolTaskScheduler.scheduleWithFixedDelay(jobRunner, initialDelay,
                 jobSchedulerConfiguration.getFixedDelay());
@@ -46,7 +45,7 @@ public class PeriodScheduler extends AbstractScheduler {
     }
 
     @Override
-    protected void terminate() {
+    public void terminate() {
         threadPoolTaskScheduler.shutdown();
         while (threadPoolTaskScheduler.getActiveCount() > 0) {
             setStatus(SchedulerStatus.IN_TERMINATION);

@@ -2,6 +2,9 @@ package org.tuxdevelop.spring.batch.lightmin.util;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -9,6 +12,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.tuxdevelop.spring.batch.lightmin.ITConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.TestHelper;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
+import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,6 +31,12 @@ public class BeanRegistrarIT {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    @Autowired
+    private Job simpleJob;
+
+    @Autowired
+    private JobLauncher jobLauncher;
 
     @Test
     public void registerBeanStringIT() {
@@ -53,7 +65,28 @@ public class BeanRegistrarIT {
     }
 
     @Test(expected = NoSuchBeanDefinitionException.class)
-    public void unregisterBeanNotFoundIT(){
+    public void unregisterBeanNotFoundIT() {
         beanRegistrar.unregisterBean("notExistingBean");
+    }
+
+    @Test
+    public void registerPeriodSchedulerIT() {
+        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
+                10L, 10L, JobSchedulerType.PERIOD);
+        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final SchedulerConstructorWrapper schedulerConstructorWrapper = new SchedulerConstructorWrapper();
+        schedulerConstructorWrapper.setJob(simpleJob);
+        schedulerConstructorWrapper.setJobConfiguration(jobConfiguration);
+        schedulerConstructorWrapper.setJobIncrementer(JobIncrementer.DATE);
+        schedulerConstructorWrapper.setJobLauncher(jobLauncher);
+        schedulerConstructorWrapper.setJobParameters(new JobParametersBuilder().toJobParameters());
+        final Set<Object> constructorValues = new HashSet<Object>();
+        constructorValues.add(schedulerConstructorWrapper);
+        beanRegistrar
+                .registerBean(PeriodScheduler.class, "sampleBeanRegistrar", constructorValues, null, null, null, null);
+        final PeriodScheduler periodScheduler = applicationContext.getBean("sampleBeanRegistrar", PeriodScheduler
+                .class);
+        assertThat(periodScheduler).isNotNull();
+        periodScheduler.schedule();
     }
 }

@@ -34,7 +34,7 @@ public class ITPersistenceConfiguration {
     }
 
     @Bean
-    public JobConfigurationRepository jdbcJobConfigurationRepository() {
-        return new JdbcJobConfigurationRepository(jdbcTemplate(), "BATCH");
+    public JobConfigurationRepository jobConfigurationRepository() {
+        return new JdbcJobConfigurationRepository(jdbcTemplate(), "BATCH_");
     }
 }
