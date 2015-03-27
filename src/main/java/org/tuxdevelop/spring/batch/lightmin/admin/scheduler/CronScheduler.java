@@ -59,7 +59,7 @@ public class CronScheduler extends AbstractScheduler implements Scheduler{
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         assert (jobConfiguration != null);
         assert (threadPoolTaskScheduler != null);
         assert (jobSchedulerConfiguration != null);

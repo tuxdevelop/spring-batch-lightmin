@@ -67,7 +67,7 @@ public class SchedulerServiceBean implements SchedulerService {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         assert (beanRegistrar != null);
         assert (jobRepository != null);
         assert (jobRegistry != null);

@@ -37,7 +37,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
             }
         }
         if (jobConfiguration == null) {
-            final String message = "No jobConfiguration could be found for id:" + jobConfiguration;
+            final String message = "No jobConfiguration could be found for id:" + jobConfigurationId;
             log.error(message);
             throw new NoSuchJobConfigurationException(message);
         }

@@ -23,7 +23,7 @@ public class StepServiceBean implements StepService{
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet(){
 		assert(stepExecutionDao != null);
 	}
 }

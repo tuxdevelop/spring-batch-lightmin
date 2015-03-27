@@ -96,7 +96,7 @@ public class JobServiceBean implements JobService {
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet() {
 		assert jobOperator != null;
 		assert jobRegistry != null;
 		assert jobInstanceDao != null;

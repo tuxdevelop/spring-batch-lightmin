@@ -139,7 +139,7 @@ public abstract class AbstractSpringBatchLightminConfiguration implements Initia
     }
 
     @PostConstruct
-    public void registerJobs() throws DuplicateJobException, IOException {
+    public void registerJobs() throws DuplicateJobException {
         //register jobs of the current application context
         final Map<String, Job> jobs = applicationContext.getBeansOfType(Job.class);
         if (jobs != null) {

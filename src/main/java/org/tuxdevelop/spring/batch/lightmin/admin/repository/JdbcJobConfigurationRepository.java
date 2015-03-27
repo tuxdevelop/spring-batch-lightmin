@@ -116,7 +116,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet(){
         assert jdbcTemplate != null;
         assert tablePrefix != null;
     }

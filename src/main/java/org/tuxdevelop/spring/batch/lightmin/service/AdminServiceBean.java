@@ -78,7 +78,7 @@ public class AdminServiceBean implements AdminService {
         } catch (NoSuchJobException e) {
             final String message = "No Job with name: " + jobName + "is registered";
             log.error(message);
-            throw new SpringBatchLightminApplicationException(message);
+            throw new SpringBatchLightminApplicationException(e,message);
         }
     }
 
@@ -109,8 +109,7 @@ public class AdminServiceBean implements AdminService {
         try {
             return jobConfigurationRepository.getJobConfiguration(jobConfigurationId);
         } catch (NoSuchJobConfigurationException e) {
-            //TODO exception handling
-            throw new RuntimeException(e.getMessage());
+            throw new SpringBatchLightminApplicationException(e,e.getMessage());
         }
     }
 
@@ -131,7 +130,7 @@ public class AdminServiceBean implements AdminService {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet(){
         assert (jobConfigurationRepository != null);
         assert (schedulerService != null);
     }

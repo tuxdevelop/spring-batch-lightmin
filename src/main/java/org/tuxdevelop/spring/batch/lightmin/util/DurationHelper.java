@@ -8,6 +8,9 @@ import java.util.Date;
 @Slf4j
 public class DurationHelper {
 
+    private DurationHelper() {
+    }
+
     private static final long MILLIS_UPPER_BOUND = 1000;
     private static final long SECONDS_UPPER_BOUND = 60000;
     private static final long MINUTES_UPPER_BOUND = 3600000;
@@ -29,7 +32,7 @@ public class DurationHelper {
         }
         final Long duration = endTime.getTime() - startTime.getTime();
         if (duration < 0) {
-            throw new IllegalArgumentException("The duration may not be negativ! Values [starteTime:" + startTime
+            throw new IllegalArgumentException("The duration may not be negative! Values [startTime:" + startTime
                     + "], [endTime:" + endTime + "], [duration:" + duration + "]");
         }
         return format(new Date(duration));
