@@ -1,30 +1,38 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8" />
 <title>Spring Batch Lightmin</title>
 <!-- bootstrap -->
 <link rel="stylesheet" type="text/css"
-	href="/src/main/resources/static/css/bootstrap.min.css"
+	href="src/main/resources/static/css/bootstrap.min.css"
 	th:href="@{/css/bootstrap.min.css}" />
 <link rel="stylesheet" type="text/css"
-	href="/src/main/resources/static/css/bootstrap.css"
+	href="src/main/resources/static/css/bootstrap.css"
 	th:href="@{/css/bootstrap.css}" />
 <link rel="stylesheet" type="text/css"
-	href="/src/main/resources/static/css/bootstrap-theme.css"
+	href="src/main/resources/static/css/bootstrap-theme.css"
 	th:href="@{/css/bootstrap-theme.css}" />
 <link rel="stylesheet" type="text/css"
-	href="/src/main/resources/static/css/bootstrap-theme.min.css"
+	href="src/main/resources/static/css/bootstrap-theme.min.css"
 	th:href="@{/css/bootstrap-theme.min.css}" />
 <link rel="shortcut icon" type="image/png"
-	href="/src/main/resources/static/favicon.ico" th:href="@{/favicon.ico}" />
+	href="src/main/resources/static/favicon.ico" th:href="@{/favicon.ico}" />
+<script src="src/main/resources/static/js/bootstrap.js"
+	th:src="@{/js/bootstrap.js}">
+
+</script>
+<script src="src/main/resources/static/js/bootstrap.min.js"
+	th:src="@{/js/bootstrap.min.js}">
+
+</script>
 </head>
 <body>
 	<div th:include="fragments/header :: header"></div>
 	<div class="container">
 		<div class="hero-unit">
-			<div class="panel panel-default">
+			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 th:text="${jobName}" class="panel-title">Job Name</h3>
 				</div>

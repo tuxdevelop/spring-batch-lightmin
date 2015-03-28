@@ -30,29 +30,38 @@
 </head>
 <body>
 	<div th:include="fragments/header :: header"></div>
+	<div th:include="fragments/adminMenu :: adminMenu"></div>
 	<div class="container">
 		<div class="hero-unit">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h3 class="panel-title">Jobs</h3>
+					<h3 class="panel-title">Job Launcher</h3>
 				</div>
 				<div class="panel-body">
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<td>Name</td>
-								<td>Instance Count</td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="job : ${jobs}">
-								<td><a href="#"
-									th:href="@{/jobs/{jobName}(jobName=${job.jobName})}"
-									th:text="${job.jobName}"> </a></td>
-								<td th:text="${job.instanceCount}" />
-							</tr>
-						</tbody>
-					</table>
+					<form id="launchJob" th:action="@{jobLaunchers}"
+						th:object="${jobLauncherModel}" action="#" method="post">
+						<div class="form-group">
+							<label for="jobName" class="control-label col-xs-2">Job
+								Name</label>
+							<div class="col-xs-10">
+								<select class="form-control" id="jobName" th:value="*{jobName}"
+									th:field="*{jobName}">
+									<option th:each="name : ${jobNames}" th:value="${name}"
+										th:text="${name}">JobName</option>
+								</select>
+							</div>
+							<label for="jobParameters" class="control-label col-xs-2">Job
+								Parameters</label>
+							<div class="col-xs-10">
+								<textarea class="form-control" id="jobParameters"
+									th:value="*{jobParameters}" th:field="*{jobParameters}">key(type)=value,key(type)=value</textarea>
+							</div>
+							<div class="col-xs-10">
+								<button type="submit" class="btn btn-primary btn-xs">Launch
+								</button>
+							</div>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>

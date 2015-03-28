@@ -1,78 +1,90 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Spring Batch Lightmin</title>
-    <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css"
-          href="/src/main/resources/static/css/bootstrap.min.css"
-          th:href="@{/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="/src/main/resources/static/css/bootstrap.css"
-          th:href="@{/css/bootstrap.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="/src/main/resources/static/css/bootstrap-theme.css"
-          th:href="@{/css/bootstrap-theme.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="/src/main/resources/static/css/bootstrap-theme.min.css"
-          th:href="@{/css/bootstrap-theme.min.css}"/>
-    <link rel="shortcut icon" type="image/png"
-          href="/src/main/resources/static/favicon.ico" th:href="@{/favicon.ico}"/>
+<meta charset="UTF-8" />
+<title>Spring Batch Lightmin</title>
+<!-- bootstrap -->
+<link rel="stylesheet" type="text/css"
+	href="src/main/resources/static/css/bootstrap.min.css"
+	th:href="@{/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css"
+	href="src/main/resources/static/css/bootstrap.css"
+	th:href="@{/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css"
+	href="src/main/resources/static/css/bootstrap-theme.css"
+	th:href="@{/css/bootstrap-theme.css}" />
+<link rel="stylesheet" type="text/css"
+	href="src/main/resources/static/css/bootstrap-theme.min.css"
+	th:href="@{/css/bootstrap-theme.min.css}" />
+<link rel="shortcut icon" type="image/png"
+	href="src/main/resources/static/favicon.ico" th:href="@{/favicon.ico}" />
+<script src="src/main/resources/static/js/bootstrap.js"
+	th:src="@{/js/bootstrap.js}">
+
+</script>
+<script src="src/main/resources/static/js/bootstrap.min.js"
+	th:src="@{/js/bootstrap.min.js}">
+
+</script>
 </head>
 <body>
-<div th:include="fragments/header :: header"></div>
-<div th:include="fragments/adminMenu :: adminMenu"></div>
-<div class="container">
-    <div class="hero-unit">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Job Configurations</h3>
-            </div>
-            <div class="panel-body">
-                <a href="#">
-                    <button ttype="button"
-                            class="btn btn-primary btn-xs">Add
-                    </button>
-                </a>
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <td>Name</td>
-                        <td>Job Configurations</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="jobConfigurationModel : ${jobConfigurationModels}">
-                        <td th:text="${jobConfigurationModel.jobName}"/>
-                        <td>
-                            <table>
-                                <thead>
-                                <tr>
-                                    <td/>
-                                    <td/>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="jobConfiguration: ${jobConfigurationModel.jobConfigurations}">
-                                    <td th:text="${jobConfiguration.jobConfigurationId}"/>
-                                    <td>
-                                        <a href="#">
-                                            <button ttype="button"
-                                                    class="btn btn-primary btn-xs">edit
-                                            </button>
-                                        </a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+	<div th:include="fragments/header :: header"></div>
+	<div th:include="fragments/adminMenu :: adminMenu"></div>
+	<div class="container">
+		<div class="hero-unit">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Job Configurations</h3>
+				</div>
+				<div class="panel-body">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<a href="#" th:href="@{/jobConfigurationAdd}">
+								<button type="button" class="btn btn-primary btn-xs">Add
+								</button>
+							</a>
+						</div>
+						<div class="panel-body">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<td>Job Name</td>
+										<td>Job Configurations</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="jobConfigurationModel : ${jobConfigurationModels}">
+										<td th:text="${jobConfigurationModel.jobName}" />
+										<td>
+											<table class="table table-bordered table-striped">
+												<thead>
+													<tr>
+														<td>Id</td>
+														<td>Operation</td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr
+														th:each="jobConfiguration: ${jobConfigurationModel.jobConfigurations}">
+														<td th:text="${jobConfiguration.jobConfigurationId}" />
+														<td><a href="#"
+															th:href="@{/jobConfigurationEdit/{jobConfigurationId}(jobConfigurationId=${jobConfiguration.jobConfigurationId})}">
+																<button type="button" class="btn btn-primary btn-xs">edit
+																</button>
+														</a></td>
+													</tr>
+												</tbody>
+											</table>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

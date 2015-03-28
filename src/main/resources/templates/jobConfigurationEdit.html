@@ -38,17 +38,22 @@
 					<h3 class="panel-title">Job Configuration</h3>
 				</div>
 				<div class="panel-body">
-					<form id="addJobConfiguration" th:action="@{/jobConfigurationAdd}"
+					<form id="editJobConfiguration"
+						th:action="@{/jobConfigurationEdit}"
 						th:object="${jobConfigurationAddModel}" action="#" method="post">
 						<div class="form-group">
+							<label for="jobConfigurationId" class="control-label col-xs-2">Job
+								Configuration Id</label>
+							<div class="col-xs-10">
+								<input readonly="readonly" id="jobConfigurationId" class="form-control"
+									th:value="*{jobConfigurationId}"
+									th:field="*{jobConfigurationId}"/>
+							</div>
 							<label for="jobName" class="control-label col-xs-2">Job
 								Name</label>
 							<div class="col-xs-10">
-								<select class="form-control" id="jobName" th:value="*{jobName}"
-									th:field="*{jobName}">
-									<option th:each="name : ${jobNames}" th:value="${name}"
-										th:text="${name}">JobName</option>
-								</select>
+								<input readonly="readonly" id="jobName" class="form-control" th:field="*{jobName}"
+									th:value="*{jobName}"/>
 							</div>
 
 							<label for="jobSchedulerType" class="control-label col-xs-2">Job
@@ -96,7 +101,7 @@
 									th:value="*{jobParameters}" th:field="*{jobParameters}">key(type)=value,key(type)=value</textarea>
 							</div>
 							<div class="col-xs-10">
-								<button type="submit" class="btn btn-primary btn-xs">Add
+								<button type="submit" class="btn btn-primary btn-xs">Update
 								</button>
 							</div>
 						</div>

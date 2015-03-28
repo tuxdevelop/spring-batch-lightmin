@@ -25,16 +25,21 @@ public class BeanRegistrar {
 	 * @param propertyReferences
 	 * @param dependsOnBeans
 	 */
-	public void registerBean(final Class<?> beanClass, final String beanName, final Set<Object> constructorValues,
-			final Set<String> constructorReferences, final Map<String, Object> propertyValues,
-			final Map<String, String> propertyReferences, final Set<String> dependsOnBeans) {
-		final BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(beanClass);
+	public void registerBean(final Class<?> beanClass, final String beanName,
+			final Set<Object> constructorValues,
+			final Set<String> constructorReferences,
+			final Map<String, Object> propertyValues,
+			final Map<String, String> propertyReferences,
+			final Set<String> dependsOnBeans) {
+		final BeanDefinitionBuilder builder = BeanDefinitionBuilder
+				.rootBeanDefinition(beanClass);
 		addConstructorArgReferences(builder, constructorReferences);
 		addConstructorArgValues(builder, constructorValues);
 		addPropertyReference(builder, propertyReferences);
 		addPropertyValues(builder, propertyValues);
 		addDependsOnBean(builder, dependsOnBeans);
-		final DefaultListableBeanFactory factory = (DefaultListableBeanFactory) context.getBeanFactory();
+		final DefaultListableBeanFactory factory = (DefaultListableBeanFactory) context
+				.getBeanFactory();
 		factory.registerBeanDefinition(beanName, builder.getBeanDefinition());
 	}
 
@@ -43,15 +48,18 @@ public class BeanRegistrar {
 	 * @param beanName
 	 */
 	public void unregisterBean(final String beanName) {
-		final BeanDefinitionRegistry factory = (BeanDefinitionRegistry) context.getAutowireCapableBeanFactory();
+		final BeanDefinitionRegistry factory = (BeanDefinitionRegistry) context
+				.getAutowireCapableBeanFactory();
 		if (factory.containsBeanDefinition(beanName)) {
-			factory.removeBeanDefinition(beanName);
+			((DefaultListableBeanFactory) factory).destroySingleton(beanName);
 		} else {
-			throw new NoSuchBeanDefinitionException("No Bean definition exists for bean name: " + beanName);
+			throw new NoSuchBeanDefinitionException(
+					"No Bean definition exists for bean name: " + beanName);
 		}
 	}
 
-	private void addConstructorArgValues(final BeanDefinitionBuilder builder, final Set<Object> constructorValues) {
+	private void addConstructorArgValues(final BeanDefinitionBuilder builder,
+			final Set<Object> constructorValues) {
 		if (constructorValues != null) {
 			for (final Object constructorReference : constructorValues) {
 				builder.addConstructorArgValue(constructorReference);
@@ -59,7 +67,8 @@ public class BeanRegistrar {
 		}
 	}
 
-	private void addConstructorArgReferences(final BeanDefinitionBuilder builder,
+	private void addConstructorArgReferences(
+			final BeanDefinitionBuilder builder,
 			final Set<String> constructorReferences) {
 		if (constructorReferences != null) {
 			for (final String beanName : constructorReferences) {
@@ -68,23 +77,30 @@ public class BeanRegistrar {
 		}
 	}
 
-	private void addPropertyValues(final BeanDefinitionBuilder builder, final Map<String, Object> propertyValues) {
+	private void addPropertyValues(final BeanDefinitionBuilder builder,
+			final Map<String, Object> propertyValues) {
 		if (propertyValues != null) {
-			for (final Map.Entry<String, Object> propertyValue : propertyValues.entrySet()) {
-				builder.addPropertyValue(propertyValue.getKey(), propertyValue.getValue());
+			for (final Map.Entry<String, Object> propertyValue : propertyValues
+					.entrySet()) {
+				builder.addPropertyValue(propertyValue.getKey(),
+						propertyValue.getValue());
 			}
 		}
 	}
 
-	private void addPropertyReference(final BeanDefinitionBuilder builder, final Map<String, String> propertyReferences) {
+	private void addPropertyReference(final BeanDefinitionBuilder builder,
+			final Map<String, String> propertyReferences) {
 		if (propertyReferences != null) {
-			for (final Map.Entry<String, String> propertyReference : propertyReferences.entrySet()) {
-				builder.addPropertyReference(propertyReference.getKey(), propertyReference.getValue());
+			for (final Map.Entry<String, String> propertyReference : propertyReferences
+					.entrySet()) {
+				builder.addPropertyReference(propertyReference.getKey(),
+						propertyReference.getValue());
 			}
 		}
 	}
 
-	private void addDependsOnBean(final BeanDefinitionBuilder builder, final Set<String> beanNames) {
+	private void addDependsOnBean(final BeanDefinitionBuilder builder,
+			final Set<String> beanNames) {
 		if (beanNames != null) {
 			for (final String beanName : beanNames) {
 				builder.addDependsOn(beanName);
