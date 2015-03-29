@@ -16,6 +16,8 @@ import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobConfigurationExce
 import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobException;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,7 +60,7 @@ public class JdbcJobConfigurationRepositoryIT {
     }
 
     @Test
-    public void updateTest() throws NoSuchJobConfigurationException {
+    public void updateIT() throws NoSuchJobConfigurationException {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
         jobSchedulerConfiguration.setBeanName("testBean");
@@ -75,7 +77,27 @@ public class JdbcJobConfigurationRepositoryIT {
     }
 
     @Test
-    public void getJobConfigurationsTest() throws NoSuchJobException {
+    public void updateWithParametersIT() throws NoSuchJobConfigurationException {
+        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
+                10L, 10L, JobSchedulerType.PERIOD);
+        jobSchedulerConfiguration.setBeanName("testBean");
+        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobConfiguration addedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        assertThat(addedJobConfiguration).isNotNull();
+        assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
+        assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
+        addedJobConfiguration.setJobName("updated");
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("test", "input");
+        addedJobConfiguration.setJobParameters(parameters);
+        final JobConfiguration updatedJobConfiguration = jdbcJobConfigurationRepository.update(addedJobConfiguration);
+        assertThat(updatedJobConfiguration.getJobName()).isEqualTo("updated");
+        final JobConfiguration fetchedJobConfiguration = jdbcJobConfigurationRepository.getJobConfiguration(1L);
+        assertThat(fetchedJobConfiguration).isEqualTo(updatedJobConfiguration);
+    }
+
+    @Test
+    public void getJobConfigurationsIT() throws NoSuchJobException {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
         jobSchedulerConfiguration.setBeanName("testBean");
@@ -94,7 +116,7 @@ public class JdbcJobConfigurationRepositoryIT {
     }
 
     @Test(expected = NoSuchJobConfigurationException.class)
-    public void deleteTest() throws NoSuchJobConfigurationException {
+    public void deleteIT() throws NoSuchJobConfigurationException {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
         jobSchedulerConfiguration.setBeanName("testBean");

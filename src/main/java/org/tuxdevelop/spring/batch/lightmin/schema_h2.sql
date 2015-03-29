@@ -18,7 +18,7 @@ CREATE TABLE BATCH_JOB_SCHEDULER_CONFIGURATION (
 CREATE TABLE BATCH_JOB_CONFIGURATION_PARAMETERS (
   id                   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
   job_configuration_id NUMERIC                      NOT NULL,
-  paramater_name       VARCHAR(255)                 NOT NULL,
+  parameter_name       VARCHAR(255)                 NOT NULL,
   parameter_value      VARCHAR(255)                 NOT NULL,
   parameter_type       INT                          NOT NULL
 );

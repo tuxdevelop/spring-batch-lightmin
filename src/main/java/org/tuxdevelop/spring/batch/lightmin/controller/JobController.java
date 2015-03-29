@@ -1,6 +1,5 @@
 package org.tuxdevelop.spring.batch.lightmin.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
@@ -20,7 +19,6 @@ import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 import java.util.Collection;
 import java.util.LinkedList;
 
-@Slf4j
 @Controller
 @RequestMapping(value = "/jobs")
 public class JobController {
@@ -32,7 +30,7 @@ public class JobController {
     private StepService stepService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public void getJobs(final Model model) {
+    public void initJobs(final Model model) {
         final Collection<JobInfoModel> jobInfoModels = new LinkedList<JobInfoModel>();
         final Collection<String> jobNames = jobService.getJobNames();
         for (final String jobName : jobNames) {
@@ -104,7 +102,6 @@ public class JobController {
 
     private void enrichJobExecution(final JobExecutionModel jobExecutionModel,
                                     Collection<StepExecution> stepExecutions) {
-        log.info(String.valueOf(stepExecutions.size()));
         final Collection<StepExecutionModel> stepExecutionModels = new LinkedList<StepExecutionModel>();
         for (final StepExecution stepExecution : stepExecutions) {
             final StepExecutionModel stepExecutionModel = new StepExecutionModel();
