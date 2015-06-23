@@ -1,0 +1,16 @@
+#Lightmin
+table:
+ prefix: BATCH_
+
+#SPRING BOOT
+
+#Server
+server:
+  port: 9009
+
+#Logging
+logging:
+ level:
+  org:
+   springframework:
+    web: DEBUG
