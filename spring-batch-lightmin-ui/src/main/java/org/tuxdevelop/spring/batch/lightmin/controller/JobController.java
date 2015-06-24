@@ -85,7 +85,7 @@ public class JobController {
         return "jobExecutions";
     }
 
-    @RequestMapping(value = "/execution/{jobExecutionId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/executions/execution/{jobExecutionId}", method = RequestMethod.GET)
     public String getJobExecution(final ModelMap modelMap,
                                   @PathVariable(value = "jobExecutionId") final Long jobExecutionId) {
         final JobExecution jobExecution = jobService.getJobExecution(jobExecutionId);

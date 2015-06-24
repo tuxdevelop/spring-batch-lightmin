@@ -7,7 +7,7 @@ table:
 #Server
 server:
   port: 9009
-
+  servlet-path: /addressMigrator/
 #Logging
 logging:
  level:

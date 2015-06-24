@@ -47,7 +47,7 @@
 						<tbody>
 							<tr th:each="job : ${jobs}">
 								<td><a href="#"
-									th:href="@{/jobs/{jobName}(jobName=${job.jobName})}"
+									th:href="@{jobs/{jobName}(jobName=${job.jobName})}"
 									th:text="${job.jobName}"> </a></td>
 								<td th:text="${job.instanceCount}" />
 							</tr>

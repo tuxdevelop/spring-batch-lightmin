@@ -14,7 +14,7 @@ public class IndexController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String redirectToIndex() {
-		return "redirect:/index";
+		return "redirect:index";
 	}
 
     @ExceptionHandler(Exception.class)
