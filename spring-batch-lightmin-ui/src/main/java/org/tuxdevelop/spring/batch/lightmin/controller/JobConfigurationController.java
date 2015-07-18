@@ -3,10 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.model.JobConfigurationAddModel;
 import org.tuxdevelop.spring.batch.lightmin.model.JobConfigurationModel;
@@ -29,6 +26,11 @@ public class JobConfigurationController {
 
     @RequestMapping(value = "/jobConfigurations", method = RequestMethod.GET)
     public void getJobConfigurations(final Model model) {
+        final Collection<JobConfigurationModel> jobConfigurationModels = getJobConfigurationModels();
+        model.addAttribute("jobConfigurationModels", jobConfigurationModels);
+    }
+
+    private Collection<JobConfigurationModel> getJobConfigurationModels() {
         final Map<String, Collection<JobConfiguration>> jobConfigurationMap = adminService.getJobConfigurationMap();
         final Collection<JobConfigurationModel> jobConfigurationModels = new LinkedList<JobConfigurationModel>();
         for (final Map.Entry<String, Collection<JobConfiguration>> entry : jobConfigurationMap.entrySet()) {
@@ -37,7 +39,7 @@ public class JobConfigurationController {
             jobConfigurationModel.setJobConfigurations(entry.getValue());
             jobConfigurationModels.add(jobConfigurationModel);
         }
-        model.addAttribute("jobConfigurationModels", jobConfigurationModels);
+        return jobConfigurationModels;
     }
 
     @RequestMapping(value = "/jobConfigurations/{jobConfigurationId}", method = RequestMethod.GET)
@@ -55,8 +57,8 @@ public class JobConfigurationController {
         model.addAttribute("taskExecutorTypes", TaskExecutorType.values());
     }
 
-    @RequestMapping(value = "/jobConfigurationEdit/{jobConfigurationId}", method = RequestMethod.GET)
-    public String initEditJobConfiguration(@PathVariable("jobConfigurationId") final Long jobConfigurationId,
+    @RequestMapping(value = "/jobConfigurationEdit", method = RequestMethod.GET)
+    public String initEditJobConfiguration(@RequestParam("jobConfigurationId") final Long jobConfigurationId,
                                            final Model model) {
         final JobConfiguration jobConfiguration = adminService.getJobConfigurationById(jobConfigurationId);
         final JobConfigurationAddModel jobConfigurationAddModel = new JobConfigurationAddModel();
@@ -81,25 +83,27 @@ public class JobConfigurationController {
             @ModelAttribute("jobConfigurationAddModel") final JobConfigurationAddModel jobConfigurationAddModel) {
         final JobConfiguration jobConfiguration = mapModelToJobConfiguration(jobConfigurationAddModel);
         adminService.saveJobConfiguration(jobConfiguration);
-        return "redirect:/jobConfigurations";
+        return "jobConfigurations";
     }
 
     @RequestMapping(value = "/jobConfigurationEdit", method = RequestMethod.POST)
     public String updateJobConfiguration(
             @ModelAttribute("jobConfigurationAddModel") final JobConfigurationAddModel jobConfigurationAddModel) {
-        final JobConfiguration currentJobConfiguration = adminService.getJobConfigurationById(jobConfigurationAddModel
-                .getJobConfigurationId());
+        final JobConfiguration currentJobConfiguration = adminService.getJobConfigurationById
+                (jobConfigurationAddModel.getJobConfigurationId());
         final JobConfiguration jobConfiguration = mapModelToJobConfiguration(jobConfigurationAddModel);
         jobConfiguration.getJobSchedulerConfiguration().setBeanName(
                 currentJobConfiguration.getJobSchedulerConfiguration().getBeanName());
         adminService.updateJobConfiguration(jobConfiguration);
-        return "redirect:/jobConfigurations";
+        return "redirect:jobConfigurations";
     }
 
-    @RequestMapping(value = "/jobConfigurations/delete/{jobConfigurationId}", method = RequestMethod.POST)
-    public String deleteJobConfiguration(@PathVariable("jobConfigurationId") final Long jobConfigurationId) {
+    @RequestMapping(value = "/jobConfigurations", method = RequestMethod.POST)
+    public void deleteJobConfiguration(@RequestParam("jobConfigurationId") final long jobConfigurationId, final
+    Model model) {
         adminService.deleteJobConfiguration(jobConfigurationId);
-        return "redirect:/jobConfigurations";
+        final Collection<JobConfigurationModel> jobConfigurationModels = getJobConfigurationModels();
+        model.addAttribute("jobConfigurationModels", jobConfigurationModels);
     }
 
     private JobConfiguration mapModelToJobConfiguration(final JobConfigurationAddModel jobConfigurationAddModel) {

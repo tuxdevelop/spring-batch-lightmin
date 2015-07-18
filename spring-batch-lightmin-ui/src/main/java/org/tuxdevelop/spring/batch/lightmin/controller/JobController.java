@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +19,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 @Controller
-@RequestMapping(value = "/jobs")
 public class JobController {
 
     @Autowired
@@ -29,7 +27,7 @@ public class JobController {
     @Autowired
     private StepService stepService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/jobs", method = RequestMethod.GET)
     public void initJobs(final Model model) {
         final Collection<JobInfoModel> jobInfoModels = new LinkedList<JobInfoModel>();
         final Collection<String> jobNames = jobService.getJobNames();
@@ -43,8 +41,8 @@ public class JobController {
         model.addAttribute("jobs", jobInfoModels);
     }
 
-    @RequestMapping(value = "/{jobName}", method = RequestMethod.GET)
-    public String getJob(final Model model, @PathVariable("jobName") final String jobName, @RequestParam(
+    @RequestMapping(value = "job", method = RequestMethod.GET)
+    public String getJob(final Model model, @RequestParam("jobName") final String jobName, @RequestParam(
             value = "startIndex", defaultValue = "0") final int startIndex, @RequestParam(value = "pageSize",
             defaultValue = "10") final int pageSize) {
         final PageModel pageModel = new PageModel();
@@ -68,8 +66,8 @@ public class JobController {
         return "job";
     }
 
-    @RequestMapping(value = "/executions/{jobInstanceId}", method = RequestMethod.GET)
-    public String getJobExecutions(final Model model, @PathVariable("jobInstanceId") final Long jobInstanceId) {
+    @RequestMapping(value = "/executions", method = RequestMethod.GET)
+    public String getJobExecutions(final Model model, @RequestParam("jobInstanceId") final Long jobInstanceId) {
         final JobInstance jobInstance = jobService.getJobInstance(jobInstanceId);
         Collection<JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance);
         final Collection<JobExecutionModel> jobExecutionModels = new LinkedList<JobExecutionModel>();
@@ -85,9 +83,9 @@ public class JobController {
         return "jobExecutions";
     }
 
-    @RequestMapping(value = "/executions/execution/{jobExecutionId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/execution", method = RequestMethod.GET)
     public String getJobExecution(final ModelMap modelMap,
-                                  @PathVariable(value = "jobExecutionId") final Long jobExecutionId) {
+                                  @RequestParam(value = "jobExecutionId") final Long jobExecutionId) {
         final JobExecution jobExecution = jobService.getJobExecution(jobExecutionId);
         final JobExecutionModel jobExecutionModel = new JobExecutionModel();
         jobService.attachJobInstance(jobExecution);

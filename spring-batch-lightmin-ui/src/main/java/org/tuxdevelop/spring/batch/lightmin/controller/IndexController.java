@@ -12,13 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/")
 public class IndexController {
 
-	@RequestMapping(method = RequestMethod.GET)
-	public String redirectToIndex() {
-		return "redirect:index";
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    public String redirectToIndex() {
+        return "index";
+    }
 
     @ExceptionHandler(Exception.class)
-    public ModelAndView handleAllExceptions(final HttpServletRequest request, Exception ex){
+    public ModelAndView handleAllExceptions(final HttpServletRequest request, Exception ex) {
         final ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("exception", ex);
         modelAndView.addObject("url", request.getRequestURL());

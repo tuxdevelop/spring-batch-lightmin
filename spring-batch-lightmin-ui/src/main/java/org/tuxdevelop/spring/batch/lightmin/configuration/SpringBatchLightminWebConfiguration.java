@@ -21,17 +21,15 @@ public class SpringBatchLightminWebConfiguration {
                 viewControllerRegistry.addViewController("/admin").setViewName("admin");
                 viewControllerRegistry.addViewController("/index").setViewName("index");
                 viewControllerRegistry.addViewController("/jobs").setViewName("jobs");
-                viewControllerRegistry.addViewController("/jobs/{jobName}").setViewName("job");
-                viewControllerRegistry.addViewController("/executions/{jobInstanceId}")
-                        .setViewName("jobExecutions");
-                viewControllerRegistry.addViewController("/execution/{jobExecutionId}").setViewName
-                        ("jobExecution");
+                viewControllerRegistry.addViewController("/job").setViewName("job");
+                viewControllerRegistry.addViewController("/executions").setViewName("jobExecutions");
+                viewControllerRegistry.addViewController("/execution").setViewName("jobExecution");
                 viewControllerRegistry.addViewController("/jobConfigurations").setViewName("jobConfigurations");
                 viewControllerRegistry.addViewController("/jobConfigurationAdd").setViewName("jobConfigurationAdd");
                 viewControllerRegistry.addViewController("/jobConfigurationEdit").setViewName("jobConfigurationEdit");
                 viewControllerRegistry.addViewController("/jobConfiguration").setViewName("jobConfiguration");
                 viewControllerRegistry.addViewController("/jobLaunchers").setViewName("jobLaunchers");
-                viewControllerRegistry.addViewController("/jobConfigurations/delete/{jobConfigurationID}").setViewName
+                viewControllerRegistry.addViewController("/jobConfigurations/{jobConfigurationId}").setViewName
                         ("jobConfigurations");
             }
         };
