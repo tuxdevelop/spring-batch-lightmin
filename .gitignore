@@ -137,4 +137,7 @@ local.properties
 # TeXlipse plugin
 .texlipse
 
+# local
+local.*
+
 
