@@ -117,8 +117,8 @@
     </dependencies>
 
     <scm>
-        <connection>scm:git:git@github.com:org/tuxdevelop/spring-batch-lightmin.git</connection>
-        <developerConnection>scm:git:tuxdevelop@github.com:org/tuxdevelop/spring-batch-lightmin.git
+        <connection>scm:git:git@github.com:tuxdevelop/spring-batch-lightmin.git</connection>
+        <developerConnection>scm:git:tuxdevelop@github.com:tuxdevelop/spring-batch-lightmin.git
         </developerConnection>
         <url>https://github.com/tuxdevelop/spring-batch-lightmin.git</url>
     </scm>
