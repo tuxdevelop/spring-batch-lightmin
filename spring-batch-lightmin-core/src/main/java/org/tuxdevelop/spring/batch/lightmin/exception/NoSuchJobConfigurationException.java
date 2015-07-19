@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.execption;
+package org.tuxdevelop.spring.batch.lightmin.exception;
 
 
 public class NoSuchJobConfigurationException extends Exception {

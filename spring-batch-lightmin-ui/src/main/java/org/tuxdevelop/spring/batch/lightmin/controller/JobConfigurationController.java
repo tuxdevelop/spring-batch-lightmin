@@ -83,7 +83,7 @@ public class JobConfigurationController {
             @ModelAttribute("jobConfigurationAddModel") final JobConfigurationAddModel jobConfigurationAddModel) {
         final JobConfiguration jobConfiguration = mapModelToJobConfiguration(jobConfigurationAddModel);
         adminService.saveJobConfiguration(jobConfiguration);
-        return "jobConfigurations";
+        return "redirect:jobConfigurations";
     }
 
     @RequestMapping(value = "/jobConfigurationEdit", method = RequestMethod.POST)

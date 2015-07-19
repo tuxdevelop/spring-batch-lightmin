@@ -18,7 +18,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.CronScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler;
-import org.tuxdevelop.spring.batch.lightmin.execption.SpringBatchLightminConfigurationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 
 import java.util.Date;

@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.admin.domain;
 
 import lombok.Getter;
-import org.tuxdevelop.spring.batch.lightmin.execption.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 public enum JobIncrementer {
 

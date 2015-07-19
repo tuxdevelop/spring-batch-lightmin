@@ -28,7 +28,7 @@ import javax.sql.DataSource;
 
 @Slf4j
 @Configuration
-@Import(RegistrationConfiguration.class)
+@Import(value = {RegistrationConfiguration.class, RestServiceConfiguration.class})
 public class AbstractSpringBatchLightminConfiguration implements InitializingBean, ApplicationContextAware {
 
 

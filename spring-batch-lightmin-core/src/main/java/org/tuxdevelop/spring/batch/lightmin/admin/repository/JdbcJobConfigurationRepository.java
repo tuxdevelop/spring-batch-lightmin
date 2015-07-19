@@ -7,9 +7,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
-import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobConfigurationException;
-import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobException;
-import org.tuxdevelop.spring.batch.lightmin.execption.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 import org.tuxdevelop.spring.batch.lightmin.util.ParameterParser;
 
 import java.sql.ResultSet;

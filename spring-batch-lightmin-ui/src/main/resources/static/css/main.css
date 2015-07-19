@@ -428,3 +428,15 @@ dl.health-status td {
 .header--application-urls .navbar-inner li > a:hover {
     text-decoration: underline;
 }
+
+.text-spring {
+    color: #6db33f;
+}
+
+.header-text-small {
+    font-size: 9px;
+}
+
+.td-text-small {
+    font-size: 12px;
+}

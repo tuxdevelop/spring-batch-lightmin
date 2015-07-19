@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.util;
 
 import org.junit.Test;
-import org.tuxdevelop.spring.batch.lightmin.execption.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -9,7 +9,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.InitializingBean;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
-import org.tuxdevelop.spring.batch.lightmin.execption.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.util.Date;
 

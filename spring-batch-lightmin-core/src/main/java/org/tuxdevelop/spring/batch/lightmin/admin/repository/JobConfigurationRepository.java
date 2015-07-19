@@ -1,8 +1,8 @@
 package org.tuxdevelop.spring.batch.lightmin.admin.repository;
 
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobConfigurationException;
-import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobException;
+import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
 
 import java.util.Collection;
 
@@ -13,7 +13,7 @@ public interface JobConfigurationRepository {
      *
      * @param jobConfigurationId
      * @return a {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration}
-     * @throws {@link org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobConfigurationException}
+     * @throws {@link org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException}
      */
     JobConfiguration getJobConfiguration(Long jobConfigurationId) throws NoSuchJobConfigurationException;
 
@@ -21,7 +21,7 @@ public interface JobConfigurationRepository {
      *
      * @param jobName
      * @return
-     * @throws {@link org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobException}
+     * @throws {@link org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException}
      */
     Collection<JobConfiguration> getJobConfigurations(String jobName) throws NoSuchJobException;
 
@@ -36,7 +36,7 @@ public interface JobConfigurationRepository {
      *
      * @param jobConfiguration
      * @return
-     * @throws {@link org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobConfigurationException}
+     * @throws {@link org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException}
      */
     JobConfiguration update(JobConfiguration jobConfiguration) throws NoSuchJobConfigurationException;
 
@@ -44,7 +44,7 @@ public interface JobConfigurationRepository {
     /**
      *
      * @param jobConfiguration
-     * @throws {@link org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobConfigurationException}
+     * @throws {@link org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException}
      */
     void delete(JobConfiguration jobConfiguration) throws NoSuchJobConfigurationException;
 

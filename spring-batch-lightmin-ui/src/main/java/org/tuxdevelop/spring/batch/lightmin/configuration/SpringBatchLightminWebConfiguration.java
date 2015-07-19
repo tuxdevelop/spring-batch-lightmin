@@ -9,7 +9,7 @@ import org.tuxdevelop.spring.batch.lightmin.controller.*;
 
 @Configuration
 @Import(value = {AdminController.class, IndexController.class, JobConfigurationController.class, JobController.class,
-        JobLauncherController.class, StepController.class})
+        JobLauncherController.class, StepController.class, RestServiceConfiguration.class})
 public class SpringBatchLightminWebConfiguration {
 
     @Bean

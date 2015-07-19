@@ -55,13 +55,60 @@
                                         <thead>
                                         <tr>
                                             <th>Id</th>
+                                            <th>Summary</th>
                                             <th>Operation</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr
-                                                th:each="jobConfiguration: ${jobConfigurationModel.jobConfigurations}">
+                                        <tr th:each="jobConfiguration: ${jobConfigurationModel.jobConfigurations}">
                                             <td th:text="${jobConfiguration.jobConfigurationId}"/>
+                                            <td>
+                                                <table class="table boxed">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="header-text-small">
+                                                            Job Scheduler Type
+                                                        </th>
+                                                        <th class="header-text-small">
+                                                            Cron Expression
+                                                        </th>
+                                                        <th class="header-text-small">
+                                                            Initial Delay
+                                                        </th>
+                                                        <th class="header-text-small">
+                                                            Fixed Delay
+                                                        </th>
+                                                        <th class="header-text-small">
+                                                            Task Executor Type
+                                                        </th>
+                                                        <th class="header-text-small">
+                                                            Job Parameters
+                                                        </th>
+                                                        <th class="header-text-small">
+                                                            Job Incremeter
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="td-text-small"
+                                                            th:text="${jobConfiguration.jobSchedulerConfiguration.jobSchedulerType}"></td>
+                                                        <td class="td-text-small"
+                                                            th:text="${jobConfiguration.jobSchedulerConfiguration.cronExpression}"></td>
+                                                        <td class="td-text-small"
+                                                            th:text="${jobConfiguration.jobSchedulerConfiguration.initialDelay}"></td>
+                                                        <td class="td-text-small"
+                                                            th:text="${jobConfiguration.jobSchedulerConfiguration.fixedDelay}"></td>
+                                                        <td class="td-text-small"
+                                                            th:text="${jobConfiguration.jobSchedulerConfiguration.taskExecutorType}"></td>
+                                                        <td class="td-text-small"
+                                                            th:text="${jobConfiguration.jobParameters.toString()}"></td>
+                                                        <td class="td-text-small"
+                                                            th:text="${jobConfiguration.jobIncrementer}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
                                             <td>
                                                 <a href="#"
                                                    th:href="@{jobConfigurationEdit(jobConfigurationId=${jobConfiguration.jobConfigurationId})}">

@@ -21,7 +21,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.support.incrementer.AbstractDataFieldMaxValueIncrementer;
 import org.springframework.jdbc.support.incrementer.DataFieldMaxValueIncrementer;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.tuxdevelop.spring.batch.lightmin.execption.SpringBatchLightminConfigurationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 import org.tuxdevelop.spring.batch.lightmin.service.JobServiceBean;
 import org.tuxdevelop.spring.batch.lightmin.service.StepService;

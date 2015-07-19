@@ -7,6 +7,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import(AbstractSpringBatchLightminConfiguration.class)
+@Import(value = {AbstractSpringBatchLightminConfiguration.class})
 public @interface EnableSpringBatchLingtmin {
 }

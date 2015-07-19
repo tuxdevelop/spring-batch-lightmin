@@ -2,9 +2,9 @@ package org.tuxdevelop.spring.batch.lightmin.admin.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobConfigurationException;
-import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobException;
-import org.tuxdevelop.spring.batch.lightmin.execption.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.util.*;
 

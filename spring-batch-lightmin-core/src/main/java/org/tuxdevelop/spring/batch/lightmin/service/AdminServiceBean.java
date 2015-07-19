@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
-import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobConfigurationException;
-import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobException;
-import org.tuxdevelop.spring.batch.lightmin.execption.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;

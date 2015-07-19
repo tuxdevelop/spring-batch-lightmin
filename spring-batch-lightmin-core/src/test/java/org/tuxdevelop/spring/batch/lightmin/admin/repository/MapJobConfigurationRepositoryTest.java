@@ -5,8 +5,8 @@ import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
-import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobConfigurationException;
-import org.tuxdevelop.spring.batch.lightmin.execption.NoSuchJobException;
+import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
 
 import java.util.Collection;
 
