@@ -1,6 +1,9 @@
 language: java
-dd:
-  secure: LvEGkjyg8kux4y/JDyRZPCyip4a3FpmPHetG00pMPGEJzWv8oavKlBqF6+0/N2ZEVP9mNQzrhFgpXQQ18Gpt/gnXs4AH9TXFrv0JTCuQfer/ua86BaT4rttSTpO4HE9lxAkYZif3Ik5bONI0589eyPLYyMvRlTDNgN95eRa7YSM=
 before_install:
-- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in secring.gpg.enc -out local.secring.gpg -d
-- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in pubring.gpg.enc -out local.pubring.gpg -d
+- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in secring.gpg.enc -out local.secring.gpg
+  -d
+- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in pubring.gpg.enc -out local.pubring.gpg
+  -d
+env:
+  global:
+    secure: JqftdHHiIkPYNUMw3I77AeBM+NU/mGuOlX+8RJpdYAFzvN4KygdTN4QmEdESN3wuiduNB+Th5zbTQ7fI8S8y16aXS0AIDVxMW6CoZmjD0Tjh2FjkMD2tJFsPypFsEKWPxz6vGjKg2hu8PBT1FP4OauLTsQxODxUvdAdst6NYSTA=
