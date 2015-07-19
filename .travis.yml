@@ -1,9 +1,1 @@
 language: java
-before_install:
-- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in secring.gpg.enc -out local.secring.gpg
-  -d
-- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in pubring.gpg.enc -out local.pubring.gpg
-  -d
-env:
-  global:
-    secure: JqftdHHiIkPYNUMw3I77AeBM+NU/mGuOlX+8RJpdYAFzvN4KygdTN4QmEdESN3wuiduNB+Th5zbTQ7fI8S8y16aXS0AIDVxMW6CoZmjD0Tjh2FjkMD2tJFsPypFsEKWPxz6vGjKg2hu8PBT1FP4OauLTsQxODxUvdAdst6NYSTA=
