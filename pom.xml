@@ -9,10 +9,16 @@
     <packaging>pom</packaging>
 
     <name>Spring Batch Lightmin</name>
+
+    <!-- project description -->
     <description>The Spring Batch Lightmin Projects contains libraries to manage Spring Batch Jobs
         within Spring Boot Applications
     </description>
+
+    <!-- project url -->
     <url>https://github.com/tuxdevelop/spring-batch-lightmin</url>
+
+    <!-- license -->
     <licenses>
         <license>
             <name>The Apache License, Version 2.0</name>
@@ -39,11 +45,12 @@
         <simple.slf4j.version>1.7.10</simple.slf4j.version>
         <platform-bom.version>1.1.3.RELEASE</platform-bom.version>
         <!-- plugin versions -->
-        <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.3</nexus-staging-maven-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
+        <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -116,6 +123,7 @@
         </dependency>
     </dependencies>
 
+    <!-- scm information -->
     <scm>
         <connection>scm:git:git@github.com:tuxdevelop/spring-batch-lightmin.git</connection>
         <developerConnection>scm:git:tuxdevelop@github.com:tuxdevelop/spring-batch-lightmin.git
@@ -123,6 +131,8 @@
         <url>https://github.com/tuxdevelop/spring-batch-lightmin.git</url>
     </scm>
 
+
+    <!-- distribution management -->
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -130,9 +140,13 @@
         </snapshotRepository>
     </distributionManagement>
 
+    <!-- build section -->
     <build>
+
+        <!-- plugins -->
         <plugins>
             <plugin>
+                <!-- compiler -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
@@ -145,14 +159,14 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>${nexus-staging-maven-plugin.version}</version>
-                <extensions>true</extensions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <includes>
+                        <include>**/*IT.java</include>
+                        <include>**/*Test.java</include>
+                    </includes>
                 </configuration>
             </plugin>
         </plugins>
