@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.util;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.Job;
@@ -60,7 +60,7 @@ public class BeanRegistrarIT {
 
     //FIXME: Bean found, but is unregistered
     @Ignore
-    //@Test(expected = NoSuchBeanDefinitionException.class)
+    @Test(expected = NoSuchBeanDefinitionException.class)
     public void unregisterBeanStringIT() {
         beanRegistrar.registerBean(String.class, "sampleString", null, null, null, null, null);
         final String registeredBean = (String) applicationContext.getBean("sampleString");
