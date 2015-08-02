@@ -56,7 +56,7 @@
             <id>release-sign-artifacts</id>
             <activation>
                 <property>
-                    <name>performRelease</name>
+                    <name>signDeploy</name>
                     <value>true</value>
                 </property>
             </activation>
