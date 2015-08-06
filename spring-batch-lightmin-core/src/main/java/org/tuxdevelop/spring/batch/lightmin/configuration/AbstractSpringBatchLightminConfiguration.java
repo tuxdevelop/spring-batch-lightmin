@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
-import lombok.extern.slf4j.Slf4j;
+import javax.sql.DataSource;
+
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -11,146 +12,140 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.dao.JobExecutionDao;
 import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.batch.core.repository.dao.StepExecutionDao;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
-import org.tuxdevelop.spring.batch.lightmin.service.*;
+import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
+import org.tuxdevelop.spring.batch.lightmin.service.AdminServiceBean;
+import org.tuxdevelop.spring.batch.lightmin.service.JobService;
+import org.tuxdevelop.spring.batch.lightmin.service.SchedulerService;
+import org.tuxdevelop.spring.batch.lightmin.service.SchedulerServiceBean;
+import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 
-import javax.sql.DataSource;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
-@Import(value = {RegistrationConfiguration.class, RestServiceConfiguration.class})
-public class AbstractSpringBatchLightminConfiguration implements InitializingBean, ApplicationContextAware {
+@Import(value = { RegistrationConfiguration.class, RestServiceConfiguration.class })
+public class AbstractSpringBatchLightminConfiguration implements InitializingBean {
 
+	@Autowired(required = false)
+	private DataSource dataSource;
 
-    @Autowired(required = false)
-    private DataSource dataSource;
+	@Value("${table.prefix}")
+	private String tablePrefix;
 
-    private ApplicationContext applicationContext;
+	@Autowired
+	private JobConfigurationRepository jobConfigurationRepository;
 
-    @Value("${table.prefix}")
-    private String tablePrefix;
+	@Bean
+	public DefaultSpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator() {
+		final DefaultSpringBatchLightminConfigurator configuration;
+		final StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("Create DefaultSpringBatchLightminConfiguration ");
+		if (dataSource != null) {
+			if (tablePrefix != null) {
+				configuration = new DefaultSpringBatchLightminConfigurator(dataSource, tablePrefix);
+				stringBuilder.append("with dataSource and tablePrefix: ");
+				stringBuilder.append(tablePrefix);
+			} else {
+				configuration = new DefaultSpringBatchLightminConfigurator(dataSource);
+				stringBuilder.append("with dataSource");
+			}
+		} else if (tablePrefix != null) {
+			configuration = new DefaultSpringBatchLightminConfigurator(tablePrefix);
+			stringBuilder.append("with tablePrefix: ");
+			stringBuilder.append(tablePrefix);
+		} else {
+			configuration = new DefaultSpringBatchLightminConfigurator();
+		}
+		log.info(stringBuilder.toString());
+		return configuration;
+	}
 
-    @Autowired
-    private JobConfigurationRepository jobConfigurationRepository;
+	@Bean
+	public JobService jobService() {
+		return defaultSpringBatchLightminConfigurator().getJobService();
+	}
 
-    @Bean
-    public DefaultSpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator() {
-        final DefaultSpringBatchLightminConfigurator configuration;
-        final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Create DefaultSpringBatchLightminConfiguration ");
-        if (dataSource != null) {
-            if (tablePrefix != null) {
-                configuration = new DefaultSpringBatchLightminConfigurator(dataSource, tablePrefix);
-                stringBuilder.append("with dataSource and tablePrefix: ");
-                stringBuilder.append(tablePrefix);
-            } else {
-                configuration = new DefaultSpringBatchLightminConfigurator(dataSource);
-                stringBuilder.append("with dataSource");
-            }
-        } else if (tablePrefix != null) {
-            configuration = new DefaultSpringBatchLightminConfigurator(tablePrefix);
-            stringBuilder.append("with tablePrefix: ");
-            stringBuilder.append(tablePrefix);
-        } else {
-            configuration = new DefaultSpringBatchLightminConfigurator();
-        }
-        log.info(stringBuilder.toString());
-        return configuration;
-    }
+	@Bean
+	public StepService stepService() {
+		return defaultSpringBatchLightminConfigurator().getStepService();
+	}
 
-    @Bean
-    public JobService jobService() {
-        return defaultSpringBatchLightminConfigurator().getJobService();
-    }
+	@Bean
+	public JobExecutionDao jobExecutionDao() {
+		return defaultSpringBatchLightminConfigurator().getJobExecutionDao();
+	}
 
-    @Bean
-    public StepService stepService() {
-        return defaultSpringBatchLightminConfigurator().getStepService();
-    }
+	@Bean
+	public JobInstanceDao jobInstanceDao() {
+		return defaultSpringBatchLightminConfigurator().getJobInstanceDao();
+	}
 
-    @Bean
-    public JobExecutionDao jobExecutionDao() {
-        return defaultSpringBatchLightminConfigurator().getJobExecutionDao();
-    }
+	@Bean
+	public StepExecutionDao stepExecutionDao() {
+		return defaultSpringBatchLightminConfigurator().getStepExecutionDao();
+	}
 
-    @Bean
-    public JobInstanceDao jobInstanceDao() {
-        return defaultSpringBatchLightminConfigurator().getJobInstanceDao();
-    }
+	@Bean
+	public JobOperator jobOperator() {
+		return defaultSpringBatchLightminConfigurator().getJobOperator();
+	}
 
-    @Bean
-    public StepExecutionDao stepExecutionDao() {
-        return defaultSpringBatchLightminConfigurator().getStepExecutionDao();
-    }
+	@Bean
+	public JobLauncher jobLauncher() {
+		return defaultSpringBatchLightminConfigurator().getJobLauncher();
+	}
 
-    @Bean
-    public JobOperator jobOperator() {
-        return defaultSpringBatchLightminConfigurator().getJobOperator();
-    }
+	@Bean
+	public JobRegistry jobRegistry() {
+		return defaultSpringBatchLightminConfigurator().getJobRegistry();
+	}
 
-    @Bean
-    public JobLauncher jobLauncher() {
-        return defaultSpringBatchLightminConfigurator().getJobLauncher();
-    }
+	@Bean
+	public JobExplorer jobExplorer() {
+		return defaultSpringBatchLightminConfigurator().getJobExplorer();
+	}
 
-    @Bean
-    public JobRegistry jobRegistry() {
-        return defaultSpringBatchLightminConfigurator().getJobRegistry();
-    }
+	@Bean
+	public JobRepository jobRepository() {
+		return defaultSpringBatchLightminConfigurator().getJobRepository();
+	}
 
-    @Bean
-    public JobExplorer jobExplorer() {
-        return defaultSpringBatchLightminConfigurator().getJobExplorer();
-    }
+	@Bean
+	public BeanRegistrar beanRegistrar() {
+		return new BeanRegistrar();
+	}
 
-    @Bean
-    public JobRepository jobRepository() {
-        return defaultSpringBatchLightminConfigurator().getJobRepository();
-    }
+	@Bean
+	public SchedulerService schedulerService() {
+		return new SchedulerServiceBean(beanRegistrar(), jobRepository(), jobRegistry());
+	}
 
-    @Bean
-    public BeanRegistrar beanRegistrar() {
-        return new BeanRegistrar();
-    }
+	@Bean
+	public AdminService adminService() {
+		return new AdminServiceBean(jobConfigurationRepository, schedulerService());
+	}
 
-    @Bean
-    public SchedulerService schedulerService() {
-        return new SchedulerServiceBean(beanRegistrar(), jobRepository(), jobRegistry());
-    }
+	@Bean
+	public StepBuilderFactory stepBuilderFactory() {
+		return new StepBuilderFactory(jobRepository(),
+				defaultSpringBatchLightminConfigurator().getTransactionManager());
+	}
 
-    @Bean
-    public AdminService adminService() {
-        return new AdminServiceBean(jobConfigurationRepository, schedulerService());
-    }
+	@Bean
+	public JobBuilderFactory jobBuilderFactory() {
+		return new JobBuilderFactory(jobRepository());
+	}
 
-    @Bean
-    public StepBuilderFactory stepBuilderFactory() {
-        return new StepBuilderFactory(jobRepository(),
-                defaultSpringBatchLightminConfigurator().getTransactionManager());
-    }
-
-    @Bean
-    public JobBuilderFactory jobBuilderFactory() {
-        return new JobBuilderFactory(jobRepository());
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        assert jobConfigurationRepository != null;
-    }
-
-    @Override
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+	@Override
+	public void afterPropertiesSet() {
+		assert jobConfigurationRepository != null;
+	}
 }
