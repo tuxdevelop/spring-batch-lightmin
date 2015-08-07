@@ -13,6 +13,7 @@
 
     <modules>
         <module>address-migrator</module>
+        <module>address-migrator-war</module>
     </modules>
 
     <artifactId>spring-batch-lightmin-samples</artifactId>

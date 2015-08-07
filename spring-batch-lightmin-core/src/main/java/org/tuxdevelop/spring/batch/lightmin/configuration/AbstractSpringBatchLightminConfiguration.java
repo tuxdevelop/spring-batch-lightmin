@@ -1,7 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
-import javax.sql.DataSource;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -19,15 +18,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
-import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
-import org.tuxdevelop.spring.batch.lightmin.service.AdminServiceBean;
-import org.tuxdevelop.spring.batch.lightmin.service.JobService;
-import org.tuxdevelop.spring.batch.lightmin.service.SchedulerService;
-import org.tuxdevelop.spring.batch.lightmin.service.SchedulerServiceBean;
-import org.tuxdevelop.spring.batch.lightmin.service.StepService;
+import org.tuxdevelop.spring.batch.lightmin.service.*;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 
-import lombok.extern.slf4j.Slf4j;
+import javax.sql.DataSource;
 
 @Slf4j
 @Configuration
@@ -37,7 +31,7 @@ public class AbstractSpringBatchLightminConfiguration implements InitializingBea
 	@Autowired(required = false)
 	private DataSource dataSource;
 
-	@Value("${table.prefix}")
+	@Value("${table.prefix:BATCH_}")
 	private String tablePrefix;
 
 	@Autowired
