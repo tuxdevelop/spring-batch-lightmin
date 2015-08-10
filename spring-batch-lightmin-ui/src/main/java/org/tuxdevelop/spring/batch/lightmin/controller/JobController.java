@@ -98,8 +98,8 @@ public class JobController {
         return "jobExecution";
     }
 
-    private void enrichJobExecution(final JobExecutionModel jobExecutionModel,
-                                    Collection<StepExecution> stepExecutions) {
+    void enrichJobExecution(final JobExecutionModel jobExecutionModel,
+                            Collection<StepExecution> stepExecutions) {
         final Collection<StepExecutionModel> stepExecutionModels = new LinkedList<StepExecutionModel>();
         for (final StepExecution stepExecution : stepExecutions) {
             final StepExecutionModel stepExecutionModel = new StepExecutionModel();
@@ -110,7 +110,7 @@ public class JobController {
         jobExecutionModel.setStepExecutions(stepExecutionModels);
     }
 
-    private void enrichJobInstanceModel(final JobInstanceModel jobInstanceModel, final JobInstance jobInstance) {
+    void enrichJobInstanceModel(final JobInstanceModel jobInstanceModel, final JobInstance jobInstance) {
         final Collection<JobExecutionModel> jobExecutionModels = new LinkedList<JobExecutionModel>();
         final Collection<JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance);
         for (final JobExecution jobExecution : jobExecutions) {

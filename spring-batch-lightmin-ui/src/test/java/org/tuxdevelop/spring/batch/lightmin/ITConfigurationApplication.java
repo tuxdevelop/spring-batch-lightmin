@@ -1,4 +1,4 @@
-package org.txudevelop.spring.batch.lightmin;
+package org.tuxdevelop.spring.batch.lightmin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,12 +11,12 @@ import org.tuxdevelop.spring.batch.lightmin.configuration.EnableSpringBatchLingt
 @EnableSpringBatchLingtminUI
 public class ITConfigurationApplication {
 
-	public static void main(final String[] args) {
-		SpringApplication.run(ITConfigurationApplication.class, args);
-	}
+    public static void main(final String[] args) {
+        SpringApplication.run(ITConfigurationApplication.class, args);
+    }
 
-	@Bean
-	public JobConfigurationRepository jobConfigurationRepository() {
-		return new MapJobConfigurationRepository();
-	}
+    @Bean
+    public JobConfigurationRepository jobConfigurationRepository() {
+        return new MapJobConfigurationRepository();
+    }
 }

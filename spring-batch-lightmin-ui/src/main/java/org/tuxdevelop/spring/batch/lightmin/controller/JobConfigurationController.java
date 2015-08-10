@@ -30,18 +30,6 @@ public class JobConfigurationController {
         model.addAttribute("jobConfigurationModels", jobConfigurationModels);
     }
 
-    private Collection<JobConfigurationModel> getJobConfigurationModels() {
-        final Map<String, Collection<JobConfiguration>> jobConfigurationMap = adminService.getJobConfigurationMap();
-        final Collection<JobConfigurationModel> jobConfigurationModels = new LinkedList<JobConfigurationModel>();
-        for (final Map.Entry<String, Collection<JobConfiguration>> entry : jobConfigurationMap.entrySet()) {
-            final JobConfigurationModel jobConfigurationModel = new JobConfigurationModel();
-            jobConfigurationModel.setJobName(entry.getKey());
-            jobConfigurationModel.setJobConfigurations(entry.getValue());
-            jobConfigurationModels.add(jobConfigurationModel);
-        }
-        return jobConfigurationModels;
-    }
-
     @RequestMapping(value = "/jobConfigurations/{jobConfigurationId}", method = RequestMethod.GET)
     public void getJobConfiguration(final Model model, @PathVariable("jobConfigurationId") final Long jobConfigurationId) {
         final JobConfiguration jobConfiguration = adminService.getJobConfigurationById(jobConfigurationId);
@@ -106,7 +94,19 @@ public class JobConfigurationController {
         model.addAttribute("jobConfigurationModels", jobConfigurationModels);
     }
 
-    private JobConfiguration mapModelToJobConfiguration(final JobConfigurationAddModel jobConfigurationAddModel) {
+    Collection<JobConfigurationModel> getJobConfigurationModels() {
+        final Map<String, Collection<JobConfiguration>> jobConfigurationMap = adminService.getJobConfigurationMap();
+        final Collection<JobConfigurationModel> jobConfigurationModels = new LinkedList<JobConfigurationModel>();
+        for (final Map.Entry<String, Collection<JobConfiguration>> entry : jobConfigurationMap.entrySet()) {
+            final JobConfigurationModel jobConfigurationModel = new JobConfigurationModel();
+            jobConfigurationModel.setJobName(entry.getKey());
+            jobConfigurationModel.setJobConfigurations(entry.getValue());
+            jobConfigurationModels.add(jobConfigurationModel);
+        }
+        return jobConfigurationModels;
+    }
+
+    JobConfiguration mapModelToJobConfiguration(final JobConfigurationAddModel jobConfigurationAddModel) {
         final JobSchedulerConfiguration jobSchedulerConfiguration = new JobSchedulerConfiguration();
         jobSchedulerConfiguration.setJobSchedulerType(jobConfigurationAddModel.getJobSchedulerType());
         if (JobSchedulerType.CRON.equals(jobConfigurationAddModel.getJobSchedulerType())) {
