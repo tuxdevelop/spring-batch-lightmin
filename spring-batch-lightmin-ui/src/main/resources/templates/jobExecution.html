@@ -65,6 +65,10 @@
                     <td>Exit Code</td>
                     <td th:text="${jobExecution.jobExecution.exitStatus.exitCode}"/>
                 </tr>
+                <tr>
+                    <td>Job Parameters</td>
+                    <td th:text="${jobExecution.jobExecution.jobParameters.toString()}"/>
+                </tr>
                 </tbody>
             </table>
         </div>
