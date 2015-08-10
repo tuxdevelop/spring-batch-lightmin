@@ -7,6 +7,9 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.tuxdevelop.spring.batch.lightmin.controller.*;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 @Configuration
 @Import(value = {AdminController.class, IndexController.class, JobConfigurationController.class, JobController.class,
         JobLauncherController.class, StepController.class, RestServiceConfiguration.class})
@@ -33,5 +36,10 @@ public class SpringBatchLightminWebConfiguration {
                         ("jobConfigurations");
             }
         };
+    }
+
+    @Bean
+    public InetAddress serverAddress() throws UnknownHostException {
+        return InetAddress.getLocalHost();
     }
 }
