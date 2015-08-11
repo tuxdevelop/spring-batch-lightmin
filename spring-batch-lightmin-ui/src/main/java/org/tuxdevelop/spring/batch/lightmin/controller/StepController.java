@@ -11,7 +11,7 @@ import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 
 @RestController
 @RequestMapping("/steps")
-public class StepController {
+public class StepController extends CommonController {
 
     @Autowired
     private StepService stepService;

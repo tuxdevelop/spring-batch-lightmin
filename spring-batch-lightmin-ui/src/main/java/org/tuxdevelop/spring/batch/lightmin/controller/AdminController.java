@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminController extends CommonController {
 
     @Autowired
     private JobService jobService;

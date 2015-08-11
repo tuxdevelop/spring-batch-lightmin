@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 @Controller
-public class JobController {
+public class JobController extends CommonController {
 
     @Autowired
     private JobService jobService;

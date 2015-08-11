@@ -17,44 +17,74 @@
 </head>
 <body>
 <div th:include="fragments/header :: header"></div>
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3>Application Exception</h3>
-    </div>
-    <div class="panel-body">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3>Information</h3>
-            </div>
-            <div class="panel-body">
-                <p th:if="${url}">
-                    <b>Page:</b> <span th:text="${url}">Page URL</span>
-                </p>
-
-                <p th:if="${timestamp}" id='created'>
-                    <b>Occurred:</b> <span th:text="${timestamp}">Timestamp</span>
-                </p>
-
-                <p th:if="${status}">
-                    <b>Response Status:</b> <span th:text="${status}">status-code</span>
-                    <span th:if="${error}" th:text="'('+${error}+')'">error ...</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3>Exception Details</h3>
-            </div>
-            <div class="panel-body">
-                <!--<div th:utext="'Exception: ' + ${exception.message}"></div> -->
-                <!--<ul>
-                    <li th:each="ste : ${exception.stackTrace}"><span
-                        th:utext="${ste}">${ste} </span></li>
-                </ul> -->
-            </div>
-        </div>
-    </div>
+<div class="viewport">
+    <table class="table boxed">
+        <thead>
+        <tr>
+            <th colspan="1">
+                <h3>Application Exception</h3>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <table class="table boxed">
+                    <thead>
+                    <tr>
+                        <th colspan="1">
+                            <h5>Information</h5>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${url}">
+                        <td>
+                            <b>Page:</b> <span th:text="${url}">Page URL</span>
+                        </td>
+                    </tr>
+                    <tr th:if="${timestamp}">
+                        <td>
+                            <b>Occurred:</b> <span th:text="${timestamp}">Timestamp</span>
+                        </td>
+                    </tr>
+                    <tr th:if="${status}">
+                        <td>
+                            <b>Response Status:</b> <span th:text="${status}">status-code</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table class="table boxed">
+                    <thead>
+                    <tr>
+                        <th colspan="1">
+                            <h5>Exception Details</h5>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div th:utext="'Exception: ' + ${exception.message}"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <li th:each="ste : ${exception.stackTrace}"><span
+                                    th:utext="${ste}">StackTranceElement</span></li>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

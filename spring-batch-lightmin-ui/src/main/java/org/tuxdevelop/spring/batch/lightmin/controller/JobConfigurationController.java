@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 @Controller
-public class JobConfigurationController {
+public class JobConfigurationController extends CommonController{
 
     @Autowired
     private AdminService adminService;

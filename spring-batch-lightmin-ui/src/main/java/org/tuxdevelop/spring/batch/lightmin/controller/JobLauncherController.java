@@ -17,7 +17,7 @@ import org.tuxdevelop.spring.batch.lightmin.util.ParameterParser;
 
 @Controller
 @RequestMapping("/jobLaunchers")
-public class JobLauncherController {
+public class JobLauncherController extends CommonController{
 
 	@Autowired
 	private JobLauncher jobLauncher;
