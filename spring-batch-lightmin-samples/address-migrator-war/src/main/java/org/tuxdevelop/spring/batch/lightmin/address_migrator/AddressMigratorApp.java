@@ -6,10 +6,10 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.tuxdevelop.spring.batch.lightmin.configuration.EnableSpringBatchLingtminUI;
+import org.tuxdevelop.spring.batch.lightmin.configuration.EnableSpringBatchLightminUI;
 
 @Configuration
-@EnableSpringBatchLingtminUI
+@EnableSpringBatchLightminUI
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "org.tuxdevelop.spring.batch.lightmin.address_migrator")
 public class AddressMigratorApp extends SpringBootServletInitializer {

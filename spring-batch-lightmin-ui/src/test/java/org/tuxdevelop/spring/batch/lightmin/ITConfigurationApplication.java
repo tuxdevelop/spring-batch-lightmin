@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.MapJobConfigurationRepository;
-import org.tuxdevelop.spring.batch.lightmin.configuration.EnableSpringBatchLingtminUI;
+import org.tuxdevelop.spring.batch.lightmin.configuration.EnableSpringBatchLightminUI;
 
 @SpringBootApplication
-@EnableSpringBatchLingtminUI
+@EnableSpringBatchLightminUI
 public class ITConfigurationApplication {
 
     public static void main(final String[] args) {
