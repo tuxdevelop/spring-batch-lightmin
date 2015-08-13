@@ -14,21 +14,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration(classes = ITConfiguration.class)
 public class PeriodSchedulerIT {
 
-	@Autowired
-	private PeriodScheduler periodScheduler;
+    @Autowired
+    private PeriodScheduler periodScheduler;
 
-	@Test
-	public void scheduleIT() {
-		periodScheduler.schedule();
-		assertThat(periodScheduler.getStatus()).isEqualTo(SchedulerStatus.RUNNING);
-		periodScheduler.terminate();
-	}
+    @Test
+    public void scheduleIT() {
+        periodScheduler.schedule();
+        assertThat(periodScheduler.getSchedulerStatus()).isEqualTo(SchedulerStatus.RUNNING);
+        periodScheduler.terminate();
+    }
 
-	@Test
-	public void terminateIT() {
-		periodScheduler.schedule();
-		assertThat(periodScheduler.getStatus()).isEqualTo(SchedulerStatus.RUNNING);
-		periodScheduler.terminate();
-		assertThat(periodScheduler.getStatus()).isEqualTo(SchedulerStatus.STOPPED);
-	}
+    @Test
+    public void terminateIT() {
+        periodScheduler.schedule();
+        assertThat(periodScheduler.getSchedulerStatus()).isEqualTo(SchedulerStatus.RUNNING);
+        periodScheduler.terminate();
+        assertThat(periodScheduler.getSchedulerStatus()).isEqualTo(SchedulerStatus.STOPPED);
+    }
 }

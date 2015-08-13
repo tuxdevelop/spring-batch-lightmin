@@ -16,6 +16,7 @@ public class JobSchedulerConfiguration extends AbstractConfiguration {
     private Long fixedDelay;
     private TaskExecutorType taskExecutorType;
     private String beanName;
+    private SchedulerStatus schedulerStatus;
 
     public void validate() {
         if (jobSchedulerType == null) {

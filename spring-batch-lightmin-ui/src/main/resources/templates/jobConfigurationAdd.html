@@ -123,6 +123,23 @@
 
                                 <tr>
                                     <td>
+                                        <label for="schedulerStatus">
+                                            Scheduler Status
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="schedulerStatus"
+                                                th:field="*{schedulerStatus}" th:value="*{schedulerStatus}">
+                                            <option th:each="status : ${schedulerStatusValues}"
+                                                    th:value="${status}" th:text="${status.value}">
+                                                Scheduler Status
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
                                         <label for="jobParameters">
                                             JobParameters
                                         </label>

@@ -20,14 +20,14 @@ public class CronSchedulerIT {
 	@Test
 	public void scheduleIT() {
 		cronScheduler.schedule();
-		assertThat(cronScheduler.getStatus()).isEqualTo(SchedulerStatus.RUNNING);
+		assertThat(cronScheduler.getSchedulerStatus()).isEqualTo(SchedulerStatus.RUNNING);
 	}
 
 	@Test
 	public void terminateIT() {
 		cronScheduler.schedule();
-		assertThat(cronScheduler.getStatus()).isEqualTo(SchedulerStatus.RUNNING);
+		assertThat(cronScheduler.getSchedulerStatus()).isEqualTo(SchedulerStatus.RUNNING);
 		cronScheduler.terminate();
-		assertThat(cronScheduler.getStatus()).isEqualTo(SchedulerStatus.STOPPED);
+		assertThat(cronScheduler.getSchedulerStatus()).isEqualTo(SchedulerStatus.STOPPED);
 	}
 }

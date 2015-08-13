@@ -3,6 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.service;
 import lombok.extern.slf4j.Slf4j;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
@@ -35,7 +36,11 @@ public class AdminServiceBean implements AdminService {
         addedJobConfiguration.getJobSchedulerConfiguration().setBeanName(beanName);
         try {
             jobConfigurationRepository.update(addedJobConfiguration);
-            schedulerService.schedule(beanName);
+            if (SchedulerStatus.RUNNING.equals(jobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus())) {
+                schedulerService.schedule(beanName);
+            } else {
+                log.info("Scheduler not started, no scheduling triggered!");
+            }
         } catch (final NoSuchJobConfigurationException e) {
             log.error(e.getMessage());
             throw new SpringBatchLightminApplicationException(e, e.getMessage());
@@ -48,7 +53,11 @@ public class AdminServiceBean implements AdminService {
         try {
             jobConfigurationRepository.update(jobConfiguration);
             schedulerService.refreshSchedulerForJob(jobConfiguration);
-            schedulerService.schedule(jobConfiguration.getJobSchedulerConfiguration().getBeanName());
+            if (SchedulerStatus.RUNNING.equals(jobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus())) {
+                schedulerService.schedule(jobConfiguration.getJobSchedulerConfiguration().getBeanName());
+            } else {
+                log.info("Scheduler not started, no scheduling triggered!");
+            }
         } catch (final NoSuchJobConfigurationException e) {
             log.error(e.getMessage());
             throw new SpringBatchLightminApplicationException(e, e.getMessage());
@@ -91,6 +100,7 @@ public class AdminServiceBean implements AdminService {
     public Map<String, Collection<JobConfiguration>> getJobConfigurationMap() {
         final Map<String, Collection<JobConfiguration>> jobConfigurationMap = new HashMap<String, Collection<JobConfiguration>>();
         final Collection<JobConfiguration> jobConfigurations = jobConfigurationRepository.getAllJobConfigurations();
+        attachSchedulerStatus(jobConfigurations);
         log.info("Fetched " + jobConfigurations.size() + " JobConfigurations");
         for (final JobConfiguration jobConfiguration : jobConfigurations) {
             final String jobName = jobConfiguration.getJobName();
@@ -111,8 +121,32 @@ public class AdminServiceBean implements AdminService {
     @Override
     public JobConfiguration getJobConfigurationById(final Long jobConfigurationId) {
         try {
-            return jobConfigurationRepository.getJobConfiguration(jobConfigurationId);
+            final JobConfiguration jobConfiguration = jobConfigurationRepository.getJobConfiguration(jobConfigurationId);
+            attachSchedulerStatus(jobConfiguration);
+            return jobConfiguration;
         } catch (final NoSuchJobConfigurationException e) {
+            throw new SpringBatchLightminApplicationException(e, e.getMessage());
+        }
+    }
+
+    @Override
+    public void stopJobConfigurationScheduler(final Long jobConfigurationId) {
+        try {
+            final JobConfiguration jobConfiguration = jobConfigurationRepository.getJobConfiguration(jobConfigurationId);
+            final String beanName = jobConfiguration.getJobSchedulerConfiguration().getBeanName();
+            schedulerService.terminate(beanName);
+        } catch (NoSuchJobConfigurationException e) {
+            throw new SpringBatchLightminApplicationException(e, e.getMessage());
+        }
+    }
+
+    @Override
+    public void startJobConfigurationScheduler(final Long jobConfigurationId) {
+        try {
+            final JobConfiguration jobConfiguration = jobConfigurationRepository.getJobConfiguration(jobConfigurationId);
+            final String beanName = jobConfiguration.getJobSchedulerConfiguration().getBeanName();
+            schedulerService.schedule(beanName);
+        } catch (NoSuchJobConfigurationException e) {
             throw new SpringBatchLightminApplicationException(e, e.getMessage());
         }
     }
@@ -137,6 +171,18 @@ public class AdminServiceBean implements AdminService {
     public void afterPropertiesSet() {
         assert jobConfigurationRepository != null;
         assert schedulerService != null;
+    }
+
+    void attachSchedulerStatus(final Collection<JobConfiguration> jobConfigurations) {
+        for (final JobConfiguration jobConfiguration : jobConfigurations) {
+            attachSchedulerStatus(jobConfiguration);
+        }
+    }
+
+    void attachSchedulerStatus(final JobConfiguration jobConfiguration) {
+        final String schedulerName = jobConfiguration.getJobSchedulerConfiguration().getBeanName();
+        final SchedulerStatus schedulerStatus = schedulerService.getSchedulerStatus(schedulerName);
+        jobConfiguration.getJobSchedulerConfiguration().setSchedulerStatus(schedulerStatus);
     }
 
 }

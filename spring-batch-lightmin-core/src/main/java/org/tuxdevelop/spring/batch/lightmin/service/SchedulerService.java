@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.service;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
 
 public interface SchedulerService extends InitializingBean {
 	/**
@@ -35,4 +36,5 @@ public interface SchedulerService extends InitializingBean {
 	 */
 	void terminate(String beanName);
 
+	SchedulerStatus getSchedulerStatus(String beanName);
 }

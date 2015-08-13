@@ -30,21 +30,28 @@ public interface AdminService extends InitializingBean {
     Collection<JobConfiguration> getJobConfigurationsByJobName(String jobName);
 
     /**
-     *
      * @return
      */
     Map<String, Collection<JobConfiguration>> getJobConfigurationMap();
 
     /**
-     *
      * @return
      */
     Collection<JobConfiguration> getJobConfigurations();
 
     /**
-     *
      * @param jobConfigurationId
      * @return
      */
     JobConfiguration getJobConfigurationById(Long jobConfigurationId);
+
+    /**
+     * @param jobConfigurationId
+     */
+    void stopJobConfigurationScheduler(Long jobConfigurationId);
+
+    /**
+     * @param jobConfigurationId
+     */
+    void startJobConfigurationScheduler(Long jobConfigurationId);
 }

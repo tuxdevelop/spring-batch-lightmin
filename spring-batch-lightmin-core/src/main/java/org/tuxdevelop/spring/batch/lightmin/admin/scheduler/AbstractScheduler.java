@@ -15,7 +15,6 @@ import java.util.Date;
 
 public abstract class AbstractScheduler implements InitializingBean {
 
-    @Getter
     @Setter
     private SchedulerStatus status;
 
@@ -58,5 +57,9 @@ public abstract class AbstractScheduler implements InitializingBean {
             }
         }
 
+    }
+
+    public SchedulerStatus getSchedulerStatus() {
+        return this.status;
     }
 }

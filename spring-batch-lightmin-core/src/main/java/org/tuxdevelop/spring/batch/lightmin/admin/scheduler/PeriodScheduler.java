@@ -52,11 +52,10 @@ public class PeriodScheduler extends AbstractScheduler implements Scheduler {
         }
         threadPoolTaskScheduler.initialize();
         setStatus(SchedulerStatus.STOPPED);
-
     }
 
     @Override
-    public void afterPropertiesSet(){
+    public void afterPropertiesSet() {
         assert (jobConfiguration != null);
         assert (threadPoolTaskScheduler != null);
         assert (jobSchedulerConfiguration != null);

@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 @Controller
-public class JobConfigurationController extends CommonController{
+public class JobConfigurationController extends CommonController {
 
     @Autowired
     private AdminService adminService;
@@ -43,6 +43,7 @@ public class JobConfigurationController extends CommonController{
         model.addAttribute("jobNames", jobService.getJobNames());
         model.addAttribute("jobSchedulerTypes", JobSchedulerType.values());
         model.addAttribute("taskExecutorTypes", TaskExecutorType.values());
+        model.addAttribute("schedulerStatusValues", getSelectableSchedulerStatus());
     }
 
     @RequestMapping(value = "/jobConfigurationEdit", method = RequestMethod.GET)
@@ -60,9 +61,11 @@ public class JobConfigurationController extends CommonController{
         jobConfigurationAddModel.setFixedDelay(jobConfiguration.getJobSchedulerConfiguration().getFixedDelay());
         jobConfigurationAddModel.setInitialDelay(jobConfiguration.getJobSchedulerConfiguration().getInitialDelay());
         jobConfigurationAddModel.setJobConfigurationId(jobConfigurationId);
+        jobConfigurationAddModel.setSchedulerStatus(jobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus());
         model.addAttribute("jobConfigurationAddModel", jobConfigurationAddModel);
         model.addAttribute("jobSchedulerTypes", JobSchedulerType.values());
         model.addAttribute("taskExecutorTypes", TaskExecutorType.values());
+        model.addAttribute("schedulerStatusValues", getSelectableSchedulerStatus());
         return "jobConfigurationEdit";
     }
 
@@ -94,6 +97,24 @@ public class JobConfigurationController extends CommonController{
         model.addAttribute("jobConfigurationModels", jobConfigurationModels);
     }
 
+    @RequestMapping(value = "/jobConfigurationSchedulerStart", method = RequestMethod.POST)
+    public String startJobConfigurationScheduler(@RequestParam("jobConfigurationId") final long jobConfigurationId, final
+    Model model) {
+        adminService.startJobConfigurationScheduler(jobConfigurationId);
+        final Collection<JobConfigurationModel> jobConfigurationModels = getJobConfigurationModels();
+        model.addAttribute("jobConfigurationModels", jobConfigurationModels);
+        return "redirect:jobConfigurations";
+    }
+
+    @RequestMapping(value = "/jobConfigurationSchedulerStop", method = RequestMethod.POST)
+    public String stopJobConfigurationScheduler(@RequestParam("jobConfigurationId") final long jobConfigurationId, final
+    Model model) {
+        adminService.stopJobConfigurationScheduler(jobConfigurationId);
+        final Collection<JobConfigurationModel> jobConfigurationModels = getJobConfigurationModels();
+        model.addAttribute("jobConfigurationModels", jobConfigurationModels);
+        return "redirect:jobConfigurations";
+    }
+
     Collection<JobConfigurationModel> getJobConfigurationModels() {
         final Map<String, Collection<JobConfiguration>> jobConfigurationMap = adminService.getJobConfigurationMap();
         final Collection<JobConfigurationModel> jobConfigurationModels = new LinkedList<JobConfigurationModel>();
@@ -116,6 +137,7 @@ public class JobConfigurationController extends CommonController{
             jobSchedulerConfiguration.setInitialDelay(jobConfigurationAddModel.getInitialDelay());
         }
         jobSchedulerConfiguration.setTaskExecutorType(jobConfigurationAddModel.getTaskExecutorType());
+        jobSchedulerConfiguration.setSchedulerStatus(jobConfigurationAddModel.getSchedulerStatus());
         final Map<String, Object> parameters = ParameterParser.parseParameters(jobConfigurationAddModel
                 .getJobParameters());
         final JobConfiguration jobConfiguration = new JobConfiguration();
@@ -127,4 +149,12 @@ public class JobConfigurationController extends CommonController{
         return jobConfiguration;
     }
 
+
+    Collection<SchedulerStatus> getSelectableSchedulerStatus() {
+        final Collection<SchedulerStatus> schedulerStatuses = new LinkedList<SchedulerStatus>();
+        schedulerStatuses.add(SchedulerStatus.INITIALIZED);
+        schedulerStatuses.add(SchedulerStatus.RUNNING);
+        schedulerStatuses.add(SchedulerStatus.STOPPED);
+        return schedulerStatuses;
+    }
 }
