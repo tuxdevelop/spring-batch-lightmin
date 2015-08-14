@@ -2,25 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
+  <meta charset="UTF-8"/>
 </head>
 <body>
-<div class="navbar navbar-default navbar-fixed-top"
-     th:fragment="adminMenu">
-    <header class="navbar header--navbar desktop-only">
+  <div class="navbar navbar-default navbar-fixed-top"
+       th:fragment="adminMenu">
+    <div class="container-fluid">
+      <header class="navbar header--navbar desktop-only">
         <div class="navbar-inner">
-            <div class="container-fluid">
-                <ul class="nav">
-                    <li class="navbar-link">
-                        <a href="#" th:href="@{jobConfigurations}">Job Configurations</a>
-                    </li>
-                    <li class="navbar-link">
-                        <a href="#" th:href="@{jobLaunchers}">Job Launcher</a>
-                    </li>
-                </ul>
-            </div>
+          <div class="container-fluid">
+            <ul class="nav navbar-nav">
+              <li class="navbar-link">
+                <a href="#" th:href="@{jobConfigurations}">Job Configurations</a>
+              </li>
+              <li class="navbar-link">
+                <a href="#" th:href="@{jobLaunchers}">Job Launcher</a>
+              </li>
+            </ul>
+          </div>
         </div>
-    </header>
-</div>
+      </header>
+    </div>
+  </div>
 </body>
 </html>

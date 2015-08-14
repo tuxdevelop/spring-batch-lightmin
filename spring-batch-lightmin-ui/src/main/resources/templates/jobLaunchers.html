@@ -1,70 +1,57 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Spring Batch Lightmin</title>
-    <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/bootstrap.min.css"
-          th:href="@{css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/bootstrap.css"
-          th:href="@{css/bootstrap.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/main.css"
-          th:href="@{css/main.css}"/>
-</head>
+<head th:include="fragments/layout :: header" />
 <body>
-<div th:include="fragments/header :: header"></div>
-<div th:include="fragments/adminMenu :: adminMenu"></div>
-<div class="viewport">
-    <div class="container content">
-        <div class="row-fluid">
-            <table class="table boxed">
-                <thead>
-                <tr>
-                    <th colspan="1">
-                        Job Configurations
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <form id="launchJob" th:action="@{jobLaunchers}"
-                              th:object="${jobLauncherModel}" action="#" method="post">
-                            <div class="form-group">
-                                <label for="jobName" class="control-label col-xs-2">Job
-                                    Name</label>
+    <div th:include="fragments/layout :: menu"></div>
+    <div th:include="fragments/adminMenu :: adminMenu"></div>
+    <div class="viewport">
+        <div class="container content">
+            <div class="row-fluid">
+                <table class="table boxed">
+                    <thead>
+                    <tr>
+                        <th colspan="1">
+                            Job Configurations
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <form id="launchJob" th:action="@{jobLaunchers}"
+                                  th:object="${jobLauncherModel}" action="#" method="post">
+                                <div class="form-group">
+                                    <label for="jobName" class="control-label col-xs-2">Job
+                                        Name</label>
 
-                                <div class="col-xs-10">
-                                    <select class="form-control" id="jobName" th:value="*{jobName}"
-                                            th:field="*{jobName}">
-                                        <option th:each="name : ${jobNames}" th:value="${name}"
-                                                th:text="${name}">JobName
-                                        </option>
-                                    </select>
-                                </div>
-                                <label for="jobParameters" class="control-label col-xs-2">Job
-                                    Parameters</label>
+                                    <div class="col-xs-10">
+                                        <select class="form-control" id="jobName" th:value="*{jobName}"
+                                                th:field="*{jobName}">
+                                            <option th:each="name : ${jobNames}" th:value="${name}"
+                                                    th:text="${name}">JobName
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <label for="jobParameters" class="control-label col-xs-2">Job
+                                        Parameters</label>
 
-                                <div class="col-xs-10">
-								<textarea class="form-control" id="jobParameters"
-                                          th:value="*{jobParameters}" th:field="*{jobParameters}">key(type)=value,key(type)=value</textarea>
+                                    <div class="col-xs-10">
+                    <textarea class="form-control" id="jobParameters"
+                                              th:value="*{jobParameters}" th:field="*{jobParameters}">key(type)=value,key(type)=value</textarea>
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <button type="submit" class="btn btn-success btn-small">Launch
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-xs-10">
-                                    <button type="submit" class="btn btn-success btn-small">Launch
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>

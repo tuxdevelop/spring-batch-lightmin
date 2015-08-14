@@ -1,23 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Spring Batch Lightmin</title>
-    <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/bootstrap.min.css"
-          th:href="@{css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/bootstrap.css"
-          th:href="@{css/bootstrap.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/main.css"
-          th:href="@{css/main.css}"/>
-</head>
+<head th:include="fragments/layout :: header" />
 <body>
-<div th:include="fragments/header :: header"></div>
-<div th:include="fragments/adminMenu :: adminMenu"></div>
-<div class="container"></div>
+  <div th:include="fragments/layout :: menu"></div>
+  <div th:include="fragments/adminMenu :: adminMenu"></div>
+  <div class="container"></div>
 </body>
 </html>

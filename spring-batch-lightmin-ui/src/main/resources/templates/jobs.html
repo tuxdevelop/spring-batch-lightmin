@@ -1,48 +1,35 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Spring Batch Lightmin</title>
-    <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css"
-          href="../static/css/bootstrap.min.css"
-          th:href="@{css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="../static/css/bootstrap.css"
-          th:href="@{css/bootstrap.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="../static/css/main.css"
-          th:href="@{css/main.css}"/>
-</head>
+<head th:include="fragments/layout :: header" />
 <body>
-<div th:include="fragments/header :: header"></div>
-<div class="viewport">
-    <div class="container content">
-        <div class="row-fluid">
-            <table class="table table-hover boxed">
-                <thead>
-                <tr>
-                    <th colspan="2">
-                        Jobs
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th>Name</th>
-                    <th>Instance Count</th>
-                </tr>
-                <tr th:each="job : ${jobs}">
-                    <td><a href="#"
-                           th:href="@{job(jobName=${job.jobName})}"
-                           th:text="${job.jobName}"> </a></td>
-                    <td th:text="${job.instanceCount}"/>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+  <div th:include="fragments/layout :: menu"></div>
+  <div class="viewport">
+      <div class="container content">
+          <div class="row-fluid">
+              <table class="table table-hover boxed">
+                  <thead>
+                  <tr>
+                      <th colspan="2">
+                          Jobs
+                      </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                      <th>Name</th>
+                      <th>Instance Count</th>
+                  </tr>
+                  <tr th:each="job : ${jobs}">
+                      <td><a href="#"
+                             th:href="@{job(jobName=${job.jobName})}"
+                             th:text="${job.jobName}"> </a></td>
+                      <td th:text="${job.instanceCount}"/>
+                  </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
 </body>
 </html>

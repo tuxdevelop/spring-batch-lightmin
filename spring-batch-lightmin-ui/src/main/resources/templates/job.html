@@ -1,65 +1,52 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Spring Batch Lightmin</title>
-    <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/bootstrap.min.css"
-          th:href="@{css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/bootstrap.css"
-          th:href="@{css/bootstrap.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/main.css"
-          th:href="@{css/main.css}"/>
-</head>
+<head th:include="fragments/layout :: header" />
 <body>
-<div th:include="fragments/header :: header"></div>
-<div class="viewport">
-    <div class="container content">
-        <div class="row-fluid">
-            <table class="table table-hover boxed">
-                <thead>
-                <tr>
-                    <th colspan="2" th:text="${jobName}">
-                        Job Name
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th>Job Instance Id</th>
-                    <th>Job Executions Count</th>
-                </tr>
-                <tr th:each="jobInstance : ${jobInstances}">
-                    <td><a href="#"
-                           th:href="@{executions(jobInstanceId=${jobInstance.jobInstanceId})}"
-                           th:text="${jobInstance.jobInstanceId}"> </a></td>
-                    <td th:text="${jobInstance.jobExecutions.size()}"/>
-                </tr>
-                </tbody>
-            </table>
-            <div th:if="${jobPage.startIndex>9}">
-                <a href="#"
-                   th:href="@{job(jobName=${jobName},startIndex=${jobPage.startIndex}-10)}">
-                    <button type="button"
-                            class="btn btn-inverse btn-small">prev
-                    </button>
+  <div th:include="fragments/layout :: menu"></div>
+  <div class="viewport">
+      <div class="container content">
+          <div class="row-fluid">
+              <table class="table table-hover boxed">
+                  <thead>
+                  <tr>
+                      <th colspan="2" th:text="${jobName}">
+                          Job Name
+                      </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                      <th>Job Instance Id</th>
+                      <th>Job Executions Count</th>
+                  </tr>
+                  <tr th:each="jobInstance : ${jobInstances}">
+                      <td><a href="#"
+                             th:href="@{executions(jobInstanceId=${jobInstance.jobInstanceId})}"
+                             th:text="${jobInstance.jobInstanceId}"> </a></td>
+                      <td th:text="${jobInstance.jobExecutions.size()}"/>
+                  </tr>
+                  </tbody>
+              </table>
+              <div th:if="${jobPage.startIndex>9}">
+                  <a href="#"
+                     th:href="@{job(jobName=${jobName},startIndex=${jobPage.startIndex}-10)}">
+                      <button type="button"
+                              class="btn btn-inverse btn-small">prev
+                      </button>
 
-                </a>
-            </div>
-            <div th:if="${jobInstances.size()>10}">
-                <a href="#"
-                   th:href="@{job(jobName=${jobName},startIndex=${jobPage.startIndex}+10)}">
-                    <button type="button"
-                            class="btn btn-inverse btn-small">next
-                    </button>
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
+                  </a>
+              </div>
+              <div th:if="${jobInstances.size()>10}">
+                  <a href="#"
+                     th:href="@{job(jobName=${jobName},startIndex=${jobPage.startIndex}+10)}">
+                      <button type="button"
+                              class="btn btn-inverse btn-small">next
+                      </button>
+                  </a>
+              </div>
+          </div>
+      </div>
+  </div>
 </body>
 </html>

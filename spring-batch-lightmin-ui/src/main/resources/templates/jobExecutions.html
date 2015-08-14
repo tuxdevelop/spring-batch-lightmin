@@ -1,62 +1,49 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Spring Batch Lightmin</title>
-    <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/bootstrap.min.css"
-          th:href="@{css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/bootstrap.css"
-          th:href="@{css/bootstrap.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/main.css"
-          th:href="@{css/main.css}"/>
-</head>
+<head th:include="fragments/layout :: header" />
 <body>
-<div th:include="fragments/header :: header"></div>
-<div class="viewport">
-    <div class="container content">
-        <div class="row-fluid">
-            <table class="table table-hover boxed">
-                <thead>
-                <tr>
-                    <th colspan="9" th:text="${jobName}">
-                        Job Executions Summary
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th>Instance Id</th>
-                    <th>Execution Id</th>
-                    <th>Job Name</th>
-                    <th>Creation Time</th>
-                    <th>Launch Time</th>
-                    <th>Duration</th>
-                    <th>End Time</th>
-                    <th>Status</th>
-                    <th>Exit Code</th>
-                </tr>
-                <tr th:each="jobExecution : ${jobExecutions}">
-                    <td th:text="${jobExecution.jobInstanceId}"/>
-                    <td><a href="#"
-                           th:href="@{execution(jobExecutionId=${jobExecution.jobExecution.jobId})}"
-                           th:text="${jobExecution.jobExecution.jobId}"></a></td>
-                    <td th:text="${jobExecution.jobName}"/>
-                    <td th:text="${jobExecution.jobExecution.createTime}"/>
-                    <td th:text="${jobExecution.jobExecution.startTime}"/>
-                    <td th:text="${jobExecution.duration}"/>
-                    <td th:text="${jobExecution.jobExecution.endTime}"/>
-                    <td th:text="${jobExecution.jobExecution.status}"/>
-                    <td th:text="${jobExecution.jobExecution.exitStatus.exitCode}"/>
-                </tr>
-                </tbody>
-            </table>
+    <div th:include="fragments/layout :: menu"></div>
+    <div class="viewport">
+        <div class="container content">
+            <div class="row-fluid">
+                <table class="table table-hover boxed">
+                    <thead>
+                    <tr>
+                        <th colspan="9" th:text="${jobName}">
+                            Job Executions Summary
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>Instance Id</th>
+                        <th>Execution Id</th>
+                        <th>Job Name</th>
+                        <th>Creation Time</th>
+                        <th>Launch Time</th>
+                        <th>Duration</th>
+                        <th>End Time</th>
+                        <th>Status</th>
+                        <th>Exit Code</th>
+                    </tr>
+                    <tr th:each="jobExecution : ${jobExecutions}">
+                        <td th:text="${jobExecution.jobInstanceId}"/>
+                        <td><a href="#"
+                               th:href="@{execution(jobExecutionId=${jobExecution.jobExecution.jobId})}"
+                               th:text="${jobExecution.jobExecution.jobId}"></a></td>
+                        <td th:text="${jobExecution.jobName}"/>
+                        <td th:text="${jobExecution.jobExecution.createTime}"/>
+                        <td th:text="${jobExecution.jobExecution.startTime}"/>
+                        <td th:text="${jobExecution.duration}"/>
+                        <td th:text="${jobExecution.jobExecution.endTime}"/>
+                        <td th:text="${jobExecution.jobExecution.status}"/>
+                        <td th:text="${jobExecution.jobExecution.exitStatus.exitCode}"/>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>

@@ -1,158 +1,145 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Spring Batch Lightmin</title>
-    <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/bootstrap.min.css"
-          th:href="@{css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/bootstrap.css"
-          th:href="@{css/bootstrap.css}"/>
-    <link rel="stylesheet" type="text/css"
-          href="src/main/resources/static/css/main.css"
-          th:href="@{css/main.css}"/>
-</head>
+<head th:include="fragments/layout :: header" />
 <body>
-<div th:include="fragments/header :: header"></div>
-<div th:include="fragments/adminMenu :: adminMenu"></div>
-<div class="viewport">
-    <div class="container content">
-        <div class="row-fluid">
-            <table class="table boxed">
-                <thead>
-                <tr>
-                    <th colspan="1">
-                        Job Configurations
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td colspan="1">
-                        <a href="#" th:href="@{jobConfigurationAdd}">
-                            <button type="button" class="btn btn-success btn-mini">Add
-                            </button>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <table class="table boxed">
-                            <thead>
-                            <tr>
-                                <th>Job Name</th>
-                                <th>Job Configurations</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="jobConfigurationModel : ${jobConfigurationModels}">
-                                <td th:text="${jobConfigurationModel.jobName}"/>
-                                <td>
-                                    <table class="table boxed">
-                                        <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Summary</th>
-                                            <th>Operation</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="jobConfiguration: ${jobConfigurationModel.jobConfigurations}">
-                                            <td th:text="${jobConfiguration.jobConfigurationId}"/>
-                                            <td>
-                                                <table class="table boxed">
-                                                    <thead>
-                                                    <tr>
-                                                        <th class="header-text-small">
-                                                            Job Scheduler Type
-                                                        </th>
-                                                        <th class="header-text-small">
-                                                            Cron Expression
-                                                        </th>
-                                                        <th class="header-text-small">
-                                                            Initial Delay
-                                                        </th>
-                                                        <th class="header-text-small">
-                                                            Fixed Delay
-                                                        </th>
-                                                        <th class="header-text-small">
-                                                            Task Executor Type
-                                                        </th>
-                                                        <th class="header-text-small">
-                                                            Job Parameters
-                                                        </th>
-                                                        <th class="header-text-small">
-                                                            Job Incremeter
-                                                        </th>
-                                                        <th class="header-text-small">
-                                                            Scheduler Status
-                                                        </th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        <td class="td-text-small"
-                                                            th:text="${jobConfiguration.jobSchedulerConfiguration.jobSchedulerType}"></td>
-                                                        <td class="td-text-small"
-                                                            th:text="${jobConfiguration.jobSchedulerConfiguration.cronExpression}"></td>
-                                                        <td class="td-text-small"
-                                                            th:text="${jobConfiguration.jobSchedulerConfiguration.initialDelay}"></td>
-                                                        <td class="td-text-small"
-                                                            th:text="${jobConfiguration.jobSchedulerConfiguration.fixedDelay}"></td>
-                                                        <td class="td-text-small"
-                                                            th:text="${jobConfiguration.jobSchedulerConfiguration.taskExecutorType}"></td>
-                                                        <td class="td-text-small"
-                                                            th:text="${jobConfiguration.jobParameters.toString()}"></td>
-                                                        <td class="td-text-small"
-                                                            th:text="${jobConfiguration.jobIncrementer}"></td>
-                                                        <td class="td-text-small"
-                                                            th:text="${jobConfiguration.jobSchedulerConfiguration.schedulerStatus}"></td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                            <td>
-                                                <a href="#"
-                                                   th:href="@{jobConfigurationEdit(jobConfigurationId=${jobConfiguration.jobConfigurationId})}">
-                                                    <button type="button" class="btn btn-success btn-mini">Edit
-                                                    </button>
-                                                </a>
+    <div th:include="fragments/layout :: menu"></div>
+    <div th:include="fragments/adminMenu :: adminMenu"></div>
+    <div class="viewport">
+        <div class="container content">
+            <div class="row-fluid">
+                <table class="table boxed">
+                    <thead>
+                    <tr>
+                        <th colspan="1">
+                            Job Configurations
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="1">
+                            <a href="#" th:href="@{jobConfigurationAdd}">
+                                <button type="button" class="btn btn-success btn-mini">Add
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table class="table boxed">
+                                <thead>
+                                <tr>
+                                    <th>Job Name</th>
+                                    <th>Job Configurations</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="jobConfigurationModel : ${jobConfigurationModels}">
+                                    <td th:text="${jobConfigurationModel.jobName}"/>
+                                    <td>
+                                        <table class="table boxed">
+                                            <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Summary</th>
+                                                <th>Operation</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="jobConfiguration: ${jobConfigurationModel.jobConfigurations}">
+                                                <td th:text="${jobConfiguration.jobConfigurationId}"/>
+                                                <td>
+                                                    <table class="table boxed">
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="header-text-small">
+                                                                Job Scheduler Type
+                                                            </th>
+                                                            <th class="header-text-small">
+                                                                Cron Expression
+                                                            </th>
+                                                            <th class="header-text-small">
+                                                                Initial Delay
+                                                            </th>
+                                                            <th class="header-text-small">
+                                                                Fixed Delay
+                                                            </th>
+                                                            <th class="header-text-small">
+                                                                Task Executor Type
+                                                            </th>
+                                                            <th class="header-text-small">
+                                                                Job Parameters
+                                                            </th>
+                                                            <th class="header-text-small">
+                                                                Job Incremeter
+                                                            </th>
+                                                            <th class="header-text-small">
+                                                                Scheduler Status
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="td-text-small"
+                                                                th:text="${jobConfiguration.jobSchedulerConfiguration.jobSchedulerType}"></td>
+                                                            <td class="td-text-small"
+                                                                th:text="${jobConfiguration.jobSchedulerConfiguration.cronExpression}"></td>
+                                                            <td class="td-text-small"
+                                                                th:text="${jobConfiguration.jobSchedulerConfiguration.initialDelay}"></td>
+                                                            <td class="td-text-small"
+                                                                th:text="${jobConfiguration.jobSchedulerConfiguration.fixedDelay}"></td>
+                                                            <td class="td-text-small"
+                                                                th:text="${jobConfiguration.jobSchedulerConfiguration.taskExecutorType}"></td>
+                                                            <td class="td-text-small"
+                                                                th:text="${jobConfiguration.jobParameters.toString()}"></td>
+                                                            <td class="td-text-small"
+                                                                th:text="${jobConfiguration.jobIncrementer}"></td>
+                                                            <td class="td-text-small"
+                                                                th:text="${jobConfiguration.jobSchedulerConfiguration.schedulerStatus}"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td>
+                                                    <a href="#"
+                                                       th:href="@{jobConfigurationEdit(jobConfigurationId=${jobConfiguration.jobConfigurationId})}">
+                                                        <button type="button" class="btn btn-success btn-mini">Edit
+                                                        </button>
+                                                    </a>
 
-                                                <form id="deleteJobConfiguration" method="post"
-                                                      th:action="@{jobConfigurations(jobConfigurationId=${jobConfiguration.jobConfigurationId})}">
-                                                    <button type="submit" class="btn btn-danger btn-mini">Delete
-                                                    </button>
-                                                </form>
-                                                <form id="start" method="post"
-                                                      th:if="${jobConfiguration.jobSchedulerConfiguration.schedulerStatus.value == 'STOPPED'
-                                                                || jobConfiguration.jobSchedulerConfiguration.schedulerStatus.value == 'INITIALIZED'}"
-                                                      th:action="@{jobConfigurationSchedulerStart(jobConfigurationId=${jobConfiguration.jobConfigurationId})}">
-                                                    <button type="submit" class="btn btn-success btn-mini">Start
-                                                    </button>
-                                                </form>
-                                                <form id="stop" method="post"
-                                                      th:if="${jobConfiguration.jobSchedulerConfiguration.schedulerStatus.value == 'RUNNING'}"
-                                                      th:action="@{jobConfigurationSchedulerStop(jobConfigurationId=${jobConfiguration.jobConfigurationId})}">
-                                                    <button type="submit" class="btn btn-danger btn-mini">Stop
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                                                    <form id="deleteJobConfiguration" method="post"
+                                                          th:action="@{jobConfigurations(jobConfigurationId=${jobConfiguration.jobConfigurationId})}">
+                                                        <button type="submit" class="btn btn-danger btn-mini">Delete
+                                                        </button>
+                                                    </form>
+                                                    <form id="start" method="post"
+                                                          th:if="${jobConfiguration.jobSchedulerConfiguration.schedulerStatus.value == 'STOPPED'
+                                                                    || jobConfiguration.jobSchedulerConfiguration.schedulerStatus.value == 'INITIALIZED'}"
+                                                          th:action="@{jobConfigurationSchedulerStart(jobConfigurationId=${jobConfiguration.jobConfigurationId})}">
+                                                        <button type="submit" class="btn btn-success btn-mini">Start
+                                                        </button>
+                                                    </form>
+                                                    <form id="stop" method="post"
+                                                          th:if="${jobConfiguration.jobSchedulerConfiguration.schedulerStatus.value == 'RUNNING'}"
+                                                          th:action="@{jobConfigurationSchedulerStop(jobConfigurationId=${jobConfiguration.jobConfigurationId})}">
+                                                        <button type="submit" class="btn btn-danger btn-mini">Stop
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>
