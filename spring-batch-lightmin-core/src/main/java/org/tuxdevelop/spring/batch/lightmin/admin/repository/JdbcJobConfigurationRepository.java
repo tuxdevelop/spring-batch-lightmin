@@ -20,6 +20,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 @Slf4j
 public class JdbcJobConfigurationRepository implements JobConfigurationRepository, InitializingBean {
 

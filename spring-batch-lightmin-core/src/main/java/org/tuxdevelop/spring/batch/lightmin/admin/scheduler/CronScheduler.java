@@ -13,6 +13,10 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
 
 import java.util.TimeZone;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 @Slf4j
 @Getter
 public class CronScheduler extends AbstractScheduler implements Scheduler {

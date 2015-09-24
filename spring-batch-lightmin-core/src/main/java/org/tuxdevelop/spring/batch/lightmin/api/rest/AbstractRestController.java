@@ -1,6 +1,9 @@
 package org.tuxdevelop.spring.batch.lightmin.api.rest;
 
-
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 public abstract class AbstractRestController {
 
     public static final String ALL_JOBS = "ALL_JOBS";

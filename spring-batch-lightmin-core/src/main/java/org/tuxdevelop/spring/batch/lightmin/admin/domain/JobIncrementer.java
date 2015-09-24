@@ -3,6 +3,10 @@ package org.tuxdevelop.spring.batch.lightmin.admin.domain;
 import lombok.Getter;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 public enum JobIncrementer {
 
     DATE("DATE_INCREMENTER");

@@ -13,6 +13,10 @@ import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplica
 
 import java.util.Date;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 public abstract class AbstractScheduler implements InitializingBean {
 
     @Setter

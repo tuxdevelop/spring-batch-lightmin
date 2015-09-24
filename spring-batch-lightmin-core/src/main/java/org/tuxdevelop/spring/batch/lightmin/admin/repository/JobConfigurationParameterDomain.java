@@ -1,6 +1,10 @@
 package org.tuxdevelop.spring.batch.lightmin.admin.repository;
 
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 public final class JobConfigurationParameterDomain {
 
     private JobConfigurationParameterDomain() {

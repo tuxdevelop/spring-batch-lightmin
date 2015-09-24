@@ -7,6 +7,10 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.util.Map;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = false)

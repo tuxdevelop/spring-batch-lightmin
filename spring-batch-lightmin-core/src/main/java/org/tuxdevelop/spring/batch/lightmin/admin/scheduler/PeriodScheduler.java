@@ -11,6 +11,10 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
 
 import java.util.Date;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 @Slf4j
 @Getter
 public class PeriodScheduler extends AbstractScheduler implements Scheduler {

@@ -3,9 +3,16 @@ package org.tuxdevelop.spring.batch.lightmin.admin.domain;
 import lombok.Getter;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 public enum SchedulerStatus {
 
-    INITIALIZED("INITIALIZED"), RUNNING("RUNNING"), STOPPED("STOPPED"), IN_TERMINATION("IN TERMINATION");
+    INITIALIZED("INITIALIZED"),
+    RUNNING("RUNNING"),
+    STOPPED("STOPPED"),
+    IN_TERMINATION("IN TERMINATION");
 
     @Getter
     private String value;

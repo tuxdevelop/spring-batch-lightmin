@@ -8,6 +8,10 @@ import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplica
 
 import java.util.*;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 @Slf4j
 public class MapJobConfigurationRepository implements JobConfigurationRepository {
 

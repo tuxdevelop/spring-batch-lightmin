@@ -29,6 +29,10 @@ import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 @Slf4j
 public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightminConfigurator {
 

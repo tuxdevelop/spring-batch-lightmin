@@ -6,6 +6,10 @@ import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
 
 import java.util.Collection;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 public interface JobConfigurationRepository {
 
     /**

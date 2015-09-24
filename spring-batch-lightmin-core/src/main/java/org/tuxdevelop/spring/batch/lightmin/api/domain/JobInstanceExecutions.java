@@ -5,6 +5,10 @@ import org.springframework.batch.core.JobExecution;
 
 import java.util.Collection;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 @Data
 public class JobInstanceExecutions {
 

@@ -18,6 +18,10 @@ import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 @Slf4j
 @Configuration
 public class RegistrationConfiguration {

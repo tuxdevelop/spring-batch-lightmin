@@ -6,6 +6,10 @@ import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplica
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 public enum TaskExecutorType {
 
     SYNCHRONOUS("SYNCHRONOUS", 1L),
@@ -16,7 +20,7 @@ public enum TaskExecutorType {
     @Getter
     private Long id;
 
-    private TaskExecutorType(final String value, final Long id) {
+    TaskExecutorType(final String value, final Long id) {
         this.value = value;
         this.id = id;
     }

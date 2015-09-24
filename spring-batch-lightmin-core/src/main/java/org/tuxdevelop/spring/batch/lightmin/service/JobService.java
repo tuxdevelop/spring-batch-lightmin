@@ -10,7 +10,7 @@ import java.util.Set;
 
 /**
  * @author Marcel Becker
- * @version 0.1
+ * @since 0.1
  */
 public interface JobService extends InitializingBean {
 
@@ -30,41 +30,54 @@ public interface JobService extends InitializingBean {
     Set<String> getJobNames();
 
     /**
+     * Retrieves a {@link org.springframework.batch.core.Job} for a given job Name
      *
-     *
-     * @param jobName
+     * @param jobName the name of the job to get
      * @return the {@link org.springframework.batch.core.Job} or null
      */
     Job getJobByName(String jobName);
 
     /**
-     * @param jobName
-     * @param startIndex
-     * @param pageSize
-     * @return
+     * Retrieves all  {@link org.springframework.batch.core.JobInstance}s for a given job name
+     * starting from a given index and limited by a page size
+     *
+     * @param jobName    name of the job
+     * @param startIndex start index of the page
+     * @param pageSize   size of the page
+     * @return all {@link org.springframework.batch.core.JobInstance}s of the job name within the page
      */
     Collection<JobInstance> getJobInstances(String jobName, int startIndex, int pageSize);
 
     /**
-     * @param jobInstance
-     * @return
+     * Retrieves all {@link org.springframework.batch.core.JobExecution}s for a given {@link org.springframework
+     * .batch.core.JobInstance}
+     *
+     * @param jobInstance the {@link org.springframework.batch.core.JobInstance} the get the executions for.
+     * @return a {@link java.util.Collection} of {@link org.springframework.batch.core.JobExecution}s
      */
     Collection<JobExecution> getJobExecutions(JobInstance jobInstance);
 
     /**
-     * @param jobExecutionId
-     * @return
+     * Retrieves a {@link org.springframework.batch.core.JobExecution} for a give jobExceutionId
+     *
+     * @param jobExecutionId Id of the requested {@link org.springframework.batch.core.JobExecution}
+     * @return the {@link org.springframework.batch.core.JobExecution} for the given id or null
      */
     JobExecution getJobExecution(Long jobExecutionId);
 
     /**
-     * @param jobInstanceId
-     * @return
+     * Retrieves a {@link org.springframework.batch.core.JobInstance} for a give jobInstanceId
+     *
+     * @param jobInstanceId Id of the requested {@link org.springframework.batch.core.JobInstance}
+     * @return the {@link org.springframework.batch.core.JobInstance} for the given id or null
      */
     JobInstance getJobInstance(Long jobInstanceId);
 
     /**
-     * @param jobExecution
+     * attaches the corresponding {@link org.springframework.batch.core.JobInstance} to a given {@link org
+     * .springframework.batch.core.JobExecution}
+     *
+     * @param jobExecution the {@link org.springframework.batch.core.JobExecution} to attache the {@link org.springframework.batch.core.JobInstance}
      */
     void attachJobInstance(JobExecution jobExecution);
 }

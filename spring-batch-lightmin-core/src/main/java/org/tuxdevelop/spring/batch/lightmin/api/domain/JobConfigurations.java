@@ -5,6 +5,10 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 
 import java.util.Collection;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 @Data
 public class JobConfigurations {
 

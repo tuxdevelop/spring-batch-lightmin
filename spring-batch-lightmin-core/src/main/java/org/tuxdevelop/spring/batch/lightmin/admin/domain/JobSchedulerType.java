@@ -2,27 +2,31 @@ package org.tuxdevelop.spring.batch.lightmin.admin.domain;
 
 import lombok.Getter;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 public enum JobSchedulerType {
 
-	CRON(1L), PERIOD(2L);
+    CRON(1L), PERIOD(2L);
 
-	@Getter
-	private Long id;
+    @Getter
+    private Long id;
 
-	private JobSchedulerType(final Long id) {
-		this.id = id;
-	}
+    JobSchedulerType(final Long id) {
+        this.id = id;
+    }
 
-	public static JobSchedulerType getById(final Long id) {
-		final JobSchedulerType type;
-		if (CRON.getId().equals(id)) {
-			type = CRON;
-		} else if (PERIOD.getId().equals(id)) {
-			type = PERIOD;
-		} else {
-			throw new IllegalArgumentException("Unknown id for JobSchedulerConfiguration:" + id);
-		}
-		return type;
-	}
+    public static JobSchedulerType getById(final Long id) {
+        final JobSchedulerType type;
+        if (CRON.getId().equals(id)) {
+            type = CRON;
+        } else if (PERIOD.getId().equals(id)) {
+            type = PERIOD;
+        } else {
+            throw new IllegalArgumentException("Unknown id for JobSchedulerConfiguration:" + id);
+        }
+        return type;
+    }
 
 }

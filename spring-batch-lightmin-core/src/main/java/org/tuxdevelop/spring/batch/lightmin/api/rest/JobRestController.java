@@ -11,6 +11,10 @@ import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 
 import java.util.Collection;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 @RestController
 public class JobRestController extends AbstractRestController {
 

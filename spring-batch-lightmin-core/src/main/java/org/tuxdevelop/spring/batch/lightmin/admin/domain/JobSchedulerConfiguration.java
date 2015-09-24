@@ -5,6 +5,10 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.quartz.CronExpression;
 
+/**
+ * @author Marcel Becker
+ * @version 0.1
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = false)
