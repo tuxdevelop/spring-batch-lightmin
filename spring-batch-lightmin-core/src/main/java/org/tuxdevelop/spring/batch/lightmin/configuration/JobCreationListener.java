@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.DuplicateJobException;
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler;
@@ -14,32 +14,31 @@ import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
 import org.tuxdevelop.spring.batch.lightmin.service.SchedulerService;
 import org.tuxdevelop.spring.batch.lightmin.util.CommonJobFactory;
 
-import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.Map;
 
 /**
  * @author Marcel Becker
- * @version 0.1
+ * @since 0.1
  */
 @Slf4j
-@Configuration
-public class RegistrationConfiguration {
+public class JobCreationListener implements ApplicationListener<ContextRefreshedEvent> {
 
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
+    private final JobRegistry jobRegistry;
+    private final AdminService adminService;
+    private final SchedulerService schedulerService;
 
-    @Autowired
-    private JobRegistry jobRegistry;
+    public JobCreationListener(final ApplicationContext applicationContext, final JobRegistry jobRegistry, final
+    AdminService adminService, final SchedulerService schedulerService) {
+        this.applicationContext = applicationContext;
+        this.jobRegistry = jobRegistry;
+        this.adminService = adminService;
+        this.schedulerService = schedulerService;
+    }
 
-    @Autowired
-    private SchedulerService schedulerService;
-
-    @Autowired
-    private AdminService adminService;
-
-    @PostConstruct
-    public void registerJobs() throws DuplicateJobException {
+    @Override
+    public void onApplicationEvent(final ContextRefreshedEvent applicationEvent) {
         // register jobs of the current application context
         final Map<String, Job> jobs = applicationContext.getBeansOfType(Job.class);
         if (jobs != null) {
@@ -47,7 +46,11 @@ public class RegistrationConfiguration {
                 final Job job = jobEntry.getValue();
                 final String jobName = job.getName();
                 final CommonJobFactory commonJobFactory = new CommonJobFactory(job, jobName);
-                jobRegistry.register(commonJobFactory);
+                try {
+                    jobRegistry.register(commonJobFactory);
+                } catch (DuplicateJobException e) {
+                    log.error("Job with name: " + jobName + " is already registered!");
+                }
             }
         }
 
@@ -75,8 +78,5 @@ public class RegistrationConfiguration {
                 }
             }
         }
-
     }
-
-
 }

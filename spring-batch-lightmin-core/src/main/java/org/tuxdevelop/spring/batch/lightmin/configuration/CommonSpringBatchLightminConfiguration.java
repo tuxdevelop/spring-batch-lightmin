@@ -13,6 +13,7 @@ import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.batch.core.repository.dao.StepExecutionDao;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -26,7 +27,7 @@ import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
  */
 @Slf4j
 @Configuration
-@Import(value = {RegistrationConfiguration.class, SpringBatchLightminConfiguration.class, RestServiceConfiguration.class})
+@Import(value = {SpringBatchLightminConfiguration.class, RestServiceConfiguration.class})
 public class CommonSpringBatchLightminConfiguration implements InitializingBean {
 
     @Autowired
@@ -34,6 +35,9 @@ public class CommonSpringBatchLightminConfiguration implements InitializingBean 
 
     @Autowired
     private SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Bean
     public JobService jobService() {
@@ -109,6 +113,11 @@ public class CommonSpringBatchLightminConfiguration implements InitializingBean 
     @Bean
     public JobBuilderFactory jobBuilderFactory() throws Exception {
         return new JobBuilderFactory(jobRepository());
+    }
+
+    @Bean
+    public JobCreationListener jobCreationListener() throws Exception {
+        return new JobCreationListener(applicationContext, jobRegistry(), adminService(), schedulerService());
     }
 
     @Override
