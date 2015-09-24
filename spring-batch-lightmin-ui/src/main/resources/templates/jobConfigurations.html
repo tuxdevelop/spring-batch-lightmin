@@ -7,16 +7,15 @@
 <div th:include="fragments/adminMenu :: adminMenu"></div>
 
 <div class="container content">
+  <div class="row">
+    <div class="col-xs-12">
+      <a href="#" th:href="@{jobConfigurationAdd}">
+        <button type="button" class="btn btn-success btn-mini">Add new configuration</button>
+      </a>
+    </div>
+  </div>
   <div th:each="jobConfigurationModel : ${jobConfigurationModels}">
     <h3 th:text="${jobConfigurationModel.jobName}" />
-    <div class="row">
-      <div class="col-xs-12">
-        <a href="#" th:href="@{jobConfigurationAdd}">
-          <button type="button" class="btn btn-success btn-mini">Add new configuration</button>
-        </a>
-      </div>
-    </div>
-
     <div class="row spacer" th:each="jobConfiguration: ${jobConfigurationModel.jobConfigurations}">
       <div class="col-xs-12">
         <table class="table boxed">
