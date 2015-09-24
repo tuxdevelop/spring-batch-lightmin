@@ -13,5 +13,6 @@ public final class JobSchedulerConfigurationDomain {
     public static final String FIXED_DELAY = "fixed_delay";
     public static final String TASK_EXECUTOR_TYPE = "task_executor_type";
     public static final String BEAN_NAME = "bean_name";
+    public static final String STATUS = "status";
 
 }

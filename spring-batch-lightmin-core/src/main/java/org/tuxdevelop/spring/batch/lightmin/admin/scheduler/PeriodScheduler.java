@@ -31,7 +31,13 @@ public class PeriodScheduler extends AbstractScheduler implements Scheduler {
         jobRunner = new JobRunner(job, schedulerConstructorWrapper.getJobLauncher(),
                 schedulerConstructorWrapper.getJobParameters(),
                 schedulerConstructorWrapper.getJobIncrementer());
-        setStatus(SchedulerStatus.INITIALIZED);
+        final SchedulerStatus schedulerStatus;
+        if (jobSchedulerConfiguration.getSchedulerStatus() != null) {
+            schedulerStatus = jobSchedulerConfiguration.getSchedulerStatus();
+        } else {
+            schedulerStatus = SchedulerStatus.INITIALIZED;
+        }
+        setStatus(schedulerStatus);
     }
 
     @Override

@@ -21,10 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SchedulerServiceBeanTest {
+public class DefaultSchedulerServiceTest {
 
     @InjectMocks
-    private SchedulerServiceBean schedulerService;
+    private DefaultSchedulerService schedulerService;
 
     @Mock
     private BeanRegistrar beanRegistrar;
@@ -61,7 +61,7 @@ public class SchedulerServiceBeanTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        schedulerService = new SchedulerServiceBean(beanRegistrar, jobRepository, jobRegistry);
+        schedulerService = new DefaultSchedulerService(beanRegistrar, jobRepository, jobRegistry);
         sampleJob = TestHelper.createJob("sampleJob");
     }
 }

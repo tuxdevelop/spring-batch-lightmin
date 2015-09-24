@@ -54,4 +54,5 @@ public interface JobConfigurationRepository {
      */
     Collection<JobConfiguration> getAllJobConfigurations();
 
+    Collection<JobConfiguration> getAllJobConfigurationsByJobNames(Collection<String> jobNames);
 }

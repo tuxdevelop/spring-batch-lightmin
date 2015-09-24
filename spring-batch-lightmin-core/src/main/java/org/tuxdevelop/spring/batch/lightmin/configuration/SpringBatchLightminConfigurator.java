@@ -9,7 +9,7 @@ import org.springframework.batch.core.repository.dao.StepExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 
-public interface SpringBatchLightminConfiguration extends BatchConfigurer {
+public interface SpringBatchLightminConfigurator extends BatchConfigurer {
 
 
     JobService getJobService();

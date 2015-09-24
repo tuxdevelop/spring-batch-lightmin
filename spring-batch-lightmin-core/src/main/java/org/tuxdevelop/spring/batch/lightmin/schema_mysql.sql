@@ -14,6 +14,7 @@ CREATE TABLE BATCH_JOB_SCHEDULER_CONFIGURATION (
   fixed_delay          BIGINT,
   task_executor_type   INT                         NOT NULL,
   bean_name            VARCHAR(255)                NOT NULL,
+  status VARCHAR(255) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION(job_configuration_id)
 );

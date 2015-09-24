@@ -15,7 +15,7 @@ import java.util.TimeZone;
 
 @Slf4j
 @Getter
-public class CronScheduler extends AbstractScheduler implements Scheduler{
+public class CronScheduler extends AbstractScheduler implements Scheduler {
 
     private final JobConfiguration jobConfiguration;
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
@@ -37,7 +37,13 @@ public class CronScheduler extends AbstractScheduler implements Scheduler{
         jobRunner = new JobRunner(job, schedulerConstructorWrapper.getJobLauncher(),
                 schedulerConstructorWrapper.getJobParameters(),
                 schedulerConstructorWrapper.getJobIncrementer());
-        setStatus(SchedulerStatus.INITIALIZED);
+        final SchedulerStatus schedulerStatus;
+        if (jobSchedulerConfiguration.getSchedulerStatus() != null) {
+            schedulerStatus = jobSchedulerConfiguration.getSchedulerStatus();
+        } else {
+            schedulerStatus = SchedulerStatus.INITIALIZED;
+        }
+        setStatus(schedulerStatus);
     }
 
     @Override

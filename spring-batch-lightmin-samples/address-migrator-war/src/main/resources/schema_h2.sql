@@ -12,13 +12,14 @@ CREATE TABLE BATCH_JOB_SCHEDULER_CONFIGURATION (
   initial_delay        NUMERIC,
   fixed_delay          NUMERIC,
   task_executor_type   INT                          NOT NULL,
-  bean_name            VARCHAR(255)                 NOT NULL
+  bean_name            VARCHAR(255)                 NOT NULL,
+  status               VARCHAR(255)                 NOT NULL
 );
 
 CREATE TABLE BATCH_JOB_CONFIGURATION_PARAMETERS (
   id                   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
   job_configuration_id NUMERIC                      NOT NULL,
-  paramater_name       VARCHAR(255)                 NOT NULL,
+  parameter_name       VARCHAR(255)                 NOT NULL,
   parameter_value      VARCHAR(255)                 NOT NULL,
   parameter_type       INT                          NOT NULL
 );

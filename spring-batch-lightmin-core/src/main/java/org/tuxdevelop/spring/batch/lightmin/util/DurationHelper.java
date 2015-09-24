@@ -5,8 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ * <p>
+ * Utility class to generate human readable durations
+ * </p>
+ */
 @Slf4j
-public class DurationHelper {
+public final class DurationHelper {
 
     private DurationHelper() {
     }
@@ -20,6 +27,13 @@ public class DurationHelper {
     private static final String MINUTES_SECONDS_MILLIS_FORMAT = "mm:ss:SSS";
     private static final String HOURS_MINUTES_SECONDS_MILLIS_FORMAT = "hh:mm:ss:SSS";
 
+    /**
+     * Creates a human readable String of duration between a start date and an end date
+     *
+     * @param startTime beginning of the duration interval
+     * @param endTime   end of the duration interval
+     * @return a {@lang java.util.String} representation of the duration
+     */
     public static String createDurationValue(Date startTime, Date endTime) {
         final Date current = new Date();
         if (startTime == null) {

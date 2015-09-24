@@ -4,11 +4,11 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.repository.dao.StepExecutionDao;
 
-public class StepServiceBean implements StepService{
+public class DefaultStepService implements StepService{
 
 	private StepExecutionDao stepExecutionDao;
 
-	public StepServiceBean(final StepExecutionDao stepExecutionDao) {
+	public DefaultStepService(final StepExecutionDao stepExecutionDao) {
 		this.stepExecutionDao = stepExecutionDao;
 	}
 

@@ -26,15 +26,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class JobServiceBeanTest {
+public class DefaultJobServiceTest {
 
 	private static final String JOB_NAME = "sampleJob";
 	private static final String JOB_NAME_2 = "sampleJob2";
 	private static final String JOB_NAME_3 = "sampleJob3";
-	private static final String[] JOB_NAMES = new String[] { JOB_NAME, JOB_NAME_2, JOB_NAME_3 };
+	private static final String[] JOB_NAMES = new String[]{JOB_NAME, JOB_NAME_2, JOB_NAME_3};
 
 	@InjectMocks
-	private JobServiceBean jobService;
+	private DefaultJobService jobService;
 	@Mock
 	private JobOperator jobOperator;
 	@Mock
@@ -132,6 +132,6 @@ public class JobServiceBeanTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		jobService = new JobServiceBean(jobOperator, jobRegistry, jobInstanceDao, jobExecutionDao);
+		jobService = new DefaultJobService(jobOperator, jobRegistry, jobInstanceDao, jobExecutionDao);
 	}
 }

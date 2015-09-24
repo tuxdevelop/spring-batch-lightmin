@@ -11,6 +11,19 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ * <p/>
+ * <p>
+ * Utility class to parse a String representation of job Parameters to {@link org.springframework.batch.core
+ * .JobParameters} and {@link java.util.Map} of String, Object.
+ * </p>
+ * <p>
+ * It is also possible to map {@link org.springframework.batch.core.JobParameters} and {@link java.util.Map} of
+ * String and Object to human readble String parameters
+ * </p>
+ */
 @Slf4j
 public class ParameterParser {
 
@@ -24,6 +37,12 @@ public class ParameterParser {
     private ParameterParser() {
     }
 
+    /**
+     * Maps key value pairs of job parameters to a readable String
+     *
+     * @param parametersMap parameter map of String, Object
+     * @return a human readble representation of the parameter map
+     */
     public static String parseParameterMapToString(final Map<String, Object> parametersMap) {
         final StringBuilder stringBuilder = new StringBuilder();
         for (Entry<String, Object> entry : parametersMap.entrySet()) {
@@ -62,6 +81,34 @@ public class ParameterParser {
         return result;
     }
 
+    /**
+     * maps a String a parameters to Spring Batch {@link org.springframework.batch.core.JobParameters}.
+     * The String has to have the following format:
+     * <ul>
+     * <li>
+     * name(type)=value, name(type2)=value2
+     * </li>
+     * </ul>
+     * The name is the job parameter name, the type, the Java type to the value.
+     * Following Types are supported
+     * <ul>
+     * <li>
+     * {@link java.lang.String}
+     * </li>
+     * <li>
+     * {@link java.lang.Long}
+     * </li>
+     * <li>
+     * {@link java.lang.Double}
+     * </li>
+     * <li>
+     * {@link java.util.Date}
+     * </li>
+     * </ul>
+     *
+     * @param parameters String of parameters
+     * @return Spring Batch {@link org.springframework.batch.core.JobParameters}
+     */
     public static JobParameters parseParametersToJobParameters(final String parameters) {
         final JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
         final Map<String, Object> parametersMap = parseParameters(parameters);
@@ -83,6 +130,12 @@ public class ParameterParser {
         return jobParametersBuilder.toJobParameters();
     }
 
+    /**
+     * maps a parameters String to {@link java.util.Map} of String, Object
+     *
+     * @param parameters String representation of the paremeters
+     * @return a {@link java.util.Map} of String, Object
+     */
     public static Map<String, Object> parseParameters(final String parameters) {
         final Map<String, Object> parameterMap;
         if (parameters == null || parameters.isEmpty()) {
@@ -111,11 +164,11 @@ public class ParameterParser {
         return parameters;
     }
 
-    static Entry<String, Object> generateParameterEntry(final String paramater) {
+    static Entry<String, Object> generateParameterEntry(final String parameter) {
         final String key;
         final Object value;
-        log.debug("parsing: " + paramater);
-        final String[] firstSplit = paramater.split(Pattern.quote("("), 2);
+        log.debug("parsing: " + parameter);
+        final String[] firstSplit = parameter.split(Pattern.quote("("), 2);
         key = firstSplit[0].trim();
         log.debug("got key: " + key);
         final String tempString = firstSplit[1];
