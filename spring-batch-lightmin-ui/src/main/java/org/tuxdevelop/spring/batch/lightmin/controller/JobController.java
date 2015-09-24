@@ -18,6 +18,11 @@ import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 import java.util.Collection;
 import java.util.LinkedList;
 
+/**
+ * @author Marcel Becker
+ * @author Lars Thielmann
+ * @since 0.1
+ */
 @Controller
 public class JobController extends CommonController {
 

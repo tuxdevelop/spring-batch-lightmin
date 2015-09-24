@@ -9,6 +9,10 @@ import org.tuxdevelop.spring.batch.lightmin.model.JobExecutionModel;
 import org.tuxdevelop.spring.batch.lightmin.model.StepExecutionModel;
 import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 @RestController
 @RequestMapping("/steps")
 public class StepController extends CommonController {

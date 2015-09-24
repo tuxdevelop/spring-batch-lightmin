@@ -15,6 +15,10 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 @Controller
 public class JobConfigurationController extends CommonController {
 

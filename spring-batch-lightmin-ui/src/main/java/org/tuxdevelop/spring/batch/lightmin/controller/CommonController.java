@@ -1,6 +1,5 @@
 package org.tuxdevelop.spring.batch.lightmin.controller;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -9,6 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Date;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 public abstract class CommonController {
 
     @ExceptionHandler(Exception.class)

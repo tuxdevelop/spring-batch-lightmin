@@ -8,9 +8,8 @@ import org.tuxdevelop.spring.batch.lightmin.util.DurationHelper;
 import java.io.Serializable;
 
 /**
- *
  * @author Marcel Becker
- *
+ * @since 0.1
  */
 @Data
 public class StepExecutionModel implements Serializable {

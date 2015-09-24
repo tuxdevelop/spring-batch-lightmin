@@ -29,38 +29,12 @@
         </tbody>
       </table>
 
-      <div class="center-block ">
-        <ul class="pagination pagination-md">
-          <li th:if="${jobPage.hasPrevious}">
-            <a href="#" th:href="@{job(jobname=${jobName},startindex=${jobPage.previousStartIndex})}">
-              prev
-            </a>
-          </li>
-          <li th:if="${jobPage.hasMore}">
-            <a href="#" th:href="@{job(jobname=${jobName},startindex=${jobPage.nextStartIndex})}">
-              next
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!--<div th:if="${jobPage.hasPrevious}">
-        <a href="#"
-           th:href="@{job(jobname=${jobName},startindex=${jobPage.previousStartIndex})}">
-          <button type="button"
-                  class="btn btn-inverse btn-small">prev
-          </button>
-
-        </a>
-      </div>
-      <div th:if="${jobPage.hasMore}">
-        <a href="#"
-           th:href="@{job(jobname=${jobName},startindex=${jobPage.nextStartIndex})}">
-          <button type="button"
-                  class="btn btn-inverse btn-small">next
-          </button>
-        </a>
-      </div>-->
+      <span class="text-left" th:if="${jobPage.hasPrevious}">
+        <a href="#" th:href="@{job(jobname=${jobName},startindex=${jobPage.previousStartIndex})}" class="btn btn-inverse btn-small">&laquo; prev</a>
+      </span>
+      <span class="text-right" th:if="${jobPage.hasMore}">
+        <a href="#" th:href="@{job(jobname=${jobName},startindex=${jobPage.nextStartIndex})}" class="btn btn-inverse btn-small">next &raquo;</a>
+      </span>
     </div>
   </div>
 </div>

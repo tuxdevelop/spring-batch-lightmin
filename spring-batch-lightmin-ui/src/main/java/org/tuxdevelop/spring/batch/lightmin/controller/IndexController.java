@@ -10,6 +10,11 @@ import org.tuxdevelop.spring.batch.lightmin.model.RestApiModel;
 
 import java.net.InetAddress;
 
+/**
+ * @author Marcel Becker
+ * @author Lars Thielmann
+ * @since 0.1
+ */
 @Controller
 @RequestMapping("/")
 public class IndexController extends CommonController {

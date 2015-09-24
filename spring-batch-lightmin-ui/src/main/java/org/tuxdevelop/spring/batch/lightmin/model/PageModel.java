@@ -1,17 +1,17 @@
 package org.tuxdevelop.spring.batch.lightmin.model;
 
-import lombok.Getter;
-
 import java.io.Serializable;
 
-@Getter
+/**
+ * @author Lars Thielmann
+ * @since 0.1
+ */
 public class PageModel implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-    private Integer currentIndex;
-	private Integer pageSize;
-    private Integer totalSize;
-    private Boolean hasMore;
+    private final Integer currentIndex;
+	private final Integer pageSize;
+    private final Integer totalSize;
 
     public PageModel(final Integer startIndex, final Integer pageSize, final Integer totalSize) {
         this.currentIndex = startIndex;
@@ -20,24 +20,25 @@ public class PageModel implements Serializable{
     }
 
     public Integer getNextStartIndex() {
+        int nextIndex = currentIndex;
         if (getHasMore()) {
-            currentIndex += (pageSize - 1);
+            nextIndex = currentIndex + pageSize;
         }
 
-        return currentIndex;
+        return nextIndex;
     }
 
     public Integer getPreviousStartIndex() {
-        currentIndex -= (pageSize - 1);
-        if (currentIndex < 0) {
-            currentIndex = 0;
+        int previousIndex = currentIndex - pageSize;
+        if (previousIndex < 0) {
+            previousIndex = 0;
         }
 
-        return currentIndex;
+        return previousIndex;
     }
 
     public Boolean getHasMore() {
-        return ((currentIndex + 1) * pageSize) < totalSize;
+        return (currentIndex + pageSize) < totalSize;
     }
 
     public Boolean getHasPrevious() {

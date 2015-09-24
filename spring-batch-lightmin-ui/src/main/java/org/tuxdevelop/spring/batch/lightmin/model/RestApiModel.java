@@ -1,6 +1,5 @@
 package org.tuxdevelop.spring.batch.lightmin.model;
 
-
 import lombok.Getter;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.tuxdevelop.spring.batch.lightmin.api.rest.AbstractRestController;
@@ -10,6 +9,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 public class RestApiModel {
 
     private static final String JOB_URIS = "Jobs URIs";

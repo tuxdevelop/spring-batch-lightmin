@@ -9,6 +9,10 @@ import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 
 import java.util.Collection;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 @Controller
 @RequestMapping("/admin")
 public class AdminController extends CommonController {

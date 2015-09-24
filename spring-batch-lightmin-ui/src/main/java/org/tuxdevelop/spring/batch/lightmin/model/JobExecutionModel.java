@@ -8,6 +8,10 @@ import org.tuxdevelop.spring.batch.lightmin.util.DurationHelper;
 import java.io.Serializable;
 import java.util.Collection;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 @Data
 public class JobExecutionModel implements Serializable {
 

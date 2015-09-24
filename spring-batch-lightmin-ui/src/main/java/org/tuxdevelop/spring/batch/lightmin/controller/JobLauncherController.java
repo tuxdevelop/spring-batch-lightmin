@@ -15,6 +15,10 @@ import org.tuxdevelop.spring.batch.lightmin.model.JobLauncherModel;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 import org.tuxdevelop.spring.batch.lightmin.util.ParameterParser;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 @Controller
 @RequestMapping("/jobLaunchers")
 public class JobLauncherController extends CommonController{

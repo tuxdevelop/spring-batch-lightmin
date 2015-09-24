@@ -4,6 +4,10 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 @Data
 public class JobInfoModel implements Serializable {
 

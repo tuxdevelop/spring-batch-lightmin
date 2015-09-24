@@ -5,6 +5,10 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.TaskExecutorType;
 
+/**
+ * @author Marcel Becker
+ * @since 0.1
+ */
 @Data
 public class JobConfigurationAddModel {
 

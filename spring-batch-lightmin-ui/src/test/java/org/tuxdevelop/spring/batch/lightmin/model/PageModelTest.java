@@ -9,7 +9,7 @@ public class PageModelTest {
     @Test
     public void testNextStartIndex() {
         final PageModel pageModel = new PageModel(0, 10, 11);
-        assertThat(pageModel.getNextStartIndex()).isEqualTo(9);
+        assertThat(pageModel.getNextStartIndex()).isEqualTo(10);
     }
 
     @Test
