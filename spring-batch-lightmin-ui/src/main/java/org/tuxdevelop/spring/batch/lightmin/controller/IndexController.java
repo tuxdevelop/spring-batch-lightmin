@@ -29,10 +29,8 @@ public class IndexController extends CommonController {
     }
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public void initIndex(final Model model) {
-        final RestApiModel restApiModel = new RestApiModel();
-        model.addAttribute("applicationName", (hostName.getCanonicalHostName() + servletPath));
-        model.addAttribute("restApi", restApiModel);
+    public String redirect() {
+        return "redirect:" + servletPath;
     }
 }
 
