@@ -22,7 +22,7 @@
                   </tr>
                   <tr th:each="job : ${jobs}">
                       <td><a href="#"
-                             th:href="@{job(jobName=${job.jobName})}"
+                             th:href="@{job(jobname=${job.jobName})}"
                              th:text="${job.jobName}"> </a></td>
                       <td th:text="${job.instanceCount}"/>
                   </tr>

@@ -1,52 +1,68 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:include="fragments/layout :: header" />
+<head th:include="fragments/layout :: header"/>
 <body>
-  <div th:include="fragments/layout :: menu"></div>
-  <div class="viewport">
-      <div class="container content">
-          <div class="row-fluid">
-              <table class="table table-hover boxed">
-                  <thead>
-                  <tr>
-                      <th colspan="2" th:text="${jobName}">
-                          Job Name
-                      </th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                      <th>Job Instance Id</th>
-                      <th>Job Executions Count</th>
-                  </tr>
-                  <tr th:each="jobInstance : ${jobInstances}">
-                      <td><a href="#"
-                             th:href="@{executions(jobInstanceId=${jobInstance.jobInstanceId})}"
-                             th:text="${jobInstance.jobInstanceId}"> </a></td>
-                      <td th:text="${jobInstance.jobExecutions.size()}"/>
-                  </tr>
-                  </tbody>
-              </table>
-              <div th:if="${jobPage.startIndex>9}">
-                  <a href="#"
-                     th:href="@{job(jobName=${jobName},startIndex=${jobPage.startIndex}-10)}">
-                      <button type="button"
-                              class="btn btn-inverse btn-small">prev
-                      </button>
+<div th:include="fragments/layout :: menu"></div>
+<div class="viewport">
+  <div class="container content">
+    <div class="row-fluid">
+      <table class="table table-hover boxed">
+        <thead>
+        <tr>
+          <th colspan="2" th:text="${jobName}">
+            Job Name
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>Job Instance Id</th>
+          <th>Job Executions Count</th>
+        </tr>
+        <tr th:each="jobInstance : ${jobInstances}">
+          <td><a href="#"
+                 th:href="@{executions(jobInstanceId=${jobInstance.jobInstanceId})}"
+                 th:text="${jobInstance.jobInstanceId}"> </a></td>
+          <td th:text="${jobInstance.jobExecutions.size()}"/>
+        </tr>
+        </tbody>
+      </table>
 
-                  </a>
-              </div>
-              <div th:if="${jobInstances.size()>10}">
-                  <a href="#"
-                     th:href="@{job(jobName=${jobName},startIndex=${jobPage.startIndex}+10)}">
-                      <button type="button"
-                              class="btn btn-inverse btn-small">next
-                      </button>
-                  </a>
-              </div>
-          </div>
+      <div class="center-block ">
+        <ul class="pagination pagination-md">
+          <li th:if="${jobPage.hasPrevious}">
+            <a href="#" th:href="@{job(jobname=${jobName},startindex=${jobPage.previousStartIndex})}">
+              prev
+            </a>
+          </li>
+          <li th:if="${jobPage.hasMore}">
+            <a href="#" th:href="@{job(jobname=${jobName},startindex=${jobPage.nextStartIndex})}">
+              next
+            </a>
+          </li>
+        </ul>
       </div>
+
+      <!--<div th:if="${jobPage.hasPrevious}">
+        <a href="#"
+           th:href="@{job(jobname=${jobName},startindex=${jobPage.previousStartIndex})}">
+          <button type="button"
+                  class="btn btn-inverse btn-small">prev
+          </button>
+
+        </a>
+      </div>
+      <div th:if="${jobPage.hasMore}">
+        <a href="#"
+           th:href="@{job(jobname=${jobName},startindex=${jobPage.nextStartIndex})}">
+          <button type="button"
+                  class="btn btn-inverse btn-small">next
+          </button>
+        </a>
+      </div>-->
+    </div>
   </div>
+</div>
 </body>
 </html>
