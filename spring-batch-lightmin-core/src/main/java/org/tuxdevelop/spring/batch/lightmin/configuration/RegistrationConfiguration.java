@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
 import org.tuxdevelop.spring.batch.lightmin.service.SchedulerService;
@@ -47,19 +48,27 @@ public class RegistrationConfiguration {
         }
 
         // register all stored jobConfigurations
-        final Collection<JobConfiguration> jobConfigurations = adminService.getJobConfigurations();
+        final Collection<JobConfiguration> jobConfigurations = adminService.getJobConfigurations(jobRegistry.getJobNames());
         if (jobConfigurations != null) {
             for (final JobConfiguration jobConfiguration : jobConfigurations) {
-                schedulerService.registerSchedulerForJob(jobConfiguration);
+                final String jobName = jobConfiguration.getJobName();
+                if (jobRegistry.getJobNames().contains(jobName)) {
+                    schedulerService.registerSchedulerForJob(jobConfiguration);
+                } else {
+                    log.debug("No Job with jobName " + jobName + " is present. Registration canceled");
+                }
             }
         }
         // Schedule all registered schedulers
         final Map<String, Scheduler> schedulerMap = applicationContext.getBeansOfType(Scheduler.class);
         if (schedulerMap != null) {
             for (final Map.Entry<String, Scheduler> schedulerEntry : schedulerMap.entrySet()) {
-                log.debug("scheduling bean: " + schedulerEntry.getKey());
                 final Scheduler scheduler = schedulerEntry.getValue();
-                scheduler.schedule();
+                if (SchedulerStatus.RUNNING.equals(scheduler.getSchedulerStatus())) {
+                    log.debug("scheduling bean: " + schedulerEntry.getKey());
+                    scheduler.schedule();
+                    log.debug("scheduled bean: " + schedulerEntry.getKey());
+                }
             }
         }
 

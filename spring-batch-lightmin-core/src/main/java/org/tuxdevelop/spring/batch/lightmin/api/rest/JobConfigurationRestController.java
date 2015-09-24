@@ -1,5 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.api.rest;
 
+import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
@@ -14,9 +15,12 @@ public class JobConfigurationRestController extends AbstractRestController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private JobRegistry jobRegistry;
+
     @RequestMapping(value = JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS, produces = PRODUCES, method = RequestMethod.GET)
     public JobConfigurations getJobConfigurations() {
-        final Collection<JobConfiguration> jobConfigurationCollection = adminService.getJobConfigurations();
+        final Collection<JobConfiguration> jobConfigurationCollection = adminService.getJobConfigurations(jobRegistry.getJobNames());
         final JobConfigurations jobConfigurations = new JobConfigurations();
         jobConfigurations.setJobConfigurations(jobConfigurationCollection);
         jobConfigurations.setJobName(ALL_JOBS);

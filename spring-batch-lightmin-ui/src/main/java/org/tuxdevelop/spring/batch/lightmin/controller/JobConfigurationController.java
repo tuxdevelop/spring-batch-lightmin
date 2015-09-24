@@ -116,7 +116,8 @@ public class JobConfigurationController extends CommonController {
     }
 
     Collection<JobConfigurationModel> getJobConfigurationModels() {
-        final Map<String, Collection<JobConfiguration>> jobConfigurationMap = adminService.getJobConfigurationMap();
+        final Map<String, Collection<JobConfiguration>> jobConfigurationMap = adminService.getJobConfigurationMap
+                (jobService.getJobNames());
         final Collection<JobConfigurationModel> jobConfigurationModels = new LinkedList<JobConfigurationModel>();
         for (final Map.Entry<String, Collection<JobConfiguration>> entry : jobConfigurationMap.entrySet()) {
             final JobConfigurationModel jobConfigurationModel = new JobConfigurationModel();

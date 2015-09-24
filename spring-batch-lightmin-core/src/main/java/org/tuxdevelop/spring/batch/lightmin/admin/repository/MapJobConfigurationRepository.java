@@ -124,6 +124,20 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
         return jobConfigurationCollection;
     }
 
+    @Override
+    public Collection<JobConfiguration> getAllJobConfigurationsByJobNames(Collection<String> jobNames) {
+        final Collection<JobConfiguration> jobConfigurationCollection = new LinkedList<JobConfiguration>();
+        for (final String jobName : jobNames) {
+            if (jobConfigurations.containsKey(jobName)) {
+                jobConfigurationCollection.addAll(jobConfigurations.get(jobName));
+            } else {
+                log.debug("No Configuration found for Job with name: " + jobName);
+            }
+        }
+
+        return jobConfigurationCollection;
+    }
+
     private synchronized Long getNextJobId() {
         final Long nextJobId = Long.valueOf(currentJobId);
         currentJobId++;

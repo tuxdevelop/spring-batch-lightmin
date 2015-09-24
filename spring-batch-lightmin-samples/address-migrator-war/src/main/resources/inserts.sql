@@ -6,12 +6,13 @@ VALUES (
 );
 
 INSERT INTO BATCH_JOB_SCHEDULER_CONFIGURATION
-(job_configuration_id, scheduler_type, initial_delay, fixed_delay, task_executor_type, bean_name)
+(job_configuration_id, scheduler_type, initial_delay, fixed_delay, task_executor_type, bean_name, status)
 VALUES (
   1,
   2,
   10,
   60000,
   1,
-  'addressMigrationJobSYNCHRONOUSLY1'
+  'addressMigrationJobSYNCHRONOUSLY1',
+  'RUNNING'
 )

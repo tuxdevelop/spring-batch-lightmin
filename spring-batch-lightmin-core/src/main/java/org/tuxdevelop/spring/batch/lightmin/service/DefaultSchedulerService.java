@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class SchedulerServiceBean implements SchedulerService {
+public class DefaultSchedulerService implements SchedulerService {
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -36,8 +36,8 @@ public class SchedulerServiceBean implements SchedulerService {
     private final JobRepository jobRepository;
     private final JobRegistry jobRegistry;
 
-    public SchedulerServiceBean(final BeanRegistrar beanRegistrar, final JobRepository jobRepository,
-                                final JobRegistry jobRegistry) {
+    public DefaultSchedulerService(final BeanRegistrar beanRegistrar, final JobRepository jobRepository,
+                                   final JobRegistry jobRegistry) {
         this.beanRegistrar = beanRegistrar;
         this.jobRepository = jobRepository;
         this.jobRegistry = jobRegistry;

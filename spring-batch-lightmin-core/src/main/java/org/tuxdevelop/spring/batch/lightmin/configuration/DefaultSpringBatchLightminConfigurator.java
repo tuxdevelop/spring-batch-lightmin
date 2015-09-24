@@ -21,16 +21,16 @@ import org.springframework.jdbc.support.incrementer.AbstractDataFieldMaxValueInc
 import org.springframework.jdbc.support.incrementer.DataFieldMaxValueIncrementer;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
+import org.tuxdevelop.spring.batch.lightmin.service.DefaultJobService;
+import org.tuxdevelop.spring.batch.lightmin.service.DefaultStepService;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
-import org.tuxdevelop.spring.batch.lightmin.service.JobServiceBean;
 import org.tuxdevelop.spring.batch.lightmin.service.StepService;
-import org.tuxdevelop.spring.batch.lightmin.service.StepServiceBean;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 @Slf4j
-public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightminConfiguration {
+public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightminConfigurator {
 
     private JobService jobService;
     private StepService stepService;
@@ -252,14 +252,14 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
     }
 
     protected JobService createJobService() throws Exception {
-        final JobService jobService = new JobServiceBean(jobOperator,
+        final JobService jobService = new DefaultJobService(jobOperator,
                 jobRegistry, jobInstanceDao, jobExecutionDao);
         jobService.afterPropertiesSet();
         return jobService;
     }
 
     protected StepService createStepService() throws Exception {
-        final StepService stepService = new StepServiceBean(stepExecutionDao);
+        final StepService stepService = new DefaultStepService(stepExecutionDao);
         stepService.afterPropertiesSet();
         return stepService;
     }

@@ -16,12 +16,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class StepServiceBeanTest {
+public class DefaultStepServiceTest {
 
 	private static final String STEP_NAME = "sampleStep";
 
 	@InjectMocks
-	private StepServiceBean stepService;
+	private DefaultStepService stepService;
 	@Mock
 	private StepExecutionDao stepExecutionDao;
 
@@ -39,7 +39,7 @@ public class StepServiceBeanTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		stepService = new StepServiceBean(stepExecutionDao);
+		stepService = new DefaultStepService(stepExecutionDao);
 	}
 
 }

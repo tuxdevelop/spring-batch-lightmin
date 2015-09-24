@@ -12,7 +12,8 @@ CREATE TABLE BATCH_JOB_SCHEDULER_CONFIGURATION (
   initial_delay        NUMERIC,
   fixed_delay          NUMERIC,
   task_executor_type   INT                          NOT NULL,
-  bean_name            VARCHAR(255)                 NOT NULL
+  bean_name            VARCHAR(255)                 NOT NULL,
+  status               VARCHAR(255)                 NOT NULL
 );
 
 CREATE TABLE BATCH_JOB_CONFIGURATION_PARAMETERS (

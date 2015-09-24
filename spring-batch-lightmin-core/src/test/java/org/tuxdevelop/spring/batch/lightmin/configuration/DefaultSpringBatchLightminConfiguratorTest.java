@@ -11,8 +11,8 @@ import org.springframework.batch.support.transaction.ResourcelessTransactionMana
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.tuxdevelop.spring.batch.lightmin.service.JobServiceBean;
-import org.tuxdevelop.spring.batch.lightmin.service.StepServiceBean;
+import org.tuxdevelop.spring.batch.lightmin.service.DefaultJobService;
+import org.tuxdevelop.spring.batch.lightmin.service.DefaultStepService;
 
 import javax.sql.DataSource;
 
@@ -88,8 +88,8 @@ public class DefaultSpringBatchLightminConfiguratorTest {
 		assertThat(configurator.getJobRegistry()).isInstanceOf(MapJobRegistry.class);
 		assertThat(configurator.getJobLauncher()).isInstanceOf(SimpleJobLauncher.class);
 		assertThat(configurator.getJobOperator()).isInstanceOf(SimpleJobOperator.class);
-		assertThat(configurator.getStepService()).isInstanceOf(StepServiceBean.class);
-		assertThat(configurator.getJobService()).isInstanceOf(JobServiceBean.class);
+		assertThat(configurator.getStepService()).isInstanceOf(DefaultStepService.class);
+		assertThat(configurator.getJobService()).isInstanceOf(DefaultJobService.class);
 		assertThat(configurator.getJobRepository()).isNotNull();
 	}
 
