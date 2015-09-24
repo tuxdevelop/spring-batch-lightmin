@@ -441,3 +441,7 @@ dl.health-status td {
 .td-text-small {
     font-size: 12px;
 }
+
+div.spacer {
+    padding-top: 10px;
+}

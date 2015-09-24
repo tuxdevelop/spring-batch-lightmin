@@ -69,7 +69,6 @@ public class JobConfigurationController extends CommonController {
         model.addAttribute("jobConfigurationAddModel", jobConfigurationAddModel);
         model.addAttribute("jobSchedulerTypes", JobSchedulerType.values());
         model.addAttribute("taskExecutorTypes", TaskExecutorType.values());
-        model.addAttribute("schedulerStatusValues", getSelectableSchedulerStatus());
         return "jobConfigurationEdit";
     }
 
@@ -94,11 +93,12 @@ public class JobConfigurationController extends CommonController {
     }
 
     @RequestMapping(value = "/jobConfigurations", method = RequestMethod.POST)
-    public void deleteJobConfiguration(@RequestParam("jobConfigurationId") final long jobConfigurationId, final
-    Model model) {
+    public String deleteJobConfiguration(@RequestParam("jobConfigurationId") final long jobConfigurationId,
+                                       final Model model) {
         adminService.deleteJobConfiguration(jobConfigurationId);
         final Collection<JobConfigurationModel> jobConfigurationModels = getJobConfigurationModels();
         model.addAttribute("jobConfigurationModels", jobConfigurationModels);
+        return "redirect:jobConfigurations";
     }
 
     @RequestMapping(value = "/jobConfigurationSchedulerStart", method = RequestMethod.POST)
