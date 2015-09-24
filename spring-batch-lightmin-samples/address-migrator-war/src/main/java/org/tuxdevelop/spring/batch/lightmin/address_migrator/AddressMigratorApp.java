@@ -6,9 +6,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.tuxdevelop.spring.batch.lightmin.configuration.EnableSpringBatchLightminUI;
 
 @Configuration
+@EnableScheduling
 @EnableSpringBatchLightminUI
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "org.tuxdevelop.spring.batch.lightmin.address_migrator")
