@@ -8,7 +8,7 @@ CREATE TABLE  batch_task_address(
 );
 
 CREATE TABLE address(
-  id IDENTITY NOT NULL  PRIMARY KEY,
+	id NUMERIC NOT NULL  PRIMARY KEY,
   street_line VARCHAR(255),
   city_line VARCHAR(255)
 );

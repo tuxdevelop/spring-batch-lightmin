@@ -20,16 +20,17 @@ public class AddressMigrationProcessor implements ItemProcessor<BatchTaskAddress
         final Address address = mapToAddress(batchTaskAddress);
         addressDAO.add(address);
         batchTaskAddress.setProcessingState(ProcessingState.SUCCESS);
-        return null;
+        return batchTaskAddress;
     }
 
     private Address mapToAddress(final BatchTaskAddress batchTaskAddress) {
         final Address address = new Address();
         final String streetLine = batchTaskAddress.getStreet() + " " + batchTaskAddress.getHouseNumber();
         final String cityLine = batchTaskAddress.getZipCode() + " " + batchTaskAddress.getCity();
+        address.setId(batchTaskAddress.getBatchTaskId());
         address.setStreetLine(streetLine);
         address.setCityLine(cityLine);
-        log.info("creating Address with street line: "+streetLine+" and city line: "+cityLine);
+        log.info("creating Address with street line: " + streetLine + " and city line: " + cityLine);
         return address;
     }
 }
