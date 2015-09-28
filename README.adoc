@@ -29,7 +29,7 @@ manages _JobConfigurations_, which can be used for time triggered job runs.
 </dependency>
 ----
 
-In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapshot reposistory.
+In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapshot repository.
 
 [source,xml]
 ----
