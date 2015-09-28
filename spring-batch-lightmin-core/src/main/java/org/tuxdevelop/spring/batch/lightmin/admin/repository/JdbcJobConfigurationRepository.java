@@ -178,7 +178,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         private static final String GET_ALL_JOB_CONFIGURATION_QUERY = "SELECT * FROM " + TABLE_NAME;
 
         private static final String GET_ALL_JOB_CONFIGURATION_BY_JOB_NAMES_QUERY = "SELECT * FROM " + TABLE_NAME + " " +
-                "WHERE " + JobConfigurationDomain.JOB_NAME + " IN (?)";
+                "WHERE " + JobConfigurationDomain.JOB_NAME + " IN (%s)";
 
         private final JdbcTemplate jdbcTemplate;
         private final SimpleJdbcInsert simpleJdbcInsert;
@@ -241,8 +241,9 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
         public List<JobConfiguration> getAllByJobNames(final Collection<String> jobNames) {
             final String inParameters = parseInCollection(jobNames);
-            final String sql = String.format(GET_ALL_JOB_CONFIGURATION_BY_JOB_NAMES_QUERY, tablePrefix);
-            return jdbcTemplate.query(sql, new JobConfigurationRowMapper(), inParameters);
+            final String sql = String.format(GET_ALL_JOB_CONFIGURATION_BY_JOB_NAMES_QUERY, tablePrefix, inParameters);
+            return jdbcTemplate
+                    .query(sql, new JobConfigurationRowMapper(), jobNames.toArray());
         }
 
         private Map<String, Object> map(final JobConfiguration jobConfiguration) {
@@ -260,7 +261,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             final StringBuilder stringBuilder = new StringBuilder();
             final Iterator<String> iterator = inParameters.iterator();
             while (iterator.hasNext()) {
-                stringBuilder.append(iterator.next());
+                stringBuilder.append("?");
+                iterator.next();
                 if (iterator.hasNext()) {
                     stringBuilder.append(",");
                 }
@@ -357,7 +359,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             keyValues.put(JobSchedulerConfigurationDomain.TASK_EXECUTOR_TYPE, jobSchedulerConfiguration
                     .getTaskExecutorType().getId());
             keyValues.put(JobSchedulerConfigurationDomain.BEAN_NAME, jobSchedulerConfiguration.getBeanName());
-            keyValues.put(JobSchedulerConfigurationDomain.STATUS, jobSchedulerConfiguration.getSchedulerStatus().getValue());
+            keyValues.put(JobSchedulerConfigurationDomain.STATUS,
+                    jobSchedulerConfiguration.getSchedulerStatus().getValue());
             return keyValues;
         }
     }

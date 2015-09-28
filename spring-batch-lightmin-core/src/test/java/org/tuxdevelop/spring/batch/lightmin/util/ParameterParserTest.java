@@ -34,6 +34,21 @@ public class ParameterParserTest {
     }
 
     @Test
+    public void parseParametersUrlTest() {
+        final String parameters = "targetDirectory(String)=./import/diff/," +
+                "emailFile(String)=email.txt," +
+                "currentFile(String)=./import/current/email_current.txt," +
+                "lastWeekFile(String)=./import/archive/email_last_week.txt," +
+                "pathToTempFolder(String)=./import/temp/," +
+                "emailUrl(String)=https://www.robinsonabgleich.de/abgleichen/email/klartext-direct/97/0f88d453c73e9bd305667d7c072c2fe9," +
+                "emailZipFile(String)=./import/zip/email.zip," +
+                "maxLineCount(Long)=20000";
+
+        final Map<String,Object> parameterMap = ParameterParser.parseParameters(parameters);
+        assertThat(parameterMap).hasSize(8);
+    }
+
+    @Test
     public void parseParametersNullTest() {
         final Map<String, Object> parameterMap = ParameterParser
                 .parseParameters(null);

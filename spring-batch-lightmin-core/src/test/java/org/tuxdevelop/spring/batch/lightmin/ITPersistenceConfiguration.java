@@ -17,8 +17,8 @@ public class ITPersistenceConfiguration {
     @Bean
     public DataSource dataSource() {
         final EmbeddedDatabaseBuilder embeddedDatabaseBuilder = new EmbeddedDatabaseBuilder();
-        return embeddedDatabaseBuilder.addScript("classpath:create.sql").addScript("classpath:schema_h2.sql").setType
-                (EmbeddedDatabaseType.H2).build();
+        return embeddedDatabaseBuilder.addScript("classpath:create.sql")
+                .addScript("classpath:schema_h2.sql").setType(EmbeddedDatabaseType.H2).build();
     }
 
     @Bean

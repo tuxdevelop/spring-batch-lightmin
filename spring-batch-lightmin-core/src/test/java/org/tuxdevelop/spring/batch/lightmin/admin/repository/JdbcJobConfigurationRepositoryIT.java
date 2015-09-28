@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.tuxdevelop.spring.batch.lightmin.ITPersistenceConfiguration;
@@ -17,6 +18,7 @@ import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,6 +32,7 @@ public class JdbcJobConfigurationRepositoryIT {
     private JobConfigurationRepository jdbcJobConfigurationRepository;
 
     @Test
+    @Rollback
     public void addIT() {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
@@ -46,6 +49,7 @@ public class JdbcJobConfigurationRepositoryIT {
     }
 
     @Test
+    @Rollback
     public void getJobConfigurationIT() throws NoSuchJobConfigurationException {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
@@ -60,6 +64,7 @@ public class JdbcJobConfigurationRepositoryIT {
     }
 
     @Test
+    @Rollback
     public void updateIT() throws NoSuchJobConfigurationException {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
@@ -77,6 +82,7 @@ public class JdbcJobConfigurationRepositoryIT {
     }
 
     @Test
+    @Rollback
     public void updateWithParametersIT() throws NoSuchJobConfigurationException {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
@@ -97,6 +103,7 @@ public class JdbcJobConfigurationRepositoryIT {
     }
 
     @Test
+    @Rollback
     public void getJobConfigurationsIT() throws NoSuchJobException {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
@@ -116,6 +123,7 @@ public class JdbcJobConfigurationRepositoryIT {
     }
 
     @Test(expected = NoSuchJobConfigurationException.class)
+    @Rollback
     public void deleteIT() throws NoSuchJobConfigurationException {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
@@ -127,6 +135,28 @@ public class JdbcJobConfigurationRepositoryIT {
         assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
         jdbcJobConfigurationRepository.delete(addedJobConfiguration);
         jdbcJobConfigurationRepository.getJobConfiguration(1L);
+    }
+
+    @Test
+    @Rollback
+    public void getJobConfigurationsByNameIT() throws NoSuchJobException {
+        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
+                10L, 10L, JobSchedulerType.PERIOD);
+        jobSchedulerConfiguration.setBeanName("testBean");
+        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobConfiguration addedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        assertThat(addedJobConfiguration).isNotNull();
+        assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
+        assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
+        final JobConfiguration secondAddedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        assertThat(secondAddedJobConfiguration).isNotNull();
+        assertThat(secondAddedJobConfiguration.getJobConfigurationId()).isEqualTo(2L);
+        assertThat(secondAddedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
+        final Collection<String> jobNames = new LinkedList<String>();
+        jobNames.add("sampleJob");
+        final Collection<JobConfiguration> jobConfigurations = jdbcJobConfigurationRepository
+                .getAllJobConfigurationsByJobNames(jobNames);
+        assertThat(jobConfigurations.size()).isEqualTo(2);
     }
 
 }
