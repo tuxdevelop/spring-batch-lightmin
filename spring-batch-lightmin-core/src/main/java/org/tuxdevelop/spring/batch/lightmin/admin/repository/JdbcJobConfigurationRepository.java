@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.admin.repository;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.repository.dao.AbstractJdbcBatchMetadataDao;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -35,7 +36,11 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
     public JdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate, final String tablePrefix) {
         this.jdbcTemplate = jdbcTemplate;
-        this.tablePrefix = tablePrefix;
+        if (tablePrefix != null) {
+            this.tablePrefix = tablePrefix;
+        } else {
+            this.tablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
+        }
         this.jobSchedulerConfigurationDAO = new JobSchedulerConfigurationDAO(jdbcTemplate, tablePrefix);
         this.jobConfigurationDAO = new JobConfigurationDAO(jdbcTemplate, tablePrefix);
         this.jobConfigurationParameterDAO = new JobConfigurationParameterDAO(jdbcTemplate, tablePrefix);
