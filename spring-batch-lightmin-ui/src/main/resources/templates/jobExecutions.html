@@ -30,7 +30,7 @@
                     <tr th:each="jobExecution : ${jobExecutions}">
                         <td th:text="${jobExecution.jobInstanceId}"/>
                         <td><a href="#"
-                               th:href="@{execution(jobExecutionId=${jobExecution.jobExecution.jobId})}"
+                               th:href="@{execution(jobExecutionId=${jobExecution.jobExecution.id})}"
                                th:text="${jobExecution.jobExecution.jobId}"></a></td>
                         <td th:text="${jobExecution.jobName}"/>
                         <td th:text="${jobExecution.jobExecution.createTime}"/>

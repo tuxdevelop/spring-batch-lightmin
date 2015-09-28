@@ -18,7 +18,7 @@ VALUES (
   1,
   2,
   10,
-  10,
+  60000,
   1,
   'addressMigrationJobSYNCHRONOUSLY1',
   'RUNNING'
