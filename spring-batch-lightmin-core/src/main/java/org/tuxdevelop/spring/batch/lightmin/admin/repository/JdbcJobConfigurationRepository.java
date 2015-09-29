@@ -292,6 +292,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
                 + JobSchedulerConfigurationDomain.INITIAL_DELAY + " = ? , "
                 + JobSchedulerConfigurationDomain.SCHEDULER_TYPE + " = ?, "
                 + JobSchedulerConfigurationDomain.TASK_EXECUTOR_TYPE + " = ?, "
+                + JobSchedulerConfigurationDomain.BEAN_NAME + " = ?, "
                 + JobSchedulerConfigurationDomain.STATUS + " = ? WHERE "
                 + JobSchedulerConfigurationDomain.JOB_CONFIGURATION_ID + " = ? ";
 
@@ -332,6 +333,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
                     jobSchedulerConfiguration.getInitialDelay(),
                     jobSchedulerConfiguration.getJobSchedulerType().getId(),
                     jobSchedulerConfiguration.getTaskExecutorType().getId(),
+                    jobSchedulerConfiguration.getBeanName(),
                     jobSchedulerConfiguration.getSchedulerStatus().getValue(),
                     jobConfiguration.getJobConfigurationId()};
             final int[] types = {
@@ -340,6 +342,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
                     Types.NUMERIC,
                     Types.NUMERIC,
                     Types.NUMERIC,
+                    Types.VARCHAR,
                     Types.VARCHAR,
                     Types.NUMERIC};
             jdbcTemplate.update(sql, parameters, types);

@@ -37,11 +37,12 @@ public class DefaultAdminService implements AdminService {
         jobConfiguration.validateForSave();
         jobConfiguration.getJobSchedulerConfiguration().setBeanName("TEMP");
         final JobConfiguration addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
-        final String beanName = schedulerService.registerSchedulerForJob(jobConfiguration);
+        addedJobConfiguration.getJobSchedulerConfiguration().setBeanName(null);
+        final String beanName = schedulerService.registerSchedulerForJob(addedJobConfiguration);
         addedJobConfiguration.getJobSchedulerConfiguration().setBeanName(beanName);
         try {
             jobConfigurationRepository.update(addedJobConfiguration);
-            if (SchedulerStatus.RUNNING.equals(jobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus())) {
+            if (SchedulerStatus.RUNNING.equals(addedJobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus())) {
                 schedulerService.schedule(beanName);
             } else {
                 log.info("Scheduler not started, no scheduling triggered!");
