@@ -19,6 +19,8 @@ import java.net.InetAddress;
 @RequestMapping("/")
 public class IndexController extends CommonController {
 
+    private static final String ROOT_SLASH = "/";
+
     @Value("${server.servlet-path}")
     private String servletPath;
 
@@ -35,7 +37,21 @@ public class IndexController extends CommonController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String redirect() {
-        return "redirect:" + servletPath;
+        return "redirect:" + determinIndex(servletPath);
+    }
+
+    String determinIndex(final String currentServletPath) {
+        final String redirectPath;
+        if (currentServletPath != null) {
+            if (currentServletPath.endsWith("/")) {
+                redirectPath = currentServletPath;
+            } else {
+                redirectPath = currentServletPath + "/";
+            }
+        } else {
+            redirectPath = ROOT_SLASH;
+        }
+        return redirectPath;
     }
 }
 

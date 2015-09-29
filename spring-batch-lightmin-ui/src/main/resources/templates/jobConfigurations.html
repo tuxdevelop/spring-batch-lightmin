@@ -43,8 +43,15 @@
                   th:text="${jobConfiguration.jobSchedulerConfiguration.fixedDelay}"></td>
               <td class="td-text-small"
                   th:text="${jobConfiguration.jobSchedulerConfiguration.taskExecutorType}"></td>
-              <td class="td-text-small"
-                  th:text="${jobConfiguration.jobParameters.toString()}"></td>
+              <td class="td-text-small">
+                <table>
+                  <tbody>
+                  <tr th:each="parameter : ${jobConfiguration.jobParameters}">
+                    <td th:text="${parameter}"/>
+                  </tr>
+                  </tbody>
+                </table>
+              </td>
               <td class="td-text-small"
                   th:text="${jobConfiguration.jobIncrementer}"></td>
               <td class="td-text-small"
