@@ -1,6 +1,5 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -25,7 +24,6 @@ import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
  * @author Marcel Becker
  * @version 0.1
  */
-@Slf4j
 @Configuration
 @Import(value = {SpringBatchLightminConfiguration.class, RestServiceConfiguration.class})
 public class CommonSpringBatchLightminConfiguration implements InitializingBean {

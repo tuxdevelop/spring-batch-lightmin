@@ -29,7 +29,7 @@ public class SpringBatchLightminConfiguration {
     public SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator() {
         final DefaultSpringBatchLightminConfigurator configuration;
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Create DefaultSpringBatchLightminConfiguration ");
+        stringBuilder.append("Create DefaultSpringBatchLightminConfigurator ");
         if (dataSource != null) {
             if (tablePrefix != null) {
                 configuration = new DefaultSpringBatchLightminConfigurator(dataSource, tablePrefix);

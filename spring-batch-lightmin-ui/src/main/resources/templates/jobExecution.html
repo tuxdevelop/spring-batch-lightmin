@@ -22,7 +22,11 @@
                 </tr>
                 <tr>
                     <td>Job Instance Id</td>
-                    <td th:text="${jobExecution.jobInstanceId}"/>
+                    <td>
+                        <a href="#"
+                           th:href="@{executions(jobInstanceId=${jobExecution.jobInstanceId})}"
+                           th:text="${jobExecution.jobInstanceId}"> </a>
+                    </td>
                 </tr>
                 <tr>
                     <td>Job Execution Id</td>

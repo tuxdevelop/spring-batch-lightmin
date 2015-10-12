@@ -1,49 +1,51 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:include="fragments/layout :: header" />
+<head th:include="fragments/layout :: header"/>
 <body>
-    <div th:include="fragments/layout :: menu"></div>
-    <div class="viewport">
-        <div class="container content">
-            <div class="row-fluid">
-                <table class="table table-hover boxed">
-                    <thead>
-                    <tr>
-                        <th colspan="9" th:text="${jobName}">
-                            Job Executions Summary
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th>Instance Id</th>
-                        <th>Execution Id</th>
-                        <th>Job Name</th>
-                        <th>Creation Time</th>
-                        <th>Launch Time</th>
-                        <th>Duration</th>
-                        <th>End Time</th>
-                        <th>Status</th>
-                        <th>Exit Code</th>
-                    </tr>
-                    <tr th:each="jobExecution : ${jobExecutions}">
-                        <td th:text="${jobExecution.jobInstanceId}"/>
-                        <td><a href="#"
-                               th:href="@{execution(jobExecutionId=${jobExecution.jobExecution.id})}"
-                               th:text="${jobExecution.jobExecution.jobId}"></a></td>
-                        <td th:text="${jobExecution.jobName}"/>
-                        <td th:text="${jobExecution.jobExecution.createTime}"/>
-                        <td th:text="${jobExecution.jobExecution.startTime}"/>
-                        <td th:text="${jobExecution.duration}"/>
-                        <td th:text="${jobExecution.jobExecution.endTime}"/>
-                        <td th:text="${jobExecution.jobExecution.status}"/>
-                        <td th:text="${jobExecution.jobExecution.exitStatus.exitCode}"/>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+<div th:include="fragments/layout :: menu"></div>
+<div class="viewport">
+    <div class="container content">
+        <div class="row-fluid">
+            <table class="table table-hover boxed">
+                <thead>
+                <tr>
+                    <th colspan="9">
+                        <a href="#"
+                           th:href="@{job(jobname=${jobName})}"
+                           th:text="${jobName}"> </a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>Instance Id</th>
+                    <th>Execution Id</th>
+                    <th>Job Name</th>
+                    <th>Creation Time</th>
+                    <th>Launch Time</th>
+                    <th>Duration</th>
+                    <th>End Time</th>
+                    <th>Status</th>
+                    <th>Exit Code</th>
+                </tr>
+                <tr th:each="jobExecution : ${jobExecutions}">
+                    <td th:text="${jobExecution.jobInstanceId}"/>
+                    <td><a href="#"
+                           th:href="@{execution(jobExecutionId=${jobExecution.jobExecution.id})}"
+                           th:text="${jobExecution.jobExecution.jobId}"></a></td>
+                    <td th:text="${jobExecution.jobName}"/>
+                    <td th:text="${jobExecution.jobExecution.createTime}"/>
+                    <td th:text="${jobExecution.jobExecution.startTime}"/>
+                    <td th:text="${jobExecution.duration}"/>
+                    <td th:text="${jobExecution.jobExecution.endTime}"/>
+                    <td th:text="${jobExecution.jobExecution.status}"/>
+                    <td th:text="${jobExecution.jobExecution.exitStatus.exitCode}"/>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 </body>
 </html>

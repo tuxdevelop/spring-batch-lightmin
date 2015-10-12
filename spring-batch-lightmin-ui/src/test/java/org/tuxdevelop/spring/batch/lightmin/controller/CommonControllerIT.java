@@ -41,7 +41,7 @@ public abstract class CommonControllerIT {
         jobSchedulerConfiguration.setFixedDelay(100000L);
         jobSchedulerConfiguration.setInitialDelay(100000L);
         jobSchedulerConfiguration.setJobSchedulerType(JobSchedulerType.PERIOD);
-        jobSchedulerConfiguration.setTaskExecutorType(TaskExecutorType.ASYNCHRONOUS.SYNCHRONOUS);
+        jobSchedulerConfiguration.setTaskExecutorType(TaskExecutorType.ASYNCHRONOUS);
         final JobConfiguration jobConfiguration = new JobConfiguration();
         jobConfiguration.setJobName("testJob");
         jobConfiguration.setJobConfigurationId(1L);
