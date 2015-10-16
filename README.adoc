@@ -16,6 +16,7 @@ and depending beans.
 
 To monitor the Spring Batch Jobs, the _Spring Batch Lightmin_ provides a web interface. The web interface also
 manages _JobConfigurations_, which can be used for time triggered job runs.
+
 == Getting Started
 
 === Maven Dependencies
