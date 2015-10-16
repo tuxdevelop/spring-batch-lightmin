@@ -100,5 +100,61 @@ schema, you have to set the _table.prefix_ property in your application.properti
 table.prefix=MY_BATCH_PREFIX_
 ----
 
+== Spring Batch Lightmin UI
 
+=== Index
 
+The welcome page of the _Spring Batch Lightmin_ shows the hostname/ip-address and the servlet path of the current
+instance. At this point, all available REST-endpoints and operations are also listed. In order to get deeper into the
+_Lightmin_, you have to navigate through the top bar.
+
+image::index.png[]
+
+=== Jobs
+
+On startup, the _Spring Batch Lightmin_ scans the _Spring Context_ to register all beans of the type _Job_ and make
+them available into the _JobRegistry_. All known jobs will be listed in the jobs tab with their current instance count.
+To get more detailed informations about the job instances, you have to click on the job name, you want to view.
+
+image::jobs.png[]
+
+==== Job Instances
+
+After selecting a job by name, all instances of the job will be listed with their current execution count. In order
+to get more detailed information about the executions of the instance, select the desired job instance id.
+
+image::job_instances.png[]
+
+==== Job Executions
+
+The view will show an overview of all executions for the selected instance id. To get detailes of the job execution,
+click on the desired id.
+
+image::job_instance.png[]
+
+==== Job Execution
+
+The job execution view shows you a detailed overview about the job and step executions of the selected job execution.
+
+image::job_execution.png[]
+
+=== Admin
+
+==== Job Configurations
+
+The job configurations view gives an overview about all stored job configurations. At this point, you can add and delete
+ new job configurations, start and stop the scheduler of the job configurations and edit existing configurations.
+
+image::job_configurations.png[]
+
+===== Add Job Configuration
+
+image::job_configuration_add.png[]
+
+===== Edit Job Configuration
+
+image::job_configuration_edit.png[]
+
+==== Job Launcher
+
+image::job_launcher.png[]
