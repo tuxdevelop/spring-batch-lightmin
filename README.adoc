@@ -1,102 +1,10 @@
 = Spring Batch Lightmin
 :toc:
+:asciidoctor-source: ./spring-batch-lightmin-documentation/src/main/asciidoc
 
-The _Spring Batch Lightmin_ is a library on top of the _Spring Batch_ Framework. It provides the basic _Spring 
-Batch_ infrastructure components 
+include::{asciidoctor-source}/introduction.adoc[]
+include::{asciidoctor-source}/getting_started.adoc[]
+include::{asciidoctor-source}/jdbc_support.adoc[]
 
-* JobRepository
-* JobOperator
-* JobExplorer
-* JobLauncher
-* JobBuilderFactory
-* StepBuilderFactory
-
-and depending beans. 
-
-To monitor the Spring Batch Jobs, the _Spring Batch Lightmin_ provides a web interface. The web interface also 
-manages _JobConfigurations_, which can be used for time triggered job runs.
-
-== Getting Started
-
-=== Maven Dependencies
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.tuxdevelop</groupId>
-    <artifactId>spring-batch-lightmin-ui</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-</dependency>
-----
-
-In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapshot repository.
-
-[source,xml]
-----
-<repositories>
-    <repository>
-        <id>ossrh</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </repository>
-</repositories>
-----
-
-=== Enable Spring Batch Lightmin
-
-To enable the _Spring Batch Lightmin_, you have to add the _@EnableSpringBatchLightminUI_ annotation to a 
-Spring configuration class of your application. The _Spring Batch Lightmin_ also needs a bean of type 
-_JobConfigurationRepository_ in the application context. The easiest implementation of _JobConfigurationRepository_ 
-is the _MapJobConfigurationRepository_.
-
-[source,java]
-----
-@Configuration
-@SpringBootApplication
-@EnableSpringBatchLightminUI
-public class AddressMigratorApp {
-
-    public static void main(final String[] args) {
-        SpringApplication.run(AddressMigratorApp.class, args);
-    }
-    
-    @Bean
-    public JobConfigurationRepository jobConfigurationRepository(){
-        return new MapJobConfigurationRepository();
-    }
-
-}
-----
-
-==== Jdbc Support
-For production environments, the _Spring Batch Lightmin_ also provides jdbc components, to get the _Spring Batch Job_
- meta informations from a database and to store the _JobConfigurations_. To use a persistent way to store your 
- _JobConfigurations_, you have to install a schema of _Spring Batch Lightmin_ next to your _Spring Batch_ tables. 
- The DDL scripts for various database types are located within the core-module of the _Spring Batch Lightmin_.
-  
-[source, java]
-----
-
-@Autowired
-private JdbcTemplate jdbcTemplate;
-
-@Value("${table.prefix}")
-private String tablePrefix;
-
-@Bean
-public JobConfigurationRepository jobConfigurationRepository() {
-    return new JdbcJobConfigurationRepository(jdbcTemplate, tablePrefix);
-}
-
-----
-
-==== Properties
-
-If you have to use a different table prefix for the Spring Batch database schema and the job configuration database 
-schema, you have to set the _table.prefix_ property in your application.properties. The default value is _BATCH__.  
-
-[source,properties]
-----
-table.prefix=MY_BATCH_PREFIX_    
-----
 
 

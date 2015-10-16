@@ -38,6 +38,7 @@
         <module>spring-batch-lightmin-core</module>
         <module>spring-batch-lightmin-ui</module>
         <module>spring-batch-lightmin-samples</module>
+        <module>spring-batch-lightmin-documentation</module>
     </modules>
 
     <properties>

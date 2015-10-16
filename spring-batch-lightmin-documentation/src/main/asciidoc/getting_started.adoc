@@ -1,0 +1,50 @@
+== Getting Started
+
+=== Maven Dependencies
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-ui</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+----
+
+In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapshot repository.
+
+[source,xml]
+----
+<repositories>
+    <repository>
+        <id>ossrh</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+</repositories>
+----
+
+=== Enable Spring Batch Lightmin
+
+To enable the _Spring Batch Lightmin_, you have to add the _@EnableSpringBatchLightminUI_ annotation to a
+Spring configuration class of your application. The _Spring Batch Lightmin_ also needs a bean of type
+_JobConfigurationRepository_ in the application context. The easiest implementation of _JobConfigurationRepository_
+is the _MapJobConfigurationRepository_.
+
+[source,java]
+----
+@Configuration
+@SpringBootApplication
+@EnableSpringBatchLightminUI
+public class AddressMigratorApp {
+
+    public static void main(final String[] args) {
+        SpringApplication.run(AddressMigratorApp.class, args);
+    }
+
+    @Bean
+    public JobConfigurationRepository jobConfigurationRepository(){
+        return new MapJobConfigurationRepository();
+    }
+
+}
+----

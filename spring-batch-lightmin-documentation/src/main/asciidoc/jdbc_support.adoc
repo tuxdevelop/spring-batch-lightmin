@@ -1,0 +1,31 @@
+=== Jdbc Support
+For production environments, the _Spring Batch Lightmin_ also provides jdbc components, to get the _Spring Batch Job_
+ meta informations from a database and to store the _JobConfigurations_. To use a persistent way to store your
+ _JobConfigurations_, you have to install a schema of _Spring Batch Lightmin_ next to your _Spring Batch_ tables.
+ The DDL scripts for various database types are located within the core-module of the _Spring Batch Lightmin_.
+
+[source, java]
+----
+
+@Autowired
+private JdbcTemplate jdbcTemplate;
+
+@Value("${table.prefix}")
+private String tablePrefix;
+
+@Bean
+public JobConfigurationRepository jobConfigurationRepository() {
+    return new JdbcJobConfigurationRepository(jdbcTemplate, tablePrefix);
+}
+
+----
+
+==== Properties
+
+If you have to use a different table prefix for the Spring Batch database schema and the job configuration database
+schema, you have to set the _table.prefix_ property in your application.properties. The default value is _BATCH__.
+
+[source,properties]
+----
+table.prefix=MY_BATCH_PREFIX_
+----
