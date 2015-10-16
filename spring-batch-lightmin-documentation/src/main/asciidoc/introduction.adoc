@@ -1,3 +1,5 @@
+== Introduction
+
 The _Spring Batch Lightmin_ is a library on top of the _Spring Batch_ Framework. It provides the basic _Spring
 Batch_ infrastructure components
 

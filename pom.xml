@@ -51,6 +51,7 @@
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
         <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
+        <asciidoctor.version>1.5.2</asciidoctor.version>
     </properties>
 
     <dependencyManagement>

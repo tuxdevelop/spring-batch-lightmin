@@ -11,5 +11,34 @@
 
     <artifactId>spring-batch-lightmin-documentation</artifactId>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>${asciidoctor.version}</version>
+                <executions>
+                    <execution>
+                        <id>output-html</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>html</backend>
+                            <doctype>article</doctype>
+                            <sourceHighlighter>coderay</sourceHighlighter>
+                            <embedAssets>true</embedAssets>
+                            <sourceDocumentName>spring_batch_lightmin.adoc</sourceDocumentName>
+                            <outputDirectory>src/main/doc</outputDirectory>
+                            <attributes>
+                                <docVersion>${project.version}</docVersion>
+                            </attributes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
