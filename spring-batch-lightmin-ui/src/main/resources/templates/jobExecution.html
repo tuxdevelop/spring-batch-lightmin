@@ -79,7 +79,7 @@
             <table class="table table-hover boxed">
                 <thead>
                 <tr>
-                    <th colspan="8">
+                    <th colspan="11">
                         Step Executions
                     </th>
                 </tr>
@@ -91,6 +91,9 @@
                     <th>Writes</th>
                     <th>Commits</th>
                     <th>Rollbacks</th>
+                    <th>Read Skips</th>
+                    <th>Process Skips</th>
+                    <th>Write Skips</th>
                     <th>Duration</th>
                     <th>Step Status</th>
                     <th>Step Exit Message</th>
@@ -101,6 +104,9 @@
                     <td th:text="${stepExecution.stepExecution.writeCount}"/>
                     <td th:text="${stepExecution.stepExecution.commitCount}"/>
                     <td th:text="${stepExecution.stepExecution.rollbackCount}"/>
+                    <td th:text="${stepExecution.stepExecution.readSkipCount}"/>
+                    <td th:text="${stepExecution.stepExecution.processSkipCount}"/>
+                    <td th:text="${stepExecution.stepExecution.writeSkipCount}"/>
                     <td th:text="${stepExecution.duration}"/>
                     <td th:text="${stepExecution.stepExecution.exitStatus.exitCode}"/>
                     <td th:text="${stepExecution.stepExecution.exitStatus.exitDescription}"/>
