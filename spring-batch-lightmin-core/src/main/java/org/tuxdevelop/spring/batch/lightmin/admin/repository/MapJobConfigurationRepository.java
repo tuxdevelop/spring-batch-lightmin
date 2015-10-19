@@ -7,6 +7,9 @@ import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author Marcel Becker
@@ -15,12 +18,11 @@ import java.util.*;
 @Slf4j
 public class MapJobConfigurationRepository implements JobConfigurationRepository {
 
-    private Map<String, Set<JobConfiguration>> jobConfigurations;
-    private Long currentJobId;
+    private ConcurrentMap<String, Set<JobConfiguration>> jobConfigurations;
+    private final AtomicLong currentJobId = new AtomicLong(1L);
 
     public MapJobConfigurationRepository() {
-        jobConfigurations = new HashMap<String, Set<JobConfiguration>>();
-        currentJobId = 1L;
+        jobConfigurations = new ConcurrentHashMap<String, Set<JobConfiguration>>();
     }
 
     @Override
@@ -143,8 +145,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     }
 
     private synchronized Long getNextJobId() {
-        final Long nextJobId = Long.valueOf(currentJobId);
-        currentJobId++;
+        final Long nextJobId = currentJobId.getAndIncrement();
         return nextJobId;
     }
 

@@ -6,6 +6,7 @@ import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.repository.dao.JobExecutionDao;
 import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.batch.core.repository.dao.StepExecutionDao;
+import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 
@@ -39,6 +40,11 @@ public interface SpringBatchLightminConfigurator extends BatchConfigurer {
      * @return an instance of {@link org.springframework.batch.core.repository.dao.JobExecutionDao}
      */
     JobExecutionDao getJobExecutionDao();
+
+    /**
+     * @return an instance of {@link org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao}
+     */
+    LightminJobExecutionDao getLightminJobExecutionDao();
 
     /**
      * @return an instance of {@link org.springframework.batch.core.repository.dao.JobInstanceDao}

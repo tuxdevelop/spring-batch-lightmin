@@ -20,6 +20,9 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.support.incrementer.AbstractDataFieldMaxValueIncrementer;
 import org.springframework.jdbc.support.incrementer.DataFieldMaxValueIncrementer;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.tuxdevelop.spring.batch.lightmin.dao.JdbcLightminJobExecutionDao;
+import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
+import org.tuxdevelop.spring.batch.lightmin.dao.MapLightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.service.DefaultJobService;
 import org.tuxdevelop.spring.batch.lightmin.service.DefaultStepService;
@@ -41,6 +44,7 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
     private JobOperator jobOperator;
     private JobRegistry jobRegistry;
     private JobExecutionDao jobExecutionDao;
+    private LightminJobExecutionDao lightminJobExecutionDao;
     private JobInstanceDao jobInstanceDao;
     private StepExecutionDao stepExecutionDao;
     private PlatformTransactionManager transactionManager;
@@ -104,6 +108,11 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
     @Override
     public JobExecutionDao getJobExecutionDao() {
         return jobExecutionDao;
+    }
+
+    @Override
+    public LightminJobExecutionDao getLightminJobExecutionDao() {
+        return lightminJobExecutionDao;
     }
 
     @Override
@@ -172,6 +181,8 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
         this.jobInstanceDao = createJobInstanceDao();
         // stepExecutionDao
         this.stepExecutionDao = createStepExecutionDao();
+        //lightminJobExecutionDao
+        this.lightminJobExecutionDao = createLightminJobExecutionDao();
         // jobRepository
         this.jobRepository = createJobRepository();
     }
@@ -192,6 +203,8 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
         this.jobExplorer = jobExplorerFactory.getObject();
         // jobExecutionDao
         this.jobExecutionDao = new MapJobExecutionDao();
+        //lightminJobExecutionDao
+        this.lightminJobExecutionDao = new MapLightminJobExecutionDao();
         // jobInstanceDao
         this.jobInstanceDao = new MapJobInstanceDao();
         // stepExecutionDao
@@ -232,6 +245,15 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
         return dao;
     }
 
+    protected LightminJobExecutionDao createLightminJobExecutionDao() throws Exception {
+        final JdbcLightminJobExecutionDao dao = new JdbcLightminJobExecutionDao();
+        dao.setJdbcTemplate(jdbcTemplate);
+        dao.setJobExecutionIncrementer(incrementer);
+        dao.setTablePrefix(tablePrefix);
+        dao.afterPropertiesSet();
+        return dao;
+    }
+
     protected StepExecutionDao createStepExecutionDao() throws Exception {
         JdbcStepExecutionDao dao = new JdbcStepExecutionDao();
         dao.setJdbcTemplate(jdbcTemplate);
@@ -257,7 +279,7 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
 
     protected JobService createJobService() throws Exception {
         final JobService jobService = new DefaultJobService(jobOperator,
-                jobRegistry, jobInstanceDao, jobExecutionDao);
+                jobRegistry, jobInstanceDao, jobExecutionDao, lightminJobExecutionDao);
         jobService.afterPropertiesSet();
         return jobService;
     }

@@ -50,8 +50,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     public JobConfiguration getJobConfiguration(final Long jobConfigurationId) throws NoSuchJobConfigurationException {
         if (checkJobConfigurationExists(jobConfigurationId)) {
             final JobConfiguration jobConfiguration = jobConfigurationDAO.getById(jobConfigurationId);
-            jobSchedulerConfigurationDAO.attacheJobSchedulerConfiguration(jobConfiguration);
-            jobConfigurationParameterDAO.attacheParameters(jobConfiguration);
+            jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
+            jobConfigurationParameterDAO.attachParameters(jobConfiguration);
             return jobConfiguration;
         } else {
             final String message = "No jobConfiguration could be found for id:" + jobConfigurationId;
@@ -65,8 +65,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         if (checkJobConfigurationExists(jobName)) {
             final List<JobConfiguration> jobConfigurations = jobConfigurationDAO.getByJobName(jobName);
             for (final JobConfiguration jobConfiguration : jobConfigurations) {
-                jobSchedulerConfigurationDAO.attacheJobSchedulerConfiguration(jobConfiguration);
-                jobConfigurationParameterDAO.attacheParameters(jobConfiguration);
+                jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
+                jobConfigurationParameterDAO.attachParameters(jobConfiguration);
             }
             return jobConfigurations;
         } else {
@@ -119,8 +119,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     public Collection<JobConfiguration> getAllJobConfigurations() {
         final List<JobConfiguration> jobConfigurations = jobConfigurationDAO.getAll();
         for (final JobConfiguration jobConfiguration : jobConfigurations) {
-            jobSchedulerConfigurationDAO.attacheJobSchedulerConfiguration(jobConfiguration);
-            jobConfigurationParameterDAO.attacheParameters(jobConfiguration);
+            jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
+            jobConfigurationParameterDAO.attachParameters(jobConfiguration);
         }
         return jobConfigurations;
     }
@@ -129,8 +129,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     public Collection<JobConfiguration> getAllJobConfigurationsByJobNames(final Collection<String> jobNames) {
         final List<JobConfiguration> jobConfigurations = jobConfigurationDAO.getAllByJobNames(jobNames);
         for (final JobConfiguration jobConfiguration : jobConfigurations) {
-            jobSchedulerConfigurationDAO.attacheJobSchedulerConfiguration(jobConfiguration);
-            jobConfigurationParameterDAO.attacheParameters(jobConfiguration);
+            jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
+            jobConfigurationParameterDAO.attachParameters(jobConfiguration);
         }
         return jobConfigurations;
     }
@@ -142,8 +142,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     }
 
 	/*
-     * -------------------------- HELPER CLASSES AND METHODS
-	 * --------------------------
+     * -------------------------- HELPER CLASSES AND METHODS -------------------
 	 */
 
     private Boolean checkJobConfigurationExists(final Long jobConfigurationId) {
@@ -317,7 +316,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             return key.longValue();
         }
 
-        public void attacheJobSchedulerConfiguration(final JobConfiguration jobConfiguration) {
+        public void attachJobSchedulerConfiguration(final JobConfiguration jobConfiguration) {
             final String sql = String.format(GET_JOB_SCHEDULER_QUERY, tablePrefix);
             final JobSchedulerConfiguration jobSchedulerConfiguration = jdbcTemplate.queryForObject(sql,
                     new JobSchedulerConfigurationRowMapper(), jobConfiguration.getJobConfigurationId());
@@ -418,7 +417,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             }
         }
 
-        public void attacheParameters(final JobConfiguration jobConfiguration) {
+        public void attachParameters(final JobConfiguration jobConfiguration) {
             final Long jobConfigurationId = jobConfiguration.getJobConfigurationId();
             final String sql = String.format(GET_JOB_PARAMETERS_QUERY, tablePrefix);
             final List<JobConfigurationParameter> jobConfigurationParameters = jdbcTemplate.query(sql,
@@ -459,24 +458,24 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             }
         }
 
-        private JobConfigurationParameter createJobConfigurationParameter(final String key, final Object o) {
+        private JobConfigurationParameter createJobConfigurationParameter(final String key, final Object value) {
             final JobConfigurationParameter jobConfigurationParameter = new JobConfigurationParameter();
-            if (o instanceof Long) {
-                jobConfigurationParameter.setParameterValue(o.toString());
+            if (value instanceof Long) {
+                jobConfigurationParameter.setParameterValue(value.toString());
                 jobConfigurationParameter.setParameterType(ParameterType.LONG.getId());
-            } else if (o instanceof String) {
-                jobConfigurationParameter.setParameterValue(o.toString());
+            } else if (value instanceof String) {
+                jobConfigurationParameter.setParameterValue(value.toString());
                 jobConfigurationParameter.setParameterType(ParameterType.STRING.getId());
-            } else if (o instanceof Date) {
+            } else if (value instanceof Date) {
                 jobConfigurationParameter.setParameterValue(dateFormat
                         .format(ParameterParser.DATE_FORMAT_WITH_TIMESTAMP));
                 jobConfigurationParameter.setParameterType(ParameterType.DATE.getId());
-            } else if (o instanceof Double) {
-                jobConfigurationParameter.setParameterValue(o.toString());
+            } else if (value instanceof Double) {
+                jobConfigurationParameter.setParameterValue(value.toString());
                 jobConfigurationParameter.setParameterType(ParameterType.DOUBLE.getId());
             } else {
                 throw new SpringBatchLightminApplicationException("Unknown jobParameterType: "
-                        + o.getClass().getSimpleName());
+                        + value.getClass().getSimpleName());
             }
             jobConfigurationParameter.setParameterName(key);
             return jobConfigurationParameter;

@@ -67,6 +67,14 @@
                 </tr>
                 </tbody>
             </table>
+            <span class="text-left" th:if="${pageModel.hasPrevious}">
+        <a href="#" th:href="@{executions(jobInstanceId=${jobInstanceId},startindex=${pageModel.previousStartIndex})}"
+           class="btn btn-inverse btn-small">&laquo; prev</a>
+      </span>
+      <span class="text-right" th:if="${pageModel.hasMore}">
+        <a href="#" th:href="@{executions(jobInstanceId=${jobInstanceId},startindex=${pageModel.nextStartIndex})}"
+           class="btn btn-inverse btn-small">next &raquo;</a>
+      </span>
         </div>
     </div>
 </div>

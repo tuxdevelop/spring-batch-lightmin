@@ -17,45 +17,53 @@ import java.util.List;
 @Configuration
 public class ITJobConfiguration {
 
-	@Autowired
-	private JobBuilderFactory jobBuilderFactory;
+    @Autowired
+    private JobBuilderFactory jobBuilderFactory;
 
-	@Autowired
-	private StepBuilderFactory stepBuilderFactory;
+    @Autowired
+    private StepBuilderFactory stepBuilderFactory;
 
-	@Bean
-	public Job simpleJob() {
-		return jobBuilderFactory.get("simpleJob").start(simpleStep()).build();
-	}
+    @Bean
+    public Job simpleJob() {
+        return jobBuilderFactory
+                .get("simpleJob")
+                .start(simpleStep())
+                .build();
+    }
 
-	@Bean
-	public Step simpleStep() {
-		return stepBuilderFactory.get("simpleStep").<Long, Long> chunk(1).reader(new SimpleReader())
-				.writer(new SimpleWriter()).build();
-	}
+    @Bean
+    public Step simpleStep() {
+        return stepBuilderFactory
+                .get("simpleStep")
+                .<Long, Long>chunk(1)
+                .reader(new SimpleReader())
+                .writer(new SimpleWriter())
+                .allowStartIfComplete(Boolean.TRUE)
+                .build();
+    }
 
-	public static class SimpleReader implements ItemReader<Long> {
+    public static class SimpleReader implements ItemReader<Long> {
 
-		private static final Long[] values = { 1L, 2L, 3L, 4L };
-		private int index = 0;
+        private static final Long[] values = {1L, 2L, 3L, 4L};
+        private int index = 0;
 
-		@Override
-		public Long read() throws Exception {
-			final Long value = index >= values.length ? null : values[index];
-			index++;
-			return value;
-		}
+        @Override
+        public Long read() throws Exception {
+            final Long value = index >= values.length ? null : values[index];
+            index++;
+            return value;
+        }
 
-	}
+    }
 
-	public static class SimpleWriter implements ItemWriter<Long> {
-		@Override
-		public void write(final List<? extends Long> list) throws Exception {
-			for (final Long value : list) {
-				log.info(String.valueOf(value));
-			}
-		}
+    public static class SimpleWriter implements ItemWriter<Long> {
+        @Override
+        public void write(final List<? extends Long> list) throws Exception {
+            for (final Long value : list) {
+                log.info(String.valueOf(value));
+            }
+        }
 
-	}
+    }
 
 }

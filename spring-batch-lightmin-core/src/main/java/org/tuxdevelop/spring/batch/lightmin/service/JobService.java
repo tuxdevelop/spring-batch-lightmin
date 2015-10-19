@@ -23,6 +23,14 @@ public interface JobService extends InitializingBean {
     int getJobInstanceCount(String jobName);
 
     /**
+     * Retrieves the current count of job executions of a {@link org.springframework.batch.core.JobInstance}
+     *
+     * @param jobInstance current jobInstance
+     * @return the count of job executions
+     */
+    int getJobExecutionCount(JobInstance jobInstance);
+
+    /**
      * Retrieves the names of all registered {@link org.springframework.batch.core.Job}
      *
      * @return a {@link java.util.Set} of job names
@@ -56,6 +64,17 @@ public interface JobService extends InitializingBean {
      * @return a {@link java.util.Collection} of {@link org.springframework.batch.core.JobExecution}s
      */
     Collection<JobExecution> getJobExecutions(JobInstance jobInstance);
+
+    /**
+     * Retrieves all {@link org.springframework.batch.core.JobExecution}s for a given {@link org.springframework
+     * .batch.core.JobInstance}
+     *
+     * @param jobInstance the {@link org.springframework.batch.core.JobInstance} the get the executions for.
+     * @param start       index of the {@link org.springframework.batch.core.JobExecution}s
+     * @param count       count of {@link org.springframework.batch.core.JobExecution}s to fetch
+     * @return a {@link java.util.Collection} of {@link org.springframework.batch.core.JobExecution}s
+     */
+    Collection<JobExecution> getJobExecutions(JobInstance jobInstance, int start, int count);
 
     /**
      * Retrieves a {@link org.springframework.batch.core.JobExecution} for a give jobExceutionId

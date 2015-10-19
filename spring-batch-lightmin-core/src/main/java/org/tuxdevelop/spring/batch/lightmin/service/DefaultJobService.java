@@ -9,6 +9,7 @@ import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.repository.dao.JobExecutionDao;
 import org.springframework.batch.core.repository.dao.JobInstanceDao;
+import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.util.*;
@@ -26,13 +27,16 @@ public class DefaultJobService implements JobService {
     private final JobRegistry jobRegistry;
     private final JobInstanceDao jobInstanceDao;
     private final JobExecutionDao jobExecutionDao;
+    private final LightminJobExecutionDao lightminJobExecutionDao;
 
     public DefaultJobService(final JobOperator jobOperator, final JobRegistry jobRegistry,
-                             final JobInstanceDao jobInstanceDao, final JobExecutionDao jobExecutionDao) {
+                             final JobInstanceDao jobInstanceDao, final JobExecutionDao jobExecutionDao, final
+                             LightminJobExecutionDao lightminJobExecutionDao) {
         this.jobOperator = jobOperator;
         this.jobRegistry = jobRegistry;
         this.jobInstanceDao = jobInstanceDao;
         this.jobExecutionDao = jobExecutionDao;
+        this.lightminJobExecutionDao = lightminJobExecutionDao;
     }
 
     @Override
@@ -44,6 +48,13 @@ public class DefaultJobService implements JobService {
             log.info(e.getMessage(), e);
         }
         return jobInstanceCount;
+    }
+
+    @Override
+    public int getJobExecutionCount(final JobInstance jobInstance) {
+        int jobExecutionCount = 0;
+        jobExecutionCount = lightminJobExecutionDao.getJobExecutionCount(jobInstance);
+        return jobExecutionCount;
     }
 
     @Override
@@ -72,6 +83,14 @@ public class DefaultJobService implements JobService {
     public Collection<JobExecution> getJobExecutions(final JobInstance jobInstance) {
         final Collection<JobExecution> jobExecutions = new LinkedList<JobExecution>();
         final List<JobExecution> jobExecutionList = jobExecutionDao.findJobExecutions(jobInstance);
+        jobExecutions.addAll(jobExecutionList);
+        return jobExecutions;
+    }
+
+    @Override
+    public Collection<JobExecution> getJobExecutions(final JobInstance jobInstance, final int start, final int count) {
+        final Collection<JobExecution> jobExecutions = new LinkedList<JobExecution>();
+        final List<JobExecution> jobExecutionList = lightminJobExecutionDao.findJobExecutions(jobInstance, start, count);
         jobExecutions.addAll(jobExecutionList);
         return jobExecutions;
     }

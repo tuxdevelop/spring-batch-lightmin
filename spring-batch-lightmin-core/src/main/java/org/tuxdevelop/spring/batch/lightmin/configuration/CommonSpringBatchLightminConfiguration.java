@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.service.*;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 
@@ -50,6 +51,11 @@ public class CommonSpringBatchLightminConfiguration implements InitializingBean 
     @Bean
     public JobExecutionDao jobExecutionDao() {
         return defaultSpringBatchLightminConfigurator.getJobExecutionDao();
+    }
+
+    @Bean
+    public LightminJobExecutionDao lightminJobExecutionDao() {
+        return defaultSpringBatchLightminConfigurator.getLightminJobExecutionDao();
     }
 
     @Bean

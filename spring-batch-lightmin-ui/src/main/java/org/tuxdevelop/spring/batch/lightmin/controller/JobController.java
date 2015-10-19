@@ -73,9 +73,12 @@ public class JobController extends CommonController {
     }
 
     @RequestMapping(value = "/executions", method = RequestMethod.GET)
-    public String getJobExecutions(final Model model, @RequestParam("jobInstanceId") final Long jobInstanceId) {
+    public String getJobExecutions(final Model model, @RequestParam("jobInstanceId") final Long jobInstanceId,
+                                   @RequestParam(value = "startindex", defaultValue = "0") final int startIndex,
+                                   @RequestParam(value = "pagesize", defaultValue = "10") final int pageSize) {
         final JobInstance jobInstance = jobService.getJobInstance(jobInstanceId);
-        Collection<JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance);
+        final int totalJobExecutions = jobService.getJobExecutionCount(jobInstance);
+        final Collection<JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance, startIndex, pageSize);
         final Collection<JobExecutionModel> jobExecutionModels = new LinkedList<JobExecutionModel>();
         for (final JobExecution jobExecution : jobExecutions) {
             final JobExecutionModel jobExecutionModel = new JobExecutionModel();
@@ -84,8 +87,11 @@ public class JobController extends CommonController {
             jobExecutionModel.setJobName(jobInstance.getJobName());
             jobExecutionModels.add(jobExecutionModel);
         }
+        final PageModel pageModel = new PageModel(startIndex, pageSize, totalJobExecutions);
         model.addAttribute("jobName", jobInstance.getJobName());
         model.addAttribute("jobExecutions", jobExecutionModels);
+        model.addAttribute("pageModel", pageModel);
+        model.addAttribute("jobInstanceId", jobInstanceId);
         return "jobExecutions";
     }
 
