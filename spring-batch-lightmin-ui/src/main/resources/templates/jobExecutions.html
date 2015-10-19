@@ -10,7 +10,7 @@
             <table class="table table-hover boxed">
                 <thead>
                 <tr>
-                    <th colspan="9">
+                    <th colspan="10">
                         <a href="#"
                            th:href="@{job(jobname=${jobName})}"
                            th:text="${jobName}"> </a>
@@ -28,12 +28,13 @@
                     <th>End Time</th>
                     <th>Status</th>
                     <th>Exit Code</th>
+                    <th>Action</th>
                 </tr>
                 <tr th:each="jobExecution : ${jobExecutions}">
                     <td th:text="${jobExecution.jobInstanceId}"/>
                     <td><a href="#"
                            th:href="@{execution(jobExecutionId=${jobExecution.jobExecution.id})}"
-                           th:text="${jobExecution.jobExecution.jobId}"></a></td>
+                           th:text="${jobExecution.jobExecution.id}"></a></td>
                     <td th:text="${jobExecution.jobName}"/>
                     <td th:text="${jobExecution.jobExecution.createTime}"/>
                     <td th:text="${jobExecution.jobExecution.startTime}"/>
@@ -41,6 +42,28 @@
                     <td th:text="${jobExecution.jobExecution.endTime}"/>
                     <td th:text="${jobExecution.jobExecution.status}"/>
                     <td th:text="${jobExecution.jobExecution.exitStatus.exitCode}"/>
+                    <td>
+                        <div class="col-xs-11 clearfix">
+                            <div class="pull-right">
+                                <form method="post" class="form-inline pull-right"
+                                      th:if="${jobExecution.jobExecution.status.name() == 'COMPLETED'
+                                                      || jobExecution.jobExecution.status.name() == 'FAILED' || jobExecution.jobExecution.status.name() == 'ABANDONED'}"
+                                      th:action="@{executionRestart(jobExecutionId=${jobExecution.jobExecution.id},jobInstanceId=${jobExecution.jobInstanceId})}">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success btn-sm">Restart</button>
+                                    </div>
+                                </form>
+                                <form method="post" class="form-inline pull-right"
+                                      th:if="${jobExecution.jobExecution.status.name() == 'STARTING'
+                                                      || jobExecution.jobExecution.status.name() == 'STARTED' || jobExecution.jobExecution.status.name() == 'UNKNOWN'}"
+                                      th:action="@{executionStop(jobExecutionId=${jobExecution.jobExecution.id},jobInstanceId=${jobExecution.jobInstanceId})}">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-danger btn-sm">Stop</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
                 </tbody>
             </table>

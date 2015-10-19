@@ -40,9 +40,10 @@ public interface SchedulerService extends InitializingBean {
     /**
      * Triggers the scheduler of Spring Bean with the given name.
      *
-     * @param beanName name of the Spring Bean to schedule
+     * @param beanName        name of the Spring Bean to schedule
+     * @param forceScheduling if true, the scheduler will be triggered independently of the {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus}
      */
-    void schedule(String beanName);
+    void schedule(String beanName, Boolean forceScheduling);
 
     /**
      * terminates the {@link org.springframework.core.task.TaskExecutor} of the {@link org.tuxdevelop.spring.batch

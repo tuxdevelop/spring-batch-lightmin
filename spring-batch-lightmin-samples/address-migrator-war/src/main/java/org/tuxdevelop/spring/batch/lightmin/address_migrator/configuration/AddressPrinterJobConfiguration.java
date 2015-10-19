@@ -5,6 +5,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.ItemSqlParameterSourceProvider;
@@ -50,6 +51,7 @@ public class AddressPrinterJobConfiguration {
     public Job addressPrinterJob() throws Exception {
         return jobBuilderFactory
                 .get("addressPrinterJob")
+                .incrementer(new RunIdIncrementer())
                 .start(addressPrinterStep())
                 .next(addressBatchTaskDeletionJob())
                 .build();
@@ -63,6 +65,7 @@ public class AddressPrinterJobConfiguration {
                 .reader(addressPrinterReader())
                 .processor(addressPrinterProcessor())
                 .writer(addressPrinterWriter())
+                .allowStartIfComplete(Boolean.TRUE)
                 .build();
     }
 
@@ -72,6 +75,7 @@ public class AddressPrinterJobConfiguration {
                 .<Long, Long>chunk(1)
                 .reader(addressBatchTaskDeletionReader())
                 .writer(addressBatchTaskDeletionWriter())
+                .allowStartIfComplete(Boolean.TRUE)
                 .build();
     }
 

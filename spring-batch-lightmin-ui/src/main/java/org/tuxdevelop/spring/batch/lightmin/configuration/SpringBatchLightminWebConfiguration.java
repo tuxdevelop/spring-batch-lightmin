@@ -27,6 +27,8 @@ public class SpringBatchLightminWebConfiguration {
                 viewControllerRegistry.addViewController("/job").setViewName("job");
                 viewControllerRegistry.addViewController("/executions").setViewName("jobExecutions");
                 viewControllerRegistry.addViewController("/execution").setViewName("jobExecution");
+                viewControllerRegistry.addViewController("/executionRestart").setViewName("jobExecutions");
+                viewControllerRegistry.addViewController("/executionStop").setViewName("jobExecutions");
                 viewControllerRegistry.addViewController("/jobConfigurations").setViewName("jobConfigurations");
                 viewControllerRegistry.addViewController("/jobConfigurationAdd").setViewName("jobConfigurationAdd");
                 viewControllerRegistry.addViewController("/jobConfigurationEdit").setViewName("jobConfigurationEdit");

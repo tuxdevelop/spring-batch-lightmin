@@ -1,7 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.Job;
@@ -9,7 +8,7 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -33,7 +32,7 @@ public class BeanRegistrarIT {
     private BeanRegistrar beanRegistrar;
 
     @Autowired
-    private ApplicationContext applicationContext;
+    private ConfigurableApplicationContext applicationContext;
 
     @Autowired
     private Job simpleJob;
@@ -58,16 +57,18 @@ public class BeanRegistrarIT {
         assertThat(registeredBean).isEqualTo("Test");
     }
 
-    //FIXME: Bean found, but is unregistered
-    @Ignore
     @Test(expected = NoSuchBeanDefinitionException.class)
     public void unregisterBeanStringIT() {
-        beanRegistrar.registerBean(String.class, "sampleString", null, null, null, null, null);
-        final String registeredBean = (String) applicationContext.getBean("sampleString");
+        final Set<Object> constructorValues = new HashSet<Object>();
+        constructorValues.add("sampleStringSecond");
+        beanRegistrar.registerBean(String.class, "sampleStringSecond", constructorValues, null, null, null, null);
+        final String registeredBean = (String) applicationContext.getBean("sampleStringSecond");
         assertThat(registeredBean).isNotNull();
-        beanRegistrar.unregisterBean("sampleString");
-        final String gotBean = (String) applicationContext.getBean("sampleString");
+        assertThat(registeredBean).isEqualTo("sampleStringSecond");
+        beanRegistrar.unregisterBean("sampleStringSecond");
+        final String gotBean = applicationContext.getBean("sampleStringSecond", String.class);
         log.info("got: " + gotBean);
+
     }
 
     @Test(expected = NoSuchBeanDefinitionException.class)

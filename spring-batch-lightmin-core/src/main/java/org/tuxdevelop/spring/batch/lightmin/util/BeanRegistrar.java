@@ -54,7 +54,7 @@ public class BeanRegistrar {
     }
 
     /**
-     * unrigesters a bean of the current application context
+     * unregisters a bean of the current application context
      *
      * @param beanName name of the bean, which should be destroyed on current application context
      * @throws NoSuchBeanDefinitionException if the context does not contain a bean with the given name
@@ -64,6 +64,7 @@ public class BeanRegistrar {
                 .getAutowireCapableBeanFactory();
         if (factory.containsBeanDefinition(beanName)) {
             ((DefaultListableBeanFactory) factory).destroySingleton(beanName);
+            factory.removeBeanDefinition(beanName);
         } else {
             throw new NoSuchBeanDefinitionException(
                     "No Bean definition exists for bean name: " + beanName);

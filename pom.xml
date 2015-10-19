@@ -43,8 +43,7 @@
 
     <properties>
         <assertj.version>1.7.1</assertj.version>
-        <simple.slf4j.version>1.7.10</simple.slf4j.version>
-        <platform-bom.version>1.1.3.RELEASE</platform-bom.version>
+        <platform-bom.version>1.1.4.RELEASE</platform-bom.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.3</nexus-staging-maven-plugin.version>

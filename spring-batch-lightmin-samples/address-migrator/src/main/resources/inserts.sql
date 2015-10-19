@@ -16,7 +16,7 @@ INSERT INTO BATCH_JOB_CONFIGURATION
 (job_name, job_incrementer)
 VALUES (
   'addressPrinterJob',
-  'DATE_INCREMENTER'
+  'NONE'
 );
 
 

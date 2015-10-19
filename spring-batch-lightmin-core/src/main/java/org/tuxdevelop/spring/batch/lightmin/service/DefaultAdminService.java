@@ -43,7 +43,7 @@ public class DefaultAdminService implements AdminService {
         try {
             jobConfigurationRepository.update(addedJobConfiguration);
             if (SchedulerStatus.RUNNING.equals(addedJobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus())) {
-                schedulerService.schedule(beanName);
+                schedulerService.schedule(beanName, Boolean.TRUE);
             } else {
                 log.info("Scheduler not started, no scheduling triggered!");
             }
@@ -60,7 +60,7 @@ public class DefaultAdminService implements AdminService {
             jobConfigurationRepository.update(jobConfiguration);
             schedulerService.refreshSchedulerForJob(jobConfiguration);
             if (SchedulerStatus.RUNNING.equals(jobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus())) {
-                schedulerService.schedule(jobConfiguration.getJobSchedulerConfiguration().getBeanName());
+                schedulerService.schedule(jobConfiguration.getJobSchedulerConfiguration().getBeanName(), Boolean.TRUE);
             } else {
                 log.info("Scheduler not started, no scheduling triggered!");
             }
@@ -154,7 +154,7 @@ public class DefaultAdminService implements AdminService {
         try {
             final JobConfiguration jobConfiguration = jobConfigurationRepository.getJobConfiguration(jobConfigurationId);
             final String beanName = jobConfiguration.getJobSchedulerConfiguration().getBeanName();
-            schedulerService.schedule(beanName);
+            schedulerService.schedule(beanName, Boolean.FALSE);
             jobConfiguration.getJobSchedulerConfiguration().setSchedulerStatus(SchedulerStatus.RUNNING);
             jobConfigurationRepository.update(jobConfiguration);
         } catch (NoSuchJobConfigurationException e) {

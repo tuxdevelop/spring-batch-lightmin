@@ -4,6 +4,11 @@ Version {docVersion}
 :imagesdir: images
 
 include::introduction.adoc[]
+
 include::getting_started.adoc[]
+
 include::jdbc_support.adoc[]
+
+include::job_configuration.adoc[]
+
 include::ui.adoc[]

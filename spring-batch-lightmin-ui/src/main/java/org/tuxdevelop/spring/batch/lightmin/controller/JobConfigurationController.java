@@ -48,6 +48,7 @@ public class JobConfigurationController extends CommonController {
         model.addAttribute("jobSchedulerTypes", JobSchedulerType.values());
         model.addAttribute("taskExecutorTypes", TaskExecutorType.values());
         model.addAttribute("schedulerStatusValues", getSelectableSchedulerStatus());
+        model.addAttribute("jobIncrementerTypes", JobIncrementer.values());
     }
 
     @RequestMapping(value = "/jobConfigurationEdit", method = RequestMethod.GET)
@@ -66,9 +67,11 @@ public class JobConfigurationController extends CommonController {
         jobConfigurationAddModel.setInitialDelay(jobConfiguration.getJobSchedulerConfiguration().getInitialDelay());
         jobConfigurationAddModel.setJobConfigurationId(jobConfigurationId);
         jobConfigurationAddModel.setSchedulerStatus(jobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus());
+        jobConfigurationAddModel.setJobIncrementer(jobConfiguration.getJobIncrementer());
         model.addAttribute("jobConfigurationAddModel", jobConfigurationAddModel);
         model.addAttribute("jobSchedulerTypes", JobSchedulerType.values());
         model.addAttribute("taskExecutorTypes", TaskExecutorType.values());
+        model.addAttribute("jobIncrementerTypes", JobIncrementer.values());
         return "jobConfigurationEdit";
     }
 
@@ -94,7 +97,7 @@ public class JobConfigurationController extends CommonController {
 
     @RequestMapping(value = "/jobConfigurations", method = RequestMethod.POST)
     public String deleteJobConfiguration(@RequestParam("jobConfigurationId") final long jobConfigurationId,
-                                       final Model model) {
+                                         final Model model) {
         adminService.deleteJobConfiguration(jobConfigurationId);
         final Collection<JobConfigurationModel> jobConfigurationModels = getJobConfigurationModels();
         model.addAttribute("jobConfigurationModels", jobConfigurationModels);
@@ -149,7 +152,7 @@ public class JobConfigurationController extends CommonController {
         jobConfiguration.setJobName(jobConfigurationAddModel.getJobName());
         jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobParameters(parameters);
-        jobConfiguration.setJobIncrementer(JobIncrementer.DATE);
+        jobConfiguration.setJobIncrementer(jobConfigurationAddModel.getJobIncrementer());
         jobConfiguration.setJobConfigurationId(jobConfigurationAddModel.getJobConfigurationId());
         return jobConfiguration;
     }

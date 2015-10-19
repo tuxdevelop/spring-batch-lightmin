@@ -9,6 +9,7 @@ import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.repository.dao.JobExecutionDao;
 import org.springframework.batch.core.repository.dao.JobInstanceDao;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.util.*;
 
@@ -89,6 +90,24 @@ public class DefaultJobService implements JobService {
     public void attachJobInstance(final JobExecution jobExecution) {
         final JobInstance jobInstance = jobInstanceDao.getJobInstance(jobExecution);
         jobExecution.setJobInstance(jobInstance);
+    }
+
+    @Override
+    public void restartJobExecution(final Long jobExecutionId) {
+        try {
+            jobOperator.restart(jobExecutionId);
+        } catch (final Exception e) {
+            throw new SpringBatchLightminApplicationException(e, e.getMessage());
+        }
+    }
+
+    @Override
+    public void stopJobExecution(final Long jobExecutionId) {
+        try {
+            jobOperator.stop(jobExecutionId);
+        } catch (final Exception e) {
+            throw new SpringBatchLightminApplicationException(e, e.getMessage());
+        }
     }
 
     @Override

@@ -73,10 +73,10 @@ public class DefaultSchedulerService implements SchedulerService {
     }
 
     @Override
-    public void schedule(final String beanName) {
+    public void schedule(final String beanName, final Boolean forceScheduling) {
         if (applicationContext.containsBean(beanName)) {
             final Scheduler scheduler = (Scheduler) applicationContext.getBean(beanName);
-            if (scheduler.getSchedulerStatus().equals(SchedulerStatus.RUNNING)) {
+            if (scheduler.getSchedulerStatus().equals(SchedulerStatus.RUNNING) && Boolean.FALSE.equals(forceScheduling)) {
                 log.info("Scheduler: " + beanName + " already running");
             } else {
                 scheduler.schedule();

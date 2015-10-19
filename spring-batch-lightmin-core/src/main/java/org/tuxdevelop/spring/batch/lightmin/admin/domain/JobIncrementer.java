@@ -9,12 +9,14 @@ import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplica
  */
 public enum JobIncrementer {
 
-    DATE("DATE_INCREMENTER");
+    DATE("DATE_INCREMENTER"),
+    NONE("NONE");
+
 
     @Getter
     private String incrementerIdentifier;
 
-    private JobIncrementer(final String incrementerIdentifier) {
+    JobIncrementer(final String incrementerIdentifier) {
         this.incrementerIdentifier = incrementerIdentifier;
     }
 
@@ -22,6 +24,8 @@ public enum JobIncrementer {
         final JobIncrementer jobIncrementer;
         if (JobIncrementer.DATE.getIncrementerIdentifier().equals(incrementerIdentifier)) {
             jobIncrementer = DATE;
+        } else if (JobIncrementer.NONE.getIncrementerIdentifier().equals(incrementerIdentifier)) {
+            jobIncrementer = NONE;
         } else {
             throw new SpringBatchLightminApplicationException(
                     "Unknown JobIncrementer for identifier: " + incrementerIdentifier);

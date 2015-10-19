@@ -80,4 +80,18 @@ public interface JobService extends InitializingBean {
      * @param jobExecution the {@link org.springframework.batch.core.JobExecution} to attache the {@link org.springframework.batch.core.JobInstance}
      */
     void attachJobInstance(JobExecution jobExecution);
+
+    /**
+     * restarts a jobExecution for a given id
+     *
+     * @param jobExecutionId id of the {@link org.springframework.batch.core.JobExecution}
+     */
+    void restartJobExecution(Long jobExecutionId);
+
+    /**
+     * stops a jobExecution for a given id
+     *
+     * @param jobExecutionId id of the {@link org.springframework.batch.core.JobExecution}
+     */
+    void stopJobExecution(Long jobExecutionId);
 }

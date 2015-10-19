@@ -143,6 +143,22 @@
                 </tr>
                 <tr>
                   <td>
+                    <label for="jobIncrementerType">
+                      Job Incrementer Type
+                    </label>
+                  </td>
+                  <td>
+                    <select class="form-control" id="jobIncrementerType"
+                            th:field="*{jobIncrementer}" th:value="*{jobIncrementer}">
+                      <option th:each="type : ${jobIncrementerTypes}"
+                              th:value="${type}" th:text="${type.name()}">Job
+                        Incrementer Type
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
                     <button type="submit" class="btn btn-success btn-small">Update
                     </button>
                   </td>

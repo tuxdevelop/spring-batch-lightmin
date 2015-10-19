@@ -104,6 +104,20 @@ public class JobController extends CommonController {
         return "jobExecution";
     }
 
+    @RequestMapping(value = "/executionRestart", method = RequestMethod.POST)
+    public String restartJobExecution(@RequestParam(value = "jobExecutionId") final Long jobExecutionId,
+                                      @RequestParam(value = "jobInstanceId") final Long jobInstanceId) {
+        jobService.restartJobExecution(jobExecutionId);
+        return "redirect:executions?jobInstanceId=" + jobInstanceId;
+    }
+
+    @RequestMapping(value = "/executionStop", method = RequestMethod.POST)
+    public String stopJobExecution(@RequestParam(value = "jobExecutionId") final Long jobExecutionId,
+                                   @RequestParam(value = "jobInstanceId") final Long jobInstanceId) {
+        jobService.stopJobExecution(jobExecutionId);
+        return "redirect:executions?jobInstanceId=" + jobInstanceId;
+    }
+
     void enrichJobExecution(final JobExecutionModel jobExecutionModel,
                             Collection<StepExecution> stepExecutions) {
         final Collection<StepExecutionModel> stepExecutionModels = new LinkedList<StepExecutionModel>();
