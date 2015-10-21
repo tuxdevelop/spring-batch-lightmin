@@ -45,31 +45,33 @@ public class ParameterParser {
      */
     public static String parseParameterMapToString(final Map<String, Object> parametersMap) {
         final StringBuilder stringBuilder = new StringBuilder();
-        for (Entry<String, Object> entry : parametersMap.entrySet()) {
-            final String key = entry.getKey();
-            final Object value = entry.getValue();
-            final String valueType;
-            final String valueString;
-            if (value instanceof Long) {
-                valueType = "(Long)";
-                valueString = value.toString();
-            } else if (value instanceof String) {
-                valueType = "(String)";
-                valueString = (String) value;
-            } else if (value instanceof Double) {
-                valueType = "(Double)";
-                valueString = value.toString();
-            } else if (value instanceof Date) {
-                valueType = "(Date)";
-                valueString = simpleDateFormatTimeStamp.format((Date) value);
-            } else {
-                throw new SpringBatchLightminApplicationException("Unknown ParameterType:" + value.getClass().getName());
+        if (parametersMap != null) {
+            for (Entry<String, Object> entry : parametersMap.entrySet()) {
+                final String key = entry.getKey();
+                final Object value = entry.getValue();
+                final String valueType;
+                final String valueString;
+                if (value instanceof Long) {
+                    valueType = "(Long)";
+                    valueString = value.toString();
+                } else if (value instanceof String) {
+                    valueType = "(String)";
+                    valueString = (String) value;
+                } else if (value instanceof Double) {
+                    valueType = "(Double)";
+                    valueString = value.toString();
+                } else if (value instanceof Date) {
+                    valueType = "(Date)";
+                    valueString = simpleDateFormatTimeStamp.format((Date) value);
+                } else {
+                    throw new SpringBatchLightminApplicationException("Unknown ParameterType:" + value.getClass().getName());
+                }
+                stringBuilder.append(key);
+                stringBuilder.append(valueType);
+                stringBuilder.append("=");
+                stringBuilder.append(valueString);
+                stringBuilder.append(",");
             }
-            stringBuilder.append(key);
-            stringBuilder.append(valueType);
-            stringBuilder.append("=");
-            stringBuilder.append(valueString);
-            stringBuilder.append(",");
         }
         final String tempParameters = stringBuilder.toString();
         final String result;

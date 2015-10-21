@@ -43,10 +43,10 @@ public class IndexController extends CommonController {
     String determinIndex(final String currentServletPath) {
         final String redirectPath;
         if (currentServletPath != null) {
-            if (currentServletPath.endsWith("/")) {
+            if (currentServletPath.endsWith(ROOT_SLASH)) {
                 redirectPath = currentServletPath;
             } else {
-                redirectPath = currentServletPath + "/";
+                redirectPath = currentServletPath + ROOT_SLASH;
             }
         } else {
             redirectPath = ROOT_SLASH;

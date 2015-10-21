@@ -3,7 +3,10 @@ package org.tuxdevelop.spring.batch.lightmin.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.model.JobConfigurationAddModel;
 import org.tuxdevelop.spring.batch.lightmin.model.JobConfigurationModel;
@@ -32,12 +35,6 @@ public class JobConfigurationController extends CommonController {
     public void getJobConfigurations(final Model model) {
         final Collection<JobConfigurationModel> jobConfigurationModels = getJobConfigurationModels();
         model.addAttribute("jobConfigurationModels", jobConfigurationModels);
-    }
-
-    @RequestMapping(value = "/jobConfigurations/{jobConfigurationId}", method = RequestMethod.GET)
-    public void getJobConfiguration(final Model model, @PathVariable("jobConfigurationId") final Long jobConfigurationId) {
-        final JobConfiguration jobConfiguration = adminService.getJobConfigurationById(jobConfigurationId);
-        model.addAttribute("jobConfiguration", jobConfiguration);
     }
 
     @RequestMapping(value = "/jobConfigurationAdd", method = RequestMethod.GET)

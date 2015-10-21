@@ -12,7 +12,7 @@ public class AdminControllerIT extends CommonControllerIT {
     @Test
     public void initAdminIT() {
         try {
-            this.mockMvc.perform(get("/admin")).andExpect(status().isOk()).andExpect(view().name("admin"));
+            this.mockMvc.perform(get("/admin/")).andExpect(status().isOk()).andExpect(view().name("admin"));
         } catch (final Exception e) {
             fail(e.getMessage());
         }
