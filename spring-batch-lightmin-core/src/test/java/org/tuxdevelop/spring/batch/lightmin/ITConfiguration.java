@@ -8,5 +8,4 @@ import org.tuxdevelop.spring.batch.lightmin.configuration.CommonSpringBatchLight
 @ComponentScan(basePackages = "org.tuxdevelop.spring.batch.lightmin")
 public class ITConfiguration extends CommonSpringBatchLightminConfiguration {
 
-
 }

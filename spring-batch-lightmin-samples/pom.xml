@@ -18,6 +18,10 @@
 
     <artifactId>spring-batch-lightmin-samples</artifactId>
 
+    <properties>
+        <jacoco.skip>true</jacoco.skip>
+    </properties>
+
     <dependencies>
         <!-- spring boot -->
         <dependency>

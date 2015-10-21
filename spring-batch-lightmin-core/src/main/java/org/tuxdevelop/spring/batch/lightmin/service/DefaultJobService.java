@@ -52,7 +52,7 @@ public class DefaultJobService implements JobService {
 
     @Override
     public int getJobExecutionCount(final JobInstance jobInstance) {
-        int jobExecutionCount = 0;
+        int jobExecutionCount;
         jobExecutionCount = lightminJobExecutionDao.getJobExecutionCount(jobInstance);
         return jobExecutionCount;
     }

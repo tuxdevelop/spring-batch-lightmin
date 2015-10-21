@@ -38,7 +38,7 @@ public class JobSchedulerConfiguration extends AbstractConfiguration {
         }
     }
 
-    private void validateCron() {
+    void validateCron() {
         if (cronExpression == null) {
             throwExceptionAndLogError("cronExpression must not be null for CRON Scheduler");
         } else if (!CronExpression.isValidExpression(cronExpression)) {
@@ -52,7 +52,7 @@ public class JobSchedulerConfiguration extends AbstractConfiguration {
         }
     }
 
-    private void validatePeriod() {
+    void validatePeriod() {
         if (fixedDelay == null) {
             throwExceptionAndLogError("fixedDelay must not be null for PERIOD Scheduler");
         } else {

@@ -44,6 +44,8 @@
     <properties>
         <assertj.version>1.7.1</assertj.version>
         <platform-bom.version>1.1.4.RELEASE</platform-bom.version>
+        <openpojo.version>0.7.3</openpojo.version>
+        <equalsverifier.version>1.7.5</equalsverifier.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.3</nexus-staging-maven-plugin.version>
@@ -51,14 +53,8 @@
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
         <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
         <asciidoctor.version>1.5.2</asciidoctor.version>
-        <!-- sonar -->
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <!-- Ensure you run mvn install before sonar:sonar -->
-        <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
-        <sonar.surefire.reportsPath>/target/surefire-reports</sonar.surefire.reportsPath>
-        <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>
-        <!-- This is the default, put here to be explicit -->
-        <sonar.jacoco.itReportPath>target/jacoco-it.exec</sonar.jacoco.itReportPath>
+        <!-- jacoco -->
+        <jacoco.skip>false</jacoco.skip>
     </properties>
 
     <dependencyManagement>
@@ -129,6 +125,21 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- openpojo -->
+        <dependency>
+            <groupId>com.googlecode.openpojo</groupId>
+            <artifactId>openpojo</artifactId>
+            <version>${openpojo.version}</version>
+        </dependency>
+
+        <!-- equalsverifier -->
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier</artifactId>
+            <version>${equalsverifier.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <!-- scm information -->
@@ -150,7 +161,6 @@
 
     <!-- build section -->
     <build>
-
         <!-- plugins -->
         <plugins>
             <plugin>
@@ -235,6 +245,11 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <includes>
+                        <include>**/*IT.java</include>
+                    </includes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

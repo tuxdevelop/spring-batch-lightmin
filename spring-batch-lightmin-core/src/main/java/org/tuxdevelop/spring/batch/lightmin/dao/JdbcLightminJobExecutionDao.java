@@ -6,14 +6,13 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 
-import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements LightminJobExecutionDao, Serializable {
+public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements LightminJobExecutionDao {
 
     private final String FIND_JOB_EXECUTIONS = "SELECT " +
             "JOB_EXECUTION_ID, " +

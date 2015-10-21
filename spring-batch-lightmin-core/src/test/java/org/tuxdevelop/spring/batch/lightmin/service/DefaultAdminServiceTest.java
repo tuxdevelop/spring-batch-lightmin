@@ -23,8 +23,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultAdminServiceTest {
@@ -224,6 +223,46 @@ public class DefaultAdminServiceTest {
             fail(e.getMessage());
         }
         defaultAdminService.getJobConfigurationById(jobConfigurationId);
+    }
+
+    @Test
+    public void stopJobConfigurationSchedulerTest() throws NoSuchJobConfigurationException {
+        final String beanName = "schedulerBean";
+        final Long jobConfigurationId = 10L;
+        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration("* * * * * *", null, null, JobSchedulerType.CRON);
+        jobSchedulerConfiguration.setBeanName(beanName);
+        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenReturn(jobConfiguration);
+        defaultAdminService.stopJobConfigurationScheduler(jobConfigurationId);
+        verify(schedulerService, times(1)).terminate(beanName);
+    }
+
+    @Test(expected = SpringBatchLightminApplicationException.class)
+    public void stopJobConfigurationSchedulerExceptionTest() throws NoSuchJobConfigurationException {
+        final Long jobConfigurationId = 10L;
+        when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenThrow
+                (NoSuchJobConfigurationException.class);
+        defaultAdminService.stopJobConfigurationScheduler(jobConfigurationId);
+    }
+
+    @Test
+    public void startJobConfigurationSchedulerTest() throws NoSuchJobConfigurationException {
+        final String beanName = "schedulerBean";
+        final Long jobConfigurationId = 10L;
+        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration("* * * * * *", null, null, JobSchedulerType.CRON);
+        jobSchedulerConfiguration.setBeanName(beanName);
+        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenReturn(jobConfiguration);
+        defaultAdminService.startJobConfigurationScheduler(jobConfigurationId);
+        verify(schedulerService, times(1)).schedule(beanName, Boolean.FALSE);
+    }
+
+    @Test(expected = SpringBatchLightminApplicationException.class)
+    public void startJobConfigurationSchedulerExceptionTest() throws NoSuchJobConfigurationException {
+        final Long jobConfigurationId = 10L;
+        when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenThrow
+                (NoSuchJobConfigurationException.class);
+        defaultAdminService.startJobConfigurationScheduler(jobConfigurationId);
     }
 
     @Before

@@ -31,7 +31,7 @@ public class SpringBatchLightminConfiguration {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Create DefaultSpringBatchLightminConfigurator ");
         if (dataSource != null) {
-            if (tablePrefix != null) {
+            if (tablePrefix != null && !tablePrefix.isEmpty()) {
                 configuration = new DefaultSpringBatchLightminConfigurator(dataSource, tablePrefix);
                 stringBuilder.append("with dataSource and tablePrefix: ");
                 stringBuilder.append(tablePrefix);
@@ -39,7 +39,7 @@ public class SpringBatchLightminConfiguration {
                 configuration = new DefaultSpringBatchLightminConfigurator(dataSource);
                 stringBuilder.append("with dataSource");
             }
-        } else if (tablePrefix != null) {
+        } else if (tablePrefix != null && !tablePrefix.isEmpty()) {
             configuration = new DefaultSpringBatchLightminConfigurator(tablePrefix);
             stringBuilder.append("with tablePrefix: ");
             stringBuilder.append(tablePrefix);

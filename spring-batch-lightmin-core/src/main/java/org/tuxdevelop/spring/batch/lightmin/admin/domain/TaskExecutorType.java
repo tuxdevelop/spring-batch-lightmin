@@ -3,9 +3,6 @@ package org.tuxdevelop.spring.batch.lightmin.admin.domain;
 import lombok.Getter;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * @author Marcel Becker
  * @version 0.1
@@ -23,10 +20,6 @@ public enum TaskExecutorType {
     TaskExecutorType(final String value, final Long id) {
         this.value = value;
         this.id = id;
-    }
-
-    public List<TaskExecutorType> getAll() {
-        return Arrays.asList(TaskExecutorType.values());
     }
 
     public static TaskExecutorType getById(final Long id) {

@@ -36,7 +36,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
     public JdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate, final String tablePrefix) {
         this.jdbcTemplate = jdbcTemplate;
-        if (tablePrefix != null) {
+        if (tablePrefix != null && !tablePrefix.isEmpty()) {
             this.tablePrefix = tablePrefix;
         } else {
             this.tablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
@@ -402,18 +402,22 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         public void add(final JobConfiguration jobConfiguration) {
             final Long jobConfigurationId = jobConfiguration.getJobConfigurationId();
             final Map<String, Object> jobParameters = jobConfiguration.getJobParameters();
-            for (final Map.Entry<String, Object> jobParameter : jobParameters.entrySet()) {
-                final JobConfigurationParameter jobConfigurationParameter = createJobConfigurationParameter(
-                        jobParameter.getKey(), jobParameter.getValue());
-                final String key = jobConfigurationParameter.getParameterName();
-                final String value = jobConfigurationParameter.getParameterValue();
-                final Long clazzType = jobConfigurationParameter.getParameterType();
-                final Map<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put(JobConfigurationParameterDomain.JOB_CONFIGURATION_ID, jobConfigurationId);
-                parameters.put(JobConfigurationParameterDomain.PARAMETER_NAME, key);
-                parameters.put(JobConfigurationParameterDomain.PARAMETER_TYPE, clazzType);
-                parameters.put(JobConfigurationParameterDomain.PARAMETER_VALUE, value);
-                simpleJdbcInsert.executeAndReturnKey(parameters);
+            if (jobParameters != null) {
+                for (final Map.Entry<String, Object> jobParameter : jobParameters.entrySet()) {
+                    final JobConfigurationParameter jobConfigurationParameter = createJobConfigurationParameter(
+                            jobParameter.getKey(), jobParameter.getValue());
+                    final String key = jobConfigurationParameter.getParameterName();
+                    final String value = jobConfigurationParameter.getParameterValue();
+                    final Long clazzType = jobConfigurationParameter.getParameterType();
+                    final Map<String, Object> parameters = new HashMap<String, Object>();
+                    parameters.put(JobConfigurationParameterDomain.JOB_CONFIGURATION_ID, jobConfigurationId);
+                    parameters.put(JobConfigurationParameterDomain.PARAMETER_NAME, key);
+                    parameters.put(JobConfigurationParameterDomain.PARAMETER_TYPE, clazzType);
+                    parameters.put(JobConfigurationParameterDomain.PARAMETER_VALUE, value);
+                    simpleJdbcInsert.executeAndReturnKey(parameters);
+                }
+            } else {
+                log.info("JobParameters null, nothing to map!");
             }
         }
 

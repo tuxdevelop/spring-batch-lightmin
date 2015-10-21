@@ -55,4 +55,9 @@ public interface SpringBatchLightminConfigurator extends BatchConfigurer {
      * @return an instance of {@link org.springframework.batch.core.repository.dao.StepExecutionDao}
      */
     StepExecutionDao getStepExecutionDao();
+
+    /**
+     * @return the current value of configured table.prefix
+     */
+    String getTablePrefix();
 }

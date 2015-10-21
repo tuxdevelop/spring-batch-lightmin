@@ -5,6 +5,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -65,7 +66,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     public synchronized JobConfiguration add(final JobConfiguration jobConfiguration) {
         final String jobName = jobConfiguration.getJobName();
         if (jobName == null) {
-            throw new IllegalArgumentException("jobName must not be null!");
+            throw new SpringBatchLightminConfigurationException("jobName must not be null!");
         }
         final Long jobConfigurationId = getNextJobId();
         jobConfiguration.setJobConfigurationId(jobConfigurationId);
@@ -83,13 +84,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     public synchronized JobConfiguration update(final JobConfiguration jobConfiguration)
             throws NoSuchJobConfigurationException {
         JobConfiguration jobConfigurationToUpdate = getJobConfiguration(jobConfiguration.getJobConfigurationId());
-        if (jobConfigurationToUpdate == null) {
-            final String message = "No JobConfiguration found for id: " + jobConfiguration.getJobConfigurationId();
-            log.error(message);
-            throw new NoSuchJobConfigurationException(message);
-        } else {
-            jobConfigurationToUpdate = jobConfiguration;
-        }
+        jobConfigurationToUpdate = jobConfiguration;
         return jobConfigurationToUpdate;
     }
 
@@ -105,14 +100,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
         if (jobConfigurations.containsKey(jobName)) {
             final Set<JobConfiguration> jobConfigurationSet = jobConfigurations.get(jobName);
             jobConfigurationToDelete = getJobConfiguration(jobConfigurationId);
-            if (jobConfigurationToDelete != null) {
-                jobConfigurationSet.remove(jobConfigurationToDelete);
-            } else {
-                final String message = "No JobConfiguration found for id: " + jobConfigurationId + ". Nothing to " +
-                        "delete";
-                log.error(message);
-                throw new NoSuchJobConfigurationException(message);
-            }
+            jobConfigurationSet.remove(jobConfigurationToDelete);
         } else {
             final String message = "No configuration found for job: " + jobName + ". Nothing to delete";
             log.error(message);

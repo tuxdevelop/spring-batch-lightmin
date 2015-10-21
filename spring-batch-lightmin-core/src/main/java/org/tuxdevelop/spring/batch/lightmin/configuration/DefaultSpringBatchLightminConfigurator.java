@@ -145,6 +145,11 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
         return jobExplorer;
     }
 
+    @Override
+    public String getTablePrefix() {
+        return tablePrefix;
+    }
+
     @PostConstruct
     public void initialize() {
         try {

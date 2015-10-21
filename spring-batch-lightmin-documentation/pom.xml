@@ -11,6 +11,10 @@
 
     <artifactId>spring-batch-lightmin-documentation</artifactId>
 
+    <properties>
+        <jacoco.skip>true</jacoco.skip>
+    </properties>
+
     <build>
         <plugins>
             <plugin>

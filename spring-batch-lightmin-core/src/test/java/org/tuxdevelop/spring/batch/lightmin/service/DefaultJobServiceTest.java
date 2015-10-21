@@ -10,13 +10,19 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.launch.JobExecutionNotRunningException;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.NoSuchJobException;
+import org.springframework.batch.core.launch.NoSuchJobExecutionException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.batch.core.repository.dao.JobExecutionDao;
 import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,7 +30,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Fail.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultJobServiceTest {
@@ -139,6 +147,51 @@ public class DefaultJobServiceTest {
         when(jobInstanceDao.getJobInstance(jobExecution)).thenReturn(jobInstance);
         jobService.attachJobInstance(jobExecution);
         assertThat(jobExecution.getJobInstance()).isEqualTo(jobInstance);
+    }
+
+    @Test
+    public void getJobExecutionCountTest() {
+        final Integer count = 10;
+        when(lightminJobExecutionDao.getJobExecutionCount(any(JobInstance.class))).thenReturn(count);
+        final Integer resultCount = jobService.getJobExecutionCount(new JobInstance(1L, "testjob"));
+        assertThat(resultCount).isEqualTo(count);
+    }
+
+    @Test
+    public void restartJobExecutionTest() {
+        final Long jobExecutionId = 10L;
+        try {
+            jobService.restartJobExecution(jobExecutionId);
+            verify(jobOperator, times(1)).restart(jobExecutionId);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test(expected = SpringBatchLightminApplicationException.class)
+    public void restartJobExecutionExceptionTest() throws JobParametersInvalidException, JobRestartException, JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException {
+        final Long jobExecutionId = 10L;
+        when(jobOperator.restart(jobExecutionId)).thenThrow(NoSuchJobExecutionException.class);
+        jobService.restartJobExecution(jobExecutionId);
+    }
+
+    @Test
+    public void stopJobExecutionTest() {
+        final Long jobExecutionId = 10L;
+        try {
+            jobService.stopJobExecution(jobExecutionId);
+            verify(jobOperator, times(1)).stop(jobExecutionId);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test(expected = SpringBatchLightminApplicationException.class)
+    public void stopJobExecutionExceptionTest() throws JobParametersInvalidException, JobRestartException,
+            JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException, JobExecutionNotRunningException {
+        final Long jobExecutionId = 10L;
+        when(jobOperator.stop(jobExecutionId)).thenThrow(NoSuchJobExecutionException.class);
+        jobService.stopJobExecution(jobExecutionId);
     }
 
     @Before

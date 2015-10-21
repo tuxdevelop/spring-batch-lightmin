@@ -96,7 +96,7 @@ public class DefaultAdminService implements AdminService {
         try {
             return jobConfigurationRepository.getJobConfigurations(jobName);
         } catch (final NoSuchJobException e) {
-            final String message = "No Job with name: " + jobName + "is registered";
+            final String message = "No Job with name: " + jobName + " is registered";
             log.error(message);
             throw new SpringBatchLightminApplicationException(e, message);
         }
