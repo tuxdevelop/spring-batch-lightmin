@@ -13,7 +13,10 @@ public abstract class AbstractRestController {
     public static final String PRODUCES = "application/json";
     public static final String CONSUMES = "application/json";
 
-    public class JobRestControllerAPI {
+    public final class JobRestControllerAPI {
+
+        private JobRestControllerAPI() {
+        }
 
         public static final String JOB_EXECUTIONS_JOB_EXECUTION_ID = ROOT_URI + "/jobExecutions/{jobExecutionId}";
         public static final String JOB_EXECUTIONS_JOB_INSTANCES_JOB_INSTANCE_ID =
@@ -21,7 +24,10 @@ public abstract class AbstractRestController {
         public static final String JOB_INSTANCES_JOB_NAME = ROOT_URI + "/jobInstances/{jobName}";
     }
 
-    public class JobConfigurationRestControllerAPI {
+    public final class JobConfigurationRestControllerAPI {
+
+        private JobConfigurationRestControllerAPI() {
+        }
 
         public static final String JOB_CONFIGURATIONS = ROOT_URI + "/jobConfigurations";
         public static final String JOB_CONFIGURATIONS_JOB_NAME = ROOT_URI + "/jobConfigurations/{jobName}";

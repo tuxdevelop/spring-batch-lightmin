@@ -1,18 +1,15 @@
 package org.tuxdevelop.spring.batch.lightmin.api.rest;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.batch.core.JobExecution;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.tuxdevelop.spring.batch.lightmin.api.domain.JobInstanceExecutions;
-import org.tuxdevelop.spring.batch.lightmin.api.domain.JobInstances;
+import org.tuxdevelop.spring.batch.lightmin.api.rest.response.JobExecutionResponse;
+import org.tuxdevelop.spring.batch.lightmin.api.rest.response.JobInstanceExecutionsResponse;
+import org.tuxdevelop.spring.batch.lightmin.api.rest.response.JobInstancesResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Ignore
-//TODO: add object mapper to solve the no default constructure issue
 public class JobRestControllerIT extends CommonControllerIT {
 
     @Test
@@ -21,7 +18,8 @@ public class JobRestControllerIT extends CommonControllerIT {
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobRestControllerAPI.JOB_EXECUTIONS_JOB_EXECUTION_ID;
 
-        final ResponseEntity<JobExecution> response = restTemplate.getForEntity(uri, JobExecution.class, jobExecutionId);
+        final ResponseEntity<JobExecutionResponse> response = restTemplate.getForEntity(uri, JobExecutionResponse.class,
+                jobExecutionId);
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getId()).isEqualTo(jobExecutionId);
@@ -32,7 +30,8 @@ public class JobRestControllerIT extends CommonControllerIT {
         final Long jobInstanceId = launchedJobInstanceId;
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobRestControllerAPI.JOB_EXECUTIONS_JOB_INSTANCES_JOB_INSTANCE_ID;
-        final ResponseEntity<JobInstanceExecutions> response = restTemplate.getForEntity(uri, JobInstanceExecutions.class, jobInstanceId);
+        final ResponseEntity<JobInstanceExecutionsResponse> response = restTemplate.getForEntity(uri, JobInstanceExecutionsResponse.class,
+                jobInstanceId);
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getJobInstanceId()).isEqualTo(jobInstanceId);
@@ -43,7 +42,8 @@ public class JobRestControllerIT extends CommonControllerIT {
         final String jobName = "simpleJob";
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobRestControllerAPI.JOB_INSTANCES_JOB_NAME;
-        final ResponseEntity<JobInstances> response = restTemplate.getForEntity(uri, JobInstances.class, jobName);
+        final ResponseEntity<JobInstancesResponse> response = restTemplate.getForEntity(uri, JobInstancesResponse.class,
+                jobName);
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getJobName()).isEqualTo(jobName);
