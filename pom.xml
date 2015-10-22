@@ -128,7 +128,7 @@
 
         <!-- openpojo -->
         <dependency>
-            <groupId>com.googlecode.openpojo</groupId>
+            <groupId>com.openpojo</groupId>
             <artifactId>openpojo</artifactId>
             <version>${openpojo.version}</version>
         </dependency>
