@@ -1,6 +1,56 @@
 == Job Configurations
 
+A job Configuration contains properties, which describes how a job should be launched by _Spring Batch Lightmin_.
+
 === Anatomy of a Job Configuration
+
+[source,java]
+----
+public class JobConfiguration extends AbstractConfiguration implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private Long jobConfigurationId;
+	private String jobName;
+	private JobSchedulerConfiguration jobSchedulerConfiguration;
+	private Map<String, Object> jobParameters;
+	private JobIncrementer jobIncrementer;
+
+}
+----
+
+==== Properties
+
+===== Job Configuration Id
+The _jobConfigurationId_ is a technical id to make the configuration unique.
+
+===== Job Name
+The _jobName_ is the name of _Spring Batch Job_ where the configuration belongs to.
+
+===== Job Parameters
+The _jobParameters_ are keys and values, which will passed to the _JobLauncher_, when a instance of a _Spring Batch
+Job_ will be triggered by a _JobConfiguration_. The key describes the type of the parameter. Following types are
+currently supported
+
+* String
+* Long
+* Double
+* Date
+
+===== Job Incremeter
+The jobIncremeter is a job parameter which will be added to existing job parameters. This incremeter can be used to
+trigger a new _JobInstance_ of a _Job_.
+
+[source,java]
+----
+public enum JobIncrementer {
+
+    DATE("DATE_INCREMENTER"),
+    NONE("NONE");
+}
+----
+
+===== Job Scheduler Configuration
 
 === JobConfiguration Repository
 
