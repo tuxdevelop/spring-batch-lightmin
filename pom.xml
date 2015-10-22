@@ -112,13 +112,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- commons logging -->
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <!--H2 -->
         <dependency>
             <groupId>com.h2database</groupId>
@@ -131,6 +124,7 @@
             <groupId>com.openpojo</groupId>
             <artifactId>openpojo</artifactId>
             <version>${openpojo.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- equalsverifier -->
