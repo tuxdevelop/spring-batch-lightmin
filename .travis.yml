@@ -13,4 +13,4 @@ addons:
     notification_email: tuxdevelop@gmail.com
     build_command_prepend: "mvn clean"
     build_command:   "mvn verify"
-    branch_pattern: coverity_scan
+    branch_pattern: master
