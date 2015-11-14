@@ -9,7 +9,8 @@ import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigu
  */
 public enum JobSchedulerType {
 
-    CRON(1L), PERIOD(2L);
+    CRON(1L),
+    PERIOD(2L);
 
     @Getter
     private Long id;

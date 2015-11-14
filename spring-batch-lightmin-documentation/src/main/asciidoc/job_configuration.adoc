@@ -37,8 +37,8 @@ currently supported
 * Double
 * Date
 
-===== Job Incremeter
-The jobIncremeter is a job parameter which will be added to existing job parameters. This incremeter can be used to
+===== Job Incrementer
+The _jobIncrementer_ is a job parameter which will be added to existing job parameters. This incremeter can be used to
 trigger a new _JobInstance_ of a _Job_.
 
 [source,java]
@@ -52,10 +52,146 @@ public enum JobIncrementer {
 
 ===== Job Scheduler Configuration
 
+The _JobSchedulerConfiguration_ determines, in which way a _Job_ should be launched.
+
+[source, java]
+----
+public class JobSchedulerConfiguration extends AbstractConfiguration {
+
+    private JobSchedulerType jobSchedulerType;
+    private String cronExpression;
+    private Long initialDelay;
+    private Long fixedDelay;
+    private TaskExecutorType taskExecutorType;
+    private String beanName;
+    private SchedulerStatus schedulerStatus;
+}
+----
+
+====== JobSchedulerType
+
+The JobSchedulerType determines, if the trigger is a CRON expression or by periods.
+
+[source, java]
+----
+public enum JobSchedulerType {
+    CRON(1L),
+    PERIOD(2L);
+}
+----
+
+====== cronExpression
+
+It has to be not null and a regular CRON expression, if the _JobSchedulerType_ is set to _CRON_.
+It has to be null, if the _JobSchedulerType_ is equal to _PERIOD_.
+
+====== initial- & fixedDelay
+
+Both properties must not be null or negative, if the _JobSchedulerType_ is set to _PERIOD_.
+The _initialDelay_ configures the delay of the first launched after initialization and the
+_fixedDelay the_ the period of a relaunch. Both values have to be null, if the _JobSchedulerType_ is equal to _CRON_.
+
+====== TaskExecutorType
+
+The _TaskExecutorType_ determines, if the launch of a _Job_ should be synchronously or asynchronously.
+If the value is set to _SYNCHRONOUS_, the task executor will wait, until the previous run is
+finished. On _ASYNCHRONOUS_ mode, the job will be launched, if the _CRON_ or _PERIOD_ trigger fires.
+
+[source,java]
+----
+public enum TaskExecutorType {
+    SYNCHRONOUS("SYNCHRONOUS", 1L),
+    ASYNCHRONOUS("ASYNCHRONOUS", 2L);
+}
+----
+
+====== beanName
+
+The name of spring bean.
+
+====== SchedulerStatus
+
+The _SchedulerStatus_ represents the current status of scheduler of the
+_JobConfiguration_.
+
+[source,java]
+----
+public enum SchedulerStatus {
+    INITIALIZED("INITIALIZED"),
+    RUNNING("RUNNING"),
+    STOPPED("STOPPED"),
+    IN_TERMINATION("IN TERMINATION");
+----
+
 === JobConfiguration Repository
+
+The _JobConfigurationRepository_ describes an interface, to manage _JobConfigurations_.
+The current version provides two Implementations, the _JdbcJobConfigurationRepository_ and the _MapJobConfigurationRepository_.
+
+[source, java]
+----
+
+public interface JobConfigurationRepository {
+
+    JobConfiguration getJobConfiguration(Long jobConfigurationId) throws NoSuchJobConfigurationException;
+
+		Collection<JobConfiguration> getJobConfigurations(String jobName) throws NoSuchJobException;
+
+    JobConfiguration add(JobConfiguration jobConfiguration);
+
+    JobConfiguration update(JobConfiguration jobConfiguration) throws NoSuchJobConfigurationException;
+
+    void delete(JobConfiguration jobConfiguration) throws NoSuchJobConfigurationException;
+
+    Collection<JobConfiguration> getAllJobConfigurations();
+
+    Collection<JobConfiguration> getAllJobConfigurationsByJobNames(Collection<String> jobNames);
+}
+
+----
 
 ==== JdbcJobConfigurationRepository
 
+The _JdbcJobConfigurationRepository_ stores the _JobConfiguration_ within a relational database.
+In order to use the jdbc version, a ddl schema has to be installed.
+Schemas for various providers are locate within the core jar.
+
+===== H2 Schema example
+
+[source, sql]
+----
+CREATE TABLE BATCH_JOB_CONFIGURATION (
+  job_configuration_id NUMERIC IDENTITY PRIMARY KEY NOT NULL,
+  job_name             VARCHAR(255),
+  job_incrementer      VARCHAR(255)
+);
+
+CREATE TABLE BATCH_JOB_SCHEDULER_CONFIGURATION (
+  id                   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
+  job_configuration_id NUMERIC                      NOT NULL,
+  scheduler_type       INT                          NOT NULL,
+  cron_expression      VARCHAR(255),
+  initial_delay        NUMERIC,
+  fixed_delay          NUMERIC,
+  task_executor_type   INT                          NOT NULL,
+  bean_name            VARCHAR(255)                 NOT NULL,
+  status               VARCHAR(255)                 NOT NULL,
+  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION(job_configuration_id)
+);
+
+CREATE TABLE BATCH_JOB_CONFIGURATION_PARAMETERS (
+  id                   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
+  job_configuration_id NUMERIC                      NOT NULL,
+  parameter_name       VARCHAR(255)                 NOT NULL,
+  parameter_value      VARCHAR(255)                 NOT NULL,
+  parameter_type       INT                          NOT NULL,
+  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION(job_configuration_id)
+);
+
+
+----
+
 ==== MapJobConfigurationRepository
 
-
+The _MapJobConfigurationRepository_ stores the _JobConfigurations_ within a map.
+If the application will be restarted, all stored _JobConfigurations_ will be lost.

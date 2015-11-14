@@ -49,10 +49,147 @@ image::job_configurations.png[]
 
 image::job_configuration_add.png[]
 
+====== Job Name
+
+Registered _Spring Batch Jobs_.
+
+====== Job Scheduler Type
+
+* CRON
+* PERIOD
+
+====== CRON Expression
+
+CRON expression, if the _Job Scheduler Type_ is _CRON_
+
+====== Fixed Delay
+
+Restart delay, if the _Job Scheduler Type_ is _PERIOD_
+
+====== Initial Delay
+
+Initial delay of the first job launch, if the _Job Scheduler Type_ is _PERIOD_
+
+====== Task Executor Type
+
+* SYNCHRONOUS
+* ASYNCHRONOUS
+
+====== Scheduler Status
+
+* INITIALIZED
+* RUNNING
+* STOPPED
+
+====== Job Parameters
+
+Configurable parameters, which will be passed to the _JobLauncher_ on each start.
+
+The format of the parameters has to
+
+----
+name(type)=value, name2(type)=value2
+----
+
+Possible types are
+
+* String
+* Long
+* Double
+* Date
+
+====== Job Incrementer Type
+
+Additional job parameter, to give each job instance uniqueness.
+
+* NONE
+* DATE
+
 ===== Edit Job Configuration
 
 image::job_configuration_edit.png[]
 
+====== Job Configuration Id
+
+Technical identifier of the configuration.
+
+====== Job Name
+
+Registered _Spring Batch Jobs_.
+
+====== Job Scheduler Type
+
+* CRON
+* PERIOD
+
+====== CRON Expression
+
+CRON expression, if the _Job Scheduler Type_ is _CRON_
+
+====== Fixed Delay
+
+Restart delay, if the _Job Scheduler Type_ is _PERIOD_
+
+====== Initial Delay
+
+Initial delay of the first job launch, if the _Job Scheduler Type_ is _PERIOD_
+
+====== Task Executor Type
+
+* SYNCHRONOUS
+* ASYNCHRONOUS
+
+====== Scheduler Status
+
+* INITIALIZED
+* RUNNING
+* STOPPED
+
+====== Job Parameters
+
+Configurable parameters, which will be passed to the _JobLauncher_ on each start.
+
+The format of the parameters has to
+
+----
+name(type)=value, name2(type)=value2
+----
+
+Possible types are
+
+* String
+* Long
+* Double
+* Date
+
+====== Job Incrementer Type
+
+Additional job parameter, to give each job instance uniqueness.
+
+* NONE
+* DATE
+
 ==== Job Launcher
 
 image::job_launcher.png[]
+
+===== Job Name
+
+Name of the _Spring Batch Job_
+
+===== Job Parameters
+
+Configurable parameters, which will be passed to the _JobLauncher_ on start.
+
+The format of the parameters has to
+
+----
+name(type)=value, name2(type)=value2
+----
+
+Possible types are
+
+* String
+* Long
+* Double
+* Date
