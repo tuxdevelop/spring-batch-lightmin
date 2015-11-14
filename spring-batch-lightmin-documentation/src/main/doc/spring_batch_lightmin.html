@@ -524,6 +524,12 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_jobconfiguration_repository">JobConfiguration Repository</a></li>
 </ul>
 </li>
+<li><a href="#_rest_api">REST API</a>
+<ul class="sectlevel2">
+<li><a href="#_job">Job</a></li>
+<li><a href="#_job_configuration">Job Configuration</a></li>
+</ul>
+</li>
 <li><a href="#_spring_batch_lightmin_ui">Spring Batch Lightmin UI</a>
 <ul class="sectlevel2">
 <li><a href="#_index">Index</a></li>
@@ -614,6 +620,41 @@ is the <em>MapJobConfigurationRepository</em>.</p>
 <pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
 <span class="annotation">@SpringBootApplication</span>
 <span class="annotation">@EnableSpringBatchLightminUI</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">AddressMigratorApp</span> {
+
+    <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="directive">final</span> <span class="predefined-type">String</span><span class="type">[]</span> args) {
+        SpringApplication.run(AddressMigratorApp.class, args);
+    }
+
+    <span class="annotation">@Bean</span>
+    <span class="directive">public</span> JobConfigurationRepository jobConfigurationRepository(){
+        <span class="keyword">return</span> <span class="keyword">new</span> MapJobConfigurationRepository();
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To use <em>Spring Batch Lightmin</em> without UI, following maven dependency is reqired</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.tuxdevelop<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>spring-batch-lightmin-core<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>{spring-batch-lightmin.version}<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The annotation <em>@EnableSpringBatchLightmin</em> will set up the <em>Spring Batch Lightmin</em> without the user interface.
+The REST-API will be available.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="annotation">@SpringBootApplication</span>
+<span class="annotation">@EnableSpringBatchLightmin</span>
 <span class="directive">public</span> <span class="type">class</span> <span class="class">AddressMigratorApp</span> {
 
     <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="directive">final</span> <span class="predefined-type">String</span><span class="type">[]</span> args) {
@@ -905,6 +946,502 @@ Schemas for various providers are locate within the core jar.</p>
 <div class="paragraph">
 <p>The <em>MapJobConfigurationRepository</em> stores the <em>JobConfigurations</em> within a map.
 If the application will be restarted, all stored <em>JobConfigurations</em> will be lost.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_rest_api">REST API</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_job">Job</h3>
+<div class="sect3">
+<h4 id="_get_job_execution_by_id">Get Job Execution by Id</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTP-Method GET</p>
+</li>
+<li>
+<p>Produces <em>application/json</em></p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_uri">URI</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html">http://server:port/api/jobExecutions/{jobExecutionId}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">n</span><span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">n</span><span class="error">c</span><span class="error">e</span><span class="error">I</span><span class="error">d</span>:<span class="integer">1</span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">E</span><span class="error">x</span><span class="error">e</span><span class="error">c</span><span class="error">u</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">s</span>:[
+      {
+         <span class="error">i</span><span class="error">d</span>:<span class="integer">2</span>,
+         <span class="error">v</span><span class="error">e</span><span class="error">r</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="integer">2</span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">P</span><span class="error">a</span><span class="error">r</span><span class="error">a</span><span class="error">m</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">r</span><span class="error">s</span>:{
+            <span class="error">p</span><span class="error">a</span><span class="error">r</span><span class="error">a</span><span class="error">m</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">r</span><span class="error">s</span>:{
+               <span class="error">D</span><span class="error">A</span><span class="error">T</span><span class="error">E</span><span class="error">_</span><span class="error">I</span><span class="error">N</span><span class="error">C</span><span class="error">R</span><span class="error">E</span><span class="error">M</span><span class="error">E</span><span class="error">N</span><span class="error">T</span><span class="error">E</span><span class="error">R</span>:{
+                  <span class="error">i</span><span class="error">d</span><span class="error">e</span><span class="error">n</span><span class="error">t</span><span class="error">i</span><span class="error">f</span><span class="error">y</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>:<span class="value">true</span>,
+                  <span class="error">v</span><span class="error">a</span><span class="error">l</span><span class="error">u</span><span class="error">e</span>:<span class="integer">1447515678658</span>,
+                  <span class="error">t</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">DATE</span><span class="delimiter">&quot;</span></span>
+               }
+            },
+            <span class="error">e</span><span class="error">m</span><span class="error">p</span><span class="error">t</span><span class="error">y</span>:<span class="value">false</span>
+         },
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">n</span><span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">n</span><span class="error">c</span><span class="error">e</span>:{
+            <span class="error">i</span><span class="error">d</span>:<span class="integer">1</span>,
+            <span class="error">v</span><span class="error">e</span><span class="error">r</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="integer">0</span>,
+            <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">i</span><span class="error">n</span><span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">n</span><span class="error">c</span><span class="error">e</span><span class="error">I</span><span class="error">d</span>:<span class="integer">1</span>
+         },
+         <span class="error">s</span><span class="error">t</span><span class="error">e</span><span class="error">p</span><span class="error">E</span><span class="error">x</span><span class="error">e</span><span class="error">c</span><span class="error">u</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">s</span>:[
+
+         ],
+         <span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">t</span><span class="error">u</span><span class="error">s</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">COMPLETED</span><span class="delimiter">&quot;</span></span>,
+         <span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">r</span><span class="error">t</span><span class="error">T</span><span class="error">i</span><span class="error">m</span><span class="error">e</span>:<span class="integer">1447515678738</span>,
+         <span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">a</span><span class="error">t</span><span class="error">e</span><span class="error">T</span><span class="error">i</span><span class="error">m</span><span class="error">e</span>:<span class="integer">1447515678697</span>,
+         <span class="error">e</span><span class="error">n</span><span class="error">d</span><span class="error">T</span><span class="error">i</span><span class="error">m</span><span class="error">e</span>:<span class="integer">1447515679416</span>,
+         <span class="error">l</span><span class="error">a</span><span class="error">s</span><span class="error">t</span><span class="error">U</span><span class="error">p</span><span class="error">d</span><span class="error">a</span><span class="error">t</span><span class="error">e</span><span class="error">d</span>:<span class="integer">1447515679416</span>,
+         <span class="error">e</span><span class="error">x</span><span class="error">i</span><span class="error">t</span><span class="error">S</span><span class="error">t</span><span class="error">a</span><span class="error">t</span><span class="error">u</span><span class="error">s</span>:{
+            <span class="error">e</span><span class="error">x</span><span class="error">i</span><span class="error">t</span><span class="error">C</span><span class="error">o</span><span class="error">d</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">COMPLETED</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">e</span><span class="error">x</span><span class="error">i</span><span class="error">t</span><span class="error">D</span><span class="error">e</span><span class="error">s</span><span class="error">c</span><span class="error">r</span><span class="error">i</span><span class="error">p</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">r</span><span class="error">u</span><span class="error">n</span><span class="error">n</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>:<span class="value">false</span>
+         },
+         <span class="error">e</span><span class="error">x</span><span class="error">e</span><span class="error">c</span><span class="error">u</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">t</span><span class="error">e</span><span class="error">x</span><span class="error">t</span>:{
+            <span class="error">d</span><span class="error">i</span><span class="error">r</span><span class="error">t</span><span class="error">y</span>:<span class="value">false</span>,
+            <span class="error">e</span><span class="error">m</span><span class="error">p</span><span class="error">t</span><span class="error">y</span>:<span class="value">true</span>
+         },
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="value">null</span>,
+         <span class="error">r</span><span class="error">u</span><span class="error">n</span><span class="error">n</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>:<span class="value">false</span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">d</span>:<span class="integer">1</span>,
+         <span class="error">s</span><span class="error">t</span><span class="error">o</span><span class="error">p</span><span class="error">p</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>:<span class="value">false</span>,
+         <span class="error">f</span><span class="error">a</span><span class="error">i</span><span class="error">l</span><span class="error">u</span><span class="error">r</span><span class="error">e</span><span class="error">E</span><span class="error">x</span><span class="error">c</span><span class="error">e</span><span class="error">p</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">s</span>:[
+
+         ],
+         <span class="error">a</span><span class="error">l</span><span class="error">l</span><span class="error">F</span><span class="error">a</span><span class="error">i</span><span class="error">l</span><span class="error">u</span><span class="error">r</span><span class="error">e</span><span class="error">E</span><span class="error">x</span><span class="error">c</span><span class="error">e</span><span class="error">p</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">s</span>:[
+
+         ]
+      }
+   ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_get_jobexecutions_by_job_instance_id">Get JobExecutions by Job Instance Id</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTP-Method GET</p>
+</li>
+<li>
+<p>Produces <em>application/json</em></p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_uri_2">URI</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html">http://server:port/api//jobExecutions/jobInstances/{jobInstanceId}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_2">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">n</span><span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">n</span><span class="error">c</span><span class="error">e</span><span class="error">I</span><span class="error">d</span>:<span class="integer">1</span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">E</span><span class="error">x</span><span class="error">e</span><span class="error">c</span><span class="error">u</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">s</span>:[
+      {
+         <span class="error">i</span><span class="error">d</span>:<span class="integer">2</span>,
+         <span class="error">v</span><span class="error">e</span><span class="error">r</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="integer">2</span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">P</span><span class="error">a</span><span class="error">r</span><span class="error">a</span><span class="error">m</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">r</span><span class="error">s</span>:{
+            <span class="error">p</span><span class="error">a</span><span class="error">r</span><span class="error">a</span><span class="error">m</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">r</span><span class="error">s</span>:{
+               <span class="error">D</span><span class="error">A</span><span class="error">T</span><span class="error">E</span><span class="error">_</span><span class="error">I</span><span class="error">N</span><span class="error">C</span><span class="error">R</span><span class="error">E</span><span class="error">M</span><span class="error">E</span><span class="error">N</span><span class="error">T</span><span class="error">E</span><span class="error">R</span>:{
+                  <span class="error">i</span><span class="error">d</span><span class="error">e</span><span class="error">n</span><span class="error">t</span><span class="error">i</span><span class="error">f</span><span class="error">y</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>:<span class="value">true</span>,
+                  <span class="error">v</span><span class="error">a</span><span class="error">l</span><span class="error">u</span><span class="error">e</span>:<span class="integer">1447515678658</span>,
+                  <span class="error">t</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">DATE</span><span class="delimiter">&quot;</span></span>
+               }
+            },
+            <span class="error">e</span><span class="error">m</span><span class="error">p</span><span class="error">t</span><span class="error">y</span>:<span class="value">false</span>
+         },
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">n</span><span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">n</span><span class="error">c</span><span class="error">e</span>:{
+            <span class="error">i</span><span class="error">d</span>:<span class="integer">1</span>,
+            <span class="error">v</span><span class="error">e</span><span class="error">r</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="integer">0</span>,
+            <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">i</span><span class="error">n</span><span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">n</span><span class="error">c</span><span class="error">e</span><span class="error">I</span><span class="error">d</span>:<span class="integer">1</span>
+         },
+         <span class="error">s</span><span class="error">t</span><span class="error">e</span><span class="error">p</span><span class="error">E</span><span class="error">x</span><span class="error">e</span><span class="error">c</span><span class="error">u</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">s</span>:[
+
+         ],
+         <span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">t</span><span class="error">u</span><span class="error">s</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">COMPLETED</span><span class="delimiter">&quot;</span></span>,
+         <span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">r</span><span class="error">t</span><span class="error">T</span><span class="error">i</span><span class="error">m</span><span class="error">e</span>:<span class="integer">1447515678738</span>,
+         <span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">a</span><span class="error">t</span><span class="error">e</span><span class="error">T</span><span class="error">i</span><span class="error">m</span><span class="error">e</span>:<span class="integer">1447515678697</span>,
+         <span class="error">e</span><span class="error">n</span><span class="error">d</span><span class="error">T</span><span class="error">i</span><span class="error">m</span><span class="error">e</span>:<span class="integer">1447515679416</span>,
+         <span class="error">l</span><span class="error">a</span><span class="error">s</span><span class="error">t</span><span class="error">U</span><span class="error">p</span><span class="error">d</span><span class="error">a</span><span class="error">t</span><span class="error">e</span><span class="error">d</span>:<span class="integer">1447515679416</span>,
+         <span class="error">e</span><span class="error">x</span><span class="error">i</span><span class="error">t</span><span class="error">S</span><span class="error">t</span><span class="error">a</span><span class="error">t</span><span class="error">u</span><span class="error">s</span>:{
+            <span class="error">e</span><span class="error">x</span><span class="error">i</span><span class="error">t</span><span class="error">C</span><span class="error">o</span><span class="error">d</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">COMPLETED</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">e</span><span class="error">x</span><span class="error">i</span><span class="error">t</span><span class="error">D</span><span class="error">e</span><span class="error">s</span><span class="error">c</span><span class="error">r</span><span class="error">i</span><span class="error">p</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">r</span><span class="error">u</span><span class="error">n</span><span class="error">n</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>:<span class="value">false</span>
+         },
+         <span class="error">e</span><span class="error">x</span><span class="error">e</span><span class="error">c</span><span class="error">u</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">t</span><span class="error">e</span><span class="error">x</span><span class="error">t</span>:{
+            <span class="error">d</span><span class="error">i</span><span class="error">r</span><span class="error">t</span><span class="error">y</span>:<span class="value">false</span>,
+            <span class="error">e</span><span class="error">m</span><span class="error">p</span><span class="error">t</span><span class="error">y</span>:<span class="value">true</span>
+         },
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="value">null</span>,
+         <span class="error">r</span><span class="error">u</span><span class="error">n</span><span class="error">n</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>:<span class="value">false</span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">d</span>:<span class="integer">1</span>,
+         <span class="error">s</span><span class="error">t</span><span class="error">o</span><span class="error">p</span><span class="error">p</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>:<span class="value">false</span>,
+         <span class="error">f</span><span class="error">a</span><span class="error">i</span><span class="error">l</span><span class="error">u</span><span class="error">r</span><span class="error">e</span><span class="error">E</span><span class="error">x</span><span class="error">c</span><span class="error">e</span><span class="error">p</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">s</span>:[
+
+         ],
+         <span class="error">a</span><span class="error">l</span><span class="error">l</span><span class="error">F</span><span class="error">a</span><span class="error">i</span><span class="error">l</span><span class="error">u</span><span class="error">r</span><span class="error">e</span><span class="error">E</span><span class="error">x</span><span class="error">c</span><span class="error">e</span><span class="error">p</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">s</span>:[
+
+         ]
+      }
+   ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_get_job_instances_by_job_name">Get Job Instances By Job Name</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTP-Method GET</p>
+</li>
+<li>
+<p>Produces <em>application/json</em></p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_uri_3">URI</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html">http://server:port/api/jobInstances/{jobName}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_3">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+   <span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">r</span><span class="error">t</span><span class="error">I</span><span class="error">n</span><span class="error">d</span><span class="error">e</span><span class="error">x</span>:<span class="integer">0</span>,
+   <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">S</span><span class="error">i</span><span class="error">z</span><span class="error">e</span>:<span class="integer">10</span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">n</span><span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">n</span><span class="error">c</span><span class="error">e</span><span class="error">s</span>:[
+      {
+         <span class="error">i</span><span class="error">d</span>:<span class="integer">4</span>,
+         <span class="error">v</span><span class="error">e</span><span class="error">r</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="integer">0</span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+         <span class="error">i</span><span class="error">n</span><span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">n</span><span class="error">c</span><span class="error">e</span><span class="error">I</span><span class="error">d</span>:<span class="integer">4</span>
+      },
+      {
+         <span class="error">i</span><span class="error">d</span>:<span class="integer">3</span>,
+         <span class="error">v</span><span class="error">e</span><span class="error">r</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="integer">0</span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+         <span class="error">i</span><span class="error">n</span><span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">n</span><span class="error">c</span><span class="error">e</span><span class="error">I</span><span class="error">d</span>:<span class="integer">3</span>
+      },
+      {
+         <span class="error">i</span><span class="error">d</span>:<span class="integer">1</span>,
+         <span class="error">v</span><span class="error">e</span><span class="error">r</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="integer">0</span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+         <span class="error">i</span><span class="error">n</span><span class="error">s</span><span class="error">t</span><span class="error">a</span><span class="error">n</span><span class="error">c</span><span class="error">e</span><span class="error">I</span><span class="error">d</span>:<span class="integer">1</span>
+      }
+   ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_job_configuration">Job Configuration</h3>
+<div class="sect3">
+<h4 id="_get_job_configurations">Get Job Configurations</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTP-Method GET</p>
+</li>
+<li>
+<p>Produces <em>application/json</em></p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_uri_4">URI</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html">http://server:port/api/jobConfigurations</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_4">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">ALL_JOBS</span><span class="delimiter">&quot;</span></span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">s</span>:[
+      {
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">I</span><span class="error">d</span>:<span class="integer">1</span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">S</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:{
+            <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">S</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">T</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">PERIOD</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">c</span><span class="error">r</span><span class="error">o</span><span class="error">n</span><span class="error">E</span><span class="error">x</span><span class="error">p</span><span class="error">r</span><span class="error">e</span><span class="error">s</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="value">null</span>,
+            <span class="error">i</span><span class="error">n</span><span class="error">i</span><span class="error">t</span><span class="error">i</span><span class="error">a</span><span class="error">l</span><span class="error">D</span><span class="error">e</span><span class="error">l</span><span class="error">a</span><span class="error">y</span>:<span class="integer">10</span>,
+            <span class="error">f</span><span class="error">i</span><span class="error">x</span><span class="error">e</span><span class="error">d</span><span class="error">D</span><span class="error">e</span><span class="error">l</span><span class="error">a</span><span class="error">y</span>:<span class="integer">60000</span>,
+            <span class="error">t</span><span class="error">a</span><span class="error">s</span><span class="error">k</span><span class="error">E</span><span class="error">x</span><span class="error">e</span><span class="error">c</span><span class="error">u</span><span class="error">t</span><span class="error">o</span><span class="error">r</span><span class="error">T</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">SYNCHRONOUS</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">b</span><span class="error">e</span><span class="error">a</span><span class="error">n</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJobSYNCHRONOUSLY1</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">s</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">S</span><span class="error">t</span><span class="error">a</span><span class="error">t</span><span class="error">u</span><span class="error">s</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">RUNNING</span><span class="delimiter">&quot;</span></span>
+         },
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">P</span><span class="error">a</span><span class="error">r</span><span class="error">a</span><span class="error">m</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">r</span><span class="error">s</span>:{
+
+         },
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">n</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">m</span><span class="error">e</span><span class="error">n</span><span class="error">t</span><span class="error">e</span><span class="error">r</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">DATE</span><span class="delimiter">&quot;</span></span>
+      },
+      {
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">I</span><span class="error">d</span>:<span class="integer">3</span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressPrinterJob</span><span class="delimiter">&quot;</span></span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">S</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:{
+            <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">S</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">T</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">PERIOD</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">c</span><span class="error">r</span><span class="error">o</span><span class="error">n</span><span class="error">E</span><span class="error">x</span><span class="error">p</span><span class="error">r</span><span class="error">e</span><span class="error">s</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="value">null</span>,
+            <span class="error">i</span><span class="error">n</span><span class="error">i</span><span class="error">t</span><span class="error">i</span><span class="error">a</span><span class="error">l</span><span class="error">D</span><span class="error">e</span><span class="error">l</span><span class="error">a</span><span class="error">y</span>:<span class="integer">10</span>,
+            <span class="error">f</span><span class="error">i</span><span class="error">x</span><span class="error">e</span><span class="error">d</span><span class="error">D</span><span class="error">e</span><span class="error">l</span><span class="error">a</span><span class="error">y</span>:<span class="integer">6000</span>,
+            <span class="error">t</span><span class="error">a</span><span class="error">s</span><span class="error">k</span><span class="error">E</span><span class="error">x</span><span class="error">e</span><span class="error">c</span><span class="error">u</span><span class="error">t</span><span class="error">o</span><span class="error">r</span><span class="error">T</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">SYNCHRONOUS</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">b</span><span class="error">e</span><span class="error">a</span><span class="error">n</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressPrinterJobSYNCHRONOUSLY1</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">s</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">S</span><span class="error">t</span><span class="error">a</span><span class="error">t</span><span class="error">u</span><span class="error">s</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">RUNNING</span><span class="delimiter">&quot;</span></span>
+         },
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">P</span><span class="error">a</span><span class="error">r</span><span class="error">a</span><span class="error">m</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">r</span><span class="error">s</span>:{
+
+         },
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">n</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">m</span><span class="error">e</span><span class="error">n</span><span class="error">t</span><span class="error">e</span><span class="error">r</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">NONE</span><span class="delimiter">&quot;</span></span>
+      }
+   ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_get_job_configurations_by_job_name">Get Job Configurations By Job Name</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTP-Method GET</p>
+</li>
+<li>
+<p>Produces <em>application/json</em></p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_uri_5">URI</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html">http://server:port/api/jobConfigurations/{jobName}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_5">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">s</span>:[
+      {
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">I</span><span class="error">d</span>:<span class="integer">1</span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">S</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:{
+            <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">S</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">T</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">PERIOD</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">c</span><span class="error">r</span><span class="error">o</span><span class="error">n</span><span class="error">E</span><span class="error">x</span><span class="error">p</span><span class="error">r</span><span class="error">e</span><span class="error">s</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="value">null</span>,
+            <span class="error">i</span><span class="error">n</span><span class="error">i</span><span class="error">t</span><span class="error">i</span><span class="error">a</span><span class="error">l</span><span class="error">D</span><span class="error">e</span><span class="error">l</span><span class="error">a</span><span class="error">y</span>:<span class="integer">10</span>,
+            <span class="error">f</span><span class="error">i</span><span class="error">x</span><span class="error">e</span><span class="error">d</span><span class="error">D</span><span class="error">e</span><span class="error">l</span><span class="error">a</span><span class="error">y</span>:<span class="integer">60000</span>,
+            <span class="error">t</span><span class="error">a</span><span class="error">s</span><span class="error">k</span><span class="error">E</span><span class="error">x</span><span class="error">e</span><span class="error">c</span><span class="error">u</span><span class="error">t</span><span class="error">o</span><span class="error">r</span><span class="error">T</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">SYNCHRONOUS</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">b</span><span class="error">e</span><span class="error">a</span><span class="error">n</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJobSYNCHRONOUSLY1</span><span class="delimiter">&quot;</span></span>,
+            <span class="error">s</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">S</span><span class="error">t</span><span class="error">a</span><span class="error">t</span><span class="error">u</span><span class="error">s</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">RUNNING</span><span class="delimiter">&quot;</span></span>
+         },
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">P</span><span class="error">a</span><span class="error">r</span><span class="error">a</span><span class="error">m</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">r</span><span class="error">s</span>:{
+
+         },
+         <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">n</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">m</span><span class="error">e</span><span class="error">n</span><span class="error">t</span><span class="error">e</span><span class="error">r</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">DATE</span><span class="delimiter">&quot;</span></span>
+      }
+   ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_get_job_configurations_by_id">Get Job Configurations By Id</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTP-Method GET</p>
+</li>
+<li>
+<p>Produces <em>application/json</em></p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_uri_6">URI</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html">http://server:port/api/jobConfigurations/jobConfiguration/{jobConfigurationId}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_6">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">I</span><span class="error">d</span>:<span class="integer">1</span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">S</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:{
+      <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">S</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">T</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">PERIOD</span><span class="delimiter">&quot;</span></span>,
+      <span class="error">c</span><span class="error">r</span><span class="error">o</span><span class="error">n</span><span class="error">E</span><span class="error">x</span><span class="error">p</span><span class="error">r</span><span class="error">e</span><span class="error">s</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="value">null</span>,
+      <span class="error">i</span><span class="error">n</span><span class="error">i</span><span class="error">t</span><span class="error">i</span><span class="error">a</span><span class="error">l</span><span class="error">D</span><span class="error">e</span><span class="error">l</span><span class="error">a</span><span class="error">y</span>:<span class="integer">10</span>,
+      <span class="error">f</span><span class="error">i</span><span class="error">x</span><span class="error">e</span><span class="error">d</span><span class="error">D</span><span class="error">e</span><span class="error">l</span><span class="error">a</span><span class="error">y</span>:<span class="integer">60000</span>,
+      <span class="error">t</span><span class="error">a</span><span class="error">s</span><span class="error">k</span><span class="error">E</span><span class="error">x</span><span class="error">e</span><span class="error">c</span><span class="error">u</span><span class="error">t</span><span class="error">o</span><span class="error">r</span><span class="error">T</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">SYNCHRONOUS</span><span class="delimiter">&quot;</span></span>,
+      <span class="error">b</span><span class="error">e</span><span class="error">a</span><span class="error">n</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJobSYNCHRONOUSLY1</span><span class="delimiter">&quot;</span></span>,
+      <span class="error">s</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">S</span><span class="error">t</span><span class="error">a</span><span class="error">t</span><span class="error">u</span><span class="error">s</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">RUNNING</span><span class="delimiter">&quot;</span></span>
+   },
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">P</span><span class="error">a</span><span class="error">r</span><span class="error">a</span><span class="error">m</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">r</span><span class="error">s</span>:{
+
+   },
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">n</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">m</span><span class="error">e</span><span class="error">n</span><span class="error">t</span><span class="error">e</span><span class="error">r</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">DATE</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_add_configuration">Add Configuration</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTP-Method POST</p>
+</li>
+<li>
+<p>Consumes <em>application/json</em></p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_uri_7">URI</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html">http://server:port/api/jobConfigurations</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_body">Body</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">I</span><span class="error">d</span>:<span class="value">null</span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">S</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:{
+      <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">S</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">T</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">PERIOD</span><span class="delimiter">&quot;</span></span>,
+      <span class="error">c</span><span class="error">r</span><span class="error">o</span><span class="error">n</span><span class="error">E</span><span class="error">x</span><span class="error">p</span><span class="error">r</span><span class="error">e</span><span class="error">s</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="value">null</span>,
+      <span class="error">i</span><span class="error">n</span><span class="error">i</span><span class="error">t</span><span class="error">i</span><span class="error">a</span><span class="error">l</span><span class="error">D</span><span class="error">e</span><span class="error">l</span><span class="error">a</span><span class="error">y</span>:<span class="integer">10</span>,
+      <span class="error">f</span><span class="error">i</span><span class="error">x</span><span class="error">e</span><span class="error">d</span><span class="error">D</span><span class="error">e</span><span class="error">l</span><span class="error">a</span><span class="error">y</span>:<span class="integer">60000</span>,
+      <span class="error">t</span><span class="error">a</span><span class="error">s</span><span class="error">k</span><span class="error">E</span><span class="error">x</span><span class="error">e</span><span class="error">c</span><span class="error">u</span><span class="error">t</span><span class="error">o</span><span class="error">r</span><span class="error">T</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">SYNCHRONOUS</span><span class="delimiter">&quot;</span></span>,
+      <span class="error">b</span><span class="error">e</span><span class="error">a</span><span class="error">n</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJobSYNCHRONOUSLY1</span><span class="delimiter">&quot;</span></span>,
+      <span class="error">s</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">S</span><span class="error">t</span><span class="error">a</span><span class="error">t</span><span class="error">u</span><span class="error">s</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">RUNNING</span><span class="delimiter">&quot;</span></span>
+   },
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">P</span><span class="error">a</span><span class="error">r</span><span class="error">a</span><span class="error">m</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">r</span><span class="error">s</span>:{
+
+   },
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">n</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">m</span><span class="error">e</span><span class="error">n</span><span class="error">t</span><span class="error">e</span><span class="error">r</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">DATE</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_update_configuration">Update Configuration</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTP-Method PUT</p>
+</li>
+<li>
+<p>Consumes <em>application/json</em></p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_uri_8">URI</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html">http://server:port/api/jobConfigurations</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_body_2">Body</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">I</span><span class="error">d</span>:<span class="integer">1</span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJob</span><span class="delimiter">&quot;</span></span>,
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">S</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">C</span><span class="error">o</span><span class="error">n</span><span class="error">f</span><span class="error">i</span><span class="error">g</span><span class="error">u</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:{
+      <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">S</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">T</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">PERIOD</span><span class="delimiter">&quot;</span></span>,
+      <span class="error">c</span><span class="error">r</span><span class="error">o</span><span class="error">n</span><span class="error">E</span><span class="error">x</span><span class="error">p</span><span class="error">r</span><span class="error">e</span><span class="error">s</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>:<span class="value">null</span>,
+      <span class="error">i</span><span class="error">n</span><span class="error">i</span><span class="error">t</span><span class="error">i</span><span class="error">a</span><span class="error">l</span><span class="error">D</span><span class="error">e</span><span class="error">l</span><span class="error">a</span><span class="error">y</span>:<span class="integer">10</span>,
+      <span class="error">f</span><span class="error">i</span><span class="error">x</span><span class="error">e</span><span class="error">d</span><span class="error">D</span><span class="error">e</span><span class="error">l</span><span class="error">a</span><span class="error">y</span>:<span class="integer">60000</span>,
+      <span class="error">t</span><span class="error">a</span><span class="error">s</span><span class="error">k</span><span class="error">E</span><span class="error">x</span><span class="error">e</span><span class="error">c</span><span class="error">u</span><span class="error">t</span><span class="error">o</span><span class="error">r</span><span class="error">T</span><span class="error">y</span><span class="error">p</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">SYNCHRONOUS</span><span class="delimiter">&quot;</span></span>,
+      <span class="error">b</span><span class="error">e</span><span class="error">a</span><span class="error">n</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">addressMigrationJobSYNCHRONOUSLY1</span><span class="delimiter">&quot;</span></span>,
+      <span class="error">s</span><span class="error">c</span><span class="error">h</span><span class="error">e</span><span class="error">d</span><span class="error">u</span><span class="error">l</span><span class="error">e</span><span class="error">r</span><span class="error">S</span><span class="error">t</span><span class="error">a</span><span class="error">t</span><span class="error">u</span><span class="error">s</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">RUNNING</span><span class="delimiter">&quot;</span></span>
+   },
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">P</span><span class="error">a</span><span class="error">r</span><span class="error">a</span><span class="error">m</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">r</span><span class="error">s</span>:{
+
+   },
+   <span class="error">j</span><span class="error">o</span><span class="error">b</span><span class="error">I</span><span class="error">n</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">m</span><span class="error">e</span><span class="error">n</span><span class="error">t</span><span class="error">e</span><span class="error">r</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">DATE</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_delete_job_configuration">Delete Job Configuration</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTP-Method DELETE</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_uri_9">URI</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html">http://server:port/api/jobConfigurations/jobConfiguration/{jobConfigurationId}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1293,7 +1830,7 @@ click on the desired id.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-10-18 09:56:24 +02:00
+Last updated 2015-11-14 16:35:59 +01:00
 </div>
 </div>
 </body>

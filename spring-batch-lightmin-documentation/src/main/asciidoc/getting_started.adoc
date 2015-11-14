@@ -48,3 +48,36 @@ public class AddressMigratorApp {
 
 }
 ----
+
+To use _Spring Batch Lightmin_ without UI, following maven dependency is reqired
+
+[source, xml]
+----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-core</artifactId>
+    <version>{spring-batch-lightmin.version}</version>
+</dependency>
+----
+
+The annotation _@EnableSpringBatchLightmin_ will set up the _Spring Batch Lightmin_ without the user interface.
+The REST-API will be available.
+
+[source,java]
+----
+@Configuration
+@SpringBootApplication
+@EnableSpringBatchLightmin
+public class AddressMigratorApp {
+
+    public static void main(final String[] args) {
+        SpringApplication.run(AddressMigratorApp.class, args);
+    }
+
+    @Bean
+    public JobConfigurationRepository jobConfigurationRepository(){
+        return new MapJobConfigurationRepository();
+    }
+
+}
+----

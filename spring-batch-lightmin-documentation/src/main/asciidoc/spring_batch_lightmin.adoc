@@ -11,4 +11,6 @@ include::jdbc_support.adoc[]
 
 include::job_configuration.adoc[]
 
+include::rest_api.adoc[]
+
 include::ui.adoc[]

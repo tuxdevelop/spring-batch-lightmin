@@ -1,0 +1,401 @@
+== REST API
+
+=== Job
+
+==== Get Job Execution by Id
+
+* HTTP-Method GET
+* Produces _application/json_
+
+===== URI
+
+[source, html]
+----
+http://server:port/api/jobExecutions/{jobExecutionId}
+----
+
+===== Response
+
+[source,json]
+----
+{
+   jobName:"addressMigrationJob",
+   jobInstanceId:1,
+   jobExecutions:[
+      {
+         id:2,
+         version:2,
+         jobParameters:{
+            parameters:{
+               DATE_INCREMENTER:{
+                  identifying:true,
+                  value:1447515678658,
+                  type:"DATE"
+               }
+            },
+            empty:false
+         },
+         jobInstance:{
+            id:1,
+            version:0,
+            jobName:"addressMigrationJob",
+            instanceId:1
+         },
+         stepExecutions:[
+
+         ],
+         status:"COMPLETED",
+         startTime:1447515678738,
+         createTime:1447515678697,
+         endTime:1447515679416,
+         lastUpdated:1447515679416,
+         exitStatus:{
+            exitCode:"COMPLETED",
+            exitDescription:"",
+            running:false
+         },
+         executionContext:{
+            dirty:false,
+            empty:true
+         },
+         jobConfigurationName:null,
+         running:false,
+         jobId:1,
+         stopping:false,
+         failureExceptions:[
+
+         ],
+         allFailureExceptions:[
+
+         ]
+      }
+   ]
+}
+----
+
+==== Get JobExecutions by Job Instance Id
+
+* HTTP-Method GET
+* Produces _application/json_
+
+===== URI
+
+[source, html]
+----
+http://server:port/api//jobExecutions/jobInstances/{jobInstanceId}
+----
+
+===== Response
+
+[source,json]
+----
+{
+   jobName:"addressMigrationJob",
+   jobInstanceId:1,
+   jobExecutions:[
+      {
+         id:2,
+         version:2,
+         jobParameters:{
+            parameters:{
+               DATE_INCREMENTER:{
+                  identifying:true,
+                  value:1447515678658,
+                  type:"DATE"
+               }
+            },
+            empty:false
+         },
+         jobInstance:{
+            id:1,
+            version:0,
+            jobName:"addressMigrationJob",
+            instanceId:1
+         },
+         stepExecutions:[
+
+         ],
+         status:"COMPLETED",
+         startTime:1447515678738,
+         createTime:1447515678697,
+         endTime:1447515679416,
+         lastUpdated:1447515679416,
+         exitStatus:{
+            exitCode:"COMPLETED",
+            exitDescription:"",
+            running:false
+         },
+         executionContext:{
+            dirty:false,
+            empty:true
+         },
+         jobConfigurationName:null,
+         running:false,
+         jobId:1,
+         stopping:false,
+         failureExceptions:[
+
+         ],
+         allFailureExceptions:[
+
+         ]
+      }
+   ]
+}
+----
+
+==== Get Job Instances By Job Name
+
+* HTTP-Method GET
+* Produces _application/json_
+
+===== URI
+
+[source, html]
+----
+http://server:port/api/jobInstances/{jobName}
+----
+
+===== Response
+
+[source,json]
+----
+{
+   startIndex:0,
+   pageSize:10,
+   jobName:"addressMigrationJob",
+   jobInstances:[
+      {
+         id:4,
+         version:0,
+         jobName:"addressMigrationJob",
+         instanceId:4
+      },
+      {
+         id:3,
+         version:0,
+         jobName:"addressMigrationJob",
+         instanceId:3
+      },
+      {
+         id:1,
+         version:0,
+         jobName:"addressMigrationJob",
+         instanceId:1
+      }
+   ]
+}
+----
+
+=== Job Configuration
+
+==== Get Job Configurations
+
+* HTTP-Method GET
+* Produces _application/json_
+
+===== URI
+
+[source, html]
+----
+http://server:port/api/jobConfigurations
+----
+
+===== Response
+
+[source,json]
+----
+{
+   jobName:"ALL_JOBS",
+   jobConfigurations:[
+      {
+         jobConfigurationId:1,
+         jobName:"addressMigrationJob",
+         jobSchedulerConfiguration:{
+            jobSchedulerType:"PERIOD",
+            cronExpression:null,
+            initialDelay:10,
+            fixedDelay:60000,
+            taskExecutorType:"SYNCHRONOUS",
+            beanName:"addressMigrationJobSYNCHRONOUSLY1",
+            schedulerStatus:"RUNNING"
+         },
+         jobParameters:{
+
+         },
+         jobIncrementer:"DATE"
+      },
+      {
+         jobConfigurationId:3,
+         jobName:"addressPrinterJob",
+         jobSchedulerConfiguration:{
+            jobSchedulerType:"PERIOD",
+            cronExpression:null,
+            initialDelay:10,
+            fixedDelay:6000,
+            taskExecutorType:"SYNCHRONOUS",
+            beanName:"addressPrinterJobSYNCHRONOUSLY1",
+            schedulerStatus:"RUNNING"
+         },
+         jobParameters:{
+
+         },
+         jobIncrementer:"NONE"
+      }
+   ]
+}
+----
+
+==== Get Job Configurations By Job Name
+
+* HTTP-Method GET
+* Produces _application/json_
+
+===== URI
+
+[source, html]
+----
+http://server:port/api/jobConfigurations/{jobName}
+----
+
+===== Response
+
+[source,json]
+----
+{
+   jobName:"addressMigrationJob",
+   jobConfigurations:[
+      {
+         jobConfigurationId:1,
+         jobName:"addressMigrationJob",
+         jobSchedulerConfiguration:{
+            jobSchedulerType:"PERIOD",
+            cronExpression:null,
+            initialDelay:10,
+            fixedDelay:60000,
+            taskExecutorType:"SYNCHRONOUS",
+            beanName:"addressMigrationJobSYNCHRONOUSLY1",
+            schedulerStatus:"RUNNING"
+         },
+         jobParameters:{
+
+         },
+         jobIncrementer:"DATE"
+      }
+   ]
+}
+----
+
+==== Get Job Configurations By Id
+
+* HTTP-Method GET
+* Produces _application/json_
+
+===== URI
+
+[source, html]
+----
+http://server:port/api/jobConfigurations/jobConfiguration/{jobConfigurationId}
+----
+
+===== Response
+
+[source,json]
+----
+{
+   jobConfigurationId:1,
+   jobName:"addressMigrationJob",
+   jobSchedulerConfiguration:{
+      jobSchedulerType:"PERIOD",
+      cronExpression:null,
+      initialDelay:10,
+      fixedDelay:60000,
+      taskExecutorType:"SYNCHRONOUS",
+      beanName:"addressMigrationJobSYNCHRONOUSLY1",
+      schedulerStatus:"RUNNING"
+   },
+   jobParameters:{
+
+   },
+   jobIncrementer:"DATE"
+}
+----
+
+==== Add Configuration
+
+* HTTP-Method POST
+* Consumes _application/json_
+
+===== URI
+
+[source, html]
+----
+http://server:port/api/jobConfigurations
+----
+
+===== Body
+[source, json]
+----
+{
+   jobConfigurationId:null,
+   jobName:"addressMigrationJob",
+   jobSchedulerConfiguration:{
+      jobSchedulerType:"PERIOD",
+      cronExpression:null,
+      initialDelay:10,
+      fixedDelay:60000,
+      taskExecutorType:"SYNCHRONOUS",
+      beanName:"addressMigrationJobSYNCHRONOUSLY1",
+      schedulerStatus:"RUNNING"
+   },
+   jobParameters:{
+
+   },
+   jobIncrementer:"DATE"
+}
+----
+
+==== Update Configuration
+
+* HTTP-Method PUT
+* Consumes _application/json_
+
+===== URI
+
+[source, html]
+----
+http://server:port/api/jobConfigurations
+----
+
+===== Body
+[source, json]
+----
+{
+   jobConfigurationId:1,
+   jobName:"addressMigrationJob",
+   jobSchedulerConfiguration:{
+      jobSchedulerType:"PERIOD",
+      cronExpression:null,
+      initialDelay:10,
+      fixedDelay:60000,
+      taskExecutorType:"SYNCHRONOUS",
+      beanName:"addressMigrationJobSYNCHRONOUSLY1",
+      schedulerStatus:"RUNNING"
+   },
+   jobParameters:{
+
+   },
+   jobIncrementer:"DATE"
+}
+----
+
+==== Delete Job Configuration
+
+* HTTP-Method DELETE
+
+===== URI
+
+[source, html]
+----
+http://server:port/api/jobConfigurations/jobConfiguration/{jobConfigurationId}
+----
