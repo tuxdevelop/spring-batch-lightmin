@@ -6,11 +6,11 @@ import org.springframework.batch.core.configuration.JobFactory;
 /**
  * @author Marcel Becker
  * @since 0.1
- * <p/>
+ * <p>
  * Implementation of the {@link org.springframework.batch.core.configuration.JobFactory}
  * to handle the registration of {@link org.springframework.batch.core.Job} instances within the application
  * context
- * <p/>
+ * </p>
  */
 public class CommonJobFactory implements JobFactory {
 

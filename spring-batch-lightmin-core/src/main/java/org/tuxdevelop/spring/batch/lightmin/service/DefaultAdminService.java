@@ -17,7 +17,6 @@ import java.util.Map;
 /**
  * @author Marcel Becker
  * @since 0.1
- * <p/>
  * Default implementation of {@link org.tuxdevelop.spring.batch.lightmin.service.AdminService}
  */
 @Slf4j

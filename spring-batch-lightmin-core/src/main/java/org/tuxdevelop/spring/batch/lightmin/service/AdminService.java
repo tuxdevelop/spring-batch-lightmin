@@ -48,6 +48,8 @@ public interface AdminService extends InitializingBean {
      * Retrieves a Map of String and all known {@link org.tuxdevelop.spring.batch.lightmin.admin.domain
      * .JobConfiguration} . The key of the maps belongs to a job name.
      *
+     * @param jobNames Collection of job names get the configurations for.
+     *
      * @return all known {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration}s
      */
     Map<String, Collection<JobConfiguration>> getJobConfigurationMap(final Collection<String> jobNames);
@@ -57,7 +59,6 @@ public interface AdminService extends InitializingBean {
      * .JobConfiguration}s.
      *
      * @param jobNames names of the {@link org.springframework.batch.core.Job}s, to get the configurations for
-     *
      * @return all known {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration}s
      */
     Collection<JobConfiguration> getJobConfigurations(final Collection<String> jobNames);

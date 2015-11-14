@@ -42,7 +42,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -61,7 +61,7 @@
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
         </dependency>
-        
+
     </dependencies>
 
     <!-- profiles -->
@@ -114,6 +114,16 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <configuration>
+                            <fixClassComment>true</fixClassComment>
+                            <fixFieldComment>true</fixFieldComment>
+                            <fixMethodComment>true</fixMethodComment>
+                            <failOnError>false</failOnError>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>

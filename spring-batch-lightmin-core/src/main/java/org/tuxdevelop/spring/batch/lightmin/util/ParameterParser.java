@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
 /**
  * @author Marcel Becker
  * @since 0.1
- * <p/>
  * <p>
  * Utility class to parse a String representation of job Parameters to {@link org.springframework.batch.core
  * .JobParameters} and {@link java.util.Map} of String, Object.

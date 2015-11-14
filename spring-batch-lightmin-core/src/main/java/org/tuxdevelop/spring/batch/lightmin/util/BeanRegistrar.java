@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * @author Marcel Becker
  * @since 0.1
- * <p/>
+ * <p>
  * Utility class the register and unregister classes within the current application context on the fly
  * </p>
  */

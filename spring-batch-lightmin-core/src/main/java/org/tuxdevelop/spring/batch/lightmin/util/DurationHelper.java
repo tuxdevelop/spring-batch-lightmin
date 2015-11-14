@@ -32,7 +32,7 @@ public final class DurationHelper {
      *
      * @param startTime beginning of the duration interval
      * @param endTime   end of the duration interval
-     * @return a {@lang java.util.String} representation of the duration
+     * @return a {@link java.lang.String} representation of the duration
      */
     public static String createDurationValue(Date startTime, Date endTime) {
         final Date current = new Date();
