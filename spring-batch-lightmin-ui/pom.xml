@@ -111,6 +111,16 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <configuration>
+                            <fixClassComment>true</fixClassComment>
+                            <fixFieldComment>true</fixFieldComment>
+                            <fixMethodComment>true</fixMethodComment>
+                            <failOnError>false</failOnError>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
