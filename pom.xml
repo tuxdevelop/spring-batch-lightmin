@@ -32,7 +32,7 @@
         </developer>
     </developers>
 
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
 
     <modules>
         <module>spring-batch-lightmin-core</module>
@@ -147,6 +147,10 @@
 
     <!-- distribution management -->
     <distributionManagement>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
