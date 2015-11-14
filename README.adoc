@@ -28,7 +28,7 @@ The documentation can be found at http://htmlpreview.github.io/?https://github.c
 <dependency>
     <groupId>org.tuxdevelop</groupId>
     <artifactId>spring-batch-lightmin-ui</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
 </dependency>
 ----
 
