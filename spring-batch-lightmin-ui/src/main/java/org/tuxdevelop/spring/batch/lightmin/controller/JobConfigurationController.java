@@ -25,11 +25,14 @@ import java.util.Map;
 @Controller
 public class JobConfigurationController extends CommonController {
 
-    @Autowired
-    private AdminService adminService;
+    private final AdminService adminService;
+    private final JobService jobService;
 
     @Autowired
-    private JobService jobService;
+    public JobConfigurationController(final AdminService adminService, final JobService jobService) {
+        this.adminService = adminService;
+        this.jobService = jobService;
+    }
 
     @RequestMapping(value = "/jobConfigurations", method = RequestMethod.GET)
     public void getJobConfigurations(final Model model) {

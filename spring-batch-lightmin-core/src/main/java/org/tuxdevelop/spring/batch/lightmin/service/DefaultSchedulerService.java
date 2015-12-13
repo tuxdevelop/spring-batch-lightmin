@@ -29,7 +29,6 @@ import java.util.Set;
 @Slf4j
 public class DefaultSchedulerService implements SchedulerService {
 
-    @Autowired
     private ApplicationContext applicationContext;
 
     private final BeanRegistrar beanRegistrar;
@@ -43,16 +42,21 @@ public class DefaultSchedulerService implements SchedulerService {
         this.jobRegistry = jobRegistry;
     }
 
+    @Autowired
+    public void setApplicationContext(final ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
     @Override
     public String registerSchedulerForJob(final JobConfiguration jobConfiguration) {
         final JobSchedulerType schedulerType = jobConfiguration.getJobSchedulerConfiguration().getJobSchedulerType();
         final String beanName;
         switch (schedulerType) {
             case CRON:
-                beanName = registerCronScheduler(jobConfiguration);
+                beanName = registerScheduler(jobConfiguration, CronScheduler.class);
                 break;
             case PERIOD:
-                beanName = registerPeriodScheduler(jobConfiguration);
+                beanName = registerScheduler(jobConfiguration, PeriodScheduler.class);
                 break;
             default:
                 throw new SpringBatchLightminConfigurationException("Unknown Scheduler Type: " + schedulerType);
@@ -119,8 +123,7 @@ public class DefaultSchedulerService implements SchedulerService {
         assert jobRegistry != null;
     }
 
-    // TODO simplify | unify registration
-    private String registerCronScheduler(final JobConfiguration jobConfiguration) {
+    String registerScheduler(final JobConfiguration jobConfiguration, final Class schedulerClass) {
         try {
             final Set<Object> constructorValues = new HashSet<Object>();
             final JobLauncher jobLauncher = this.createJobLauncher(jobConfiguration.getJobSchedulerConfiguration()
@@ -143,37 +146,7 @@ public class DefaultSchedulerService implements SchedulerService {
             schedulerConstructorWrapper.setJobIncrementer(jobConfiguration.getJobIncrementer());
             schedulerConstructorWrapper.setJobConfiguration(jobConfiguration);
             constructorValues.add(schedulerConstructorWrapper);
-            beanRegistrar.registerBean(CronScheduler.class, beanName, constructorValues, null, null, null, null);
-            return beanName;
-        } catch (final Exception e) {
-            throw new SpringBatchLightminConfigurationException(e, e.getMessage());
-        }
-    }
-
-    private String registerPeriodScheduler(final JobConfiguration jobConfiguration) {
-        try {
-            final Set<Object> constructorValues = new HashSet<Object>();
-            final JobLauncher jobLauncher = this.createJobLauncher(jobConfiguration.getJobSchedulerConfiguration()
-                    .getTaskExecutorType());
-            final Job job = jobRegistry.getJob(jobConfiguration.getJobName());
-            final JobParameters jobParameters = mapToJobParameters(jobConfiguration.getJobParameters());
-            final JobSchedulerConfiguration jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
-            final String beanName;
-            if (jobSchedulerConfiguration.getBeanName() == null || jobSchedulerConfiguration.getBeanName().isEmpty()) {
-                beanName = generateSchedulerBeanName(jobConfiguration.getJobName(),
-                        jobConfiguration.getJobConfigurationId(), jobConfiguration.getJobSchedulerConfiguration()
-                                .getJobSchedulerType());
-            } else {
-                beanName = jobSchedulerConfiguration.getBeanName();
-            }
-            final SchedulerConstructorWrapper schedulerConstructorWrapper = new SchedulerConstructorWrapper();
-            schedulerConstructorWrapper.setJobParameters(jobParameters);
-            schedulerConstructorWrapper.setJob(job);
-            schedulerConstructorWrapper.setJobLauncher(jobLauncher);
-            schedulerConstructorWrapper.setJobIncrementer(jobConfiguration.getJobIncrementer());
-            schedulerConstructorWrapper.setJobConfiguration(jobConfiguration);
-            constructorValues.add(schedulerConstructorWrapper);
-            beanRegistrar.registerBean(PeriodScheduler.class, beanName, constructorValues, null, null, null, null);
+            beanRegistrar.registerBean(schedulerClass, beanName, constructorValues, null, null, null, null);
             return beanName;
         } catch (final Exception e) {
             throw new SpringBatchLightminConfigurationException(e, e.getMessage());

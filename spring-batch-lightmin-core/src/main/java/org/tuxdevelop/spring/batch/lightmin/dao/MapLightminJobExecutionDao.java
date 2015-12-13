@@ -27,8 +27,8 @@ public class MapLightminJobExecutionDao extends MapJobExecutionDao implements Li
 
     void sortDescending(final List<JobExecution> result) {
         Collections.sort(result, new Comparator<JobExecution>() {
-            public int compare(final JobExecution o1, final JobExecution o2) {
-                return Long.signum(o2.getId().longValue() - o1.getId().longValue());
+            public int compare(final JobExecution jobExecution, final JobExecution jobExecutionToCompare) {
+                return Long.signum(jobExecutionToCompare.getId().longValue() - jobExecution.getId().longValue());
             }
         });
     }

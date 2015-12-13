@@ -26,11 +26,14 @@ import java.util.LinkedList;
 @Controller
 public class JobController extends CommonController {
 
-    @Autowired
-    private JobService jobService;
+    private final JobService jobService;
+    private final StepService stepService;
 
     @Autowired
-    private StepService stepService;
+    public JobController(final JobService jobService, final StepService stepService) {
+        this.jobService = jobService;
+        this.stepService = stepService;
+    }
 
     @RequestMapping(value = "/jobs", method = RequestMethod.GET)
     public void initJobs(final Model model) {

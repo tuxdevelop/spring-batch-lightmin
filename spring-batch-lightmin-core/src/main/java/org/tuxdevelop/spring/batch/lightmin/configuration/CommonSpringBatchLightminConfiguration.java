@@ -10,9 +10,8 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.dao.JobExecutionDao;
 import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.batch.core.repository.dao.StepExecutionDao;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -27,105 +26,98 @@ import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
  */
 @Configuration
 @Import(value = {SpringBatchLightminConfiguration.class, RestServiceConfiguration.class})
-public class CommonSpringBatchLightminConfiguration implements InitializingBean {
-
-    @Autowired
-    private JobConfigurationRepository jobConfigurationRepository;
-
-    @Autowired
-    private SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator;
-
-    @Autowired
-    private ApplicationContext applicationContext;
+public class CommonSpringBatchLightminConfiguration {
 
     @Bean
-    public JobService jobService() {
+    public JobService jobService(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
         return defaultSpringBatchLightminConfigurator.getJobService();
     }
 
     @Bean
-    public StepService stepService() {
+    public StepService stepService(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
         return defaultSpringBatchLightminConfigurator.getStepService();
     }
 
     @Bean
-    public JobExecutionDao jobExecutionDao() {
+    public JobExecutionDao jobExecutionDao(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
         return defaultSpringBatchLightminConfigurator.getJobExecutionDao();
     }
 
     @Bean
-    public LightminJobExecutionDao lightminJobExecutionDao() {
+    public LightminJobExecutionDao lightminJobExecutionDao(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
         return defaultSpringBatchLightminConfigurator.getLightminJobExecutionDao();
     }
 
     @Bean
-    public JobInstanceDao jobInstanceDao() {
+    public JobInstanceDao jobInstanceDao(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
         return defaultSpringBatchLightminConfigurator.getJobInstanceDao();
     }
 
     @Bean
-    public StepExecutionDao stepExecutionDao() {
+    public StepExecutionDao stepExecutionDao(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
         return defaultSpringBatchLightminConfigurator.getStepExecutionDao();
     }
 
     @Bean
-    public JobOperator jobOperator() {
+    public JobOperator jobOperator(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
         return defaultSpringBatchLightminConfigurator.getJobOperator();
     }
 
     @Bean
-    public JobLauncher jobLauncher() throws Exception {
+    public JobLauncher jobLauncher(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) throws Exception {
         return defaultSpringBatchLightminConfigurator.getJobLauncher();
     }
 
     @Bean
-    public JobRegistry jobRegistry() {
+    public JobRegistry jobRegistry(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
         return defaultSpringBatchLightminConfigurator.getJobRegistry();
     }
 
     @Bean
-    public JobExplorer jobExplorer() throws Exception {
+    public JobExplorer jobExplorer(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) throws Exception {
         return defaultSpringBatchLightminConfigurator.getJobExplorer();
     }
 
     @Bean
-    public JobRepository jobRepository() throws Exception {
+    public JobRepository jobRepository(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) throws Exception {
         return defaultSpringBatchLightminConfigurator.getJobRepository();
     }
 
     @Bean
-    public BeanRegistrar beanRegistrar() {
-        return new BeanRegistrar();
+    public BeanRegistrar beanRegistrar(final ConfigurableApplicationContext context) {
+        return new BeanRegistrar(context);
     }
 
     @Bean
-    public SchedulerService schedulerService() throws Exception {
-        return new DefaultSchedulerService(beanRegistrar(), jobRepository(), jobRegistry());
+    public SchedulerService schedulerService(final BeanRegistrar beanRegistrar,
+                                             final JobRepository jobRepository,
+                                             final JobRegistry jobRegistry) throws Exception {
+        return new DefaultSchedulerService(beanRegistrar, jobRepository, jobRegistry);
     }
 
     @Bean
-    public AdminService adminService() throws Exception {
-        return new DefaultAdminService(jobConfigurationRepository, schedulerService());
+    public AdminService adminService(final JobConfigurationRepository jobConfigurationRepository,
+                                     final SchedulerService schedulerService) throws Exception {
+        return new DefaultAdminService(jobConfigurationRepository, schedulerService);
     }
 
     @Bean
-    public StepBuilderFactory stepBuilderFactory() throws Exception {
-        return new StepBuilderFactory(jobRepository(),
+    public StepBuilderFactory stepBuilderFactory(final JobRepository jobRepository,
+                                                 final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) throws Exception {
+        return new StepBuilderFactory(jobRepository,
                 defaultSpringBatchLightminConfigurator.getTransactionManager());
     }
 
     @Bean
-    public JobBuilderFactory jobBuilderFactory() throws Exception {
-        return new JobBuilderFactory(jobRepository());
+    public JobBuilderFactory jobBuilderFactory(final JobRepository jobRepository) throws Exception {
+        return new JobBuilderFactory(jobRepository);
     }
 
     @Bean
-    public JobCreationListener jobCreationListener() throws Exception {
-        return new JobCreationListener(applicationContext, jobRegistry(), adminService(), schedulerService());
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        assert jobConfigurationRepository != null;
+    public JobCreationListener jobCreationListener(final ApplicationContext applicationContext,
+                                                   final JobRegistry jobRegistry,
+                                                   final AdminService adminService,
+                                                   final SchedulerService schedulerService) throws Exception {
+        return new JobCreationListener(applicationContext, jobRegistry, adminService, schedulerService);
     }
 }

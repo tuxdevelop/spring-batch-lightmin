@@ -17,8 +17,12 @@ import java.util.Collection;
 @RequestMapping("/admin")
 public class AdminController extends CommonController {
 
+    private final JobService jobService;
+
     @Autowired
-    private JobService jobService;
+    public AdminController(final JobService jobService) {
+        this.jobService = jobService;
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public void initAdmin(final Model model) {

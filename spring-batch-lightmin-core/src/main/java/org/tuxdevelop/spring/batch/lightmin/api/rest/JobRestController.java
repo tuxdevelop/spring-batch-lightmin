@@ -3,6 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.api.rest;
 
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.tuxdevelop.spring.batch.lightmin.api.domain.JobInstanceExecutions;
@@ -16,10 +17,14 @@ import java.util.Collection;
  * @version 0.1
  */
 @RestController
-public class JobRestController extends AbstractRestController {
+public class JobRestController extends AbstractRestController implements InitializingBean {
+
+    private final JobService jobService;
 
     @Autowired
-    private JobService jobService;
+    public JobRestController(final JobService jobService) {
+        this.jobService = jobService;
+    }
 
     @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTIONS_JOB_EXECUTION_ID, produces = PRODUCES, method = RequestMethod.GET)
     public JobExecution getJobExecutionById(@PathVariable(value = "jobExecutionId") final Long jobExecutionId) {
@@ -49,4 +54,8 @@ public class JobRestController extends AbstractRestController {
         return jobInstances;
     }
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        assert jobService != null;
+    }
 }

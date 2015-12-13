@@ -18,12 +18,14 @@ import javax.sql.DataSource;
 @ConditionalOnMissingBean(SpringBatchLightminConfigurator.class)
 public class SpringBatchLightminConfiguration {
 
+    /*
+     *TODO: refactor to apply constructor injection (0.2)
+     */
     @Autowired(required = false)
     private DataSource dataSource;
 
     @Value("${table.prefix:BATCH_}")
     private String tablePrefix;
-
 
     @Bean
     public SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator() {

@@ -1,7 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.util;
 
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -20,8 +19,11 @@ import java.util.Set;
  */
 public class BeanRegistrar {
 
-    @Autowired
-    private ConfigurableApplicationContext context;
+    private final ConfigurableApplicationContext context;
+
+    public BeanRegistrar(final ConfigurableApplicationContext context) {
+        this.context = context;
+    }
 
     /**
      * registers beans within the current application context of the given class with the given parameters

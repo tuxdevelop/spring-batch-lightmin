@@ -11,7 +11,10 @@ import java.util.Date;
  */
 public enum ParameterType {
 
-    STRING(1L, String.class), LONG(2L, Long.class), DATE(3L, Date.class), DOUBLE(4L, Double.class);
+    STRING(1L, String.class),
+    LONG(2L, Long.class),
+    DATE(3L, Date.class),
+    DOUBLE(4L, Double.class);
 
     @Getter
     private Long id;

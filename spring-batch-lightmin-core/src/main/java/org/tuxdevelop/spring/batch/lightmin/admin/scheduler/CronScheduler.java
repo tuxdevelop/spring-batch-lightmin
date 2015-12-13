@@ -52,8 +52,8 @@ public class CronScheduler extends AbstractScheduler implements Scheduler {
 
     @Override
     public void schedule() {
-        log.info("Scheduling: " + jobRunner.getJob().getName() + " with Parameters: "
-                + jobRunner.getJobParameters().toProperties());
+        log.info("Scheduling: " + jobRunner.getJob().getName() +
+                " with Parameters: " + jobRunner.getJobParameters().toProperties());
         threadPoolTaskScheduler.schedule(jobRunner, trigger);
         setStatus(SchedulerStatus.RUNNING);
     }

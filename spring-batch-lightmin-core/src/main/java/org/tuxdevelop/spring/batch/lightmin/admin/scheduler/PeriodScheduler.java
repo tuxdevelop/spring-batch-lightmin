@@ -47,10 +47,9 @@ public class PeriodScheduler extends AbstractScheduler implements Scheduler {
     @Override
     public void schedule() {
         final Date initialDelay = new Date(System.currentTimeMillis() + jobSchedulerConfiguration.getInitialDelay());
-        log.debug("Scheduling: " + jobRunner.getJob().getName() + " with Parameters: "
-                + jobRunner.getJobParameters().toProperties());
-        threadPoolTaskScheduler.scheduleWithFixedDelay(jobRunner, initialDelay,
-                jobSchedulerConfiguration.getFixedDelay());
+        log.debug("Scheduling: " + jobRunner.getJob().getName() +
+                " with Parameters: " + jobRunner.getJobParameters().toProperties());
+        threadPoolTaskScheduler.scheduleWithFixedDelay(jobRunner, initialDelay, jobSchedulerConfiguration.getFixedDelay());
         setStatus(SchedulerStatus.RUNNING);
     }
 

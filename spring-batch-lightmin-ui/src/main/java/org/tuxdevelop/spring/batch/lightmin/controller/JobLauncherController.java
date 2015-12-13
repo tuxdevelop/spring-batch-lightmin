@@ -21,34 +21,38 @@ import org.tuxdevelop.spring.batch.lightmin.util.ParameterParser;
  */
 @Controller
 @RequestMapping("/jobLaunchers")
-public class JobLauncherController extends CommonController{
+public class JobLauncherController extends CommonController {
 
-	@Autowired
-	private JobLauncher jobLauncher;
+    private final JobLauncher jobLauncher;
+    private final JobService jobService;
+    private final JobRegistry JobRegistry;
 
-	@Autowired
-	private JobService jobService;
+    @Autowired
+    public JobLauncherController(final JobLauncher jobLauncher,
+                                 final JobService jobService,
+                                 final JobRegistry jobRegistry) {
+        this.jobLauncher = jobLauncher;
+        this.jobService = jobService;
+        this.JobRegistry = jobRegistry;
+    }
 
-	@Autowired
-	private JobRegistry JobRegistry;
+    @RequestMapping(method = RequestMethod.GET)
+    public void initJobLaunchers(final Model model) {
+        model.addAttribute("jobNames", jobService.getJobNames());
+        model.addAttribute("jobLauncherModel", new JobLauncherModel());
+    }
 
-	@RequestMapping(method = RequestMethod.GET)
-	public void initJobLaunchers(final Model model) {
-		model.addAttribute("jobNames", jobService.getJobNames());
-		model.addAttribute("jobLauncherModel", new JobLauncherModel());
-	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	public String launchJob(@ModelAttribute("jobLauncherModel") final JobLauncherModel jobLauncherModel) {
-		final String jobName = jobLauncherModel.getJobName();
-		try {
-			final Job job = JobRegistry.getJob(jobName);
-			final JobParameters jobParameters = ParameterParser.parseParametersToJobParameters(jobLauncherModel
-					.getJobParameters());
-			jobLauncher.run(job, jobParameters);
-		} catch (final Exception e) {
-			throw new SpringBatchLightminApplicationException(e, e.getMessage());
-		}
-		return "redirect:jobLaunchers";
-	}
+    @RequestMapping(method = RequestMethod.POST)
+    public String launchJob(@ModelAttribute("jobLauncherModel") final JobLauncherModel jobLauncherModel) {
+        final String jobName = jobLauncherModel.getJobName();
+        try {
+            final Job job = JobRegistry.getJob(jobName);
+            final JobParameters jobParameters = ParameterParser.parseParametersToJobParameters(jobLauncherModel
+                    .getJobParameters());
+            jobLauncher.run(job, jobParameters);
+        } catch (final Exception e) {
+            throw new SpringBatchLightminApplicationException(e, e.getMessage());
+        }
+        return "redirect:jobLaunchers";
+    }
 }

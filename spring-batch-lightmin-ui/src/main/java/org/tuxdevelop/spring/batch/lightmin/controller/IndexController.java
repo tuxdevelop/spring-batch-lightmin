@@ -21,11 +21,15 @@ public class IndexController extends CommonController {
 
     private static final String ROOT_SLASH = "/";
 
-    @Value("${server.servlet-path}")
-    private String servletPath;
+    private final String servletPath;
+    private final InetAddress hostName;
 
     @Autowired
-    private InetAddress hostName;
+    public IndexController(final InetAddress inetAddress,
+                           @Value("${server.servlet-path}") final String servletPath) {
+        this.hostName = inetAddress;
+        this.servletPath = servletPath;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public String redirectToIndex(final Model model) {

@@ -17,8 +17,12 @@ import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 @RequestMapping("/steps")
 public class StepController extends CommonController {
 
+    private final StepService stepService;
+
     @Autowired
-    private StepService stepService;
+    public StepController(final StepService stepService) {
+        this.stepService = stepService;
+    }
 
     @RequestMapping(value = "/execution/{stepExecutionId}", method = RequestMethod.GET)
     public String initStepExecution(final ModelMap modelMap,
