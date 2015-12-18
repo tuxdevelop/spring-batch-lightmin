@@ -12,8 +12,8 @@ import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.StepExecution;
 import org.tuxdevelop.spring.batch.lightmin.model.JobExecutionModel;
 import org.tuxdevelop.spring.batch.lightmin.model.JobInstanceModel;
-import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
+import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -29,7 +29,7 @@ public class JobControllerTest {
     private JobService jobService;
 
     @Mock
-    private AdminService adminService;
+    private StepService stepService;
 
     @InjectMocks
     private JobController jobController;
@@ -59,6 +59,7 @@ public class JobControllerTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
+        jobController = new JobController(jobService, stepService);
     }
 
     StepExecution createStepExecution() {
