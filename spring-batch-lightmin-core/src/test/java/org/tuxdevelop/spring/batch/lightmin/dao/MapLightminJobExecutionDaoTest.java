@@ -5,6 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.explore.support.MapJobExplorerFactoryBean;
+import org.springframework.batch.core.repository.dao.JobExecutionDao;
+import org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean;
 import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 
 import java.util.List;
@@ -17,6 +21,8 @@ public class MapLightminJobExecutionDaoTest {
     private static final Integer JOB_EXECUTION_COUNT = 10;
 
     private MapLightminJobExecutionDao mapLightminJobExecutionDao;
+    private JobExplorer jobExplorer;
+    private JobExecutionDao jobExecutionDao;
     private JobInstance jobInstance;
 
     @Test
@@ -64,14 +70,19 @@ public class MapLightminJobExecutionDaoTest {
     }
 
     @Before
-    public void init() {
-        mapLightminJobExecutionDao = new MapLightminJobExecutionDao();
+    public void init() throws Exception {
+        final MapJobRepositoryFactoryBean mapJobRepositoryFactoryBean = new MapJobRepositoryFactoryBean();
+        mapJobRepositoryFactoryBean.getObject();
+        jobExecutionDao = mapJobRepositoryFactoryBean.getJobExecutionDao();
+        final MapJobExplorerFactoryBean mapJobExplorerFactoryBean = new MapJobExplorerFactoryBean(mapJobRepositoryFactoryBean);
+        jobExplorer = mapJobExplorerFactoryBean.getObject();
+        mapLightminJobExecutionDao = new MapLightminJobExecutionDao(jobExplorer);
         jobInstance = TestHelper.createJobInstance(JOB_INSTANCE_ID, "someJob");
         final List<JobExecution> jobExecutions = TestHelper.createJobExecutions(JOB_EXECUTION_COUNT);
         for (final JobExecution jobExecution : jobExecutions) {
             jobExecution.setId(null);
             jobExecution.setJobInstance(jobInstance);
-            mapLightminJobExecutionDao.saveJobExecution(jobExecution);
+            jobExecutionDao.saveJobExecution(jobExecution);
         }
 
     }

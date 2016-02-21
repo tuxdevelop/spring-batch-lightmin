@@ -1,18 +1,19 @@
-package org.tuxdevelop.spring.batch.lightmin.api.rest.response;
+package org.tuxdevelop.spring.batch.lightmin.api.response;
 
 import lombok.Data;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.item.ExecutionContext;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Data
-public class StepExecutionResponse {
+public class StepExecution implements Serializable {
 
     private Long id;
     private Integer version;
-    private JobExecutionResponse jobExecution;
+    private Long jobExecutionId;
     private String stepName;
     private BatchStatus status;
     private int readCount;
@@ -26,7 +27,7 @@ public class StepExecutionResponse {
     private Date endTime;
     private Date lastUpdated;
     private ExecutionContext executionContext;
-    private ExitStatusResponse exitStatus;
+    private ExitStatus exitStatus;
     private boolean terminateOnly;
     private int filterCount;
     private List<Throwable> failureExceptions;

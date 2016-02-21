@@ -14,7 +14,7 @@ import org.tuxdevelop.spring.batch.lightmin.service.StepService;
  * @author Marcel Becker
  * @version 0.1
  */
-public interface SpringBatchLightminConfigurator extends BatchConfigurer {
+public interface SpringBatchLightminConfigurator{
 
     /**
      * @return an instance of {@link org.tuxdevelop.spring.batch.lightmin.service.JobService}
@@ -37,24 +37,9 @@ public interface SpringBatchLightminConfigurator extends BatchConfigurer {
     JobRegistry getJobRegistry();
 
     /**
-     * @return an instance of {@link org.springframework.batch.core.repository.dao.JobExecutionDao}
-     */
-    JobExecutionDao getJobExecutionDao();
-
-    /**
      * @return an instance of {@link org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao}
      */
     LightminJobExecutionDao getLightminJobExecutionDao();
-
-    /**
-     * @return an instance of {@link org.springframework.batch.core.repository.dao.JobInstanceDao}
-     */
-    JobInstanceDao getJobInstanceDao();
-
-    /**
-     * @return an instance of {@link org.springframework.batch.core.repository.dao.StepExecutionDao}
-     */
-    StepExecutionDao getStepExecutionDao();
 
     /**
      * @return the current value of configured table.prefix

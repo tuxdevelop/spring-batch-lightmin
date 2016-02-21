@@ -2,10 +2,6 @@ package org.tuxdevelop.spring.batch.lightmin.configuration;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.batch.core.repository.dao.MapJobExecutionDao;
-import org.springframework.batch.core.repository.dao.MapJobInstanceDao;
-import org.springframework.batch.core.repository.dao.MapStepExecutionDao;
-import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -27,11 +23,6 @@ public class SpringBatchLightminConfigurationMapPrefixIT {
 
     @Test
     public void initMapIT() throws Exception {
-        assertThat(configurator.getJobExecutionDao()).isInstanceOf(MapJobExecutionDao.class);
-        assertThat(configurator.getJobInstanceDao()).isInstanceOf(MapJobInstanceDao.class);
-        assertThat(configurator.getStepExecutionDao()).isInstanceOf(MapStepExecutionDao.class);
-        assertThat(configurator.getTransactionManager()).isInstanceOf(ResourcelessTransactionManager.class);
-        assertThat(configurator.getJobExplorer()).isNotNull();
         assertThat(configurator.getLightminJobExecutionDao()).isNotNull();
         assertThat(configurator.getTablePrefix()).isEqualTo("IT_");
     }

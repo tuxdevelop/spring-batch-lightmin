@@ -5,7 +5,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.api.domain.JobConfigurations;
+import org.tuxdevelop.spring.batch.lightmin.api.response.JobConfigurations;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
 
 import java.util.Collection;

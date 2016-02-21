@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.api.domain;
+package org.tuxdevelop.spring.batch.lightmin.api.response;
 
 
 import org.junit.Ignore;

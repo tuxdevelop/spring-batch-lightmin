@@ -128,7 +128,7 @@ public class JobController extends CommonController {
     }
 
     void enrichJobExecution(final JobExecutionModel jobExecutionModel,
-                            Collection<StepExecution> stepExecutions) {
+                            final Collection<StepExecution> stepExecutions) {
         final Collection<StepExecutionModel> stepExecutionModels = new LinkedList<StepExecutionModel>();
         for (final StepExecution stepExecution : stepExecutions) {
             final StepExecutionModel stepExecutionModel = new StepExecutionModel();

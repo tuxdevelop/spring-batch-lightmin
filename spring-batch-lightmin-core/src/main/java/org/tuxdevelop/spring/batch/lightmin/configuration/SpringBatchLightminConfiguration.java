@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -15,7 +16,6 @@ import javax.sql.DataSource;
  */
 @Slf4j
 @Configuration
-@ConditionalOnMissingBean(SpringBatchLightminConfigurator.class)
 public class SpringBatchLightminConfiguration {
 
     /*
@@ -28,7 +28,28 @@ public class SpringBatchLightminConfiguration {
     private String tablePrefix;
 
     @Bean
-    public SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator() {
+    @ConditionalOnMissingBean(BatchConfigurer.class)
+    public BatchConfigurer batchConfigurer() {
+        final DefaultSpringBatchLightminBatchConfigurer batchConfigurer;
+        if (dataSource != null) {
+            if (tablePrefix != null && !tablePrefix.isEmpty()) {
+                batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource, tablePrefix);
+            } else {
+                batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource);
+            }
+        } else if (tablePrefix != null && !tablePrefix.isEmpty()) {
+            batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(tablePrefix);
+        } else {
+            batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer();
+        }
+
+        return batchConfigurer;
+    }
+
+
+    @Bean
+    @ConditionalOnMissingBean(SpringBatchLightminConfigurator.class)
+    public SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator(final BatchConfigurer batchConfigurer) {
         final DefaultSpringBatchLightminConfigurator configuration;
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Create DefaultSpringBatchLightminConfigurator ");
@@ -48,6 +69,7 @@ public class SpringBatchLightminConfiguration {
         } else {
             configuration = new DefaultSpringBatchLightminConfigurator();
         }
+        configuration.setBatchConfigurer(batchConfigurer);
         log.info(stringBuilder.toString());
         return configuration;
     }

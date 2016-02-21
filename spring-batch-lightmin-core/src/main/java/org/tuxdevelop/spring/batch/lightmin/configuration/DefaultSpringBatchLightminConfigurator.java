@@ -1,25 +1,17 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.batch.core.configuration.support.MapJobRegistry;
-import org.springframework.batch.core.explore.JobExplorer;
-import org.springframework.batch.core.explore.support.JobExplorerFactoryBean;
-import org.springframework.batch.core.explore.support.MapJobExplorerFactoryBean;
-import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobOperator;
-import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.repository.dao.*;
-import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
-import org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean;
-import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
+import org.springframework.batch.core.repository.dao.AbstractJdbcBatchMetadataDao;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.support.incrementer.AbstractDataFieldMaxValueIncrementer;
 import org.springframework.jdbc.support.incrementer.DataFieldMaxValueIncrementer;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.tuxdevelop.spring.batch.lightmin.dao.JdbcLightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.dao.MapLightminJobExecutionDao;
@@ -37,25 +29,20 @@ import javax.sql.DataSource;
  * @version 0.1
  */
 @Slf4j
-public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightminConfigurator {
+public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightminConfigurator, InitializingBean {
 
+    @Setter
+    private BatchConfigurer batchConfigurer;
     private JobService jobService;
     private StepService stepService;
     private JobOperator jobOperator;
     private JobRegistry jobRegistry;
-    private JobExecutionDao jobExecutionDao;
     private LightminJobExecutionDao lightminJobExecutionDao;
-    private JobInstanceDao jobInstanceDao;
-    private StepExecutionDao stepExecutionDao;
-    private PlatformTransactionManager transactionManager;
-    private JobRepository jobRepository;
-    private JobLauncher jobLauncher;
-    private JobExplorer jobExplorer;
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
     private String tablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
 
-    private DataFieldMaxValueIncrementer incrementer = new AbstractDataFieldMaxValueIncrementer() {
+    private final DataFieldMaxValueIncrementer incrementer = new AbstractDataFieldMaxValueIncrementer() {
         @Override
         protected long getNextKey() {
             throw new IllegalStateException("JobExplorer is read only.");
@@ -81,7 +68,6 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
 
     public void setDataSource(final DataSource dataSource) {
         this.dataSource = dataSource;
-        this.transactionManager = new DataSourceTransactionManager(dataSource);
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
@@ -106,49 +92,20 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
     }
 
     @Override
-    public JobExecutionDao getJobExecutionDao() {
-        return jobExecutionDao;
-    }
-
-    @Override
     public LightminJobExecutionDao getLightminJobExecutionDao() {
         return lightminJobExecutionDao;
-    }
-
-    @Override
-    public JobInstanceDao getJobInstanceDao() {
-        return jobInstanceDao;
-    }
-
-    @Override
-    public StepExecutionDao getStepExecutionDao() {
-        return stepExecutionDao;
-    }
-
-    @Override
-    public JobRepository getJobRepository() {
-        return jobRepository;
-    }
-
-    @Override
-    public PlatformTransactionManager getTransactionManager() {
-        return transactionManager;
-    }
-
-    @Override
-    public JobLauncher getJobLauncher() {
-        return jobLauncher;
-    }
-
-    @Override
-    public JobExplorer getJobExplorer() {
-        return jobExplorer;
     }
 
     @Override
     public String getTablePrefix() {
         return tablePrefix;
     }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        assert batchConfigurer != null;
+    }
+
 
     @PostConstruct
     public void initialize() {
@@ -158,12 +115,11 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
             } else {
                 createMapComponents();
             }
-            this.jobLauncher = createJobLauncher();
             this.jobRegistry = createJobRegistry();
             this.jobOperator = createJobOperator();
             this.jobService = createJobService();
             this.stepService = createStepService();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             log.error("Error while creating DefaultSpringBatchLightminConfiguration: "
                     + e.getMessage());
             throw new SpringBatchLightminConfigurationException(e,
@@ -172,82 +128,11 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
     }
 
     protected void createJdbcComponents() throws Exception {
-
-        // jobExplorer
-        final JobExplorerFactoryBean jobExplorerFactoryBean = new JobExplorerFactoryBean();
-        jobExplorerFactoryBean.setTablePrefix(tablePrefix);
-        jobExplorerFactoryBean.setDataSource(this.dataSource);
-        jobExplorerFactoryBean.afterPropertiesSet();
-        this.jobExplorer = jobExplorerFactoryBean.getObject();
-
-        // jobExecutionDao
-        this.jobExecutionDao = createJobExecutionDao();
-        // jobInstanceDao
-        this.jobInstanceDao = createJobInstanceDao();
-        // stepExecutionDao
-        this.stepExecutionDao = createStepExecutionDao();
-        //lightminJobExecutionDao
         this.lightminJobExecutionDao = createLightminJobExecutionDao();
-        // jobRepository
-        this.jobRepository = createJobRepository();
     }
 
     protected void createMapComponents() throws Exception {
-        if (this.transactionManager == null) {
-            this.transactionManager = new ResourcelessTransactionManager();
-        }
-        // jobRepository
-        final MapJobRepositoryFactoryBean jobRepositoryFactory = new MapJobRepositoryFactoryBean(
-                this.transactionManager);
-        jobRepositoryFactory.afterPropertiesSet();
-        this.jobRepository = jobRepositoryFactory.getObject();
-        // jobExplorer
-        final MapJobExplorerFactoryBean jobExplorerFactory = new MapJobExplorerFactoryBean(
-                jobRepositoryFactory);
-        jobExplorerFactory.afterPropertiesSet();
-        this.jobExplorer = jobExplorerFactory.getObject();
-        // jobExecutionDao
-        this.jobExecutionDao = new MapJobExecutionDao();
-        //lightminJobExecutionDao
-        this.lightminJobExecutionDao = new MapLightminJobExecutionDao();
-        // jobInstanceDao
-        this.jobInstanceDao = new MapJobInstanceDao();
-        // stepExecutionDao
-        this.stepExecutionDao = new MapStepExecutionDao();
-    }
-
-    protected JobLauncher createJobLauncher() throws Exception {
-        final SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
-        jobLauncher.setJobRepository(jobRepository);
-        jobLauncher.afterPropertiesSet();
-        return jobLauncher;
-    }
-
-    protected JobRepository createJobRepository() throws Exception {
-        final JobRepositoryFactoryBean jobRepositoryFactoryBean = new JobRepositoryFactoryBean();
-        jobRepositoryFactoryBean.setDataSource(dataSource);
-        jobRepositoryFactoryBean.setTransactionManager(transactionManager);
-        jobRepositoryFactoryBean.setTablePrefix(tablePrefix);
-        jobRepositoryFactoryBean.afterPropertiesSet();
-        return jobRepositoryFactoryBean.getObject();
-    }
-
-    protected JobInstanceDao createJobInstanceDao() throws Exception {
-        JdbcJobInstanceDao dao = new JdbcJobInstanceDao();
-        dao.setJdbcTemplate(jdbcTemplate);
-        dao.setJobIncrementer(incrementer);
-        dao.setTablePrefix(tablePrefix);
-        dao.afterPropertiesSet();
-        return dao;
-    }
-
-    protected JobExecutionDao createJobExecutionDao() throws Exception {
-        JdbcJobExecutionDao dao = new JdbcJobExecutionDao();
-        dao.setJdbcTemplate(jdbcTemplate);
-        dao.setJobExecutionIncrementer(incrementer);
-        dao.setTablePrefix(tablePrefix);
-        dao.afterPropertiesSet();
-        return dao;
+        this.lightminJobExecutionDao = new MapLightminJobExecutionDao(batchConfigurer.getJobExplorer());
     }
 
     protected LightminJobExecutionDao createLightminJobExecutionDao() throws Exception {
@@ -259,20 +144,11 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
         return dao;
     }
 
-    protected StepExecutionDao createStepExecutionDao() throws Exception {
-        JdbcStepExecutionDao dao = new JdbcStepExecutionDao();
-        dao.setJdbcTemplate(jdbcTemplate);
-        dao.setStepExecutionIncrementer(incrementer);
-        dao.setTablePrefix(tablePrefix);
-        dao.afterPropertiesSet();
-        return dao;
-    }
-
     protected JobOperator createJobOperator() throws Exception {
         final SimpleJobOperator jobOperator = new SimpleJobOperator();
-        jobOperator.setJobExplorer(jobExplorer);
-        jobOperator.setJobLauncher(jobLauncher);
-        jobOperator.setJobRepository(jobRepository);
+        jobOperator.setJobExplorer(batchConfigurer.getJobExplorer());
+        jobOperator.setJobLauncher(batchConfigurer.getJobLauncher());
+        jobOperator.setJobRepository(batchConfigurer.getJobRepository());
         jobOperator.setJobRegistry(jobRegistry);
         jobOperator.afterPropertiesSet();
         return jobOperator;
@@ -283,16 +159,18 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
     }
 
     protected JobService createJobService() throws Exception {
-        final JobService jobService = new DefaultJobService(jobOperator,
-                jobRegistry, jobInstanceDao, jobExecutionDao, lightminJobExecutionDao);
+        final JobService jobService = new DefaultJobService(
+                jobOperator,
+                jobRegistry,
+                batchConfigurer.getJobExplorer(),
+                lightminJobExecutionDao);
         jobService.afterPropertiesSet();
         return jobService;
     }
 
     protected StepService createStepService() throws Exception {
-        final StepService stepService = new DefaultStepService(stepExecutionDao);
+        final StepService stepService = new DefaultStepService(batchConfigurer.getJobExplorer());
         stepService.afterPropertiesSet();
         return stepService;
     }
-
 }

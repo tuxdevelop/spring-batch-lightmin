@@ -8,6 +8,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class JdbcLightminJobExecutionDaoIT {
     private LightminJobExecutionDao jdbcLightminJobExecutionDao;
 
     @Autowired
-    private JobInstanceDao jobInstanceDao;
+    private JobExplorer jobExplorer;
 
     @Autowired
     private Job simpleJob;
@@ -42,7 +43,7 @@ public class JdbcLightminJobExecutionDaoIT {
 
     @Test
     public void getJobExecutionCountIT() {
-        final JobInstance jobInstance = jobInstanceDao.getJobInstance(1L);
+        final JobInstance jobInstance = jobExplorer.getJobInstance(1L);
         final int count = jdbcLightminJobExecutionDao.getJobExecutionCount(jobInstance);
         assertThat(count).isEqualTo(JOB_EXECUTION_COUNT);
     }
@@ -56,7 +57,7 @@ public class JdbcLightminJobExecutionDaoIT {
 
     @Test
     public void findJobExecutionsIT() {
-        final JobInstance jobInstance = jobInstanceDao.getJobInstance(1L);
+        final JobInstance jobInstance = jobExplorer.getJobInstance(1L);
         final List<JobExecution> jobExecutions = jdbcLightminJobExecutionDao.findJobExecutions(jobInstance, 0,
                 JOB_EXECUTION_COUNT);
         assertThat(jobExecutions).isNotNull();
@@ -69,7 +70,7 @@ public class JdbcLightminJobExecutionDaoIT {
     @Test
     public void findJobExecutionsPageIT() {
         final int count = 5;
-        final JobInstance jobInstance = jobInstanceDao.getJobInstance(1L);
+        final JobInstance jobInstance = jobExplorer.getJobInstance(1L);
         final List<JobExecution> jobExecutions = jdbcLightminJobExecutionDao.findJobExecutions(jobInstance, 0,
                 count);
         assertThat(jobExecutions).isNotNull();
