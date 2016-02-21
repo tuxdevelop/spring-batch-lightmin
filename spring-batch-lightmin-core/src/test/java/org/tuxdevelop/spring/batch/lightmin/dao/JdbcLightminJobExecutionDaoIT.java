@@ -1,5 +1,9 @@
 package org.tuxdevelop.spring.batch.lightmin.dao;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,17 +14,11 @@ import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.tuxdevelop.spring.batch.lightmin.ITConfiguration;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ITConfiguration.class)
@@ -87,7 +85,6 @@ public class JdbcLightminJobExecutionDaoIT {
         assertThat(jobExecutions).isNotNull();
         assertThat(jobExecutions).isEmpty();
     }
-
 
     @Before
     public void init() {

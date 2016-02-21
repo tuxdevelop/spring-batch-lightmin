@@ -1,16 +1,18 @@
 package org.tuxdevelop.spring.batch.lightmin.api.response;
 
-
-import lombok.Data;
-import org.springframework.batch.core.BatchStatus;
-import org.springframework.batch.item.ExecutionContext;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.item.ExecutionContext;
+
+import lombok.Data;
+
 @Data
 public class JobExecution implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private Integer version;

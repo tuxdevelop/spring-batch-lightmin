@@ -1,11 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.batch.core.launch.JobOperator;
-import org.springframework.batch.core.repository.dao.JobExecutionDao;
-import org.springframework.batch.core.repository.dao.JobInstanceDao;
-import org.springframework.batch.core.repository.dao.StepExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 import org.tuxdevelop.spring.batch.lightmin.service.StepService;
@@ -14,7 +10,7 @@ import org.tuxdevelop.spring.batch.lightmin.service.StepService;
  * @author Marcel Becker
  * @version 0.1
  */
-public interface SpringBatchLightminConfigurator{
+public interface SpringBatchLightminConfigurator {
 
     /**
      * @return an instance of {@link org.tuxdevelop.spring.batch.lightmin.service.JobService}

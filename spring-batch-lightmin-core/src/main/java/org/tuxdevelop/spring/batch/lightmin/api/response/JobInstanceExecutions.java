@@ -1,9 +1,9 @@
 package org.tuxdevelop.spring.batch.lightmin.api.response;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.List;
+
+import lombok.Data;
 
 /**
  * @author Marcel Becker
@@ -11,6 +11,8 @@ import java.util.List;
  */
 @Data
 public class JobInstanceExecutions implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String jobName;
     private Long jobInstanceId;

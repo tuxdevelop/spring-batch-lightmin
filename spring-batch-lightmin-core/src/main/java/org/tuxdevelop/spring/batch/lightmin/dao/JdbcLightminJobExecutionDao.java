@@ -1,16 +1,19 @@
 package org.tuxdevelop.spring.batch.lightmin.dao;
 
-import org.springframework.batch.core.*;
-import org.springframework.batch.core.repository.dao.JdbcJobExecutionDao;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.repository.dao.JdbcJobExecutionDao;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 
 public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements LightminJobExecutionDao {
 
@@ -38,46 +41,50 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements 
 
     @Override
     public List<JobExecution> findJobExecutions(final JobInstance jobInstance, final int start, final int count) {
-        final ResultSetExtractor extractor = new ResultSetExtractor() {
-            private List<JobExecution> list = new ArrayList<JobExecution>();
+        final ResultSetExtractor<List<JobExecution>> extractor = new ResultSetExtractor<List<JobExecution>>() {
+            private final List<JobExecution> list = new ArrayList<JobExecution>();
 
+            @Override
             public List<JobExecution> extractData(ResultSet rs) throws SQLException, DataAccessException {
                 int rowNumber;
                 for (rowNumber = 0; rowNumber < start && rs.next(); ++rowNumber) {
                 }
 
                 while (rowNumber < start + count && rs.next()) {
-                    final JobExecutionRowMapper rowMapper = new JdbcLightminJobExecutionDao.JobExecutionRowMapper(jobInstance);
+                    final JobExecutionRowMapper rowMapper = new JdbcLightminJobExecutionDao.JobExecutionRowMapper(
+                            jobInstance);
                     list.add(rowMapper.mapRow(rs, rowNumber));
                     ++rowNumber;
                 }
                 return list;
             }
         };
-        final List result = (List) getJdbcTemplate().query(getQuery(FIND_JOB_EXECUTIONS),
-                new Object[]{jobInstance.getId()},
+        final List<JobExecution> result = getJdbcTemplate().query(getQuery(FIND_JOB_EXECUTIONS),
+                new Object[] { jobInstance.getId() },
                 extractor);
         return result;
     }
 
     @Override
     public int getJobExecutionCount(final JobInstance jobInstance) {
-        return this.getJdbcTemplate().queryForObject(getQuery(GET_EXECUTION_COUNT), Integer.class,
-                new Object[]{jobInstance.getInstanceId()});
+        return getJdbcTemplate().queryForObject(getQuery(GET_EXECUTION_COUNT), Integer.class,
+                new Object[] { jobInstance.getInstanceId() });
     }
 
     /**
-     * Ported from {@link org.springframework.batch.core.repository.dao.JdbcJobExecutionDao}
+     * Ported from
+     * {@link org.springframework.batch.core.repository.dao.JdbcJobExecutionDao}
      */
     private final class JobExecutionRowMapper implements RowMapper<JobExecution> {
 
-        private JobInstance jobInstance;
+        private final JobInstance jobInstance;
         private JobParameters jobParameters;
 
         public JobExecutionRowMapper(final JobInstance jobInstance) {
             this.jobInstance = jobInstance;
         }
 
+        @Override
         public JobExecution mapRow(final ResultSet resultSet, final int rowNumber) throws SQLException {
             final Long id = Long.valueOf(resultSet.getLong(1));
             final String jobConfigurationLocation = resultSet.getString(10);

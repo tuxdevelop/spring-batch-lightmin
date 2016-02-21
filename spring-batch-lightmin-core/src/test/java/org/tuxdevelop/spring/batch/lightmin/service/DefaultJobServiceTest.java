@@ -1,5 +1,17 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Fail.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,23 +35,13 @@ import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Fail.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
-
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultJobServiceTest {
 
     private static final String JOB_NAME = "sampleJob";
     private static final String JOB_NAME_2 = "sampleJob2";
     private static final String JOB_NAME_3 = "sampleJob3";
-    private static final String[] JOB_NAMES = new String[]{JOB_NAME, JOB_NAME_2, JOB_NAME_3};
+    private static final String[] JOB_NAMES = new String[] { JOB_NAME, JOB_NAME_2, JOB_NAME_3 };
 
     @InjectMocks
     private DefaultJobService jobService;
@@ -111,7 +113,8 @@ public class DefaultJobServiceTest {
     @Test
     public void getJobExecutionsPageTest() {
         final JobInstance jobInstance = TestHelper.createJobInstance(1l, JOB_NAME);
-        when(lightminJobExecutionDao.findJobExecutions(jobInstance, 1, 5)).thenReturn(TestHelper.createJobExecutions(5));
+        when(lightminJobExecutionDao.findJobExecutions(jobInstance, 1, 5))
+                .thenReturn(TestHelper.createJobExecutions(5));
         final Collection<JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance, 1, 5);
         assertThat(jobExecutions).isNotEmpty();
         assertThat(jobExecutions.size()).isEqualTo(5);
@@ -166,8 +169,10 @@ public class DefaultJobServiceTest {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Test(expected = SpringBatchLightminApplicationException.class)
-    public void restartJobExecutionExceptionTest() throws JobParametersInvalidException, JobRestartException, JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException {
+    public void restartJobExecutionExceptionTest() throws JobParametersInvalidException, JobRestartException,
+            JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException {
         final Long jobExecutionId = 10L;
         when(jobOperator.restart(jobExecutionId)).thenThrow(NoSuchJobExecutionException.class);
         jobService.restartJobExecution(jobExecutionId);
@@ -184,9 +189,11 @@ public class DefaultJobServiceTest {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Test(expected = SpringBatchLightminApplicationException.class)
     public void stopJobExecutionExceptionTest() throws JobParametersInvalidException, JobRestartException,
-            JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException, JobExecutionNotRunningException {
+            JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException,
+            JobExecutionNotRunningException {
         final Long jobExecutionId = 10L;
         when(jobOperator.stop(jobExecutionId)).thenThrow(NoSuchJobExecutionException.class);
         jobService.stopJobExecution(jobExecutionId);

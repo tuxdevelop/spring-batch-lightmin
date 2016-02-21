@@ -1,5 +1,17 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,15 +27,6 @@ import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRep
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
-
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultAdminServiceTest {
@@ -45,11 +48,12 @@ public class DefaultAdminServiceTest {
         when(jobConfigurationRepository.add(any(JobConfiguration.class))).thenReturn(jobConfiguration);
         try {
             defaultAdminService.saveJobConfiguration(jobConfiguration);
-        } catch (SpringBatchLightminApplicationException e) {
+        } catch (final SpringBatchLightminApplicationException e) {
             fail(e.getMessage());
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Test(expected = SpringBatchLightminApplicationException.class)
     public void saveJobConfigurationErrorTest() {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(
@@ -57,9 +61,9 @@ public class DefaultAdminServiceTest {
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         when(jobConfigurationRepository.add(any(JobConfiguration.class))).thenReturn(jobConfiguration);
         try {
-            when(jobConfigurationRepository.update(any(JobConfiguration.class))).thenThrow(NoSuchJobConfigurationException
-                    .class);
-        } catch (NoSuchJobConfigurationException e) {
+            when(jobConfigurationRepository.update(any(JobConfiguration.class)))
+                    .thenThrow(NoSuchJobConfigurationException.class);
+        } catch (final NoSuchJobConfigurationException e) {
             fail(e.getMessage());
         }
         defaultAdminService.saveJobConfiguration(jobConfiguration);
@@ -73,11 +77,12 @@ public class DefaultAdminServiceTest {
         jobConfiguration.setJobConfigurationId(1L);
         try {
             defaultAdminService.updateJobConfiguration(jobConfiguration);
-        } catch (SpringBatchLightminApplicationException e) {
+        } catch (final SpringBatchLightminApplicationException e) {
             fail(e.getMessage());
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Test(expected = SpringBatchLightminApplicationException.class)
     public void updateJobConfigurationErrorTest() {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(
@@ -85,9 +90,9 @@ public class DefaultAdminServiceTest {
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobConfigurationId(1L);
         try {
-            when(jobConfigurationRepository.update(any(JobConfiguration.class))).thenThrow(NoSuchJobConfigurationException
-                    .class);
-        } catch (NoSuchJobConfigurationException e) {
+            when(jobConfigurationRepository.update(any(JobConfiguration.class)))
+                    .thenThrow(NoSuchJobConfigurationException.class);
+        } catch (final NoSuchJobConfigurationException e) {
             fail(e.getMessage());
         }
         defaultAdminService.updateJobConfiguration(jobConfiguration);
@@ -102,13 +107,13 @@ public class DefaultAdminServiceTest {
         jobConfiguration.setJobConfigurationId(jobConfigurationId);
         try {
             when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenReturn(jobConfiguration);
-        } catch (NoSuchJobConfigurationException e) {
+        } catch (final NoSuchJobConfigurationException e) {
             fail(e.getMessage());
         }
 
         try {
             defaultAdminService.deleteJobConfiguration(jobConfigurationId);
-        } catch (SpringBatchLightminApplicationException e) {
+        } catch (final SpringBatchLightminApplicationException e) {
             fail(e.getMessage());
         }
 
@@ -124,7 +129,7 @@ public class DefaultAdminServiceTest {
         try {
             when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenReturn(jobConfiguration);
             doThrow(NoSuchJobConfigurationException.class).when(jobConfigurationRepository).delete(jobConfiguration);
-        } catch (NoSuchJobConfigurationException e) {
+        } catch (final NoSuchJobConfigurationException e) {
             fail(e.getMessage());
         }
         defaultAdminService.deleteJobConfiguration(jobConfigurationId);
@@ -141,19 +146,19 @@ public class DefaultAdminServiceTest {
         jobConfigurations.add(jobConfiguration);
         try {
             when(jobConfigurationRepository.getJobConfigurations("sampleJob")).thenReturn(jobConfigurations);
-        } catch (NoSuchJobException e) {
+        } catch (final NoSuchJobException e) {
             fail(e.getMessage());
         }
         final Collection<JobConfiguration> result = defaultAdminService.getJobConfigurationsByJobName("sampleJob");
         assertThat(result).hasSize(1);
     }
 
+    @SuppressWarnings("unchecked")
     @Test(expected = SpringBatchLightminApplicationException.class)
     public void getJobConfigurationsByJobNameErrorTest() {
         try {
-            when(jobConfigurationRepository.getJobConfigurations("sampleJob")).thenThrow
-                    (NoSuchJobException.class);
-        } catch (NoSuchJobException e) {
+            when(jobConfigurationRepository.getJobConfigurations("sampleJob")).thenThrow(NoSuchJobException.class);
+        } catch (final NoSuchJobException e) {
             fail(e.getMessage());
         }
         defaultAdminService.getJobConfigurationsByJobName("sampleJob");
@@ -170,7 +175,7 @@ public class DefaultAdminServiceTest {
         final Collection<JobConfiguration> jobConfigurations = new LinkedList<JobConfiguration>();
         jobConfigurations.add(jobConfiguration);
         jobConfigurations.add(jobConfigurationSecond);
-        Collection<String> jobNames = new LinkedList<String>();
+        final Collection<String> jobNames = new LinkedList<String>();
         jobNames.add("sampleJob");
         when(jobConfigurationRepository.getAllJobConfigurationsByJobNames(jobNames)).thenReturn(jobConfigurations);
         final Map<String, Collection<JobConfiguration>> result = defaultAdminService.getJobConfigurationMap(jobNames);
@@ -189,7 +194,7 @@ public class DefaultAdminServiceTest {
         final Collection<JobConfiguration> jobConfigurations = new LinkedList<JobConfiguration>();
         jobConfigurations.add(jobConfiguration);
         jobConfigurations.add(jobConfigurationSecond);
-        Collection<String> jobNames = new LinkedList<String>();
+        final Collection<String> jobNames = new LinkedList<String>();
         jobNames.add("sampleJob");
         when(jobConfigurationRepository.getAllJobConfigurationsByJobNames(jobNames)).thenReturn(jobConfigurations);
         final Collection<JobConfiguration> result = defaultAdminService.getJobConfigurations(jobNames);
@@ -205,7 +210,7 @@ public class DefaultAdminServiceTest {
         jobConfiguration.setJobConfigurationId(jobConfigurationId);
         try {
             when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenReturn(jobConfiguration);
-        } catch (NoSuchJobConfigurationException e) {
+        } catch (final NoSuchJobConfigurationException e) {
             fail(e.getMessage());
         }
 
@@ -213,13 +218,14 @@ public class DefaultAdminServiceTest {
         assertThat(result).isEqualTo(jobConfiguration);
     }
 
+    @SuppressWarnings("unchecked")
     @Test(expected = SpringBatchLightminApplicationException.class)
     public void getJobConfigurationByIdErrorTest() {
         final Long jobConfigurationId = 1L;
         try {
-            when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenThrow
-                    (NoSuchJobConfigurationException.class);
-        } catch (NoSuchJobConfigurationException e) {
+            when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId))
+                    .thenThrow(NoSuchJobConfigurationException.class);
+        } catch (final NoSuchJobConfigurationException e) {
             fail(e.getMessage());
         }
         defaultAdminService.getJobConfigurationById(jobConfigurationId);
@@ -229,7 +235,8 @@ public class DefaultAdminServiceTest {
     public void stopJobConfigurationSchedulerTest() throws NoSuchJobConfigurationException {
         final String beanName = "schedulerBean";
         final Long jobConfigurationId = 10L;
-        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration("* * * * * *", null, null, JobSchedulerType.CRON);
+        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper
+                .createJobSchedulerConfiguration("* * * * * *", null, null, JobSchedulerType.CRON);
         jobSchedulerConfiguration.setBeanName(beanName);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenReturn(jobConfiguration);
@@ -237,11 +244,12 @@ public class DefaultAdminServiceTest {
         verify(schedulerService, times(1)).terminate(beanName);
     }
 
+    @SuppressWarnings("unchecked")
     @Test(expected = SpringBatchLightminApplicationException.class)
     public void stopJobConfigurationSchedulerExceptionTest() throws NoSuchJobConfigurationException {
         final Long jobConfigurationId = 10L;
-        when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenThrow
-                (NoSuchJobConfigurationException.class);
+        when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId))
+                .thenThrow(NoSuchJobConfigurationException.class);
         defaultAdminService.stopJobConfigurationScheduler(jobConfigurationId);
     }
 
@@ -249,7 +257,8 @@ public class DefaultAdminServiceTest {
     public void startJobConfigurationSchedulerTest() throws NoSuchJobConfigurationException {
         final String beanName = "schedulerBean";
         final Long jobConfigurationId = 10L;
-        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration("* * * * * *", null, null, JobSchedulerType.CRON);
+        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper
+                .createJobSchedulerConfiguration("* * * * * *", null, null, JobSchedulerType.CRON);
         jobSchedulerConfiguration.setBeanName(beanName);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenReturn(jobConfiguration);
@@ -257,11 +266,12 @@ public class DefaultAdminServiceTest {
         verify(schedulerService, times(1)).schedule(beanName, Boolean.FALSE);
     }
 
+    @SuppressWarnings("unchecked")
     @Test(expected = SpringBatchLightminApplicationException.class)
     public void startJobConfigurationSchedulerExceptionTest() throws NoSuchJobConfigurationException {
         final Long jobConfigurationId = 10L;
-        when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenThrow
-                (NoSuchJobConfigurationException.class);
+        when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId))
+                .thenThrow(NoSuchJobConfigurationException.class);
         defaultAdminService.startJobConfigurationScheduler(jobConfigurationId);
     }
 

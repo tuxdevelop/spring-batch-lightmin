@@ -1,10 +1,11 @@
 package org.tuxdevelop.spring.batch.lightmin.api.response;
 
-import lombok.Data;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-
 import java.io.Serializable;
 import java.util.Collection;
+
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
+
+import lombok.Data;
 
 /**
  * @author Marcel Becker
@@ -12,6 +13,8 @@ import java.util.Collection;
  */
 @Data
 public class JobConfigurations implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String jobName;
     private Collection<JobConfiguration> jobConfigurations;

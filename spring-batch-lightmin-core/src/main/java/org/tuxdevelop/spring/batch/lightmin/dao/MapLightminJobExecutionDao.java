@@ -1,15 +1,13 @@
 package org.tuxdevelop.spring.batch.lightmin.dao;
 
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
-import org.springframework.batch.core.explore.JobExplorer;
-import org.springframework.batch.core.repository.dao.MapJobExecutionDao;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.explore.JobExplorer;
 
 public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
 
@@ -19,10 +17,9 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
         this.jobExplorer = jobExplorer;
     }
 
-
     @Override
     public List<JobExecution> findJobExecutions(final JobInstance job, final int start, final int count) {
-        final ArrayList result = new ArrayList(jobExplorer.getJobExecutions(job));
+        final ArrayList<JobExecution> result = new ArrayList<JobExecution>(jobExplorer.getJobExecutions(job));
         sortDescending(result);
         return subset(result, start, count);
     }
@@ -35,6 +32,7 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
 
     void sortDescending(final List<JobExecution> result) {
         Collections.sort(result, new Comparator<JobExecution>() {
+            @Override
             public int compare(final JobExecution jobExecution, final JobExecution jobExecutionToCompare) {
                 return Long.signum(jobExecutionToCompare.getId().longValue() - jobExecution.getId().longValue());
             }
@@ -42,8 +40,8 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
     }
 
     List<JobExecution> subset(final List<JobExecution> jobExecutions, final int start, final int count) {
-        int startIndex = Math.min(start, jobExecutions.size());
-        int endIndex = Math.min(start + count, jobExecutions.size());
+        final int startIndex = Math.min(start, jobExecutions.size());
+        final int endIndex = Math.min(start + count, jobExecutions.size());
         return jobExecutions.subList(startIndex, endIndex);
     }
 }
