@@ -17,7 +17,7 @@ and depending beans.
 To monitor the Spring Batch Jobs, the _Spring Batch Lightmin_ provides a web interface. The web interface also
 manages _JobConfigurations_, which can be used for time triggered job runs.
 
-The documentation can be found at http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/master/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[Spring Batch Linghtmin Documentation]
+The documentation can be found at http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/next/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[Spring Batch Linghtmin Documentation]
 
 == Getting Started
 
@@ -28,7 +28,7 @@ The documentation can be found at http://htmlpreview.github.io/?https://github.c
 <dependency>
     <groupId>org.tuxdevelop</groupId>
     <artifactId>spring-batch-lightmin-ui</artifactId>
-    <version>0.1.2-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
 </dependency>
 ----
 
