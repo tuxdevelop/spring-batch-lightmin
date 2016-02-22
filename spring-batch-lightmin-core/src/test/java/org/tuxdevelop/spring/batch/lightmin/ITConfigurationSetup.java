@@ -1,16 +1,19 @@
 package org.tuxdevelop.spring.batch.lightmin;
 
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
 
 import javax.sql.DataSource;
 
 @Configuration
+@EnableConfigurationProperties(value = {SpringBatchLightminConfigurationProperties.class})
+@PropertySource(value = "classpath:application.properties")
 public class ITConfigurationSetup {
 
 
@@ -20,7 +23,7 @@ public class ITConfigurationSetup {
         return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).build();
     }
 
-    @Bean
+    /*@Bean
     @Profile(value = "prefix")
     public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
         final PropertyPlaceholderConfigurer propertyPlaceholderConfigurer = new PropertyPlaceholderConfigurer();
@@ -34,5 +37,5 @@ public class ITConfigurationSetup {
         final PropertyPlaceholderConfigurer propertyPlaceholderConfigurer = new PropertyPlaceholderConfigurer();
         propertyPlaceholderConfigurer.setLocation(new ClassPathResource("prefix_empty.properties"));
         return propertyPlaceholderConfigurer;
-    }
+    } */
 }

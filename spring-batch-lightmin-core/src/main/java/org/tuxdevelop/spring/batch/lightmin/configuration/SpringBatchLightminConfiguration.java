@@ -3,7 +3,6 @@ package org.tuxdevelop.spring.batch.lightmin.configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,21 +23,25 @@ public class SpringBatchLightminConfiguration {
     @Autowired(required = false)
     private DataSource dataSource;
 
-    @Value("${table.prefix:BATCH_}")
-    private String tablePrefix;
+    @Autowired
+    private SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
 
     @Bean
     @ConditionalOnMissingBean(BatchConfigurer.class)
     public BatchConfigurer batchConfigurer() {
         final DefaultSpringBatchLightminBatchConfigurer batchConfigurer;
-        if (dataSource != null) {
-            if (tablePrefix != null && !tablePrefix.isEmpty()) {
-                batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource, tablePrefix);
+        if (dataSource != null && !springBatchLightminConfigurationProperties.getRepositoryForceMap()) {
+            if (springBatchLightminConfigurationProperties.getTablePrefix() != null &&
+                    !springBatchLightminConfigurationProperties.getTablePrefix().isEmpty()) {
+                batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource,
+                        springBatchLightminConfigurationProperties.getTablePrefix());
             } else {
                 batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource);
             }
-        } else if (tablePrefix != null && !tablePrefix.isEmpty()) {
-            batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(tablePrefix);
+        } else if (springBatchLightminConfigurationProperties.getTablePrefix() != null &&
+                !springBatchLightminConfigurationProperties.getTablePrefix().isEmpty()) {
+            batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(
+                    springBatchLightminConfigurationProperties.getTablePrefix());
         } else {
             batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer();
         }
@@ -53,19 +56,23 @@ public class SpringBatchLightminConfiguration {
         final DefaultSpringBatchLightminConfigurator configuration;
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Create DefaultSpringBatchLightminConfigurator ");
-        if (dataSource != null) {
-            if (tablePrefix != null && !tablePrefix.isEmpty()) {
-                configuration = new DefaultSpringBatchLightminConfigurator(dataSource, tablePrefix);
+        if (dataSource != null && !springBatchLightminConfigurationProperties.getConfigurationForceMap()) {
+            if (springBatchLightminConfigurationProperties.getTablePrefix() != null &&
+                    !springBatchLightminConfigurationProperties.getTablePrefix().isEmpty()) {
+                configuration = new DefaultSpringBatchLightminConfigurator(dataSource,
+                        springBatchLightminConfigurationProperties.getTablePrefix());
                 stringBuilder.append("with dataSource and tablePrefix: ");
-                stringBuilder.append(tablePrefix);
+                stringBuilder.append(springBatchLightminConfigurationProperties.getTablePrefix());
             } else {
                 configuration = new DefaultSpringBatchLightminConfigurator(dataSource);
                 stringBuilder.append("with dataSource");
             }
-        } else if (tablePrefix != null && !tablePrefix.isEmpty()) {
-            configuration = new DefaultSpringBatchLightminConfigurator(tablePrefix);
+        } else if (springBatchLightminConfigurationProperties.getTablePrefix() != null &&
+                !springBatchLightminConfigurationProperties.getTablePrefix().isEmpty()) {
+            configuration = new DefaultSpringBatchLightminConfigurator(
+                    springBatchLightminConfigurationProperties.getTablePrefix());
             stringBuilder.append("with tablePrefix: ");
-            stringBuilder.append(tablePrefix);
+            stringBuilder.append(springBatchLightminConfigurationProperties.getTablePrefix());
         } else {
             configuration = new DefaultSpringBatchLightminConfigurator();
         }

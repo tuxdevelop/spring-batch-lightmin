@@ -8,6 +8,7 @@ import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
  * @version 0.1
  */
 @Configuration
+@EnableConfigurationProperties(value = {SpringBatchLightminConfigurationProperties.class})
 @Import(value = {SpringBatchLightminConfiguration.class, RestServiceConfiguration.class})
 public class CommonSpringBatchLightminConfiguration {
 

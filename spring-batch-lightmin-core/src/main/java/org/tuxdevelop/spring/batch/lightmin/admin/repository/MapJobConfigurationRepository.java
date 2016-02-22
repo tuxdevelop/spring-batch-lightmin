@@ -19,27 +19,28 @@ import java.util.concurrent.atomic.AtomicLong;
 @Slf4j
 public class MapJobConfigurationRepository implements JobConfigurationRepository {
 
-    private ConcurrentMap<String, Set<JobConfiguration>> jobConfigurations;
+    private ConcurrentMap<String, Map<Long, JobConfiguration>> jobConfigurations;
     private final AtomicLong currentJobId = new AtomicLong(1L);
 
     public MapJobConfigurationRepository() {
-        jobConfigurations = new ConcurrentHashMap<String, Set<JobConfiguration>>();
+        jobConfigurations = new ConcurrentHashMap<String, Map<Long, JobConfiguration>>();
+
     }
 
     @Override
     public JobConfiguration getJobConfiguration(final Long jobConfigurationId) throws NoSuchJobConfigurationException {
         final Set<String> jobNames = jobConfigurations.keySet();
-        final Set<JobConfiguration> jobConfigurationSet = new HashSet<JobConfiguration>();
+        final Map<Long, JobConfiguration> tempMap = new HashMap<Long, JobConfiguration>();
         JobConfiguration jobConfiguration = null;
         for (String jobName : jobNames) {
-            final Set<JobConfiguration> configurationMap = jobConfigurations.get(jobName);
+            final Map<Long, JobConfiguration> configurationMap = jobConfigurations.get(jobName);
             if (configurationMap != null && !configurationMap.isEmpty()) {
-                jobConfigurationSet.addAll(configurationMap);
+                tempMap.putAll(configurationMap);
             }
         }
-        for (final JobConfiguration jc : jobConfigurationSet) {
-            if (jc.getJobConfigurationId().equals(jobConfigurationId)) {
-                jobConfiguration = jc;
+        for (final Map.Entry<Long, JobConfiguration> jc : tempMap.entrySet()) {
+            if (jc.getKey().equals(jobConfigurationId)) {
+                jobConfiguration = jc.getValue();
                 break;
             }
         }
@@ -54,7 +55,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     @Override
     public Collection<JobConfiguration> getJobConfigurations(final String jobName) throws NoSuchJobException {
         if (jobConfigurations.containsKey(jobName)) {
-            return jobConfigurations.get(jobName);
+            return jobConfigurations.get(jobName).values();
         } else {
             final String message = "No jobConfigurations found for jobName: " + jobName;
             log.error(message);
@@ -71,11 +72,11 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
         final Long jobConfigurationId = getNextJobId();
         jobConfiguration.setJobConfigurationId(jobConfigurationId);
         if (jobConfigurations.containsKey(jobName)) {
-            jobConfigurations.get(jobName).add(jobConfiguration);
+            jobConfigurations.get(jobName).put(jobConfigurationId, jobConfiguration);
         } else {
-            final Set<JobConfiguration> jobConfigurationSet = new HashSet<JobConfiguration>();
-            jobConfigurationSet.add(jobConfiguration);
-            jobConfigurations.put(jobName, jobConfigurationSet);
+            final Map<Long, JobConfiguration> jobConfigurationMap = new HashMap<Long, JobConfiguration>();
+            jobConfigurationMap.put(jobConfigurationId, jobConfiguration);
+            jobConfigurations.put(jobName, jobConfigurationMap);
         }
         return jobConfiguration;
     }
@@ -98,9 +99,10 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
         }
         final JobConfiguration jobConfigurationToDelete;
         if (jobConfigurations.containsKey(jobName)) {
-            final Set<JobConfiguration> jobConfigurationSet = jobConfigurations.get(jobName);
+            final Map<Long, JobConfiguration> jobConfigurationMap = jobConfigurations.get(jobName);
             jobConfigurationToDelete = getJobConfiguration(jobConfigurationId);
-            jobConfigurationSet.remove(jobConfigurationToDelete);
+            jobConfigurationMap.remove(jobConfigurationToDelete.getJobConfigurationId());
+            log.debug("Removed JobConfiguration with id: " + jobConfiguration.getJobConfigurationId());
         } else {
             final String message = "No configuration found for job: " + jobName + ". Nothing to delete";
             log.error(message);
@@ -112,8 +114,8 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     @Override
     public Collection<JobConfiguration> getAllJobConfigurations() {
         final Collection<JobConfiguration> jobConfigurationCollection = new LinkedList<JobConfiguration>();
-        for (Map.Entry<String, Set<JobConfiguration>> entry : jobConfigurations.entrySet()) {
-            jobConfigurationCollection.addAll(entry.getValue());
+        for (Map.Entry<String, Map<Long, JobConfiguration>> entry : jobConfigurations.entrySet()) {
+            jobConfigurationCollection.addAll(entry.getValue().values());
         }
         return jobConfigurationCollection;
     }
@@ -123,7 +125,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
         final Collection<JobConfiguration> jobConfigurationCollection = new LinkedList<JobConfiguration>();
         for (final String jobName : jobNames) {
             if (jobConfigurations.containsKey(jobName)) {
-                jobConfigurationCollection.addAll(jobConfigurations.get(jobName));
+                jobConfigurationCollection.addAll(jobConfigurations.get(jobName).values());
             } else {
                 log.debug("No Configuration found for Job with name: " + jobName);
             }
