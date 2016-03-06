@@ -83,11 +83,11 @@ For production environments, the _Spring Batch Lightmin_ also provides jdbc comp
 private JdbcTemplate jdbcTemplate;
 
 @Value("${table.prefix}")
-private String tablePrefix;
+private String repositoryTablePrefix;
 
 @Bean
 public JobConfigurationRepository jobConfigurationRepository() {
-    return new JdbcJobConfigurationRepository(jdbcTemplate, tablePrefix);
+    return new JdbcJobConfigurationRepository(jdbcTemplate, repositoryTablePrefix);
 }
 
 ----

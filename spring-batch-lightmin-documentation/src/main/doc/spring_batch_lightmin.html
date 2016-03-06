@@ -684,11 +684,11 @@ The REST-API will be available.</p>
 <span class="directive">private</span> JdbcTemplate jdbcTemplate;
 
 <span class="annotation">@Value</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">${table.prefix}</span><span class="delimiter">&quot;</span></span>)
-<span class="directive">private</span> <span class="predefined-type">String</span> tablePrefix;
+<span class="directive">private</span> <span class="predefined-type">String</span> repositoryTablePrefix;
 
 <span class="annotation">@Bean</span>
 <span class="directive">public</span> JobConfigurationRepository jobConfigurationRepository() {
-    <span class="keyword">return</span> <span class="keyword">new</span> JdbcJobConfigurationRepository(jdbcTemplate, tablePrefix);
+    <span class="keyword">return</span> <span class="keyword">new</span> JdbcJobConfigurationRepository(jdbcTemplate, repositoryTablePrefix);
 }</code></pre>
 </div>
 </div>

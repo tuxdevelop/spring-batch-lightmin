@@ -42,7 +42,7 @@
 
     <properties>
         <assertj.version>1.7.1</assertj.version>
-        <platform-bom.version>2.0.2.RELEASE</platform-bom.version>
+        <platform-bom.version>2.0.3.RELEASE</platform-bom.version>
         <openpojo.version>0.8.0</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
         <!-- plugin versions -->
