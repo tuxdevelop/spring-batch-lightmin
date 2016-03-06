@@ -26,9 +26,7 @@ In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapsh
 === Enable Spring Batch Lightmin
 
 To enable the _Spring Batch Lightmin_, you have to add the _@EnableSpringBatchLightminUI_ annotation to a
-Spring configuration class of your application. The _Spring Batch Lightmin_ also needs a bean of type
-_JobConfigurationRepository_ in the application context. The easiest implementation of _JobConfigurationRepository_
-is the _MapJobConfigurationRepository_.
+Spring configuration class of your application.
 
 [source,java]
 ----
@@ -40,12 +38,6 @@ public class AddressMigratorApp {
     public static void main(final String[] args) {
         SpringApplication.run(AddressMigratorApp.class, args);
     }
-
-    @Bean
-    public JobConfigurationRepository jobConfigurationRepository(){
-        return new MapJobConfigurationRepository();
-    }
-
 }
 ----
 
@@ -72,11 +64,6 @@ public class AddressMigratorApp {
 
     public static void main(final String[] args) {
         SpringApplication.run(AddressMigratorApp.class, args);
-    }
-
-    @Bean
-    public JobConfigurationRepository jobConfigurationRepository(){
-        return new MapJobConfigurationRepository();
     }
 
 }

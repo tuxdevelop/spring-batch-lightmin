@@ -47,9 +47,7 @@ In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapsh
 === Enable Spring Batch Lightmin
 
 To enable the _Spring Batch Lightmin_, you have to add the _@EnableSpringBatchLightminUI_ annotation to a
-Spring configuration class of your application. The _Spring Batch Lightmin_ also needs a bean of type
-_JobConfigurationRepository_ in the application context. The easiest implementation of _JobConfigurationRepository_
-is the _MapJobConfigurationRepository_.
+Spring configuration class of your application.
 
 [source,java]
 ----
@@ -62,11 +60,6 @@ public class AddressMigratorApp {
         SpringApplication.run(AddressMigratorApp.class, args);
     }
 
-    @Bean
-    public JobConfigurationRepository jobConfigurationRepository(){
-        return new MapJobConfigurationRepository();
-    }
-
 }
 ----
 
@@ -75,31 +68,27 @@ For production environments, the _Spring Batch Lightmin_ also provides jdbc comp
  meta informations from a database and to store the _JobConfigurations_. To use a persistent way to store your
  _JobConfigurations_, you have to install a schema of _Spring Batch Lightmin_ next to your _Spring Batch_ tables.
  The DDL scripts for various database types are located within the core-module of the _Spring Batch Lightmin_.
-
-[source, java]
-----
-
-@Autowired
-private JdbcTemplate jdbcTemplate;
-
-@Value("${table.prefix}")
-private String repositoryTablePrefix;
-
-@Bean
-public JobConfigurationRepository jobConfigurationRepository() {
-    return new JdbcJobConfigurationRepository(jdbcTemplate, repositoryTablePrefix);
-}
-
-----
+ If a _DataSource_ bean is available in the context, the _Spring Batch Lightmin_ will create a
+ _JdbcJobConfigurationRepository_.
 
 ==== Properties
 
 If you have to use a different table prefix for the Spring Batch database schema and the job configuration database
-schema, you have to set the _table.prefix_ property in your application.properties. The default value is _BATCH__.
+schema, you have to set the _*-table-prefix_ properties in your application.properties. The default value is _BATCH__.
+The _Spring Batch Lightmin_ configuration tries to create _Jdbc_-components, if a bean of type _DataSource_ is
+available within the _Spring Context_. The _*-force-map_-properties can override the behavior and let the _Spring
+Batch Lightmin_ create _Map_-components.
 
 [source,properties]
 ----
-table.prefix=MY_BATCH_PREFIX_
+#Set the table prefix for Spring Batch tables, default BATCH_
+spring.batch.lightmin.repository-table-prefix=MY_BATCH_PREFIX
+#Set the table prefix for Spring Batch Lightmin configuration tables, default BATCH__
+spring.batch.lightmin.configuration-table-prefix=MY_BATCH_PREFIX_
+#If set to true, a MapJobRepository will be created, default false
+spring.batch.lightmin.configuration-force-map=false
+#If set to true, a MapJobConfigurationRepository will be created, default false
+spring.batch.lightmin.repository-force-map=false
 ----
 
 == Spring Batch Lightmin UI
