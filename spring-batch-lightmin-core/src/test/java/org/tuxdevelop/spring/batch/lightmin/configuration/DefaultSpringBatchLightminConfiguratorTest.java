@@ -17,11 +17,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DefaultSpringBatchLightminConfiguratorTest {
 
     private DataSource dataSource;
+    private SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
 
     @Test
     public void initializeJbdcTest() {
         final DefaultSpringBatchLightminConfigurator configurator =
-                new DefaultSpringBatchLightminConfigurator(dataSource);
+                new DefaultSpringBatchLightminConfigurator(dataSource, springBatchLightminConfigurationProperties);
         final DefaultSpringBatchLightminBatchConfigurer batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource);
         batchConfigurer.initialize();
         configurator.setBatchConfigurer(batchConfigurer);
@@ -35,8 +36,9 @@ public class DefaultSpringBatchLightminConfiguratorTest {
     @Test
     public void initializeJbdcWithTablePrefixTest() {
         final String tablePrefix = "TEST_BATCH";
+        springBatchLightminConfigurationProperties.setRepositoryTablePrefix(tablePrefix);
         final DefaultSpringBatchLightminConfigurator configurator =
-                new DefaultSpringBatchLightminConfigurator(dataSource, tablePrefix);
+                new DefaultSpringBatchLightminConfigurator(dataSource, springBatchLightminConfigurationProperties);
         final DefaultSpringBatchLightminBatchConfigurer batchConfigurer = new
                 DefaultSpringBatchLightminBatchConfigurer(dataSource, tablePrefix);
         batchConfigurer.initialize();
@@ -49,7 +51,9 @@ public class DefaultSpringBatchLightminConfiguratorTest {
 
     @Test
     public void initializeMapTest() {
-        final DefaultSpringBatchLightminConfigurator configurator = new DefaultSpringBatchLightminConfigurator();
+        springBatchLightminConfigurationProperties.setConfigurationForceMap(Boolean.TRUE);
+        springBatchLightminConfigurationProperties.setRepositoryForceMap(Boolean.TRUE);
+        final DefaultSpringBatchLightminConfigurator configurator = new DefaultSpringBatchLightminConfigurator(springBatchLightminConfigurationProperties);
         final DefaultSpringBatchLightminBatchConfigurer batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer();
         batchConfigurer.initialize();
         assertThat(configurator).isNotNull();
@@ -62,8 +66,9 @@ public class DefaultSpringBatchLightminConfiguratorTest {
     @Test
     public void initializeMapWithTablePrefixTest() {
         final String tablePrefix = "TEST_BATCH";
+        springBatchLightminConfigurationProperties.setRepositoryTablePrefix(tablePrefix);
         final DefaultSpringBatchLightminConfigurator configurator =
-                new DefaultSpringBatchLightminConfigurator(tablePrefix);
+                new DefaultSpringBatchLightminConfigurator(springBatchLightminConfigurationProperties);
         final DefaultSpringBatchLightminBatchConfigurer batchConfigurer = new
                 DefaultSpringBatchLightminBatchConfigurer(tablePrefix);
         batchConfigurer.initialize();
@@ -77,6 +82,7 @@ public class DefaultSpringBatchLightminConfiguratorTest {
     @Before
     public void init() {
         this.dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).build();
+        this.springBatchLightminConfigurationProperties = new SpringBatchLightminConfigurationProperties();
     }
 
     private void assertMapComponents(final DefaultSpringBatchLightminConfigurator configurator) {

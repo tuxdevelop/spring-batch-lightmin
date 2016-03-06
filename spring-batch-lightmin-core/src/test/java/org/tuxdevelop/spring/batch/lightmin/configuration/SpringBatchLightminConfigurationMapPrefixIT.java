@@ -24,7 +24,7 @@ public class SpringBatchLightminConfigurationMapPrefixIT {
     @Test
     public void initMapIT() throws Exception {
         assertThat(configurator.getLightminJobExecutionDao()).isNotNull();
-        assertThat(configurator.getTablePrefix()).isEqualTo("BATCH_");
+        assertThat(configurator.getRepositoryTablePrefix()).isEqualTo("BATCH_");
     }
 
 }

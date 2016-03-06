@@ -25,7 +25,7 @@ public class SpringBatchLightminConfigurationJdbcPrefixIT {
     @Test
     public void initJdbcIT() throws Exception {
         assertThat(configurator.getLightminJobExecutionDao()).isInstanceOf(JdbcLightminJobExecutionDao.class);
-        assertThat(configurator.getTablePrefix()).isEqualTo("BATCH_");
+        assertThat(configurator.getRepositoryTablePrefix()).isEqualTo("BATCH_");
     }
 
 }
