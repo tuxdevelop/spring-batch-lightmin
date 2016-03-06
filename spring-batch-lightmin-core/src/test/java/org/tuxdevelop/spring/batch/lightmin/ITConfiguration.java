@@ -1,11 +1,10 @@
 package org.tuxdevelop.spring.batch.lightmin;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.tuxdevelop.spring.batch.lightmin.configuration.CommonSpringBatchLightminConfiguration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
-@ComponentScan(basePackages = "org.tuxdevelop.spring.batch.lightmin")
-public class ITConfiguration extends CommonSpringBatchLightminConfiguration {
+@Import(value = {ITSchedulerConfiguration.class, ITJobConfiguration.class, ITPersistenceConfiguration.class})
+public class ITConfiguration {
 
 }
