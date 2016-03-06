@@ -8,6 +8,7 @@ import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -102,5 +103,11 @@ public class CommonSpringBatchLightminConfiguration {
                                                    final AdminService adminService,
                                                    final SchedulerService schedulerService) throws Exception {
         return new JobCreationListener(applicationContext, jobRegistry, adminService, schedulerService);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(JobConfigurationRepository.class)
+    public JobConfigurationRepository jobConfigurationRepository(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
+        return defaultSpringBatchLightminConfigurator.getJobConfigurationRepository();
     }
 }

@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.configuration;
 
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobOperator;
+import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 import org.tuxdevelop.spring.batch.lightmin.service.StepService;
@@ -40,5 +41,10 @@ public interface SpringBatchLightminConfigurator {
     /**
      * @return the current value of configured table.prefix
      */
-    String getTablePrefix();
+    String getRepositoryTablePrefix();
+
+    /**
+     * @return an instance of {@link org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository}
+     */
+    JobConfigurationRepository getJobConfigurationRepository();
 }

@@ -7,11 +7,13 @@ import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.batch.core.configuration.support.MapJobRegistry;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.support.SimpleJobOperator;
-import org.springframework.batch.core.repository.dao.AbstractJdbcBatchMetadataDao;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.incrementer.AbstractDataFieldMaxValueIncrementer;
 import org.springframework.jdbc.support.incrementer.DataFieldMaxValueIncrementer;
+import org.tuxdevelop.spring.batch.lightmin.admin.repository.JdbcJobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.admin.repository.MapJobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.dao.JdbcLightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.dao.MapLightminJobExecutionDao;
@@ -38,9 +40,12 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
     private JobOperator jobOperator;
     private JobRegistry jobRegistry;
     private LightminJobExecutionDao lightminJobExecutionDao;
+    private JobConfigurationRepository jobConfigurationRepository;
+    private final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
-    private String tablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
+    private final String repositoryTablePrefix;
+    private final String configurationTablePrefix;
 
     private final DataFieldMaxValueIncrementer incrementer = new AbstractDataFieldMaxValueIncrementer() {
         @Override
@@ -49,21 +54,18 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
         }
     };
 
-    public DefaultSpringBatchLightminConfigurator() {
+    public DefaultSpringBatchLightminConfigurator(final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
+        this.repositoryTablePrefix = springBatchLightminConfigurationProperties.getRepositoryTablePrefix();
+        this.configurationTablePrefix = springBatchLightminConfigurationProperties.getConfigurationTablePrefix();
+        this.springBatchLightminConfigurationProperties = springBatchLightminConfigurationProperties;
     }
 
-    public DefaultSpringBatchLightminConfigurator(final String tablePrefix) {
-        this.tablePrefix = tablePrefix;
-    }
-
-    public DefaultSpringBatchLightminConfigurator(final DataSource dataSource) {
+    public DefaultSpringBatchLightminConfigurator(final DataSource dataSource, final
+    SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
         setDataSource(dataSource);
-    }
-
-    public DefaultSpringBatchLightminConfigurator(final DataSource dataSource,
-                                                  final String tablePrefix) {
-        setDataSource(dataSource);
-        this.tablePrefix = tablePrefix;
+        this.repositoryTablePrefix = springBatchLightminConfigurationProperties.getRepositoryTablePrefix();
+        this.configurationTablePrefix = springBatchLightminConfigurationProperties.getConfigurationTablePrefix();
+        this.springBatchLightminConfigurationProperties = springBatchLightminConfigurationProperties;
     }
 
     public void setDataSource(final DataSource dataSource) {
@@ -96,9 +98,13 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
         return lightminJobExecutionDao;
     }
 
+    public String getRepositoryTablePrefix() {
+        return repositoryTablePrefix;
+    }
+
     @Override
-    public String getTablePrefix() {
-        return tablePrefix;
+    public JobConfigurationRepository getJobConfigurationRepository() {
+        return jobConfigurationRepository;
     }
 
     @Override
@@ -111,9 +117,19 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
     public void initialize() {
         try {
             if (this.dataSource != null) {
-                createJdbcComponents();
+                if (this.springBatchLightminConfigurationProperties.getRepositoryForceMap()) {
+                    createLightminMapJobExecutionDao();
+                } else {
+                    createLightminJdbcJobExecutionDao();
+                }
+                if (this.springBatchLightminConfigurationProperties.getConfigurationForceMap()) {
+                    createMapJobConfigurationRepository();
+                } else {
+                    createJdbcJobConfigurationRepository();
+                }
             } else {
-                createMapComponents();
+                createLightminMapJobExecutionDao();
+                createMapJobConfigurationRepository();
             }
             this.jobRegistry = createJobRegistry();
             this.jobOperator = createJobOperator();
@@ -127,19 +143,27 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
         }
     }
 
-    protected void createJdbcComponents() throws Exception {
+    protected void createLightminJdbcJobExecutionDao() throws Exception {
         this.lightminJobExecutionDao = createLightminJobExecutionDao();
     }
 
-    protected void createMapComponents() throws Exception {
+    protected void createLightminMapJobExecutionDao() throws Exception {
         this.lightminJobExecutionDao = new MapLightminJobExecutionDao(batchConfigurer.getJobExplorer());
+    }
+
+    protected void createMapJobConfigurationRepository() {
+        this.jobConfigurationRepository = new MapJobConfigurationRepository();
+    }
+
+    protected void createJdbcJobConfigurationRepository() {
+        this.jobConfigurationRepository = new JdbcJobConfigurationRepository(jdbcTemplate, configurationTablePrefix);
     }
 
     protected LightminJobExecutionDao createLightminJobExecutionDao() throws Exception {
         final JdbcLightminJobExecutionDao dao = new JdbcLightminJobExecutionDao();
         dao.setJdbcTemplate(jdbcTemplate);
         dao.setJobExecutionIncrementer(incrementer);
-        dao.setTablePrefix(tablePrefix);
+        dao.setTablePrefix(repositoryTablePrefix);
         dao.afterPropertiesSet();
         return dao;
     }

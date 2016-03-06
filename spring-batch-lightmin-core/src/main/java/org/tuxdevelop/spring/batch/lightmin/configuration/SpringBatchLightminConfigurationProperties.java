@@ -12,6 +12,7 @@ public class SpringBatchLightminConfigurationProperties {
 
     private Boolean repositoryForceMap = FORCE_MAP_DEFAULT;
     private Boolean configurationForceMap = FORCE_MAP_DEFAULT;
-    private String tablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
+    private String repositoryTablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
+    private String configurationTablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
 
 }

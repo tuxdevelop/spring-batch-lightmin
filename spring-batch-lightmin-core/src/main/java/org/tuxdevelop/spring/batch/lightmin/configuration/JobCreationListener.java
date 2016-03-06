@@ -29,8 +29,8 @@ public class JobCreationListener implements ApplicationListener<ContextRefreshed
     private final AdminService adminService;
     private final SchedulerService schedulerService;
 
-    public JobCreationListener(final ApplicationContext applicationContext, final JobRegistry jobRegistry, final
-    AdminService adminService, final SchedulerService schedulerService) {
+    public JobCreationListener(final ApplicationContext applicationContext, final JobRegistry jobRegistry,
+                               final AdminService adminService, final SchedulerService schedulerService) {
         this.applicationContext = applicationContext;
         this.jobRegistry = jobRegistry;
         this.adminService = adminService;
@@ -48,7 +48,7 @@ public class JobCreationListener implements ApplicationListener<ContextRefreshed
                 final CommonJobFactory commonJobFactory = new CommonJobFactory(job, jobName);
                 try {
                     jobRegistry.register(commonJobFactory);
-                } catch (DuplicateJobException e) {
+                } catch (final DuplicateJobException e) {
                     log.error("Job with name: " + jobName + " is already registered!");
                 }
             }

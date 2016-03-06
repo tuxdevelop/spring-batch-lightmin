@@ -31,17 +31,17 @@ public class SpringBatchLightminConfiguration {
     public BatchConfigurer batchConfigurer() {
         final DefaultSpringBatchLightminBatchConfigurer batchConfigurer;
         if (dataSource != null && !springBatchLightminConfigurationProperties.getRepositoryForceMap()) {
-            if (springBatchLightminConfigurationProperties.getTablePrefix() != null &&
-                    !springBatchLightminConfigurationProperties.getTablePrefix().isEmpty()) {
+            if (springBatchLightminConfigurationProperties.getRepositoryTablePrefix() != null &&
+                    !springBatchLightminConfigurationProperties.getRepositoryTablePrefix().isEmpty()) {
                 batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource,
-                        springBatchLightminConfigurationProperties.getTablePrefix());
+                        springBatchLightminConfigurationProperties.getRepositoryTablePrefix());
             } else {
                 batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource);
             }
-        } else if (springBatchLightminConfigurationProperties.getTablePrefix() != null &&
-                !springBatchLightminConfigurationProperties.getTablePrefix().isEmpty()) {
+        } else if (springBatchLightminConfigurationProperties.getRepositoryTablePrefix() != null &&
+                !springBatchLightminConfigurationProperties.getRepositoryTablePrefix().isEmpty()) {
             batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(
-                    springBatchLightminConfigurationProperties.getTablePrefix());
+                    springBatchLightminConfigurationProperties.getRepositoryTablePrefix());
         } else {
             batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer();
         }
@@ -56,25 +56,12 @@ public class SpringBatchLightminConfiguration {
         final DefaultSpringBatchLightminConfigurator configuration;
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Create DefaultSpringBatchLightminConfigurator ");
-        if (dataSource != null && !springBatchLightminConfigurationProperties.getConfigurationForceMap()) {
-            if (springBatchLightminConfigurationProperties.getTablePrefix() != null &&
-                    !springBatchLightminConfigurationProperties.getTablePrefix().isEmpty()) {
-                configuration = new DefaultSpringBatchLightminConfigurator(dataSource,
-                        springBatchLightminConfigurationProperties.getTablePrefix());
-                stringBuilder.append("with dataSource and tablePrefix: ");
-                stringBuilder.append(springBatchLightminConfigurationProperties.getTablePrefix());
-            } else {
-                configuration = new DefaultSpringBatchLightminConfigurator(dataSource);
-                stringBuilder.append("with dataSource");
-            }
-        } else if (springBatchLightminConfigurationProperties.getTablePrefix() != null &&
-                !springBatchLightminConfigurationProperties.getTablePrefix().isEmpty()) {
-            configuration = new DefaultSpringBatchLightminConfigurator(
-                    springBatchLightminConfigurationProperties.getTablePrefix());
-            stringBuilder.append("with tablePrefix: ");
-            stringBuilder.append(springBatchLightminConfigurationProperties.getTablePrefix());
+        if (dataSource != null) {
+            configuration = new DefaultSpringBatchLightminConfigurator(dataSource, springBatchLightminConfigurationProperties);
+            stringBuilder.append("with dataSource and repositoryTablePrefix: ");
+            stringBuilder.append(springBatchLightminConfigurationProperties.getRepositoryTablePrefix());
         } else {
-            configuration = new DefaultSpringBatchLightminConfigurator();
+            configuration = new DefaultSpringBatchLightminConfigurator(springBatchLightminConfigurationProperties);
         }
         configuration.setBatchConfigurer(batchConfigurer);
         log.info(stringBuilder.toString());
