@@ -1,11 +1,5 @@
 package org.tuxdevelop.spring.batch.lightmin.dao;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
-import java.util.List;
-
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.Job;
@@ -19,6 +13,11 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.tuxdevelop.spring.batch.lightmin.ITConfiguration;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ITConfiguration.class)
@@ -41,6 +40,7 @@ public class JdbcLightminJobExecutionDaoIT {
 
     @Test
     public void getJobExecutionCountIT() {
+        init();
         final JobInstance jobInstance = jobExplorer.getJobInstance(1L);
         final int count = jdbcLightminJobExecutionDao.getJobExecutionCount(jobInstance);
         assertThat(count).isEqualTo(JOB_EXECUTION_COUNT);
@@ -48,6 +48,7 @@ public class JdbcLightminJobExecutionDaoIT {
 
     @Test
     public void getJobExecutionCountZeroIT() {
+        init();
         final JobInstance jobInstance = new JobInstance(9999L, "notExisting");
         final int count = jdbcLightminJobExecutionDao.getJobExecutionCount(jobInstance);
         assertThat(count).isEqualTo(0);
@@ -55,6 +56,7 @@ public class JdbcLightminJobExecutionDaoIT {
 
     @Test
     public void findJobExecutionsIT() {
+        init();
         final JobInstance jobInstance = jobExplorer.getJobInstance(1L);
         final List<JobExecution> jobExecutions = jdbcLightminJobExecutionDao.findJobExecutions(jobInstance, 0,
                 JOB_EXECUTION_COUNT);
@@ -67,6 +69,7 @@ public class JdbcLightminJobExecutionDaoIT {
 
     @Test
     public void findJobExecutionsPageIT() {
+        init();
         final int count = 5;
         final JobInstance jobInstance = jobExplorer.getJobInstance(1L);
         final List<JobExecution> jobExecutions = jdbcLightminJobExecutionDao.findJobExecutions(jobInstance, 0,
@@ -80,14 +83,14 @@ public class JdbcLightminJobExecutionDaoIT {
 
     @Test
     public void findJobExecutionsEmptyIT() {
+        init();
         final JobInstance jobInstance = new JobInstance(9999L, "notExisting");
         final List<JobExecution> jobExecutions = jdbcLightminJobExecutionDao.findJobExecutions(jobInstance, 0, 10);
         assertThat(jobExecutions).isNotNull();
         assertThat(jobExecutions).isEmpty();
     }
 
-    @Before
-    public void init() {
+    private void init() {
         try {
             for (int i = 0; i < JOB_EXECUTION_COUNT; i++) {
                 jobLauncher.run(simpleJob, new JobParametersBuilder().toJobParameters());
