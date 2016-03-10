@@ -1,17 +1,5 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Fail.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,10 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
-import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobExecutionNotRunningException;
@@ -35,13 +20,22 @@ import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Fail.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
+
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultJobServiceTest {
 
     private static final String JOB_NAME = "sampleJob";
     private static final String JOB_NAME_2 = "sampleJob2";
     private static final String JOB_NAME_3 = "sampleJob3";
-    private static final String[] JOB_NAMES = new String[] { JOB_NAME, JOB_NAME_2, JOB_NAME_3 };
+    private static final String[] JOB_NAMES = new String[]{JOB_NAME, JOB_NAME_2, JOB_NAME_3};
 
     @InjectMocks
     private DefaultJobService jobService;
@@ -197,6 +191,27 @@ public class DefaultJobServiceTest {
         final Long jobExecutionId = 10L;
         when(jobOperator.stop(jobExecutionId)).thenThrow(NoSuchJobExecutionException.class);
         jobService.stopJobExecution(jobExecutionId);
+    }
+
+    @Test
+    public void getLastJobParametersTest() {
+        final List<JobExecution> jobExecutions = new LinkedList<JobExecution>();
+        final JobParameters jobParameters = new JobParametersBuilder().addLong("long", 1L).addString("String",
+                "someString").toJobParameters();
+        final JobExecution jobExecution = new JobExecution(1L, jobParameters, "test");
+        jobExecutions.add(jobExecution);
+        when(lightminJobExecutionDao.getJobExecutions(anyString(), anyInt(), anyInt())).thenReturn(jobExecutions);
+        final JobParameters result = jobService.getLastJobParameters("test");
+        assertThat(result).isEqualTo(jobParameters);
+    }
+
+    @Test
+    public void getLastJobParametersNotExistingTest() {
+        final List<JobExecution> jobExecutions = new LinkedList<JobExecution>();
+        final JobParameters jobParameters = new JobParameters();
+        when(lightminJobExecutionDao.getJobExecutions(anyString(), anyInt(), anyInt())).thenReturn(jobExecutions);
+        final JobParameters result = jobService.getLastJobParameters("test");
+        assertThat(result).isEqualTo(jobParameters);
     }
 
     @Before

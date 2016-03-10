@@ -77,7 +77,24 @@ public class JdbcLightminJobExecutionDaoIT {
         assertThat(jobExecutions).isNotNull();
         assertThat(jobExecutions).hasSize(count);
         for (final JobExecution jobExecution : jobExecutions) {
-            assertThat(jobExecution.getJobInstance()).isEqualTo(jobInstance);
+            assertThat(jobExecution).isEqualTo(jobInstance);
+        }
+    }
+
+    @Test
+    public void getJobExecutionsPageIT() {
+        init();
+        final int count = 5;
+        final JobInstance jobInstance = jobExplorer.getJobInstance(1L);
+        final List<JobExecution> jobExecutions = jdbcLightminJobExecutionDao.getJobExecutions(jobInstance.getJobName(), 0,
+                count);
+        assertThat(jobExecutions).isNotNull();
+        assertThat(jobExecutions).hasSize(count);
+        for (final JobExecution jobExecution : jobExecutions) {
+            final JobExecution fromRepo = jobExplorer.getJobExecution(jobExecution.getId());
+            //has to be set to null
+            fromRepo.setJobInstance(null);
+            assertThat(jobExecution).isEqualTo(fromRepo);
         }
     }
 
