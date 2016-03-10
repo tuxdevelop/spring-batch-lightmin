@@ -77,7 +77,7 @@ public class JdbcLightminJobExecutionDaoIT {
         assertThat(jobExecutions).isNotNull();
         assertThat(jobExecutions).hasSize(count);
         for (final JobExecution jobExecution : jobExecutions) {
-            assertThat(jobExecution).isEqualTo(jobInstance);
+            assertThat(jobExecution.getJobInstance()).isEqualTo(jobInstance);
         }
     }
 
