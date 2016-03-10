@@ -45,7 +45,7 @@ public abstract class AbstractScheduler implements InitializingBean {
             try {
                 attachJobIncrementer();
                 jobLauncher.run(job, jobParameters);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new SpringBatchLightminApplicationException(e, e.getMessage());
             }
         }
