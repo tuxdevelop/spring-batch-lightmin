@@ -1,13 +1,10 @@
 package org.tuxdevelop.spring.batch.lightmin.dao;
 
-import java.util.List;
-
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 
-/**
- * Created by milo on 19/10/15.
- */
+import java.util.List;
+
 public interface LightminJobExecutionDao {
 
     /**
@@ -23,4 +20,12 @@ public interface LightminJobExecutionDao {
      * @return the count of executions
      */
     int getJobExecutionCount(JobInstance jobInstance);
+
+    /**
+     * @param jobName name of the {@link org.springframework.batch.core.Job}
+     * @param start   start index of the page
+     * @param count   size of the page
+     * @return a Page of {@link org.springframework.batch.core.JobExecution}s
+     */
+    List<JobExecution> getJobExecutions(String jobName, int start, int count);
 }

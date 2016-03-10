@@ -1,13 +1,11 @@
 package org.tuxdevelop.spring.batch.lightmin.dao;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.launch.NoSuchJobException;
+
+import java.util.*;
 
 public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
 
@@ -28,6 +26,25 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
     public int getJobExecutionCount(final JobInstance jobInstance) {
         final List<JobExecution> jobExecutions = jobExplorer.getJobExecutions(jobInstance);
         return jobExecutions.size();
+    }
+
+    @Override
+    public List<JobExecution> getJobExecutions(final String jobName, final int start, final int count) {
+        final List<JobExecution> jobExecutions = new LinkedList<JobExecution>();
+
+        int jobInstanceCount;
+        try {
+            jobInstanceCount = jobExplorer.getJobInstanceCount(jobName);
+        } catch (final NoSuchJobException e) {
+            jobInstanceCount = 0;
+        }
+        final List<JobInstance> jobInstances = jobExplorer.getJobInstances(jobName, 0, jobInstanceCount);
+        for (final JobInstance jobInstance : jobInstances) {
+            final List<JobExecution> jobExecutionsByInstance = jobExplorer.getJobExecutions(jobInstance);
+            jobExecutions.addAll(jobExecutionsByInstance);
+        }
+        sortDescending(jobExecutions);
+        return subset(jobExecutions, start, count);
     }
 
     void sortDescending(final List<JobExecution> result) {

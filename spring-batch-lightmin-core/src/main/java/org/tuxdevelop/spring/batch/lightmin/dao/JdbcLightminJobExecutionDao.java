@@ -1,74 +1,78 @@
 package org.tuxdevelop.spring.batch.lightmin.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.batch.core.BatchStatus;
-import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
-import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.repository.dao.JdbcJobExecutionDao;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.batch.item.database.Order;
+import org.springframework.batch.item.database.PagingQueryProvider;
+import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 
-public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements LightminJobExecutionDao {
+import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-    private final String FIND_JOB_EXECUTIONS = "SELECT " +
-            "JOB_EXECUTION_ID, " +
-            "START_TIME, " +
-            "END_TIME, " +
-            "STATUS, " +
-            "EXIT_CODE, " +
-            "EXIT_MESSAGE, " +
-            "CREATE_TIME, " +
-            "LAST_UPDATED, " +
-            "VERSION, " +
-            "JOB_CONFIGURATION_LOCATION " +
-            "FROM" +
-            " %PREFIX%JOB_EXECUTION" +
-            " WHERE" +
-            " JOB_INSTANCE_ID = ? " +
-            "ORDER BY JOB_EXECUTION_ID DESC";
+public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements LightminJobExecutionDao, InitializingBean {
+
+    private static final String FIELDS = "E.JOB_EXECUTION_ID, E.START_TIME, E.END_TIME, E.STATUS, E.EXIT_CODE, E.EXIT_MESSAGE, "
+            + "E.CREATE_TIME, E.LAST_UPDATED, E.VERSION, I.JOB_INSTANCE_ID, I.JOB_NAME";
 
     private final String GET_EXECUTION_COUNT = "SELECT " +
             "COUNT(*) " +
             "FROM %PREFIX%JOB_EXECUTION" +
             " WHERE JOB_INSTANCE_ID = ?";
 
+    private PagingQueryProvider byJobNamePagingQueryProvider;
+    private PagingQueryProvider byJobInstanceIdExecutionsPagingQueryProvider;
+
+    private final DataSource dataSource;
+
+    public JdbcLightminJobExecutionDao(final DataSource dataSource) throws Exception {
+        this.dataSource = dataSource;
+    }
+
     @Override
     public List<JobExecution> findJobExecutions(final JobInstance jobInstance, final int start, final int count) {
-        final ResultSetExtractor<List<JobExecution>> extractor = new ResultSetExtractor<List<JobExecution>>() {
-            private final List<JobExecution> list = new ArrayList<JobExecution>();
-
-            @Override
-            public List<JobExecution> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                int rowNumber;
-                for (rowNumber = 0; rowNumber < start && rs.next(); ++rowNumber) {
-                }
-
-                while (rowNumber < start + count && rs.next()) {
-                    final JobExecutionRowMapper rowMapper = new JdbcLightminJobExecutionDao.JobExecutionRowMapper(
-                            jobInstance);
-                    list.add(rowMapper.mapRow(rs, rowNumber));
-                    ++rowNumber;
-                }
-                return list;
-            }
-        };
-        final List<JobExecution> result = getJdbcTemplate().query(getQuery(FIND_JOB_EXECUTIONS),
-                new Object[] { jobInstance.getId() },
-                extractor);
-        return result;
+        if (start <= 0) {
+            return getJdbcTemplate().query(byJobInstanceIdExecutionsPagingQueryProvider.generateFirstPageQuery(count),
+                    new JobExecutionRowMapper(jobInstance), jobInstance.getInstanceId());
+        }
+        try {
+            final Long startAfterValue = getJdbcTemplate().queryForObject(
+                    byJobInstanceIdExecutionsPagingQueryProvider.generateJumpToItemQuery(start, count), Long.class,
+                    jobInstance.getInstanceId());
+            return getJdbcTemplate().query(byJobInstanceIdExecutionsPagingQueryProvider.generateRemainingPagesQuery(count),
+                    new JobExecutionRowMapper(jobInstance), jobInstance.getInstanceId(), startAfterValue);
+        } catch (final IncorrectResultSizeDataAccessException e) {
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public int getJobExecutionCount(final JobInstance jobInstance) {
         return getJdbcTemplate().queryForObject(getQuery(GET_EXECUTION_COUNT), Integer.class,
-                new Object[] { jobInstance.getInstanceId() });
+                new Object[]{jobInstance.getInstanceId()});
+    }
+
+    @Override
+    public List<JobExecution> getJobExecutions(final String jobName, final int start, final int count) {
+        if (start <= 0) {
+            return getJdbcTemplate().query(byJobNamePagingQueryProvider.generateFirstPageQuery(count),
+                    new JobExecutionRowMapper(), jobName);
+        }
+        try {
+            final Long startAfterValue = getJdbcTemplate().queryForObject(
+                    byJobNamePagingQueryProvider.generateJumpToItemQuery(start, count), Long.class, jobName);
+            return getJdbcTemplate().query(byJobNamePagingQueryProvider.generateRemainingPagesQuery(count),
+                    new JobExecutionRowMapper(), jobName, startAfterValue);
+        } catch (final IncorrectResultSizeDataAccessException e) {
+            return Collections.emptyList();
+        }
     }
 
     /**
@@ -79,6 +83,10 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements 
 
         private final JobInstance jobInstance;
         private JobParameters jobParameters;
+
+        public JobExecutionRowMapper() {
+            this(null);
+        }
 
         public JobExecutionRowMapper(final JobInstance jobInstance) {
             this.jobInstance = jobInstance;
@@ -108,5 +116,51 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements 
             jobExecution.setVersion(Integer.valueOf(resultSet.getInt(9)));
             return jobExecution;
         }
+    }
+
+    /**
+     * Ported From Spring Batch Admin Searchable JdbcSearchableJobExecutionDao
+     */
+
+    /**
+     * @return a {@link PagingQueryProvider} for all job executions
+     * @throws Exception
+     */
+    private PagingQueryProvider getPagingQueryProvider() throws Exception {
+        return getPagingQueryProvider(null);
+    }
+
+    /**
+     * @return a {@link PagingQueryProvider} for all job executions with the provided where clause
+     * @throws Exception
+     */
+    private PagingQueryProvider getPagingQueryProvider(final String whereClause) throws Exception {
+        return getPagingQueryProvider(null, whereClause);
+    }
+
+    /**
+     * @return a {@link PagingQueryProvider} with a where clause to narrow the query
+     * @throws Exception
+     */
+    private PagingQueryProvider getPagingQueryProvider(String fromClause, String whereClause) throws Exception {
+        final SqlPagingQueryProviderFactoryBean factory = new SqlPagingQueryProviderFactoryBean();
+        factory.setDataSource(dataSource);
+        fromClause = "%PREFIX%JOB_EXECUTION E, %PREFIX%JOB_INSTANCE I" + (fromClause == null ? "" : ", " + fromClause);
+        factory.setFromClause(getQuery(fromClause));
+        factory.setSelectClause(FIELDS);
+        final Map<String, Order> sortKeys = new HashMap<String, Order>();
+        sortKeys.put("JOB_EXECUTION_ID", Order.DESCENDING);
+        factory.setSortKeys(sortKeys);
+        whereClause = "E.JOB_INSTANCE_ID=I.JOB_INSTANCE_ID" + (whereClause == null ? "" : " and " + whereClause);
+        factory.setWhereClause(whereClause);
+
+        return factory.getObject();
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
+        this.byJobNamePagingQueryProvider = getPagingQueryProvider("I.JOB_NAME=?");
+        this.byJobInstanceIdExecutionsPagingQueryProvider = getPagingQueryProvider("I.JOB_INSTANCE_ID=?");
     }
 }
