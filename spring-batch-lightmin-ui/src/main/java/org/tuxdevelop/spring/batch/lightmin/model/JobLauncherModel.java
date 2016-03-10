@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.model;
 
 import lombok.Data;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
 
 /**
  * @author Marcel Becker
@@ -9,6 +10,7 @@ import lombok.Data;
 @Data
 public class JobLauncherModel {
 
-	private String jobName;
-	private String jobParameters;
+    private String jobName;
+    private String jobParameters;
+    private JobIncrementer jobIncrementer;
 }
