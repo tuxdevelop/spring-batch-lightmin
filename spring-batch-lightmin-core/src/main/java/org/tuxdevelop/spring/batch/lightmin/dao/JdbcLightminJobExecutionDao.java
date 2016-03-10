@@ -1,6 +1,19 @@
 package org.tuxdevelop.spring.batch.lightmin.dao;
 
-import org.springframework.batch.core.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.repository.dao.JdbcJobExecutionDao;
 import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.PagingQueryProvider;
@@ -9,15 +22,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 
-import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements LightminJobExecutionDao, InitializingBean {
+public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao
+        implements LightminJobExecutionDao, InitializingBean {
 
     private static final String FIELDS = "E.JOB_EXECUTION_ID, E.START_TIME, E.END_TIME, E.STATUS, E.EXIT_CODE, E.EXIT_MESSAGE, "
             + "E.CREATE_TIME, E.LAST_UPDATED, E.VERSION, I.JOB_INSTANCE_ID, I.JOB_NAME";
@@ -46,7 +52,8 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements 
             final Long startAfterValue = getJdbcTemplate().queryForObject(
                     byJobInstanceIdExecutionsPagingQueryProvider.generateJumpToItemQuery(start, count), Long.class,
                     jobInstance.getInstanceId());
-            return getJdbcTemplate().query(byJobInstanceIdExecutionsPagingQueryProvider.generateRemainingPagesQuery(count),
+            return getJdbcTemplate().query(
+                    byJobInstanceIdExecutionsPagingQueryProvider.generateRemainingPagesQuery(count),
                     new JobExecutionRowMapper(jobInstance), jobInstance.getInstanceId(), startAfterValue);
         } catch (final IncorrectResultSizeDataAccessException e) {
             return Collections.emptyList();
@@ -56,7 +63,7 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements 
     @Override
     public int getJobExecutionCount(final JobInstance jobInstance) {
         return getJdbcTemplate().queryForObject(getQuery(GET_EXECUTION_COUNT), Integer.class,
-                new Object[]{jobInstance.getInstanceId()});
+                new Object[] { jobInstance.getInstanceId() });
     }
 
     @Override
@@ -123,15 +130,8 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements 
      */
 
     /**
-     * @return a {@link PagingQueryProvider} for all job executions
-     * @throws Exception
-     */
-    private PagingQueryProvider getPagingQueryProvider() throws Exception {
-        return getPagingQueryProvider(null);
-    }
-
-    /**
-     * @return a {@link PagingQueryProvider} for all job executions with the provided where clause
+     * @return a {@link PagingQueryProvider} for all job executions with the
+     *         provided where clause
      * @throws Exception
      */
     private PagingQueryProvider getPagingQueryProvider(final String whereClause) throws Exception {
@@ -139,7 +139,8 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements 
     }
 
     /**
-     * @return a {@link PagingQueryProvider} with a where clause to narrow the query
+     * @return a {@link PagingQueryProvider} with a where clause to narrow the
+     *         query
      * @throws Exception
      */
     private PagingQueryProvider getPagingQueryProvider(String fromClause, String whereClause) throws Exception {
@@ -160,7 +161,7 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements 
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
-        this.byJobNamePagingQueryProvider = getPagingQueryProvider("I.JOB_NAME=?");
-        this.byJobInstanceIdExecutionsPagingQueryProvider = getPagingQueryProvider("I.JOB_INSTANCE_ID=?");
+        byJobNamePagingQueryProvider = getPagingQueryProvider("I.JOB_NAME=?");
+        byJobInstanceIdExecutionsPagingQueryProvider = getPagingQueryProvider("I.JOB_INSTANCE_ID=?");
     }
 }

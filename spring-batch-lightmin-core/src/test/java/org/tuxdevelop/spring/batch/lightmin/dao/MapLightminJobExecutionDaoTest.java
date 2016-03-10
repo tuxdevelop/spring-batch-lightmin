@@ -1,5 +1,8 @@
 package org.tuxdevelop.spring.batch.lightmin.dao;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,13 +16,8 @@ import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean;
 import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class MapLightminJobExecutionDaoTest {
 
-    private static final Long JOB_INSTANCE_ID = 99L;
     private static final Integer JOB_EXECUTION_COUNT = 10;
 
     private MapLightminJobExecutionDao mapLightminJobExecutionDao;
@@ -67,7 +65,8 @@ public class MapLightminJobExecutionDaoTest {
     @Test
     public void getJobExecutionsPageIT() {
         final int count = 5;
-        final List<JobExecution> jobExecutions = mapLightminJobExecutionDao.getJobExecutions(jobInstance.getJobName(), 0,
+        final List<JobExecution> jobExecutions = mapLightminJobExecutionDao.getJobExecutions(jobInstance.getJobName(),
+                0,
                 count);
         assertThat(jobExecutions).isNotNull();
         assertThat(jobExecutions).hasSize(count);
@@ -90,7 +89,8 @@ public class MapLightminJobExecutionDaoTest {
         mapJobRepositoryFactoryBean.getObject();
         jobExecutionDao = mapJobRepositoryFactoryBean.getJobExecutionDao();
         jobInstanceDao = mapJobRepositoryFactoryBean.getJobInstanceDao();
-        final MapJobExplorerFactoryBean mapJobExplorerFactoryBean = new MapJobExplorerFactoryBean(mapJobRepositoryFactoryBean);
+        final MapJobExplorerFactoryBean mapJobExplorerFactoryBean = new MapJobExplorerFactoryBean(
+                mapJobRepositoryFactoryBean);
         jobExplorer = mapJobExplorerFactoryBean.getObject();
         mapLightminJobExecutionDao = new MapLightminJobExecutionDao(jobExplorer);
         jobInstance = jobInstanceDao.createJobInstance("someJob", new JobParametersBuilder().toJobParameters());
