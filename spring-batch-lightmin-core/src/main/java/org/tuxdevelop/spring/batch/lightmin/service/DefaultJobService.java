@@ -4,10 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.NoSuchJobException;
+import org.springframework.util.CollectionUtils;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
@@ -50,10 +52,7 @@ public class DefaultJobService implements JobService {
 
     @Override
     public int getJobExecutionCount(final JobInstance jobInstance) {
-        final int jobExecutionCount;
-        jobExecutionCount = lightminJobExecutionDao.getJobExecutionCount(jobInstance);
-
-        return jobExecutionCount;
+        return lightminJobExecutionDao.getJobExecutionCount(jobInstance);
     }
 
     @Override
@@ -126,6 +125,20 @@ public class DefaultJobService implements JobService {
         } catch (final Exception e) {
             throw new SpringBatchLightminApplicationException(e, e.getMessage());
         }
+    }
+
+    @Override
+    public JobParameters getLastJobParameters(final String jobName) {
+        final List<JobExecution> executions = lightminJobExecutionDao.getJobExecutions(jobName, 0, 1);
+        JobExecution lastExecution = null;
+        if (!CollectionUtils.isEmpty(executions)) {
+            lastExecution = executions.iterator().next();
+        }
+        JobParameters oldParameters = new JobParameters();
+        if (lastExecution != null) {
+            oldParameters = lastExecution.getJobParameters();
+        }
+        return oldParameters;
     }
 
     @Override
