@@ -160,7 +160,7 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
     }
 
     protected LightminJobExecutionDao createLightminJobExecutionDao() throws Exception {
-        final JdbcLightminJobExecutionDao dao = new JdbcLightminJobExecutionDao();
+        final JdbcLightminJobExecutionDao dao = new JdbcLightminJobExecutionDao(dataSource);
         dao.setJdbcTemplate(jdbcTemplate);
         dao.setJobExecutionIncrementer(incrementer);
         dao.setTablePrefix(repositoryTablePrefix);
