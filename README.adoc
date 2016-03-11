@@ -270,9 +270,14 @@ image::job_launcher.png[]
 
 Name of the _Spring Batch Job_
 
-===== Job Parameters
+===== Job Launcher Configuration
 
-Configurable parameters, which will be passed to the _JobLauncher_ on start.
+image::job_launcher_configure.png[]
+
+====== Job Parameters
+
+Configurable parameters, which will be passed to the _JobLauncher_ on start. If an execution of the selected has
+already beeb launched, the _JobParameters_ of the last run will be shown.
 
 The format of the parameters has to
 
@@ -286,3 +291,10 @@ Possible types are
 * Long
 * Double
 * Date
+
+====== Job Incrementer
+
+Additional job parameter, to give each job instance uniqueness.
+
+* NONE
+* DATE
