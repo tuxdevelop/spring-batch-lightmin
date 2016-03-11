@@ -4,25 +4,25 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 
 @Configuration
+@Import(value = {ITPersistenceConfiguration.class})
+@PropertySource(value = "classpath:application.properties")
 public class ITInfrastructureConfiguration {
 
-    @Autowired
-    private JobRepository jobRepository;
-
     @Bean
-    public StepBuilderFactory stepBuilderFactory() {
+    public StepBuilderFactory stepBuilderFactory(final JobRepository jobRepository) {
         return new StepBuilderFactory(jobRepository, new ResourcelessTransactionManager());
     }
 
     @Bean
-    public JobBuilderFactory jobBuilderFactory() {
+    public JobBuilderFactory jobBuilderFactory(final JobRepository jobRepository) {
         return new JobBuilderFactory(jobRepository);
     }
 

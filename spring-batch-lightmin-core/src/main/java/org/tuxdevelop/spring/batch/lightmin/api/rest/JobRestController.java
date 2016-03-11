@@ -1,13 +1,14 @@
 package org.tuxdevelop.spring.batch.lightmin.api.rest;
 
 
-import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.tuxdevelop.spring.batch.lightmin.api.domain.JobInstanceExecutions;
-import org.tuxdevelop.spring.batch.lightmin.api.domain.JobInstances;
+import org.tuxdevelop.spring.batch.lightmin.api.response.BatchToResponseMapper;
+import org.tuxdevelop.spring.batch.lightmin.api.response.JobExecution;
+import org.tuxdevelop.spring.batch.lightmin.api.response.JobInstanceExecutions;
+import org.tuxdevelop.spring.batch.lightmin.api.response.JobInstances;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 
 import java.util.Collection;
@@ -28,17 +29,17 @@ public class JobRestController extends AbstractRestController implements Initial
 
     @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTIONS_JOB_EXECUTION_ID, produces = PRODUCES, method = RequestMethod.GET)
     public JobExecution getJobExecutionById(@PathVariable(value = "jobExecutionId") final Long jobExecutionId) {
-        return jobService.getJobExecution(jobExecutionId);
+        return BatchToResponseMapper.map(jobService.getJobExecution(jobExecutionId));
     }
 
     @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTIONS_JOB_INSTANCES_JOB_INSTANCE_ID, produces = PRODUCES, method = RequestMethod.GET)
     public JobInstanceExecutions getJobExecutionsByJobInstanceId(@PathVariable("jobInstanceId") final Long jobInstanceId) {
         final JobInstance jobInstance = jobService.getJobInstance(jobInstanceId);
-        final Collection<JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance);
+        final Collection<org.springframework.batch.core.JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance);
         final JobInstanceExecutions jobInstanceExecutions = new JobInstanceExecutions();
         jobInstanceExecutions.setJobName(jobInstance.getJobName());
         jobInstanceExecutions.setJobInstanceId(jobInstanceId);
-        jobInstanceExecutions.setJobExecutions(jobExecutions);
+        jobInstanceExecutions.setJobExecutions(BatchToResponseMapper.mapExecutions(jobExecutions));
         return jobInstanceExecutions;
     }
 
@@ -48,7 +49,7 @@ public class JobRestController extends AbstractRestController implements Initial
         final Collection<JobInstance> jobInstanceCollection = jobService.getJobInstances(jobName, startIndex, pageSize);
         final JobInstances jobInstances = new JobInstances();
         jobInstances.setJobName(jobName);
-        jobInstances.setJobInstances(jobInstanceCollection);
+        jobInstances.setJobInstances(BatchToResponseMapper.mapInstances(jobInstanceCollection));
         jobInstances.setPageSize(pageSize);
         jobInstances.setStartIndex(startIndex);
         return jobInstances;

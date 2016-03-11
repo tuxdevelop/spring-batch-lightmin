@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Slf4j
 public class MapJobConfigurationRepository implements JobConfigurationRepository {
 
-    private final ConcurrentMap<String, Map<Long, JobConfiguration>> jobConfigurations;
+    private ConcurrentMap<String, Map<Long, JobConfiguration>> jobConfigurations;
     private final AtomicLong currentJobId = new AtomicLong(1L);
 
     public MapJobConfigurationRepository() {
@@ -32,7 +32,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
         final Set<String> jobNames = jobConfigurations.keySet();
         final Map<Long, JobConfiguration> tempMap = new HashMap<Long, JobConfiguration>();
         JobConfiguration jobConfiguration = null;
-        for (final String jobName : jobNames) {
+        for (String jobName : jobNames) {
             final Map<Long, JobConfiguration> configurationMap = jobConfigurations.get(jobName);
             if (configurationMap != null && !configurationMap.isEmpty()) {
                 tempMap.putAll(configurationMap);
@@ -114,14 +114,14 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     @Override
     public Collection<JobConfiguration> getAllJobConfigurations() {
         final Collection<JobConfiguration> jobConfigurationCollection = new LinkedList<JobConfiguration>();
-        for (final Map.Entry<String, Map<Long, JobConfiguration>> entry : jobConfigurations.entrySet()) {
+        for (Map.Entry<String, Map<Long, JobConfiguration>> entry : jobConfigurations.entrySet()) {
             jobConfigurationCollection.addAll(entry.getValue().values());
         }
         return jobConfigurationCollection;
     }
 
     @Override
-    public Collection<JobConfiguration> getAllJobConfigurationsByJobNames(final Collection<String> jobNames) {
+    public Collection<JobConfiguration> getAllJobConfigurationsByJobNames(Collection<String> jobNames) {
         final Collection<JobConfiguration> jobConfigurationCollection = new LinkedList<JobConfiguration>();
         for (final String jobName : jobNames) {
             if (jobConfigurations.containsKey(jobName)) {

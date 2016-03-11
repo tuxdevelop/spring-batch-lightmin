@@ -4,21 +4,22 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.tuxdevelop.spring.batch.lightmin.api.rest.response.JobExecutionResponse;
-import org.tuxdevelop.spring.batch.lightmin.api.rest.response.JobInstanceExecutionsResponse;
-import org.tuxdevelop.spring.batch.lightmin.api.rest.response.JobInstancesResponse;
+import org.tuxdevelop.spring.batch.lightmin.api.response.JobExecution;
+import org.tuxdevelop.spring.batch.lightmin.api.response.JobInstanceExecutions;
+import org.tuxdevelop.spring.batch.lightmin.api.response.JobInstances;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class JobRestControllerIT extends CommonControllerIT {
 
     @Test
+    //TODO: Fixme
     public void getJobExecutionByIdIT() {
         final Long jobExecutionId = launchedJobExecutionId;
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobRestControllerAPI.JOB_EXECUTIONS_JOB_EXECUTION_ID;
 
-        final ResponseEntity<JobExecutionResponse> response = restTemplate.getForEntity(uri, JobExecutionResponse.class,
+        final ResponseEntity<JobExecution> response = restTemplate.getForEntity(uri, JobExecution.class,
                 jobExecutionId);
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -30,7 +31,8 @@ public class JobRestControllerIT extends CommonControllerIT {
         final Long jobInstanceId = launchedJobInstanceId;
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobRestControllerAPI.JOB_EXECUTIONS_JOB_INSTANCES_JOB_INSTANCE_ID;
-        final ResponseEntity<JobInstanceExecutionsResponse> response = restTemplate.getForEntity(uri, JobInstanceExecutionsResponse.class,
+        final ResponseEntity<JobInstanceExecutions> response = restTemplate.getForEntity(uri,
+                JobInstanceExecutions.class,
                 jobInstanceId);
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -42,7 +44,7 @@ public class JobRestControllerIT extends CommonControllerIT {
         final String jobName = "simpleJob";
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobRestControllerAPI.JOB_INSTANCES_JOB_NAME;
-        final ResponseEntity<JobInstancesResponse> response = restTemplate.getForEntity(uri, JobInstancesResponse.class,
+        final ResponseEntity<JobInstances> response = restTemplate.getForEntity(uri, JobInstances.class,
                 jobName);
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

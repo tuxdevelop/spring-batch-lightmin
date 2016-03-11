@@ -1,15 +1,13 @@
 package org.tuxdevelop.spring.batch.lightmin.dao;
 
-
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,7 +30,7 @@ public class JdbcLightminJobExecutionDaoIT {
     private LightminJobExecutionDao jdbcLightminJobExecutionDao;
 
     @Autowired
-    private JobInstanceDao jobInstanceDao;
+    private JobExplorer jobExplorer;
 
     @Autowired
     private Job simpleJob;
@@ -42,13 +40,15 @@ public class JdbcLightminJobExecutionDaoIT {
 
     @Test
     public void getJobExecutionCountIT() {
-        final JobInstance jobInstance = jobInstanceDao.getJobInstance(1L);
+        init();
+        final JobInstance jobInstance = jobExplorer.getJobInstance(1L);
         final int count = jdbcLightminJobExecutionDao.getJobExecutionCount(jobInstance);
         assertThat(count).isEqualTo(JOB_EXECUTION_COUNT);
     }
 
     @Test
     public void getJobExecutionCountZeroIT() {
+        init();
         final JobInstance jobInstance = new JobInstance(9999L, "notExisting");
         final int count = jdbcLightminJobExecutionDao.getJobExecutionCount(jobInstance);
         assertThat(count).isEqualTo(0);
@@ -56,7 +56,8 @@ public class JdbcLightminJobExecutionDaoIT {
 
     @Test
     public void findJobExecutionsIT() {
-        final JobInstance jobInstance = jobInstanceDao.getJobInstance(1L);
+        init();
+        final JobInstance jobInstance = jobExplorer.getJobInstance(1L);
         final List<JobExecution> jobExecutions = jdbcLightminJobExecutionDao.findJobExecutions(jobInstance, 0,
                 JOB_EXECUTION_COUNT);
         assertThat(jobExecutions).isNotNull();
@@ -68,8 +69,9 @@ public class JdbcLightminJobExecutionDaoIT {
 
     @Test
     public void findJobExecutionsPageIT() {
+        init();
         final int count = 5;
-        final JobInstance jobInstance = jobInstanceDao.getJobInstance(1L);
+        final JobInstance jobInstance = jobExplorer.getJobInstance(1L);
         final List<JobExecution> jobExecutions = jdbcLightminJobExecutionDao.findJobExecutions(jobInstance, 0,
                 count);
         assertThat(jobExecutions).isNotNull();
@@ -80,16 +82,32 @@ public class JdbcLightminJobExecutionDaoIT {
     }
 
     @Test
+    public void getJobExecutionsPageIT() {
+        init();
+        final int count = 5;
+        final JobInstance jobInstance = jobExplorer.getJobInstance(1L);
+        final List<JobExecution> jobExecutions = jdbcLightminJobExecutionDao.getJobExecutions(jobInstance.getJobName(), 0,
+                count);
+        assertThat(jobExecutions).isNotNull();
+        assertThat(jobExecutions).hasSize(count);
+        for (final JobExecution jobExecution : jobExecutions) {
+            final JobExecution fromRepo = jobExplorer.getJobExecution(jobExecution.getId());
+            //has to be set to null
+            fromRepo.setJobInstance(null);
+            assertThat(jobExecution).isEqualTo(fromRepo);
+        }
+    }
+
+    @Test
     public void findJobExecutionsEmptyIT() {
+        init();
         final JobInstance jobInstance = new JobInstance(9999L, "notExisting");
         final List<JobExecution> jobExecutions = jdbcLightminJobExecutionDao.findJobExecutions(jobInstance, 0, 10);
         assertThat(jobExecutions).isNotNull();
         assertThat(jobExecutions).isEmpty();
     }
 
-
-    @Before
-    public void init() {
+    private void init() {
         try {
             for (int i = 0; i < JOB_EXECUTION_COUNT; i++) {
                 jobLauncher.run(simpleJob, new JobParametersBuilder().toJobParameters());

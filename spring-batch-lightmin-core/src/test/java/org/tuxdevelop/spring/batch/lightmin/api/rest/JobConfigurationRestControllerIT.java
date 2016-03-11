@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.api.domain.JobConfigurations;
+import org.tuxdevelop.spring.batch.lightmin.api.response.JobConfigurations;
 
 import java.util.Collection;
 import java.util.HashMap;

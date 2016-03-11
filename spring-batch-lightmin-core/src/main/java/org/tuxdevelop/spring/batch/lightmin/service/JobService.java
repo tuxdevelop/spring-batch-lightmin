@@ -3,6 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.service;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.util.Collection;
@@ -113,4 +114,12 @@ public interface JobService extends InitializingBean {
      * @param jobExecutionId id of the {@link org.springframework.batch.core.JobExecution}
      */
     void stopJobExecution(Long jobExecutionId);
+
+    /**
+     * returns the last set {@link org.springframework.batch.core.JobParameters} for a given jobName
+     *
+     * @param jobName the name of the {@link org.springframework.batch.core.Job}
+     * @return the {@link org.springframework.batch.core.JobParameters} of the job
+     */
+    JobParameters getLastJobParameters(String jobName);
 }

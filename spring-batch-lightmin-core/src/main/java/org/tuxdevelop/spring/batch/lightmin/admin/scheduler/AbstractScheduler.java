@@ -43,14 +43,14 @@ public abstract class AbstractScheduler implements InitializingBean {
         @Override
         public void run() {
             try {
-                attacheJobIncrementer();
+                attachJobIncrementer();
                 jobLauncher.run(job, jobParameters);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new SpringBatchLightminApplicationException(e, e.getMessage());
             }
         }
 
-        private void attacheJobIncrementer() {
+        private void attachJobIncrementer() {
             if (jobParameters == null) {
                 jobParameters = new JobParametersBuilder().toJobParameters();
             }

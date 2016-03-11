@@ -1,6 +1,10 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -14,17 +18,19 @@ import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerConstructorWrapper;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.TaskExecutorType;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.CronScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DefaultSchedulerService implements SchedulerService {
@@ -36,7 +42,7 @@ public class DefaultSchedulerService implements SchedulerService {
     private final JobRegistry jobRegistry;
 
     public DefaultSchedulerService(final BeanRegistrar beanRegistrar, final JobRepository jobRepository,
-                                   final JobRegistry jobRegistry) {
+            final JobRegistry jobRegistry) {
         this.beanRegistrar = beanRegistrar;
         this.jobRepository = jobRepository;
         this.jobRegistry = jobRegistry;
@@ -71,16 +77,17 @@ public class DefaultSchedulerService implements SchedulerService {
 
     @Override
     public void refreshSchedulerForJob(final JobConfiguration jobConfiguration) {
-        this.terminate(jobConfiguration.getJobSchedulerConfiguration().getBeanName());
-        this.unregisterSchedulerForJob(jobConfiguration.getJobSchedulerConfiguration().getBeanName());
-        this.registerSchedulerForJob(jobConfiguration);
+        terminate(jobConfiguration.getJobSchedulerConfiguration().getBeanName());
+        unregisterSchedulerForJob(jobConfiguration.getJobSchedulerConfiguration().getBeanName());
+        registerSchedulerForJob(jobConfiguration);
     }
 
     @Override
     public void schedule(final String beanName, final Boolean forceScheduling) {
         if (applicationContext.containsBean(beanName)) {
             final Scheduler scheduler = (Scheduler) applicationContext.getBean(beanName);
-            if (scheduler.getSchedulerStatus().equals(SchedulerStatus.RUNNING) && Boolean.FALSE.equals(forceScheduling)) {
+            if (scheduler.getSchedulerStatus().equals(SchedulerStatus.RUNNING)
+                    && Boolean.FALSE.equals(forceScheduling)) {
                 log.info("Scheduler: " + beanName + " already running");
             } else {
                 scheduler.schedule();
@@ -123,10 +130,10 @@ public class DefaultSchedulerService implements SchedulerService {
         assert jobRegistry != null;
     }
 
-    String registerScheduler(final JobConfiguration jobConfiguration, final Class schedulerClass) {
+    String registerScheduler(final JobConfiguration jobConfiguration, final Class<?> schedulerClass) {
         try {
             final Set<Object> constructorValues = new HashSet<Object>();
-            final JobLauncher jobLauncher = this.createJobLauncher(jobConfiguration.getJobSchedulerConfiguration()
+            final JobLauncher jobLauncher = createJobLauncher(jobConfiguration.getJobSchedulerConfiguration()
                     .getTaskExecutorType());
             final Job job = jobRegistry.getJob(jobConfiguration.getJobName());
             final JobParameters jobParameters = mapToJobParameters(jobConfiguration.getJobParameters());
@@ -155,7 +162,7 @@ public class DefaultSchedulerService implements SchedulerService {
 
     private JobLauncher createJobLauncher(final TaskExecutorType taskExecutorType) {
         final SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
-        jobLauncher.setJobRepository(this.jobRepository);
+        jobLauncher.setJobRepository(jobRepository);
         if (TaskExecutorType.ASYNCHRONOUS.equals(taskExecutorType)) {
             final AsyncTaskExecutor taskExecutor = new ConcurrentTaskExecutor();
             jobLauncher.setTaskExecutor(taskExecutor);
@@ -179,7 +186,7 @@ public class DefaultSchedulerService implements SchedulerService {
     }
 
     private void attachJobParameter(final JobParametersBuilder jobParametersBuilder, final String parameterName,
-                                    final Object parameterValue) {
+            final Object parameterValue) {
         if (parameterValue instanceof Long) {
             jobParametersBuilder.addLong(parameterName, (Long) parameterValue);
         } else if (parameterValue instanceof Date) {
@@ -192,7 +199,7 @@ public class DefaultSchedulerService implements SchedulerService {
     }
 
     private String generateSchedulerBeanName(final String jobName, final Long id,
-                                             final JobSchedulerType jobSchedulerType) {
+            final JobSchedulerType jobSchedulerType) {
         return jobName + jobSchedulerType.name() + id;
     }
 

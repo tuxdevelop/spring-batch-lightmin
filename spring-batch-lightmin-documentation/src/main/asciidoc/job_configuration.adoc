@@ -135,7 +135,7 @@ public interface JobConfigurationRepository {
 
     JobConfiguration getJobConfiguration(Long jobConfigurationId) throws NoSuchJobConfigurationException;
 
-		Collection<JobConfiguration> getJobConfigurations(String jobName) throws NoSuchJobException;
+    Collection<JobConfiguration> getJobConfigurations(String jobName) throws NoSuchJobException;
 
     JobConfiguration add(JobConfiguration jobConfiguration);
 

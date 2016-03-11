@@ -1,6 +1,8 @@
 package org.tuxdevelop.spring.batch.lightmin.util;
 
 import org.junit.Test;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.text.SimpleDateFormat;
@@ -44,7 +46,7 @@ public class ParameterParserTest {
                 "emailZipFile(String)=./import/zip/email.zip," +
                 "maxLineCount(Long)=20000";
 
-        final Map<String,Object> parameterMap = ParameterParser.parseParameters(parameters);
+        final Map<String, Object> parameterMap = ParameterParser.parseParameters(parameters);
         assertThat(parameterMap).hasSize(8);
     }
 
@@ -123,5 +125,13 @@ public class ParameterParserTest {
     @Test(expected = SpringBatchLightminApplicationException.class)
     public void createValueInstanceExceptionTest() {
         ParameterParser.createValueInstance("CLASS", "1234");
+    }
+
+    @Test
+    public void parseJobParametersToStringTest() {
+        final JobParameters jobParameters = new JobParametersBuilder().addLong("long", 1L).addString("String",
+                "someString").toJobParameters();
+        final String result = ParameterParser.parseJobParametersToString(jobParameters);
+        assertThat(result).isEqualTo("String(String)=someString,long(Long)=1");
     }
 }

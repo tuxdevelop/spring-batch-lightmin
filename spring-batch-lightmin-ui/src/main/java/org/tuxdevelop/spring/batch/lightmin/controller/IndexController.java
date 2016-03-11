@@ -26,7 +26,7 @@ public class IndexController extends CommonController {
 
     @Autowired
     public IndexController(final InetAddress inetAddress,
-                           @Value("${server.servlet-path}") final String servletPath) {
+                           @Value("${server.servlet-path:/}") final String servletPath) {
         this.hostName = inetAddress;
         this.servletPath = servletPath;
     }

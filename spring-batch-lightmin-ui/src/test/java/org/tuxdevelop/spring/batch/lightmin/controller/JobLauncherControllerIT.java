@@ -22,10 +22,21 @@ public class JobLauncherControllerIT extends CommonControllerIT {
     @Test
     public void launchJobIT() {
         try {
-            this.mockMvc.perform(post("/jobLaunchers")
-                            .param("jobName", "simpleJob")
+            this.mockMvc.perform(post("/jobLauncher")
+                    .param("jobName", "simpleJob")
             ).andExpect(status().isFound()).andExpect(view().name
-                    ("redirect:jobLaunchers"));
+                    ("redirect:job?jobname=simpleJob"));
+        } catch (final Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void configureJobLauncherTest() {
+        try {
+            this.mockMvc.perform(get("/jobLauncher")
+                    .param("jobName", "simpleJob")
+            ).andExpect(status().isOk()).andExpect(view().name("jobLauncher"));
         } catch (final Exception e) {
             fail(e.getMessage());
         }

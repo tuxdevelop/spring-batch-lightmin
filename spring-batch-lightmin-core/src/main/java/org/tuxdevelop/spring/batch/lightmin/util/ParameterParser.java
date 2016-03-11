@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
@@ -24,7 +25,7 @@ import java.util.regex.Pattern;
  * </p>
  */
 @Slf4j
-public class ParameterParser {
+public final class ParameterParser {
 
     public static final String DATE_FORMAT_WITH_TIMESTAMP = "yyyy/MM/dd HH:mm:ss:SSS";
     public static final String DATE_FORMAT = "yyyy/MM/dd";
@@ -45,7 +46,7 @@ public class ParameterParser {
     public static String parseParameterMapToString(final Map<String, Object> parametersMap) {
         final StringBuilder stringBuilder = new StringBuilder();
         if (parametersMap != null) {
-            for (Entry<String, Object> entry : parametersMap.entrySet()) {
+            for (final Entry<String, Object> entry : parametersMap.entrySet()) {
                 final String key = entry.getKey();
                 final Object value = entry.getValue();
                 final String valueType;
@@ -147,6 +148,21 @@ public class ParameterParser {
             parameterMap = evaluateParameters(parameterList);
         }
         return parameterMap;
+    }
+
+    /**
+     * maps {@link org.springframework.batch.core.JobParameters} to a String representation
+     *
+     * @param jobParameters {@link org.springframework.batch.core.JobParameters} to map
+     * @return a String representation of {@link org.springframework.batch.core.JobParameters}
+     */
+    public static String parseJobParametersToString(final JobParameters jobParameters) {
+        final Map<String, JobParameter> jobParametersMap = jobParameters.getParameters();
+        final Map<String, Object> paramatersMap = new HashMap<String, Object>();
+        for (final Entry<String, JobParameter> entry : jobParametersMap.entrySet()) {
+            paramatersMap.put(entry.getKey(), entry.getValue().getValue());
+        }
+        return parseParameterMapToString(paramatersMap);
     }
 
     static List<String> splitParameters(final String parameters) {

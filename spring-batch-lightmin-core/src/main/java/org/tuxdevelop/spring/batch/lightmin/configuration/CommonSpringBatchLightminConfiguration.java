@@ -1,20 +1,22 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
+import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.repository.dao.JobExecutionDao;
-import org.springframework.batch.core.repository.dao.JobInstanceDao;
-import org.springframework.batch.core.repository.dao.StepExecutionDao;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.service.*;
@@ -25,6 +27,7 @@ import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
  * @version 0.1
  */
 @Configuration
+@EnableConfigurationProperties(value = {SpringBatchLightminConfigurationProperties.class})
 @Import(value = {SpringBatchLightminConfiguration.class, RestServiceConfiguration.class})
 public class CommonSpringBatchLightminConfiguration {
 
@@ -39,23 +42,8 @@ public class CommonSpringBatchLightminConfiguration {
     }
 
     @Bean
-    public JobExecutionDao jobExecutionDao(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
-        return defaultSpringBatchLightminConfigurator.getJobExecutionDao();
-    }
-
-    @Bean
     public LightminJobExecutionDao lightminJobExecutionDao(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
         return defaultSpringBatchLightminConfigurator.getLightminJobExecutionDao();
-    }
-
-    @Bean
-    public JobInstanceDao jobInstanceDao(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
-        return defaultSpringBatchLightminConfigurator.getJobInstanceDao();
-    }
-
-    @Bean
-    public StepExecutionDao stepExecutionDao(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
-        return defaultSpringBatchLightminConfigurator.getStepExecutionDao();
     }
 
     @Bean
@@ -64,8 +52,8 @@ public class CommonSpringBatchLightminConfiguration {
     }
 
     @Bean
-    public JobLauncher jobLauncher(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) throws Exception {
-        return defaultSpringBatchLightminConfigurator.getJobLauncher();
+    public JobLauncher jobLauncher(final BatchConfigurer batchConfigurer) throws Exception {
+        return batchConfigurer.getJobLauncher();
     }
 
     @Bean
@@ -74,13 +62,13 @@ public class CommonSpringBatchLightminConfiguration {
     }
 
     @Bean
-    public JobExplorer jobExplorer(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) throws Exception {
-        return defaultSpringBatchLightminConfigurator.getJobExplorer();
+    public JobExplorer jobExplorer(final BatchConfigurer batchConfigurer) throws Exception {
+        return batchConfigurer.getJobExplorer();
     }
 
     @Bean
-    public JobRepository jobRepository(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) throws Exception {
-        return defaultSpringBatchLightminConfigurator.getJobRepository();
+    public JobRepository jobRepository(final BatchConfigurer batchConfigurer) throws Exception {
+        return batchConfigurer.getJobRepository();
     }
 
     @Bean
@@ -102,10 +90,8 @@ public class CommonSpringBatchLightminConfiguration {
     }
 
     @Bean
-    public StepBuilderFactory stepBuilderFactory(final JobRepository jobRepository,
-                                                 final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) throws Exception {
-        return new StepBuilderFactory(jobRepository,
-                defaultSpringBatchLightminConfigurator.getTransactionManager());
+    public StepBuilderFactory stepBuilderFactory(final BatchConfigurer batchConfigurer) throws Exception {
+        return new StepBuilderFactory(batchConfigurer.getJobRepository(), batchConfigurer.getTransactionManager());
     }
 
     @Bean
@@ -119,5 +105,19 @@ public class CommonSpringBatchLightminConfiguration {
                                                    final AdminService adminService,
                                                    final SchedulerService schedulerService) throws Exception {
         return new JobCreationListener(applicationContext, jobRegistry, adminService, schedulerService);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(JobConfigurationRepository.class)
+    public JobConfigurationRepository jobConfigurationRepository(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
+        return defaultSpringBatchLightminConfigurator.getJobConfigurationRepository();
+    }
+
+    @Bean
+    public JobLauncher defaultAsyncJobLauncher(final JobRepository jobRepository) {
+        final SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
+        jobLauncher.setJobRepository(jobRepository);
+        jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
+        return jobLauncher;
     }
 }

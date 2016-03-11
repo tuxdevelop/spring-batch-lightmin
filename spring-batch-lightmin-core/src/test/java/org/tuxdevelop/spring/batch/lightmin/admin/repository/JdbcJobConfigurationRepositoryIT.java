@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class JdbcJobConfigurationRepositoryIT {
 
     @Autowired
-    private JobConfigurationRepository jdbcJobConfigurationRepository;
+    private JobConfigurationRepository jobConfigurationRepository;
 
     @Test
     @Rollback
@@ -37,11 +37,11 @@ public class JdbcJobConfigurationRepositoryIT {
                 10L, 10L, JobSchedulerType.PERIOD);
         jobSchedulerConfiguration.setBeanName("testBean");
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        final JobConfiguration addedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(addedJobConfiguration).isNotNull();
         assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
         assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
-        final JobConfiguration secondAddedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration secondAddedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(secondAddedJobConfiguration).isNotNull();
         assertThat(secondAddedJobConfiguration.getJobConfigurationId()).isEqualTo(2L);
         assertThat(secondAddedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
@@ -54,11 +54,11 @@ public class JdbcJobConfigurationRepositoryIT {
                 10L, 10L, JobSchedulerType.PERIOD);
         jobSchedulerConfiguration.setBeanName("testBean");
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        final JobConfiguration addedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(addedJobConfiguration).isNotNull();
         assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
         assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
-        final JobConfiguration fetchedJobConfiguration = jdbcJobConfigurationRepository.getJobConfiguration(1L);
+        final JobConfiguration fetchedJobConfiguration = jobConfigurationRepository.getJobConfiguration(1L);
         assertThat(fetchedJobConfiguration).isEqualTo(addedJobConfiguration);
     }
 
@@ -69,14 +69,14 @@ public class JdbcJobConfigurationRepositoryIT {
                 10L, 10L, JobSchedulerType.PERIOD);
         jobSchedulerConfiguration.setBeanName("testBean");
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        final JobConfiguration addedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(addedJobConfiguration).isNotNull();
         assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
         assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
         addedJobConfiguration.setJobName("updated");
-        final JobConfiguration updatedJobConfiguration = jdbcJobConfigurationRepository.update(addedJobConfiguration);
+        final JobConfiguration updatedJobConfiguration = jobConfigurationRepository.update(addedJobConfiguration);
         assertThat(updatedJobConfiguration.getJobName()).isEqualTo("updated");
-        final JobConfiguration fetchedJobConfiguration = jdbcJobConfigurationRepository.getJobConfiguration(1L);
+        final JobConfiguration fetchedJobConfiguration = jobConfigurationRepository.getJobConfiguration(1L);
         assertThat(fetchedJobConfiguration).isEqualTo(updatedJobConfiguration);
     }
 
@@ -87,13 +87,13 @@ public class JdbcJobConfigurationRepositoryIT {
                 10L, 10L, JobSchedulerType.PERIOD);
         jobSchedulerConfiguration.setBeanName("testBean");
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        final JobConfiguration addedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(addedJobConfiguration).isNotNull();
         assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
         assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
         addedJobConfiguration.setJobName("updated");
         addedJobConfiguration.setJobConfigurationId(-1000L);
-        jdbcJobConfigurationRepository.update(addedJobConfiguration);
+        jobConfigurationRepository.update(addedJobConfiguration);
     }
 
     @Test
@@ -103,17 +103,17 @@ public class JdbcJobConfigurationRepositoryIT {
                 10L, 10L, JobSchedulerType.PERIOD);
         jobSchedulerConfiguration.setBeanName("testBean");
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        final JobConfiguration addedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(addedJobConfiguration).isNotNull();
         assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
         assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
         addedJobConfiguration.setJobName("updated");
-        Map<String, Object> parameters = new HashMap<String, Object>();
+        final Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("test", "input");
         addedJobConfiguration.setJobParameters(parameters);
-        final JobConfiguration updatedJobConfiguration = jdbcJobConfigurationRepository.update(addedJobConfiguration);
+        final JobConfiguration updatedJobConfiguration = jobConfigurationRepository.update(addedJobConfiguration);
         assertThat(updatedJobConfiguration.getJobName()).isEqualTo("updated");
-        final JobConfiguration fetchedJobConfiguration = jdbcJobConfigurationRepository.getJobConfiguration(1L);
+        final JobConfiguration fetchedJobConfiguration = jobConfigurationRepository.getJobConfiguration(1L);
         assertThat(fetchedJobConfiguration).isEqualTo(updatedJobConfiguration);
     }
 
@@ -124,15 +124,15 @@ public class JdbcJobConfigurationRepositoryIT {
                 10L, 10L, JobSchedulerType.PERIOD);
         jobSchedulerConfiguration.setBeanName("testBean");
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        final JobConfiguration addedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(addedJobConfiguration).isNotNull();
         assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
         assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
-        final JobConfiguration secondAddedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration secondAddedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(secondAddedJobConfiguration).isNotNull();
         assertThat(secondAddedJobConfiguration.getJobConfigurationId()).isEqualTo(2L);
         assertThat(secondAddedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
-        final Collection<JobConfiguration> jobConfigurations = jdbcJobConfigurationRepository.getJobConfigurations
+        final Collection<JobConfiguration> jobConfigurations = jobConfigurationRepository.getJobConfigurations
                 ("sampleJob");
         assertThat(jobConfigurations.size()).isEqualTo(2);
     }
@@ -144,15 +144,15 @@ public class JdbcJobConfigurationRepositoryIT {
                 10L, 10L, JobSchedulerType.PERIOD);
         jobSchedulerConfiguration.setBeanName("testBean");
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        final JobConfiguration addedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(addedJobConfiguration).isNotNull();
         assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
         assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
-        final JobConfiguration secondAddedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration secondAddedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(secondAddedJobConfiguration).isNotNull();
         assertThat(secondAddedJobConfiguration.getJobConfigurationId()).isEqualTo(2L);
         assertThat(secondAddedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
-        jdbcJobConfigurationRepository.getJobConfigurations("sampleJobUnknown");
+        jobConfigurationRepository.getJobConfigurations("sampleJobUnknown");
     }
 
     @Test(expected = NoSuchJobConfigurationException.class)
@@ -162,12 +162,12 @@ public class JdbcJobConfigurationRepositoryIT {
                 10L, 10L, JobSchedulerType.PERIOD);
         jobSchedulerConfiguration.setBeanName("testBean");
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        final JobConfiguration addedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(addedJobConfiguration).isNotNull();
         assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
         assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
-        jdbcJobConfigurationRepository.delete(addedJobConfiguration);
-        jdbcJobConfigurationRepository.getJobConfiguration(1L);
+        jobConfigurationRepository.delete(addedJobConfiguration);
+        jobConfigurationRepository.getJobConfiguration(1L);
     }
 
     @Test(expected = NoSuchJobConfigurationException.class)
@@ -177,12 +177,12 @@ public class JdbcJobConfigurationRepositoryIT {
                 10L, 10L, JobSchedulerType.PERIOD);
         jobSchedulerConfiguration.setBeanName("testBean");
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        final JobConfiguration addedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(addedJobConfiguration).isNotNull();
         assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
         assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
         addedJobConfiguration.setJobConfigurationId(-100L);
-        jdbcJobConfigurationRepository.delete(addedJobConfiguration);
+        jobConfigurationRepository.delete(addedJobConfiguration);
     }
 
     @Test
@@ -199,18 +199,18 @@ public class JdbcJobConfigurationRepositoryIT {
         jobParameters.put("DATE", "2015/03/27 23:19:24:120");
         jobParameters.put("DATE", "2015/03/27");
         jobConfiguration.setJobParameters(jobParameters);
-        final JobConfiguration addedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(addedJobConfiguration).isNotNull();
         assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
         assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
-        final JobConfiguration secondAddedJobConfiguration = jdbcJobConfigurationRepository.add(jobConfiguration);
+        final JobConfiguration secondAddedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         assertThat(secondAddedJobConfiguration).isNotNull();
         assertThat(secondAddedJobConfiguration.getJobConfigurationId()).isEqualTo(2L);
         assertThat(secondAddedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
         final Collection<String> jobNames = new LinkedList<String>();
         jobNames.add("sampleJob");
         jobNames.add("sampleJobSecond");
-        final Collection<JobConfiguration> jobConfigurations = jdbcJobConfigurationRepository
+        final Collection<JobConfiguration> jobConfigurations = jobConfigurationRepository
                 .getAllJobConfigurationsByJobNames(jobNames);
         assertThat(jobConfigurations.size()).isEqualTo(2);
     }
@@ -222,10 +222,10 @@ public class JdbcJobConfigurationRepositoryIT {
         jobSchedulerConfiguration.setBeanName("testBean");
         final JobConfiguration jobConfigurationFirst = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         final JobConfiguration jobConfigurationSecond = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        final JobConfiguration addedFirstJobConfiguration = jdbcJobConfigurationRepository.add(jobConfigurationFirst);
-        final JobConfiguration addedSecondJobConfiguration = jdbcJobConfigurationRepository.add(jobConfigurationSecond);
+        final JobConfiguration addedFirstJobConfiguration = jobConfigurationRepository.add(jobConfigurationFirst);
+        final JobConfiguration addedSecondJobConfiguration = jobConfigurationRepository.add(jobConfigurationSecond);
 
-        final Collection<JobConfiguration> jobConfigurations = jdbcJobConfigurationRepository.getAllJobConfigurations();
+        final Collection<JobConfiguration> jobConfigurations = jobConfigurationRepository.getAllJobConfigurations();
         assertThat(jobConfigurations).isNotNull();
         assertThat(jobConfigurations).hasSize(2);
         final Set<JobConfiguration> jobConfigurationSet = new HashSet<JobConfiguration>(jobConfigurations);

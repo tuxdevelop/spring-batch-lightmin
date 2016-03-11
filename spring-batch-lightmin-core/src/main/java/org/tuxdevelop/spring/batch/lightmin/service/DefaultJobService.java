@@ -4,11 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.NoSuchJobException;
-import org.springframework.batch.core.repository.dao.JobExecutionDao;
-import org.springframework.batch.core.repository.dao.JobInstanceDao;
+import org.springframework.util.CollectionUtils;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
@@ -25,17 +26,16 @@ public class DefaultJobService implements JobService {
 
     private final JobOperator jobOperator;
     private final JobRegistry jobRegistry;
-    private final JobInstanceDao jobInstanceDao;
-    private final JobExecutionDao jobExecutionDao;
+    private final JobExplorer jobExplorer;
     private final LightminJobExecutionDao lightminJobExecutionDao;
 
-    public DefaultJobService(final JobOperator jobOperator, final JobRegistry jobRegistry,
-                             final JobInstanceDao jobInstanceDao, final JobExecutionDao jobExecutionDao, final
-                             LightminJobExecutionDao lightminJobExecutionDao) {
+    public DefaultJobService(final JobOperator jobOperator,
+                             final JobRegistry jobRegistry,
+                             final JobExplorer jobExplorer,
+                             final LightminJobExecutionDao lightminJobExecutionDao) {
         this.jobOperator = jobOperator;
         this.jobRegistry = jobRegistry;
-        this.jobInstanceDao = jobInstanceDao;
-        this.jobExecutionDao = jobExecutionDao;
+        this.jobExplorer = jobExplorer;
         this.lightminJobExecutionDao = lightminJobExecutionDao;
     }
 
@@ -43,7 +43,7 @@ public class DefaultJobService implements JobService {
     public int getJobInstanceCount(final String jobName) {
         int jobInstanceCount = 0;
         try {
-            jobInstanceCount = jobInstanceDao.getJobInstanceCount(jobName);
+            jobInstanceCount = jobExplorer.getJobInstanceCount(jobName);
         } catch (final NoSuchJobException e) {
             log.info(e.getMessage(), e);
         }
@@ -52,9 +52,7 @@ public class DefaultJobService implements JobService {
 
     @Override
     public int getJobExecutionCount(final JobInstance jobInstance) {
-        int jobExecutionCount;
-        jobExecutionCount = lightminJobExecutionDao.getJobExecutionCount(jobInstance);
-        return jobExecutionCount;
+        return lightminJobExecutionDao.getJobExecutionCount(jobInstance);
     }
 
     @Override
@@ -76,13 +74,13 @@ public class DefaultJobService implements JobService {
 
     @Override
     public Collection<JobInstance> getJobInstances(final String jobName, final int startIndex, final int pageSize) {
-        return jobInstanceDao.getJobInstances(jobName, startIndex, pageSize);
+        return jobExplorer.getJobInstances(jobName, startIndex, pageSize);
     }
 
     @Override
     public Collection<JobExecution> getJobExecutions(final JobInstance jobInstance) {
         final Collection<JobExecution> jobExecutions = new LinkedList<JobExecution>();
-        final List<JobExecution> jobExecutionList = jobExecutionDao.findJobExecutions(jobInstance);
+        final List<JobExecution> jobExecutionList = jobExplorer.getJobExecutions(jobInstance);
         jobExecutions.addAll(jobExecutionList);
         return jobExecutions;
     }
@@ -97,17 +95,17 @@ public class DefaultJobService implements JobService {
 
     @Override
     public JobExecution getJobExecution(final Long jobExecutionId) {
-        return jobExecutionDao.getJobExecution(jobExecutionId);
+        return jobExplorer.getJobExecution(jobExecutionId);
     }
 
     @Override
     public JobInstance getJobInstance(final Long jobInstanceId) {
-        return jobInstanceDao.getJobInstance(jobInstanceId);
+        return jobExplorer.getJobInstance(jobInstanceId);
     }
 
     @Override
     public void attachJobInstance(final JobExecution jobExecution) {
-        final JobInstance jobInstance = jobInstanceDao.getJobInstance(jobExecution);
+        final JobInstance jobInstance = jobExplorer.getJobInstance(jobExecution.getJobInstance().getId());
         jobExecution.setJobInstance(jobInstance);
     }
 
@@ -130,10 +128,23 @@ public class DefaultJobService implements JobService {
     }
 
     @Override
+    public JobParameters getLastJobParameters(final String jobName) {
+        final List<JobExecution> executions = lightminJobExecutionDao.getJobExecutions(jobName, 0, 1);
+        JobExecution lastExecution = null;
+        if (!CollectionUtils.isEmpty(executions)) {
+            lastExecution = executions.iterator().next();
+        }
+        JobParameters oldParameters = new JobParameters();
+        if (lastExecution != null) {
+            oldParameters = lastExecution.getJobParameters();
+        }
+        return oldParameters;
+    }
+
+    @Override
     public void afterPropertiesSet() {
         assert jobOperator != null;
         assert jobRegistry != null;
-        assert jobInstanceDao != null;
-        assert jobExecutionDao != null;
+        assert jobExplorer != null;
     }
 }

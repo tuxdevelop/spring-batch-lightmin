@@ -1,5 +1,8 @@
 package org.tuxdevelop.spring.batch.lightmin.controller;
 
+import static org.assertj.core.api.Fail.fail;
+
+import java.util.Collection;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -17,17 +20,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.tuxdevelop.spring.batch.lightmin.ITConfigurationApplication;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.TaskExecutorType;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
-import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
 import org.tuxdevelop.spring.batch.lightmin.service.SchedulerService;
 
-import java.util.Collection;
-
-import static org.assertj.core.api.Fail.fail;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebIntegrationTest({"server.port=0", "management.port=0"})
+@WebIntegrationTest({ "server.port=0", "management.port=0" })
 @SpringApplicationConfiguration(classes = ITConfigurationApplication.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class CommonControllerIT {
@@ -44,8 +47,6 @@ public abstract class CommonControllerIT {
     @Autowired
     private JobLauncher jobLauncher;
     @Autowired
-    private AdminService adminService;
-    @Autowired
     private SchedulerService schedulerService;
 
     protected MockMvc mockMvc;
@@ -55,12 +56,11 @@ public abstract class CommonControllerIT {
     protected JobConfiguration addedJobConfiguration;
     protected JobExecution jobExecution;
 
-
     @Before
     public void init() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        this.addJobConfigurations();
-        this.launchSimpleJob();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        addJobConfigurations();
+        launchSimpleJob();
     }
 
     protected void addJobConfigurations() {
@@ -80,13 +80,12 @@ public abstract class CommonControllerIT {
         schedulerService.registerSchedulerForJob(addedJobConfiguration);
     }
 
-
     private void launchSimpleJob() {
         try {
             final JobExecution execution = jobLauncher.run(simpleJob, new JobParametersBuilder().toJobParameters());
             launchedJobExecutionId = execution.getId();
             launchedJobInstanceId = execution.getJobInstance().getId();
-            Collection<StepExecution> stepExecutions = execution.getStepExecutions();
+            final Collection<StepExecution> stepExecutions = execution.getStepExecutions();
             for (final StepExecution stepExecution : stepExecutions) {
                 launchedStepExecutionId = stepExecution.getId();
             }

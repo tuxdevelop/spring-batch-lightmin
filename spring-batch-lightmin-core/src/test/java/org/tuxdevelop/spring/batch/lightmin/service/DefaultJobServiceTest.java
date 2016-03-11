@@ -7,31 +7,26 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
-import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobExecutionNotRunningException;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.launch.NoSuchJobExecutionException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.batch.core.repository.dao.JobExecutionDao;
-import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -49,16 +44,14 @@ public class DefaultJobServiceTest {
     @Mock
     private JobRegistry jobRegistry;
     @Mock
-    private JobInstanceDao jobInstanceDao;
-    @Mock
-    private JobExecutionDao jobExecutionDao;
+    private JobExplorer jobExplorer;
     @Mock
     private LightminJobExecutionDao lightminJobExecutionDao;
 
     @Test
     public void getJobInstanceCountTest() throws NoSuchJobException {
         final Integer expectedInstanceCount = 10;
-        when(jobInstanceDao.getJobInstanceCount(JOB_NAME)).thenReturn(expectedInstanceCount);
+        when(jobExplorer.getJobInstanceCount(JOB_NAME)).thenReturn(expectedInstanceCount);
         final Integer instanceCount = jobService.getJobInstanceCount(JOB_NAME);
         assertThat(instanceCount).isEqualTo(expectedInstanceCount);
     }
@@ -66,7 +59,7 @@ public class DefaultJobServiceTest {
     @Test
     public void getJobInstanceCountNoSuchJobExceptionTest() throws NoSuchJobException {
         final Integer expectedInstanceCount = 0;
-        when(jobInstanceDao.getJobInstanceCount(JOB_NAME)).thenThrow(new NoSuchJobException("TEST"));
+        when(jobExplorer.getJobInstanceCount(JOB_NAME)).thenThrow(new NoSuchJobException("TEST"));
         final Integer instanceCount = jobService.getJobInstanceCount(JOB_NAME);
         assertThat(instanceCount).isEqualTo(expectedInstanceCount);
     }
@@ -96,7 +89,7 @@ public class DefaultJobServiceTest {
 
     @Test
     public void getJobInstancesTest() {
-        when(jobInstanceDao.getJobInstances(JOB_NAME, 0, 10)).thenReturn(TestHelper.createJobInstances(10, JOB_NAME));
+        when(jobExplorer.getJobInstances(JOB_NAME, 0, 10)).thenReturn(TestHelper.createJobInstances(10, JOB_NAME));
         final Collection<JobInstance> jobInstances = jobService.getJobInstances(JOB_NAME, 0, 10);
         assertThat(jobInstances).isNotEmpty();
         assertThat(jobInstances.size()).isEqualTo(10);
@@ -104,8 +97,8 @@ public class DefaultJobServiceTest {
 
     @Test
     public void getJobExecutionsTest() {
-        JobInstance jobInstance = TestHelper.createJobInstance(1l, JOB_NAME);
-        when(jobExecutionDao.findJobExecutions(jobInstance)).thenReturn(TestHelper.createJobExecutions(10));
+        final JobInstance jobInstance = TestHelper.createJobInstance(1l, JOB_NAME);
+        when(jobExplorer.getJobExecutions(jobInstance)).thenReturn(TestHelper.createJobExecutions(10));
         final Collection<JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance);
         assertThat(jobExecutions).isNotEmpty();
         assertThat(jobExecutions.size()).isEqualTo(10);
@@ -113,8 +106,9 @@ public class DefaultJobServiceTest {
 
     @Test
     public void getJobExecutionsPageTest() {
-        JobInstance jobInstance = TestHelper.createJobInstance(1l, JOB_NAME);
-        when(lightminJobExecutionDao.findJobExecutions(jobInstance, 1, 5)).thenReturn(TestHelper.createJobExecutions(5));
+        final JobInstance jobInstance = TestHelper.createJobInstance(1l, JOB_NAME);
+        when(lightminJobExecutionDao.findJobExecutions(jobInstance, 1, 5))
+                .thenReturn(TestHelper.createJobExecutions(5));
         final Collection<JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance, 1, 5);
         assertThat(jobExecutions).isNotEmpty();
         assertThat(jobExecutions.size()).isEqualTo(5);
@@ -123,7 +117,7 @@ public class DefaultJobServiceTest {
     @Test
     public void getJobExecutionTest() {
         final Long jobExecutionId = 10L;
-        when(jobExecutionDao.getJobExecution(jobExecutionId)).thenReturn(TestHelper.createJobExecution(jobExecutionId));
+        when(jobExplorer.getJobExecution(jobExecutionId)).thenReturn(TestHelper.createJobExecution(jobExecutionId));
         final JobExecution jobExecution = jobService.getJobExecution(jobExecutionId);
         assertThat(jobExecution).isNotNull();
         assertThat(jobExecution.getId()).isEqualTo(jobExecutionId);
@@ -132,7 +126,7 @@ public class DefaultJobServiceTest {
     @Test
     public void getJobInstanceTest() {
         final Long jobInstanceId = 20L;
-        when(jobInstanceDao.getJobInstance(jobInstanceId)).thenReturn(
+        when(jobExplorer.getJobInstance(jobInstanceId)).thenReturn(
                 TestHelper.createJobInstance(jobInstanceId, JOB_NAME));
         final JobInstance jobInstance = jobService.getJobInstance(jobInstanceId);
         assertThat(jobInstance).isNotNull();
@@ -144,7 +138,8 @@ public class DefaultJobServiceTest {
     public void attachJobInstanceTest() {
         final JobExecution jobExecution = TestHelper.createJobExecution(10L);
         final JobInstance jobInstance = TestHelper.createJobInstance(20L, JOB_NAME);
-        when(jobInstanceDao.getJobInstance(jobExecution)).thenReturn(jobInstance);
+        jobExecution.setJobInstance(jobInstance);
+        when(jobExplorer.getJobInstance(jobExecution.getJobInstance().getId())).thenReturn(jobInstance);
         jobService.attachJobInstance(jobExecution);
         assertThat(jobExecution.getJobInstance()).isEqualTo(jobInstance);
     }
@@ -163,13 +158,15 @@ public class DefaultJobServiceTest {
         try {
             jobService.restartJobExecution(jobExecutionId);
             verify(jobOperator, times(1)).restart(jobExecutionId);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             fail(e.getMessage());
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Test(expected = SpringBatchLightminApplicationException.class)
-    public void restartJobExecutionExceptionTest() throws JobParametersInvalidException, JobRestartException, JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException {
+    public void restartJobExecutionExceptionTest() throws JobParametersInvalidException, JobRestartException,
+            JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException {
         final Long jobExecutionId = 10L;
         when(jobOperator.restart(jobExecutionId)).thenThrow(NoSuchJobExecutionException.class);
         jobService.restartJobExecution(jobExecutionId);
@@ -181,22 +178,45 @@ public class DefaultJobServiceTest {
         try {
             jobService.stopJobExecution(jobExecutionId);
             verify(jobOperator, times(1)).stop(jobExecutionId);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             fail(e.getMessage());
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Test(expected = SpringBatchLightminApplicationException.class)
     public void stopJobExecutionExceptionTest() throws JobParametersInvalidException, JobRestartException,
-            JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException, JobExecutionNotRunningException {
+            JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException,
+            JobExecutionNotRunningException {
         final Long jobExecutionId = 10L;
         when(jobOperator.stop(jobExecutionId)).thenThrow(NoSuchJobExecutionException.class);
         jobService.stopJobExecution(jobExecutionId);
     }
 
+    @Test
+    public void getLastJobParametersTest() {
+        final List<JobExecution> jobExecutions = new LinkedList<JobExecution>();
+        final JobParameters jobParameters = new JobParametersBuilder().addLong("long", 1L).addString("String",
+                "someString").toJobParameters();
+        final JobExecution jobExecution = new JobExecution(1L, jobParameters, "test");
+        jobExecutions.add(jobExecution);
+        when(lightminJobExecutionDao.getJobExecutions(anyString(), anyInt(), anyInt())).thenReturn(jobExecutions);
+        final JobParameters result = jobService.getLastJobParameters("test");
+        assertThat(result).isEqualTo(jobParameters);
+    }
+
+    @Test
+    public void getLastJobParametersNotExistingTest() {
+        final List<JobExecution> jobExecutions = new LinkedList<JobExecution>();
+        final JobParameters jobParameters = new JobParameters();
+        when(lightminJobExecutionDao.getJobExecutions(anyString(), anyInt(), anyInt())).thenReturn(jobExecutions);
+        final JobParameters result = jobService.getLastJobParameters("test");
+        assertThat(result).isEqualTo(jobParameters);
+    }
+
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        jobService = new DefaultJobService(jobOperator, jobRegistry, jobInstanceDao, jobExecutionDao, lightminJobExecutionDao);
+        jobService = new DefaultJobService(jobOperator, jobRegistry, jobExplorer, lightminJobExecutionDao);
     }
 }

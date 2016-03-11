@@ -49,7 +49,7 @@ public class JobController extends CommonController {
         model.addAttribute("jobs", jobInfoModels);
     }
 
-    @RequestMapping(value = "job", method = RequestMethod.GET)
+    @RequestMapping(value = "/job", method = RequestMethod.GET)
     public String getJob(final Model model, @RequestParam("jobname") final String jobName,
                          @RequestParam(value = "startindex", defaultValue = "0") final int startIndex,
                          @RequestParam(value = "pagesize", defaultValue = "10") final int pageSize) {
@@ -128,7 +128,7 @@ public class JobController extends CommonController {
     }
 
     void enrichJobExecution(final JobExecutionModel jobExecutionModel,
-                            Collection<StepExecution> stepExecutions) {
+                            final Collection<StepExecution> stepExecutions) {
         final Collection<StepExecutionModel> stepExecutionModels = new LinkedList<StepExecutionModel>();
         for (final StepExecution stepExecution : stepExecutions) {
             final StepExecutionModel stepExecutionModel = new StepExecutionModel();
