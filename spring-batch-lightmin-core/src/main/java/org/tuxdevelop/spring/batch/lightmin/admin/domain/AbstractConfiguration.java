@@ -9,9 +9,9 @@ import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplica
  * @since 0.1
  */
 @Slf4j
-public abstract class AbstractConfiguration {
+abstract class AbstractConfiguration {
 
-    protected void throwExceptionAndLogError(final String message) {
+    void throwExceptionAndLogError(final String message) {
         log.error(message);
         throw new SpringBatchLightminApplicationException(message);
     }

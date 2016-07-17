@@ -22,7 +22,7 @@ public class JobSchedulerConfiguration extends AbstractConfiguration {
     private String beanName;
     private SchedulerStatus schedulerStatus;
 
-    public void validate() {
+    void validate() {
         if (jobSchedulerType == null) {
             throwExceptionAndLogError("jobSchedulerType must not be null");
         }

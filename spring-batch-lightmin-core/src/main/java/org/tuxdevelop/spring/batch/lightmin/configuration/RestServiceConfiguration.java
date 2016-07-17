@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
  * @version 0.1
  */
 @Configuration
-@ComponentScan(basePackages = "org.tuxdevelop.spring.batch.lightmin.api.rest")
+@ComponentScan(basePackages = {"org.tuxdevelop.spring.batch.lightmin.api.controller",
+        "org.tuxdevelop.spring.batch.lightmin.support"})
 public class RestServiceConfiguration {
 
 

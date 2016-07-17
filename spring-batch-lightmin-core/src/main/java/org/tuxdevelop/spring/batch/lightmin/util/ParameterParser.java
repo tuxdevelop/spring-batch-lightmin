@@ -142,7 +142,7 @@ public final class ParameterParser {
         final Map<String, Object> parameterMap;
         if (parameters == null || parameters.isEmpty()) {
             log.info("parameters null or empty, nothing to map!");
-            parameterMap = new HashMap<String, Object>();
+            parameterMap = new HashMap<>();
         } else {
             final List<String> parameterList = splitParameters(parameters);
             parameterMap = evaluateParameters(parameterList);
@@ -158,7 +158,7 @@ public final class ParameterParser {
      */
     public static String parseJobParametersToString(final JobParameters jobParameters) {
         final Map<String, JobParameter> jobParametersMap = jobParameters.getParameters();
-        final Map<String, Object> paramatersMap = new HashMap<String, Object>();
+        final Map<String, Object> paramatersMap = new HashMap<>();
         for (final Entry<String, JobParameter> entry : jobParametersMap.entrySet()) {
             paramatersMap.put(entry.getKey(), entry.getValue().getValue());
         }
@@ -166,14 +166,14 @@ public final class ParameterParser {
     }
 
     static List<String> splitParameters(final String parameters) {
-        final List<String> parameterList = new LinkedList<String>();
+        final List<String> parameterList = new LinkedList<>();
         final String[] parametersArray = parameters.split(",");
         Collections.addAll(parameterList, parametersArray);
         return parameterList;
     }
 
     static Map<String, Object> evaluateParameters(final List<String> parameterList) {
-        final Map<String, Object> parameters = new HashMap<String, Object>();
+        final Map<String, Object> parameters = new HashMap<>();
         for (final String parameter : parameterList) {
             final Entry<String, Object> entry = generateParameterEntry(parameter);
             parameters.put(entry.getKey(), entry.getValue());

@@ -38,15 +38,19 @@
         <module>spring-batch-lightmin-core</module>
         <module>spring-batch-lightmin-ui</module>
         <module>spring-batch-lightmin-documentation</module>
+        <module>spring-batch-lightmin-client</module>
+        <module>spring-batch-lightmin-api</module>
     </modules>
 
     <properties>
         <assertj.version>1.7.1</assertj.version>
-        <platform-bom.version>2.0.3.RELEASE</platform-bom.version>
+        <platform-bom.version>2.0.6.RELEASE</platform-bom.version>
         <openpojo.version>0.8.0</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <maven-compiler-plugin.source>1.7</maven-compiler-plugin.source>
+        <maven-compiler-plugin.target>1.7</maven-compiler-plugin.target>
         <nexus-staging-maven-plugin.version>1.6.3</nexus-staging-maven-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
@@ -166,8 +170,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>${maven-compiler-plugin.source}</source>
+                    <target>${maven-compiler-plugin.target}</target>
                     <encoding>UTF-8</encoding>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>

@@ -15,6 +15,14 @@
     <artifactId>spring-batch-lightmin-core</artifactId>
 
     <dependencies>
+
+        <!-- lightmin -->
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- spring -->
         <dependency>
             <groupId>org.springframework</groupId>

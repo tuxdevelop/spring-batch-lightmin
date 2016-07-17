@@ -1,10 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -18,19 +14,17 @@ import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerConstructorWrapper;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.TaskExecutorType;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.CronScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 public class DefaultSchedulerService implements SchedulerService {
@@ -42,7 +36,7 @@ public class DefaultSchedulerService implements SchedulerService {
     private final JobRegistry jobRegistry;
 
     public DefaultSchedulerService(final BeanRegistrar beanRegistrar, final JobRepository jobRepository,
-            final JobRegistry jobRegistry) {
+                                   final JobRegistry jobRegistry) {
         this.beanRegistrar = beanRegistrar;
         this.jobRepository = jobRepository;
         this.jobRegistry = jobRegistry;
@@ -85,7 +79,7 @@ public class DefaultSchedulerService implements SchedulerService {
     @Override
     public void schedule(final String beanName, final Boolean forceScheduling) {
         if (applicationContext.containsBean(beanName)) {
-            final Scheduler scheduler = (Scheduler) applicationContext.getBean(beanName);
+            final Scheduler scheduler = applicationContext.getBean(beanName, Scheduler.class);
             if (scheduler.getSchedulerStatus().equals(SchedulerStatus.RUNNING)
                     && Boolean.FALSE.equals(forceScheduling)) {
                 log.info("Scheduler: " + beanName + " already running");
@@ -100,7 +94,7 @@ public class DefaultSchedulerService implements SchedulerService {
     @Override
     public void terminate(final String beanName) {
         if (applicationContext.containsBean(beanName)) {
-            final Scheduler scheduler = (Scheduler) applicationContext.getBean(beanName);
+            final Scheduler scheduler = applicationContext.getBean(beanName, Scheduler.class);
             if (scheduler.getSchedulerStatus().equals(SchedulerStatus.STOPPED)) {
                 log.info("Scheduler: " + beanName + " already terminated");
             } else {
@@ -115,7 +109,7 @@ public class DefaultSchedulerService implements SchedulerService {
     public SchedulerStatus getSchedulerStatus(final String beanName) {
         final SchedulerStatus status;
         if (applicationContext.containsBean(beanName)) {
-            final Scheduler scheduler = (Scheduler) applicationContext.getBean(beanName);
+            final Scheduler scheduler = applicationContext.getBean(beanName, Scheduler.class);
             status = scheduler.getSchedulerStatus();
         } else {
             throw new SpringBatchLightminConfigurationException("Could not get status for bean with name: " + beanName);
@@ -186,7 +180,7 @@ public class DefaultSchedulerService implements SchedulerService {
     }
 
     private void attachJobParameter(final JobParametersBuilder jobParametersBuilder, final String parameterName,
-            final Object parameterValue) {
+                                    final Object parameterValue) {
         if (parameterValue instanceof Long) {
             jobParametersBuilder.addLong(parameterName, (Long) parameterValue);
         } else if (parameterValue instanceof Date) {
@@ -199,7 +193,7 @@ public class DefaultSchedulerService implements SchedulerService {
     }
 
     private String generateSchedulerBeanName(final String jobName, final Long id,
-            final JobSchedulerType jobSchedulerType) {
+                                             final JobSchedulerType jobSchedulerType) {
         return jobName + jobSchedulerType.name() + id;
     }
 

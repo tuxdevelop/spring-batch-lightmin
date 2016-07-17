@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.model;
 
-import org.tuxdevelop.spring.batch.lightmin.PojoTestBase;
 
+import org.tuxdevelop.spring.batch.lightmin.PojoTestBase;
 
 public class JobConfigurationAddModelTest extends PojoTestBase {
     @Override

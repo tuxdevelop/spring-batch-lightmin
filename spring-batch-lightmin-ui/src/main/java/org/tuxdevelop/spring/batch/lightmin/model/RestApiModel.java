@@ -2,7 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.model;
 
 import lombok.Getter;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.tuxdevelop.spring.batch.lightmin.api.rest.AbstractRestController;
+import org.tuxdevelop.spring.batch.lightmin.api.controller.AbstractRestController;
 
 import java.util.HashMap;
 import java.util.LinkedList;

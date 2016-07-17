@@ -23,16 +23,15 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     private final AtomicLong currentJobId = new AtomicLong(1L);
 
     public MapJobConfigurationRepository() {
-        jobConfigurations = new ConcurrentHashMap<String, Map<Long, JobConfiguration>>();
-
+        jobConfigurations = new ConcurrentHashMap<>();
     }
 
     @Override
     public JobConfiguration getJobConfiguration(final Long jobConfigurationId) throws NoSuchJobConfigurationException {
         final Set<String> jobNames = jobConfigurations.keySet();
-        final Map<Long, JobConfiguration> tempMap = new HashMap<Long, JobConfiguration>();
+        final Map<Long, JobConfiguration> tempMap = new HashMap<>();
         JobConfiguration jobConfiguration = null;
-        for (String jobName : jobNames) {
+        for (final String jobName : jobNames) {
             final Map<Long, JobConfiguration> configurationMap = jobConfigurations.get(jobName);
             if (configurationMap != null && !configurationMap.isEmpty()) {
                 tempMap.putAll(configurationMap);
@@ -74,7 +73,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
         if (jobConfigurations.containsKey(jobName)) {
             jobConfigurations.get(jobName).put(jobConfigurationId, jobConfiguration);
         } else {
-            final Map<Long, JobConfiguration> jobConfigurationMap = new HashMap<Long, JobConfiguration>();
+            final Map<Long, JobConfiguration> jobConfigurationMap = new HashMap<>();
             jobConfigurationMap.put(jobConfigurationId, jobConfiguration);
             jobConfigurations.put(jobName, jobConfigurationMap);
         }
@@ -113,16 +112,16 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
 
     @Override
     public Collection<JobConfiguration> getAllJobConfigurations() {
-        final Collection<JobConfiguration> jobConfigurationCollection = new LinkedList<JobConfiguration>();
-        for (Map.Entry<String, Map<Long, JobConfiguration>> entry : jobConfigurations.entrySet()) {
+        final Collection<JobConfiguration> jobConfigurationCollection = new LinkedList<>();
+        for (final Map.Entry<String, Map<Long, JobConfiguration>> entry : jobConfigurations.entrySet()) {
             jobConfigurationCollection.addAll(entry.getValue().values());
         }
         return jobConfigurationCollection;
     }
 
     @Override
-    public Collection<JobConfiguration> getAllJobConfigurationsByJobNames(Collection<String> jobNames) {
-        final Collection<JobConfiguration> jobConfigurationCollection = new LinkedList<JobConfiguration>();
+    public Collection<JobConfiguration> getAllJobConfigurationsByJobNames(final Collection<String> jobNames) {
+        final Collection<JobConfiguration> jobConfigurationCollection = new LinkedList<>();
         for (final String jobName : jobNames) {
             if (jobConfigurations.containsKey(jobName)) {
                 jobConfigurationCollection.addAll(jobConfigurations.get(jobName).values());
@@ -135,8 +134,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     }
 
     private synchronized Long getNextJobId() {
-        final Long nextJobId = currentJobId.getAndIncrement();
-        return nextJobId;
+        return currentJobId.getAndIncrement();
     }
 
 }

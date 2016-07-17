@@ -57,7 +57,7 @@ public class DefaultJobService implements JobService {
 
     @Override
     public Set<String> getJobNames() {
-        return new HashSet<String>(jobRegistry.getJobNames());
+        return new HashSet<>(jobRegistry.getJobNames());
     }
 
     @Override

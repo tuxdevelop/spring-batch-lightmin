@@ -85,7 +85,7 @@ public class DefaultSchedulerServiceTest {
         jobSchedulerConfiguration.setBeanName(beanName);
         jobSchedulerConfiguration.setTaskExecutorType(TaskExecutorType.ASYNCHRONOUS);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        final Map<String, Object> jobParameters = new HashMap<String, Object>();
+        final Map<String, Object> jobParameters = new HashMap<>();
         jobParameters.put("LONG", 10L);
         jobParameters.put("DOUBLE", 20.2);
         jobParameters.put("STRING", "test");
@@ -100,7 +100,7 @@ public class DefaultSchedulerServiceTest {
         schedulerConstructorWrapper.setJobParameters(new JobParametersBuilder().toJobParameters());
         //scheduler = new PeriodScheduler(schedulerConstructorWrapper);
         when(applicationContext.containsBean(beanName)).thenReturn(Boolean.TRUE);
-        when(applicationContext.getBean(beanName)).thenReturn(scheduler);
+        when(applicationContext.getBean(beanName, Scheduler.class)).thenReturn(scheduler);
         when(scheduler.getSchedulerStatus()).thenReturn(SchedulerStatus.INITIALIZED);
         schedulerService.refreshSchedulerForJob(jobConfiguration);
         verify(scheduler, times(1)).terminate();
@@ -115,7 +115,7 @@ public class DefaultSchedulerServiceTest {
         jobSchedulerConfiguration.setBeanName(beanName);
         jobSchedulerConfiguration.setTaskExecutorType(TaskExecutorType.ASYNCHRONOUS);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        final Map<String, Object> jobParameters = new HashMap<String, Object>();
+        final Map<String, Object> jobParameters = new HashMap<>();
         jobParameters.put("LONG", 10L);
         jobParameters.put("DOUBLE", 20.2);
         jobParameters.put("STRING", "test");
@@ -130,7 +130,7 @@ public class DefaultSchedulerServiceTest {
         schedulerConstructorWrapper.setJobParameters(new JobParametersBuilder().toJobParameters());
         //scheduler = new PeriodScheduler(schedulerConstructorWrapper);
         when(applicationContext.containsBean(beanName)).thenReturn(Boolean.TRUE);
-        when(applicationContext.getBean(beanName)).thenReturn(scheduler);
+        when(applicationContext.getBean(beanName, Scheduler.class)).thenReturn(scheduler);
         when(scheduler.getSchedulerStatus()).thenReturn(SchedulerStatus.INITIALIZED);
         schedulerService.refreshSchedulerForJob(jobConfiguration);
         verify(scheduler, times(1)).terminate();
@@ -140,7 +140,7 @@ public class DefaultSchedulerServiceTest {
     public void scheduleTest() {
         final String beanName = "schedulerBean";
         when(applicationContext.containsBean(beanName)).thenReturn(Boolean.TRUE);
-        when(applicationContext.getBean(beanName)).thenReturn(scheduler);
+        when(applicationContext.getBean(beanName, Scheduler.class)).thenReturn(scheduler);
         when(scheduler.getSchedulerStatus()).thenReturn(SchedulerStatus.INITIALIZED);
         schedulerService.schedule(beanName, Boolean.FALSE);
         verify(scheduler, times(1)).schedule();
@@ -150,7 +150,7 @@ public class DefaultSchedulerServiceTest {
     public void scheduleRUNNINGTest() {
         final String beanName = "schedulerBean";
         when(applicationContext.containsBean(beanName)).thenReturn(Boolean.TRUE);
-        when(applicationContext.getBean(beanName)).thenReturn(scheduler);
+        when(applicationContext.getBean(beanName, Scheduler.class)).thenReturn(scheduler);
         when(scheduler.getSchedulerStatus()).thenReturn(SchedulerStatus.RUNNING);
         schedulerService.schedule(beanName, Boolean.FALSE);
         verify(scheduler, times(0)).schedule();
@@ -160,7 +160,7 @@ public class DefaultSchedulerServiceTest {
     public void scheduleRUNNINGForceTest() {
         final String beanName = "schedulerBean";
         when(applicationContext.containsBean(beanName)).thenReturn(Boolean.TRUE);
-        when(applicationContext.getBean(beanName)).thenReturn(scheduler);
+        when(applicationContext.getBean(beanName, Scheduler.class)).thenReturn(scheduler);
         when(scheduler.getSchedulerStatus()).thenReturn(SchedulerStatus.RUNNING);
         schedulerService.schedule(beanName, Boolean.TRUE);
         verify(scheduler, times(1)).schedule();
@@ -177,7 +177,7 @@ public class DefaultSchedulerServiceTest {
     public void terminateTest() {
         final String beanName = "schedulerBean";
         when(applicationContext.containsBean(beanName)).thenReturn(Boolean.TRUE);
-        when(applicationContext.getBean(beanName)).thenReturn(scheduler);
+        when(applicationContext.getBean(beanName, Scheduler.class)).thenReturn(scheduler);
         when(scheduler.getSchedulerStatus()).thenReturn(SchedulerStatus.RUNNING);
         schedulerService.terminate(beanName);
         verify(scheduler, times(1)).terminate();
@@ -187,7 +187,7 @@ public class DefaultSchedulerServiceTest {
     public void terminateSTOPPEDTest() {
         final String beanName = "schedulerBean";
         when(applicationContext.containsBean(beanName)).thenReturn(Boolean.TRUE);
-        when(applicationContext.getBean(beanName)).thenReturn(scheduler);
+        when(applicationContext.getBean(beanName, Scheduler.class)).thenReturn(scheduler);
         when(scheduler.getSchedulerStatus()).thenReturn(SchedulerStatus.STOPPED);
         schedulerService.terminate(beanName);
         verify(scheduler, times(0)).terminate();
@@ -204,7 +204,7 @@ public class DefaultSchedulerServiceTest {
     public void getSchedulerStatusTest() {
         final String beanName = "schedulerBean";
         when(applicationContext.containsBean(beanName)).thenReturn(Boolean.TRUE);
-        when(applicationContext.getBean(beanName)).thenReturn(scheduler);
+        when(applicationContext.getBean(beanName, Scheduler.class)).thenReturn(scheduler);
         when(scheduler.getSchedulerStatus()).thenReturn(SchedulerStatus.STOPPED);
         final SchedulerStatus schedulerStatus = schedulerService.getSchedulerStatus(beanName);
         assertThat(schedulerStatus).isEqualTo(SchedulerStatus.STOPPED);
