@@ -124,9 +124,9 @@ public class DefaultSchedulerService implements SchedulerService {
         assert jobRegistry != null;
     }
 
-    String registerScheduler(final JobConfiguration jobConfiguration, final Class<?> schedulerClass) {
+    private String registerScheduler(final JobConfiguration jobConfiguration, final Class<?> schedulerClass) {
         try {
-            final Set<Object> constructorValues = new HashSet<Object>();
+            final Set<Object> constructorValues = new HashSet<>();
             final JobLauncher jobLauncher = createJobLauncher(jobConfiguration.getJobSchedulerConfiguration()
                     .getTaskExecutorType());
             final Job job = jobRegistry.getJob(jobConfiguration.getJobName());

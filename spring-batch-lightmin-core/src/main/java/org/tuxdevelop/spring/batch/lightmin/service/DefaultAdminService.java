@@ -56,6 +56,10 @@ public class DefaultAdminService implements AdminService {
     public void updateJobConfiguration(final JobConfiguration jobConfiguration) {
         jobConfiguration.validateForUpdate();
         try {
+            final JobConfiguration existingJobConfiguration = jobConfigurationRepository.getJobConfiguration
+                    (jobConfiguration.getJobConfigurationId());
+            final String existingBeanName = existingJobConfiguration.getJobSchedulerConfiguration().getBeanName();
+            jobConfiguration.getJobSchedulerConfiguration().setBeanName(existingBeanName);
             jobConfigurationRepository.update(jobConfiguration);
             schedulerService.refreshSchedulerForJob(jobConfiguration);
             if (SchedulerStatus.RUNNING.equals(jobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus())) {
@@ -103,7 +107,7 @@ public class DefaultAdminService implements AdminService {
 
     @Override
     public Map<String, Collection<JobConfiguration>> getJobConfigurationMap(final Collection<String> jobNames) {
-        final Map<String, Collection<JobConfiguration>> jobConfigurationMap = new HashMap<String, Collection<JobConfiguration>>();
+        final Map<String, Collection<JobConfiguration>> jobConfigurationMap = new HashMap<>();
         final Collection<JobConfiguration> jobConfigurations = jobConfigurationRepository
                 .getAllJobConfigurationsByJobNames(jobNames);
         attachSchedulerStatus(jobConfigurations);
@@ -143,7 +147,7 @@ public class DefaultAdminService implements AdminService {
             schedulerService.terminate(beanName);
             jobConfiguration.getJobSchedulerConfiguration().setSchedulerStatus(SchedulerStatus.STOPPED);
             jobConfigurationRepository.update(jobConfiguration);
-        } catch (NoSuchJobConfigurationException e) {
+        } catch (final NoSuchJobConfigurationException e) {
             throw new SpringBatchLightminApplicationException(e, e.getMessage());
         }
     }
@@ -156,7 +160,7 @@ public class DefaultAdminService implements AdminService {
             schedulerService.schedule(beanName, Boolean.FALSE);
             jobConfiguration.getJobSchedulerConfiguration().setSchedulerStatus(SchedulerStatus.RUNNING);
             jobConfigurationRepository.update(jobConfiguration);
-        } catch (NoSuchJobConfigurationException e) {
+        } catch (final NoSuchJobConfigurationException e) {
             throw new SpringBatchLightminApplicationException(e, e.getMessage());
         }
     }
@@ -167,13 +171,13 @@ public class DefaultAdminService implements AdminService {
         assert schedulerService != null;
     }
 
-    void attachSchedulerStatus(final Collection<JobConfiguration> jobConfigurations) {
+    private void attachSchedulerStatus(final Collection<JobConfiguration> jobConfigurations) {
         for (final JobConfiguration jobConfiguration : jobConfigurations) {
             attachSchedulerStatus(jobConfiguration);
         }
     }
 
-    void attachSchedulerStatus(final JobConfiguration jobConfiguration) {
+    private void attachSchedulerStatus(final JobConfiguration jobConfiguration) {
         final String schedulerName = jobConfiguration.getJobSchedulerConfiguration().getBeanName();
         final SchedulerStatus schedulerStatus = schedulerService.getSchedulerStatus(schedulerName);
         jobConfiguration.getJobSchedulerConfiguration().setSchedulerStatus(schedulerStatus);

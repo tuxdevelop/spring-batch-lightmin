@@ -79,7 +79,7 @@ public class DefaultJobService implements JobService {
 
     @Override
     public Collection<JobExecution> getJobExecutions(final JobInstance jobInstance) {
-        final Collection<JobExecution> jobExecutions = new LinkedList<JobExecution>();
+        final Collection<JobExecution> jobExecutions = new LinkedList<>();
         final List<JobExecution> jobExecutionList = jobExplorer.getJobExecutions(jobInstance);
         jobExecutions.addAll(jobExecutionList);
         return jobExecutions;
@@ -87,7 +87,7 @@ public class DefaultJobService implements JobService {
 
     @Override
     public Collection<JobExecution> getJobExecutions(final JobInstance jobInstance, final int start, final int count) {
-        final Collection<JobExecution> jobExecutions = new LinkedList<JobExecution>();
+        final Collection<JobExecution> jobExecutions = new LinkedList<>();
         final List<JobExecution> jobExecutionList = lightminJobExecutionDao.findJobExecutions(jobInstance, start, count);
         jobExecutions.addAll(jobExecutionList);
         return jobExecutions;

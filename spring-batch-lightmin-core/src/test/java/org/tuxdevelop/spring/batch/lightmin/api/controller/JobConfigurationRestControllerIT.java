@@ -59,7 +59,7 @@ public class JobConfigurationRestControllerIT extends CommonControllerIT {
                 .JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS;
         final JobConfiguration jobConfiguration = AdminToResourceMapper.map(createJobConfiguration());
         final ResponseEntity<Void> responseEntity = restTemplate.postForEntity(uri, jobConfiguration, Void.class);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         final String uriGet = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS_JOB_NAME;
         final ResponseEntity<JobConfigurations> result = restTemplate.getForEntity(uriGet, JobConfigurations.class,
@@ -102,7 +102,7 @@ public class JobConfigurationRestControllerIT extends CommonControllerIT {
                 .JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS;
         final JobConfiguration jobConfiguration = AdminToResourceMapper.map(createJobConfiguration());
         final ResponseEntity<Void> responseEntity = restTemplate.postForEntity(uriAdd, jobConfiguration, Void.class);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         final String uriGet = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS_JOB_NAME;
         final ResponseEntity<JobConfigurations> result = restTemplate.getForEntity(uriGet, JobConfigurations.class,

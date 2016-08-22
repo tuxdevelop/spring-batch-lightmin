@@ -17,7 +17,7 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
 
     @Override
     public List<JobExecution> findJobExecutions(final JobInstance job, final int start, final int count) {
-        final ArrayList<JobExecution> result = new ArrayList<JobExecution>(jobExplorer.getJobExecutions(job));
+        final ArrayList<JobExecution> result = new ArrayList<>(jobExplorer.getJobExecutions(job));
         sortDescending(result);
         return subset(result, start, count);
     }
@@ -30,7 +30,7 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
 
     @Override
     public List<JobExecution> getJobExecutions(final String jobName, final int start, final int count) {
-        final List<JobExecution> jobExecutions = new LinkedList<JobExecution>();
+        final List<JobExecution> jobExecutions = new LinkedList<>();
 
         int jobInstanceCount;
         try {
@@ -47,16 +47,16 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
         return subset(jobExecutions, start, count);
     }
 
-    void sortDescending(final List<JobExecution> result) {
+    private void sortDescending(final List<JobExecution> result) {
         Collections.sort(result, new Comparator<JobExecution>() {
             @Override
             public int compare(final JobExecution jobExecution, final JobExecution jobExecutionToCompare) {
-                return Long.signum(jobExecutionToCompare.getId().longValue() - jobExecution.getId().longValue());
+                return Long.signum(jobExecutionToCompare.getId() - jobExecution.getId());
             }
         });
     }
 
-    List<JobExecution> subset(final List<JobExecution> jobExecutions, final int start, final int count) {
+    private List<JobExecution> subset(final List<JobExecution> jobExecutions, final int start, final int count) {
         final int startIndex = Math.min(start, jobExecutions.size());
         final int endIndex = Math.min(start + count, jobExecutions.size());
         return jobExecutions.subList(startIndex, endIndex);

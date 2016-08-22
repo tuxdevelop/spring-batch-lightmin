@@ -165,14 +165,14 @@ public final class ParameterParser {
         return parseParameterMapToString(paramatersMap);
     }
 
-    static List<String> splitParameters(final String parameters) {
+    private static List<String> splitParameters(final String parameters) {
         final List<String> parameterList = new LinkedList<>();
         final String[] parametersArray = parameters.split(",");
         Collections.addAll(parameterList, parametersArray);
         return parameterList;
     }
 
-    static Map<String, Object> evaluateParameters(final List<String> parameterList) {
+    private static Map<String, Object> evaluateParameters(final List<String> parameterList) {
         final Map<String, Object> parameters = new HashMap<>();
         for (final String parameter : parameterList) {
             final Entry<String, Object> entry = generateParameterEntry(parameter);
@@ -199,7 +199,7 @@ public final class ParameterParser {
         final String valueString = thirdSplit[1];
         log.debug("got value: " + valueString);
         value = createValueInstance(type, valueString);
-        return new AbstractMap.SimpleEntry<String, Object>(key, value);
+        return new AbstractMap.SimpleEntry<>(key, value);
     }
 
     static Object createValueInstance(final String type, final String valueString) {

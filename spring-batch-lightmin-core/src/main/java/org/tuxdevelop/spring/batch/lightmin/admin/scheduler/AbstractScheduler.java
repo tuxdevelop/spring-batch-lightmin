@@ -17,12 +17,12 @@ import java.util.Date;
  * @author Marcel Becker
  * @version 0.1
  */
-public abstract class AbstractScheduler implements InitializingBean {
+abstract class AbstractScheduler implements InitializingBean {
 
     @Setter
     private SchedulerStatus status;
 
-    protected static class JobRunner implements Runnable {
+    static class JobRunner implements Runnable {
 
         @Getter
         private final Job job;
@@ -31,8 +31,8 @@ public abstract class AbstractScheduler implements InitializingBean {
         private JobParameters jobParameters;
         private final JobIncrementer jobIncrementer;
 
-        public JobRunner(final Job job, final JobLauncher jobLauncher, final JobParameters jobParameters,
-                         final JobIncrementer jobIncrementer) {
+        JobRunner(final Job job, final JobLauncher jobLauncher, final JobParameters jobParameters,
+                  final JobIncrementer jobIncrementer) {
             this.job = job;
             this.jobLauncher = jobLauncher;
             this.jobParameters = jobParameters;

@@ -9,7 +9,7 @@ import java.util.Date;
  * @author Marcel Becker
  * @since 0.1
  */
-public enum ParameterType {
+enum ParameterType {
 
     STRING(1L, String.class),
     LONG(2L, Long.class),

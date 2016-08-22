@@ -15,6 +15,7 @@ public class LightminClientApplication implements Serializable {
     private String managementUrl;
     private String healthUrl;
     private String serviceUrl;
+    private LightminClientApplicationStatus lightminClientApplicationStatus;
     private LightminClientInformation lightminClientInformation;
 
 

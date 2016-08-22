@@ -1,17 +1,5 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +15,16 @@ import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRep
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
+
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultAdminServiceTest {
@@ -70,11 +68,12 @@ public class DefaultAdminServiceTest {
     }
 
     @Test
-    public void updateJobConfigurationTest() {
+    public void updateJobConfigurationTest() throws NoSuchJobConfigurationException {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(
                 "0 0/5 * * * ?", null, null, JobSchedulerType.CRON);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobConfigurationId(1L);
+        when(jobConfigurationRepository.getJobConfiguration(anyLong())).thenReturn(jobConfiguration);
         try {
             defaultAdminService.updateJobConfiguration(jobConfiguration);
         } catch (final SpringBatchLightminApplicationException e) {
@@ -90,6 +89,7 @@ public class DefaultAdminServiceTest {
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobConfigurationId(1L);
         try {
+            when(jobConfigurationRepository.getJobConfiguration(anyLong())).thenReturn(jobConfiguration);
             when(jobConfigurationRepository.update(any(JobConfiguration.class)))
                     .thenThrow(NoSuchJobConfigurationException.class);
         } catch (final NoSuchJobConfigurationException e) {
