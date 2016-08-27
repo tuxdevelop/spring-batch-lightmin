@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin;
 
 import org.springframework.batch.core.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -85,6 +86,30 @@ public class TestHelper {
         jobSchedulerConfiguration.setJobSchedulerType(jobSchedulerType);
         jobSchedulerConfiguration.setTaskExecutorType(TaskExecutorType.SYNCHRONOUS);
         jobSchedulerConfiguration.setSchedulerStatus(SchedulerStatus.INITIALIZED);
+        return jobSchedulerConfiguration;
+    }
+
+    public static org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration createJobConfiguration
+            (final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerConfiguration jobSchedulerConfiguration) {
+        final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration jobConfiguration = new org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration();
+        jobConfiguration.setJobName("sampleJob");
+        jobConfiguration.setJobIncrementer(org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer.DATE);
+        jobConfiguration.setJobParameters(new JobParameters());
+        jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
+        return jobConfiguration;
+    }
+
+    public static org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerConfiguration createJobSchedulerConfiguration(final String cronExpression,
+                                                                                                                                    final Long fixedDelay,
+                                                                                                                                    final Long initialDelay,
+                                                                                                                                    final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerType jobSchedulerType) {
+        final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerConfiguration jobSchedulerConfiguration = new org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerConfiguration();
+        jobSchedulerConfiguration.setCronExpression(cronExpression);
+        jobSchedulerConfiguration.setFixedDelay(fixedDelay);
+        jobSchedulerConfiguration.setInitialDelay(initialDelay);
+        jobSchedulerConfiguration.setJobSchedulerType(jobSchedulerType);
+        jobSchedulerConfiguration.setTaskExecutorType(org.tuxdevelop.spring.batch.lightmin.api.resource.admin.TaskExecutorType.SYNCHRONOUS);
+        jobSchedulerConfiguration.setSchedulerStatus(org.tuxdevelop.spring.batch.lightmin.api.resource.admin.SchedulerStatus.INITIALIZED);
         return jobSchedulerConfiguration;
     }
 }

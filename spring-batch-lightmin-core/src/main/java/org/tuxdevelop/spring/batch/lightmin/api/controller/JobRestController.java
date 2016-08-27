@@ -1,65 +1,94 @@
 package org.tuxdevelop.spring.batch.lightmin.api.controller;
 
 
-import org.springframework.batch.core.JobInstance;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.BatchToResourceMapper;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobExecution;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobInstanceExecutions;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobInstances;
-import org.tuxdevelop.spring.batch.lightmin.service.JobService;
-
-import java.util.Collection;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.*;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
+import org.tuxdevelop.spring.batch.lightmin.support.ServiceEntry;
 
 /**
  * @author Marcel Becker
  * @version 0.1
  */
-@RestController
+@ResponseBody
+@RequestMapping("/")
 public class JobRestController extends AbstractRestController implements InitializingBean {
 
-    private final JobService jobService;
+    private final ServiceEntry serviceEntry;
 
-    @Autowired
-    public JobRestController(final JobService jobService) {
-        this.jobService = jobService;
+    public JobRestController(final ServiceEntry serviceEntry) {
+        this.serviceEntry = serviceEntry;
     }
 
     @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTIONS_JOB_EXECUTION_ID, produces = PRODUCES, method = RequestMethod.GET)
     public ResponseEntity<JobExecution> getJobExecutionById(@PathVariable(value = "jobexecutionid") final Long jobExecutionId) {
-        final JobExecution jobExecution = BatchToResourceMapper.map(jobService.getJobExecution(jobExecutionId));
+        final JobExecution jobExecution = serviceEntry.getByJobExecutionId(jobExecutionId);
         return ResponseEntity.ok(jobExecution);
     }
 
-    @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTIONS_JOB_INSTANCES_JOB_INSTANCE_ID, produces = PRODUCES, method = RequestMethod.GET)
-    public ResponseEntity<JobInstanceExecutions> getJobExecutionsByJobInstanceId(@PathVariable("jobinstanceid") final Long jobInstanceId) {
-        final JobInstance jobInstance = jobService.getJobInstance(jobInstanceId);
-        final Collection<org.springframework.batch.core.JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance);
-        final JobInstanceExecutions jobInstanceExecutions = new JobInstanceExecutions();
-        jobInstanceExecutions.setJobName(jobInstance.getJobName());
-        jobInstanceExecutions.setJobInstanceId(jobInstanceId);
-        jobInstanceExecutions.setJobExecutions(BatchToResourceMapper.mapExecutions(jobExecutions));
+    @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID, produces = PRODUCES, method = RequestMethod.GET)
+    public ResponseEntity<JobExecutionPage> getJobExecutionsByJobInstanceId(@PathVariable("jobinstanceid") final Long jobInstanceId,
+                                                                            @RequestParam(value = "startindex", defaultValue = "0") final int startIndex,
+                                                                            @RequestParam(value = "pagesize", defaultValue = "10") final int pageSize) {
+        final JobExecutionPage jobInstanceExecutions = serviceEntry.getJobExecutionPage(jobInstanceId, startIndex, pageSize);
+        return ResponseEntity.ok(jobInstanceExecutions);
+    }
+
+    @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID_ALL, produces = PRODUCES, method = RequestMethod.GET)
+    public ResponseEntity<JobExecutionPage> getJobExecutionsByJobInstanceId(@PathVariable("jobinstanceid") final Long jobInstanceId) {
+        final JobExecutionPage jobInstanceExecutions = serviceEntry.getJobExecutionPage(jobInstanceId);
         return ResponseEntity.ok(jobInstanceExecutions);
     }
 
     @RequestMapping(value = JobRestControllerAPI.JOB_INSTANCES_JOB_NAME, produces = PRODUCES, method = RequestMethod.GET)
-    public ResponseEntity<JobInstances> getJobInstancesByJobName(@PathVariable("jobname") final String jobName,
-                                                                 @RequestParam(value = "startindex", defaultValue = "0") final int startIndex,
-                                                                 @RequestParam(value = "pagesize", defaultValue = "10") final int pageSize) {
-        final Collection<JobInstance> jobInstanceCollection = jobService.getJobInstances(jobName, startIndex, pageSize);
-        final JobInstances jobInstances = new JobInstances();
-        jobInstances.setJobName(jobName);
-        jobInstances.setJobInstances(BatchToResourceMapper.mapInstances(jobInstanceCollection));
-        jobInstances.setPageSize(pageSize);
-        jobInstances.setStartIndex(startIndex);
-        return ResponseEntity.ok(jobInstances);
+    public ResponseEntity<JobInstancePage> getJobInstancesByJobName(@PathVariable("jobname") final String jobName,
+                                                                    @RequestParam(value = "startindex", defaultValue = "0") final int startIndex,
+                                                                    @RequestParam(value = "pagesize", defaultValue = "10") final int pageSize) {
+        final JobInstancePage jobInstancePage = serviceEntry.getJobInstancesByJobName(jobName, startIndex, pageSize);
+        return ResponseEntity.ok(jobInstancePage);
+    }
+
+    @RequestMapping(value = JobRestControllerAPI.APPLICATION_JOB_INFO, produces = PRODUCES, method = RequestMethod.GET)
+    public ResponseEntity<ApplicationJobInfo> getApplicationJobInfo() {
+        final ApplicationJobInfo applicationJobInfo = serviceEntry.getApplicationJobInfo();
+        return ResponseEntity.ok(applicationJobInfo);
+    }
+
+    @RequestMapping(value = JobRestControllerAPI.JOB_INFO_JOB_NAME, produces = PRODUCES, method = RequestMethod.GET)
+    public ResponseEntity<JobInfo> getJobInfo(@PathVariable("jobname") final String jobName) {
+        final JobInfo jobInfo = serviceEntry.getJobInfo(jobName);
+        return ResponseEntity.ok(jobInfo);
+    }
+
+    @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTIONS_RESTART, method = RequestMethod.GET)
+    public ResponseEntity<Void> restartJobExecution(@PathVariable("jobexecutionid") final Long jobExecutionId) {
+        serviceEntry.restartJobExecution(jobExecutionId);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTIONS_STOP, method = RequestMethod.GET)
+    public ResponseEntity<Void> stopJobExecution(@PathVariable("jobexecutionid") final Long jobExecutionId) {
+        serviceEntry.stopJobExecution(jobExecutionId);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = JobRestControllerAPI.STEP_EXECUTIONS, produces = PRODUCES, method = RequestMethod.GET)
+    public ResponseEntity<StepExecution> getStepExecution(@PathVariable("jobexecutionid") final Long jobExecutionId,
+                                                          @PathVariable("stepexecutionid") final Long stepExecutionId) {
+        final StepExecution stepExecution = serviceEntry.getStepExecution(jobExecutionId, stepExecutionId);
+        return ResponseEntity.ok(stepExecution);
+    }
+
+    @RequestMapping(value = JobRestControllerAPI.JOB_PARAMETERS, produces = PRODUCES, method = RequestMethod.GET)
+    public ResponseEntity<JobParameters> getLastJobParameters(@RequestParam("jobname") final String jobName) {
+        final JobParameters jobParameters = serviceEntry.getLastJobParameters(jobName);
+        return ResponseEntity.ok(jobParameters);
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        assert jobService != null;
+        assert serviceEntry != null;
     }
 }

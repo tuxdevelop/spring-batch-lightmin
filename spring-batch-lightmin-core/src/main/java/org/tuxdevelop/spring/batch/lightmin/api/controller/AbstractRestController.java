@@ -6,7 +6,6 @@ package org.tuxdevelop.spring.batch.lightmin.api.controller;
  */
 public abstract class AbstractRestController {
 
-    static final String ALL_JOBS = "ALL_JOBS";
     static final String PRODUCES = "application/json";
     static final String CONSUMES = "application/json";
 
@@ -17,10 +16,16 @@ public abstract class AbstractRestController {
         private JobRestControllerAPI() {
         }
 
-        public static final String JOB_EXECUTIONS_JOB_EXECUTION_ID = ROOT_URI + "/jobExecutions/{jobexecutionid}";
-        public static final String JOB_EXECUTIONS_JOB_INSTANCES_JOB_INSTANCE_ID =
-                ROOT_URI + "/jobExecutions/jobInstances/{jobinstanceid}";
-        public static final String JOB_INSTANCES_JOB_NAME = ROOT_URI + "/jobInstances/{jobname}";
+        public static final String JOB_EXECUTIONS_JOB_EXECUTION_ID = ROOT_URI + "/jobexecutions/{jobexecutionid}";
+        public static final String JOB_EXECUTION_PAGES_INSTANCE_ID = ROOT_URI + "/jobexecutionpages/{jobinstanceid}";
+        public static final String JOB_EXECUTION_PAGES_INSTANCE_ID_ALL = ROOT_URI + "/jobexecutionpages/{jobinstanceid}/all";
+        public static final String JOB_INSTANCES_JOB_NAME = ROOT_URI + "/jobinstances/{jobname}";
+        public static final String APPLICATION_JOB_INFO = ROOT_URI + "/applicationjobinfos";
+        public static final String JOB_INFO_JOB_NAME = ROOT_URI + "/jobinfos/{jobname}";
+        public static final String JOB_EXECUTIONS_RESTART = JOB_EXECUTIONS_JOB_EXECUTION_ID + "/restart";
+        public static final String JOB_EXECUTIONS_STOP = JOB_EXECUTIONS_JOB_EXECUTION_ID + "/stop";
+        public static final String STEP_EXECUTIONS = ROOT_URI + "/stepexecutions/{stepexecutionid}/jobexecutions/{jobexecutionid}";
+        public static final String JOB_PARAMETERS = ROOT_URI + "/jobparameters";
     }
 
     public final class JobConfigurationRestControllerAPI {
@@ -29,8 +34,17 @@ public abstract class AbstractRestController {
         }
 
         public static final String JOB_CONFIGURATIONS = ROOT_URI + "/jobconfigurations";
-        public static final String JOB_CONFIGURATIONS_JOB_NAME = ROOT_URI + "/jobconfigurations/{jobname}";
-        public static final String JOB_CONFIGURATION_JOB_CONFIGURATION_ID = ROOT_URI +
-                "/jobconfigurations/jobconfiguration/{jobconfigurationid}";
+        public static final String JOB_CONFIGURATIONS_JOB_NAME = JOB_CONFIGURATIONS + "/{jobname}";
+        public static final String JOB_CONFIGURATION_JOB_CONFIGURATION_ID = JOB_CONFIGURATIONS + "/jobconfiguration/{jobconfigurationid}";
+        public static final String JOB_CONFIGURATION_SCHEDULER_START = JOB_CONFIGURATIONS + "/{jobconfigurationid}/start";
+        public static final String JOB_CONFIGURATION_SCHEDULER_STOP = JOB_CONFIGURATIONS + "/{jobconfigurationid}/stop";
+    }
+
+    public final class JobLauncherRestControllerAPI {
+
+        private JobLauncherRestControllerAPI() {
+        }
+
+        public static final String JOB_LAUNCH = ROOT_URI + "/joblaunches";
     }
 }

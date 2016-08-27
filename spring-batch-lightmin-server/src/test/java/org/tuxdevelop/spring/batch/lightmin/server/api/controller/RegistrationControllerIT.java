@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientInformation;
-import org.tuxdevelop.spring.batch.lightmin.server.configuration.ITConfigurationApplication;
-import org.tuxdevelop.spring.batch.lightmin.server.configuration.ITServerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.ITServerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.ITServerConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
-@SpringApplicationConfiguration(classes = {ITConfigurationApplication.class, ITServerConfiguration.class})
+@SpringApplicationConfiguration(classes = {ITServerConfigurationApplication.class, ITServerConfiguration.class})
 public class RegistrationControllerIT {
 
 

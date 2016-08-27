@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobExecution;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobInstanceExecutions;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobInstances;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobInstancePage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,7 +30,7 @@ public class JobRestControllerIT extends CommonControllerIT {
     public void getJobExecutionsByJobInstanceIdIT() {
         final Long jobInstanceId = launchedJobInstanceId;
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
-                .JobRestControllerAPI.JOB_EXECUTIONS_JOB_INSTANCES_JOB_INSTANCE_ID;
+                .JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID;
         final ResponseEntity<JobInstanceExecutions> response = restTemplate.getForEntity(uri,
                 JobInstanceExecutions.class,
                 jobInstanceId);
@@ -44,7 +44,7 @@ public class JobRestControllerIT extends CommonControllerIT {
         final String jobName = "simpleJob";
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobRestControllerAPI.JOB_INSTANCES_JOB_NAME;
-        final ResponseEntity<JobInstances> response = restTemplate.getForEntity(uri, JobInstances.class,
+        final ResponseEntity<JobInstancePage> response = restTemplate.getForEntity(uri, JobInstancePage.class,
                 jobName);
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

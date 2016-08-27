@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.tuxdevelop.spring.batch.lightmin.ITMapConfiguration;
@@ -15,12 +14,13 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-@ActiveProfiles("mapOnly")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ITMapConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -38,7 +38,7 @@ public class DefaultAdminServiceIT {
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
         adminService.saveJobConfiguration(jobConfiguration);
-        final Collection<String> jobNames = new LinkedList<String>();
+        final Collection<String> jobNames = new LinkedList<>();
         jobNames.add(jobName);
         final Collection<JobConfiguration> fetchedJobConfigurations = adminService.getJobConfigurations(jobNames);
         assertThat(fetchedJobConfigurations).hasSize(1);
@@ -46,7 +46,7 @@ public class DefaultAdminServiceIT {
         for (final JobConfiguration fetchedJobConfiguration : fetchedJobConfigurations) {
             jobConfigurationId = fetchedJobConfiguration.getJobConfigurationId();
         }
-        assertThat(jobConfiguration).isNotNull();
+        assertThat(jobConfigurationId).isNotNull();
         final JobConfiguration fetchedJobConfiguration = adminService.getJobConfigurationById(jobConfigurationId);
         assertThat(fetchedJobConfiguration).isNotNull();
         adminService.deleteJobConfiguration(jobConfigurationId);
@@ -56,8 +56,33 @@ public class DefaultAdminServiceIT {
         } catch (final SpringBatchLightminApplicationException e) {
             //OK
         }
+    }
 
-
+    @Test
+    public void testUpdateJobConfiguration() {
+        final String jobName = "simpleJob";
+        final JobSchedulerConfiguration jobSchedulerConfiguration =
+                TestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
+                        JobSchedulerType.PERIOD);
+        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        jobConfiguration.setJobName(jobName);
+        adminService.saveJobConfiguration(jobConfiguration);
+        final Collection<String> jobNames = new LinkedList<>();
+        jobNames.add(jobName);
+        final Collection<JobConfiguration> fetchedJobConfigurations = adminService.getJobConfigurations(jobNames);
+        assertThat(fetchedJobConfigurations).hasSize(1);
+        Long jobConfigurationId = null;
+        for (final JobConfiguration fetchedJobConfiguration : fetchedJobConfigurations) {
+            jobConfigurationId = fetchedJobConfiguration.getJobConfigurationId();
+        }
+        assertThat(jobConfiguration).isNotNull();
+        final JobConfiguration fetchedJobConfiguration = adminService.getJobConfigurationById(jobConfigurationId);
+        final Map<String, Object> jobParameters = new HashMap<>();
+        jobParameters.put("Double", 20.2);
+        fetchedJobConfiguration.setJobParameters(jobParameters);
+        adminService.updateJobConfiguration(fetchedJobConfiguration);
+        final JobConfiguration updatedJobConfiguration = adminService.getJobConfigurationById(jobConfigurationId);
+        assertThat(updatedJobConfiguration).isEqualTo(fetchedJobConfiguration);
     }
 
 

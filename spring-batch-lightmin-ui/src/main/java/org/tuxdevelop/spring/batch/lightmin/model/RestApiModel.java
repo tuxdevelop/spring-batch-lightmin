@@ -27,7 +27,7 @@ public class RestApiModel {
         jobUris.add(new MethodUriModel(RequestMethod.GET.name(), AbstractRestController.JobRestControllerAPI
                 .JOB_EXECUTIONS_JOB_EXECUTION_ID, UriDescription.JOB_EXECUTIONS_JOB_EXECUTION_ID_GET_DESC));
         jobUris.add(new MethodUriModel(RequestMethod.GET.name(), AbstractRestController.JobRestControllerAPI
-                .JOB_EXECUTIONS_JOB_INSTANCES_JOB_INSTANCE_ID, UriDescription.JOB_EXECUTIONS_JOB_INSTANCE_ID_GET_DESC));
+                .JOB_EXECUTION_PAGES_INSTANCE_ID, UriDescription.JOB_EXECUTIONS_JOB_INSTANCE_ID_GET_DESC));
         jobUris.add(new MethodUriModel(RequestMethod.GET.name(), AbstractRestController.JobRestControllerAPI
                 .JOB_INSTANCES_JOB_NAME, UriDescription.JOB_INSTANCES_JOB_NAME_GET_DESC));
 

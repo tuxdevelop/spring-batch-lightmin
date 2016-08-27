@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.text.ParseException;
@@ -35,6 +36,22 @@ public final class ParameterParser {
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
 
     private ParameterParser() {
+    }
+
+    /**
+     * Maps {@link org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters} to a readable String
+     *
+     * @param jobParameters {@link org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters}
+     * @return a human readble representation of the JobParamaters
+     */
+    public static String parseParametersToString(final org.tuxdevelop.spring.batch.lightmin.api.resource.common
+            .JobParameters jobParameters) {
+        final Map<String, org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter> parameters = jobParameters.getParameters();
+        final Map<String, Object> parameterMap = new HashMap<>();
+        for (final Entry<String, org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter> entry : parameters.entrySet()) {
+            parameterMap.put(entry.getKey(), entry.getValue());
+        }
+        return parseParameterMapToString(parameterMap);
     }
 
     /**
@@ -130,6 +147,63 @@ public final class ParameterParser {
             }
         }
         return jobParametersBuilder.toJobParameters();
+    }
+
+    /**
+     * maps a String a parameters to  {@link org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters}.
+     * The String has to have the following format:
+     * <ul>
+     * <li>
+     * name(type)=value, name(type2)=value2
+     * </li>
+     * </ul>
+     * The name is the job parameter name, the type, the Java type to the value.
+     * Following Types are supported
+     * <ul>
+     * <li>
+     * {@link java.lang.String}
+     * </li>
+     * <li>
+     * {@link java.lang.Long}
+     * </li>
+     * <li>
+     * {@link java.lang.Double}
+     * </li>
+     * <li>
+     * {@link java.util.Date}
+     * </li>
+     * </ul>
+     *
+     * @param parameters String of parameters
+     * @return Spring Batch {@link org.springframework.batch.core.JobParameters}
+     */
+    public static org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters parseParametersStringToJobParameters(final String parameters) {
+        final org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters jobParameters = new org
+                .tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters();
+        final Map<String, Object> parametersMap = parseParameters(parameters);
+        for (final Entry<String, Object> entry : parametersMap.entrySet()) {
+            final Object value = entry.getValue();
+            final org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter jobParameter = new org
+                    .tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter();
+            if (value instanceof String) {
+                jobParameter.setParameterType(ParameterType.STRING);
+                jobParameter.setParameter(value);
+            } else if (value instanceof Long) {
+                jobParameter.setParameterType(ParameterType.LONG);
+                jobParameter.setParameter(value);
+            } else if (value instanceof Date) {
+                jobParameter.setParameterType(ParameterType.DATE);
+                jobParameter.setParameter(value);
+            } else if (value instanceof Double) {
+                jobParameter.setParameterType(ParameterType.DOUBLE);
+                jobParameter.setParameter(value);
+            } else {
+                throw new SpringBatchLightminApplicationException("Unknown Parameter type:"
+                        + value.getClass().getName());
+            }
+            jobParameters.getParameters().put(entry.getKey(), jobParameter);
+        }
+        return jobParameters;
     }
 
     /**

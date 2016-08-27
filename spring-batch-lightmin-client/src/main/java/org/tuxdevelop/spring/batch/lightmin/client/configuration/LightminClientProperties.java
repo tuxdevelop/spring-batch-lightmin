@@ -56,9 +56,9 @@ public class LightminClientProperties {
 
     @EventListener
     public void onApplicationReady(final ApplicationReadyEvent event) {
-        serverPort = event.getApplicationContext().getEnvironment().getProperty("local.serverProperties.port", Integer.class);
+        serverPort = event.getApplicationContext().getEnvironment().getProperty("local.server.port", Integer.class);
         managementPort = event.getApplicationContext().getEnvironment()
-                .getProperty("local.managementServerProperties.port", Integer.class, serverPort);
+                .getProperty("local.management.port", Integer.class, serverPort);
     }
 
     public String getManagementUrl() {
@@ -86,15 +86,17 @@ public class LightminClientProperties {
                     serverProperties.getContextPath()), managementServerProperties.getContextPath());
 
         }
-        return append(createLocalUri(getHostAddress().getCanonicalHostName(), managementPort),
+        final String managementUrl = append(createLocalUri(getHostAddress().getCanonicalHostName(), managementPort),
                 managementServerProperties.getContextPath());
+        return managementUrl;
     }
 
     public String getHealthUrl() {
         if (healthUrl != null) {
             return healthUrl;
         }
-        return append(getManagementUrl(), healthEndpointId);
+        final String managementUrl = getManagementUrl();
+        return append(managementUrl, healthEndpointId);
     }
 
     public String getServiceUrl() {

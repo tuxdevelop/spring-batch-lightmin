@@ -17,7 +17,7 @@ import java.util.Collections;
  * @since 0.3
  */
 @Configuration
-@EnableConfigurationProperties(value = {LightminClientConfiguration.class, LightminProperties.class})
+@EnableConfigurationProperties(value = {LightminClientProperties.class, LightminProperties.class})
 public class LightminClientConfiguration {
 
     @Bean

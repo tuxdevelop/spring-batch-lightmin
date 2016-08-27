@@ -11,6 +11,8 @@ import org.tuxdevelop.spring.batch.lightmin.server.event.LightminClientApplicati
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.support.validator.LightminApplicationValidator;
 
+import java.util.Collection;
+
 /**
  * @author Marcel Becker
  * @since 0.3
@@ -67,6 +69,10 @@ public class RegistrationBean implements ApplicationEventPublisherAware {
 
     public LightminClientApplication get(final String applicationId) {
         return lightminApplicationRepository.find(applicationId);
+    }
+
+    public Collection<LightminClientApplication> getAll() {
+        return lightminApplicationRepository.findAll();
     }
 
     public void clear() {

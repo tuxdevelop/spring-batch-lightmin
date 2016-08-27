@@ -13,4 +13,5 @@ public class JobLauncherModel {
     private String jobName;
     private String jobParameters;
     private JobIncrementer jobIncrementer;
+    private String applicationId;
 }

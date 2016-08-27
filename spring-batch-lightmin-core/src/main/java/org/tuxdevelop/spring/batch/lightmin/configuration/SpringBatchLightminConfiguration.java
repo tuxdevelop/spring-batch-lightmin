@@ -17,14 +17,19 @@ import javax.sql.DataSource;
 @Configuration
 public class SpringBatchLightminConfiguration {
 
-    /*
-     *TODO: refactor to apply constructor injection (0.2)
-     */
-    @Autowired(required = false)
     private DataSource dataSource;
+    private SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
+
+    @Autowired(required = false)
+    public void setDataSource(final DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Autowired
-    private SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
+    public void setSpringBatchLightminConfigurationProperties(final SpringBatchLightminConfigurationProperties
+                                                                      springBatchLightminConfigurationProperties) {
+        this.springBatchLightminConfigurationProperties = springBatchLightminConfigurationProperties;
+    }
 
     @Bean
     @ConditionalOnMissingBean(BatchConfigurer.class)

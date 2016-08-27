@@ -1,60 +1,28 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:include="fragments/layout :: header" />
+<head th:include="fragments/layout :: header"/>
 <body>
-    <div th:include="fragments/layout :: menu" />
-    <div class="container content">
-        <div class="row-fluid">
-            <table class="table boxed">
-                <thead>
-                <tr>
-                    <th colspan="1">
-                        <h3 th:text="'Spring Batch Lightmin - ' + ${applicationName}">Spring Batch Lightmin</h3>
-                    </th>
-                </tr>
-                </thead>
-                <tbody/>
-            </table>
-            <table class="table boxed">
-                <thead>
-                <tr>
-                    <th colspan="1">
-                        REST API
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="api : ${restApi.apiMap}">
-                    <td>
-                        <table class="table table-hover boxed">
-                            <thead>
-                            <tr>
-                                <th colspan="3" th:text="${api.key}">
-                                    resource
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="apiUris : ${api.value}">
-                                <td th:text="${apiUris.method}">
-                                    method
-                                </td>
-                                <th class="text-spring" th:text="${apiUris.uri}">
-                                    uri
-                                </th>
-                                <td th:text="${apiUris.description}">
-                                    uri
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+<div th:include="fragments/layout :: menu"/>
+<div class="container content">
+    <div class="row-fluid">
+        <h3>Spring Batch Lightmin Applications</h3>
+        <table class="table boxed">
+            <thead>
+            <tr>
+                <th colspan="2">
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="clientApplication : ${clientApplications}">
+                <td th:text="${clientApplication.name}"/>
+                <td th:text="${clientApplication.serviceUrl}"/>
+            </tr>
+            </tbody>
+        </table>
     </div>
+</div>
 
 </body>
 </html>

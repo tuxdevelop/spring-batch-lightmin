@@ -15,7 +15,6 @@ public class JobConfigurations implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String jobName;
     private Collection<JobConfiguration> jobConfigurations;
 
     public JobConfigurations() {

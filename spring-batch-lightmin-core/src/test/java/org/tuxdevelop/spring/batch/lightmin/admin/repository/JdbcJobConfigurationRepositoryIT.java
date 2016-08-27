@@ -74,6 +74,9 @@ public class JdbcJobConfigurationRepositoryIT {
         assertThat(addedJobConfiguration.getJobConfigurationId()).isEqualTo(1L);
         assertThat(addedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
         addedJobConfiguration.setJobName("updated");
+        final Map<String, Object> jobParameters = new HashMap<>();
+        jobParameters.put("Double", 20.2);
+        addedJobConfiguration.setJobParameters(jobParameters);
         final JobConfiguration updatedJobConfiguration = jobConfigurationRepository.update(addedJobConfiguration);
         assertThat(updatedJobConfiguration.getJobName()).isEqualTo("updated");
         final JobConfiguration fetchedJobConfiguration = jobConfigurationRepository.getJobConfiguration(1L);
