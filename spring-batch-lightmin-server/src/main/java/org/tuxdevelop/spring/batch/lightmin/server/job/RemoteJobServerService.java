@@ -7,6 +7,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.*;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 /**
  * @author Marcel Becker
@@ -102,7 +103,8 @@ public class RemoteJobServerService implements JobServerService {
         final String uri = getClientUri(lightminClientApplication) + "/joblaunches";
         final ResponseEntity<Void> response = restTemplate.postForEntity(uri, jobLaunch, Void.class);
         if (!HttpStatus.CREATED.equals(response.getStatusCode())) {
-            //TODO: throw exception
+            final String errorMessage = "ERROR - HTTP STATUS: " + response.getStatusCode();
+            throw new SpringBatchLightminApplicationException(errorMessage);
         }
     }
 
@@ -127,7 +129,8 @@ public class RemoteJobServerService implements JobServerService {
 
     private void checkHttpOk(final ResponseEntity<?> responseEntity) {
         if (!HttpStatus.OK.equals(responseEntity.getStatusCode())) {
-            //TODO: throw Exception
+            final String errorMessage = "ERROR - HTTP STATUS: " + responseEntity.getStatusCode();
+            throw new SpringBatchLightminApplicationException(errorMessage);
         }
     }
 

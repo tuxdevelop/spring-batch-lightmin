@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +28,8 @@ public class RemoteAdminServerServiceBean implements AdminServerService {
     public void saveJobConfiguration(final JobConfiguration jobConfiguration, final LightminClientApplication lightminClientApplication) {
         final ResponseEntity<Void> response = restTemplate.postForEntity(getClientUri(lightminClientApplication), jobConfiguration, Void.class);
         if (!HttpStatus.CREATED.equals(response.getStatusCode())) {
-            //TODO: throw Exception
+            final String errorMessage = "ERROR - HTTP STATUS: " + response.getStatusCode();
+            throw new SpringBatchLightminApplicationException(errorMessage);
         }
     }
 
@@ -94,7 +96,8 @@ public class RemoteAdminServerServiceBean implements AdminServerService {
 
     private void checkHttpOk(final ResponseEntity<?> responseEntity) {
         if (!HttpStatus.OK.equals(responseEntity.getStatusCode())) {
-            //TODO: throw Exception
+            final String errorMessage = "ERROR - HTTP STATUS: " + responseEntity.getStatusCode();
+            throw new SpringBatchLightminApplicationException(errorMessage);
         }
     }
 

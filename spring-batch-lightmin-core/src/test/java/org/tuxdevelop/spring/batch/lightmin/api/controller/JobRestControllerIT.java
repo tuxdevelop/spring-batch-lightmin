@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class JobRestControllerIT extends CommonControllerIT {
 
     @Test
-    //TODO: Fixme
     public void getJobExecutionByIdIT() {
         final Long jobExecutionId = launchedJobExecutionId;
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
