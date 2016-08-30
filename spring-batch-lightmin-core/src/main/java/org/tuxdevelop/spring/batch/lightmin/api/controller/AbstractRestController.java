@@ -17,9 +17,9 @@ public abstract class AbstractRestController {
         }
 
         public static final String JOB_EXECUTIONS_JOB_EXECUTION_ID = ROOT_URI + "/jobexecutions/{jobexecutionid}";
-        public static final String JOB_EXECUTION_PAGES_INSTANCE_ID = ROOT_URI + "/jobexecutionpages/{jobinstanceid}";
-        public static final String JOB_EXECUTION_PAGES_INSTANCE_ID_ALL = ROOT_URI + "/jobexecutionpages/{jobinstanceid}/all";
-        public static final String JOB_INSTANCES_JOB_NAME = ROOT_URI + "/jobinstances/{jobname}";
+        public static final String JOB_EXECUTION_PAGES_INSTANCE_ID = ROOT_URI + "/jobexecutionpages";
+        public static final String JOB_EXECUTION_PAGES_INSTANCE_ID_ALL = ROOT_URI + "/jobexecutionpages/all";
+        public static final String JOB_INSTANCES_JOB_NAME = ROOT_URI + "/jobinstances";
         public static final String APPLICATION_JOB_INFO = ROOT_URI + "/applicationjobinfos";
         public static final String JOB_INFO_JOB_NAME = ROOT_URI + "/jobinfos/{jobname}";
         public static final String JOB_EXECUTIONS_RESTART = JOB_EXECUTIONS_JOB_EXECUTION_ID + "/restart";

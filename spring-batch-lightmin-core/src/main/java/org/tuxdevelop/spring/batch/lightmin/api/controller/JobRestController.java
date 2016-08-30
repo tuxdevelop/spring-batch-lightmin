@@ -29,7 +29,7 @@ public class JobRestController extends AbstractRestController implements Initial
     }
 
     @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID, produces = PRODUCES, method = RequestMethod.GET)
-    public ResponseEntity<JobExecutionPage> getJobExecutionsByJobInstanceId(@PathVariable("jobinstanceid") final Long jobInstanceId,
+    public ResponseEntity<JobExecutionPage> getJobExecutionsByJobInstanceId(@RequestParam("jobinstanceid") final Long jobInstanceId,
                                                                             @RequestParam(value = "startindex", defaultValue = "0") final int startIndex,
                                                                             @RequestParam(value = "pagesize", defaultValue = "10") final int pageSize) {
         final JobExecutionPage jobInstanceExecutions = serviceEntry.getJobExecutionPage(jobInstanceId, startIndex, pageSize);
@@ -37,13 +37,14 @@ public class JobRestController extends AbstractRestController implements Initial
     }
 
     @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID_ALL, produces = PRODUCES, method = RequestMethod.GET)
-    public ResponseEntity<JobExecutionPage> getJobExecutionsByJobInstanceId(@PathVariable("jobinstanceid") final Long jobInstanceId) {
+    public ResponseEntity<JobExecutionPage> getJobExecutionsByJobInstanceId(@RequestParam("jobinstanceid") final Long
+                                                                                    jobInstanceId) {
         final JobExecutionPage jobInstanceExecutions = serviceEntry.getJobExecutionPage(jobInstanceId);
         return ResponseEntity.ok(jobInstanceExecutions);
     }
 
     @RequestMapping(value = JobRestControllerAPI.JOB_INSTANCES_JOB_NAME, produces = PRODUCES, method = RequestMethod.GET)
-    public ResponseEntity<JobInstancePage> getJobInstancesByJobName(@PathVariable("jobname") final String jobName,
+    public ResponseEntity<JobInstancePage> getJobInstancesByJobName(@RequestParam("jobname") final String jobName,
                                                                     @RequestParam(value = "startindex", defaultValue = "0") final int startIndex,
                                                                     @RequestParam(value = "pagesize", defaultValue = "10") final int pageSize) {
         final JobInstancePage jobInstancePage = serviceEntry.getJobInstancesByJobName(jobName, startIndex, pageSize);

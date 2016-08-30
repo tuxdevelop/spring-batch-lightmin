@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobExecution;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobInstanceExecutions;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobInstancePage;
@@ -30,9 +31,9 @@ public class JobRestControllerIT extends CommonControllerIT {
         final Long jobInstanceId = launchedJobInstanceId;
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID;
-        final ResponseEntity<JobInstanceExecutions> response = restTemplate.getForEntity(uri,
-                JobInstanceExecutions.class,
-                jobInstanceId);
+        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
+        uriComponentsBuilder.queryParam("jobinstanceid", jobInstanceId);
+        final ResponseEntity<JobInstanceExecutions> response = restTemplate.getForEntity(uriComponentsBuilder.toUriString(), JobInstanceExecutions.class);
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getJobInstanceId()).isEqualTo(jobInstanceId);
@@ -43,8 +44,9 @@ public class JobRestControllerIT extends CommonControllerIT {
         final String jobName = "simpleJob";
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobRestControllerAPI.JOB_INSTANCES_JOB_NAME;
-        final ResponseEntity<JobInstancePage> response = restTemplate.getForEntity(uri, JobInstancePage.class,
-                jobName);
+        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
+        uriComponentsBuilder.queryParam("jobname", jobName);
+        final ResponseEntity<JobInstancePage> response = restTemplate.getForEntity(uriComponentsBuilder.toUriString(), JobInstancePage.class);
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getJobName()).isEqualTo(jobName);

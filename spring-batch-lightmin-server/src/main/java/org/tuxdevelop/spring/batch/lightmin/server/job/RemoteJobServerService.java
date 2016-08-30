@@ -33,10 +33,11 @@ public class RemoteJobServerService implements JobServerService {
 
     @Override
     public JobInstancePage getJobInstances(final String jobName, final Integer startIndex, final Integer pageSize, final LightminClientApplication lightminClientApplication) {
-        final String uri = getClientUri(lightminClientApplication) + "/jobinstances/{jobname}";
+        final String uri = getClientUri(lightminClientApplication) + "/jobinstances";
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
         final Integer startIndexParam = startIndex != null ? startIndex : 0;
         final Integer pageSizeParam = pageSize != null ? pageSize : 10;
+        uriComponentsBuilder.queryParam("jobname", jobName);
         uriComponentsBuilder.queryParam("startindex", startIndexParam);
         uriComponentsBuilder.queryParam("pagesize", pageSizeParam);
         final ResponseEntity<JobInstancePage> response = restTemplate.getForEntity(uriComponentsBuilder.toUriString(), JobInstancePage.class, jobName);
@@ -57,10 +58,11 @@ public class RemoteJobServerService implements JobServerService {
                                                 final Integer startIndex,
                                                 final Integer pageSize,
                                                 final LightminClientApplication lightminClientApplication) {
-        final String uri = getClientUri(lightminClientApplication) + "/jobexecutionpages/{jobinstanceid}";
+        final String uri = getClientUri(lightminClientApplication) + "/jobexecutionpages";
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
         final Integer startIndexParam = startIndex != null ? startIndex : 0;
         final Integer pageSizeParam = pageSize != null ? pageSize : 10;
+        uriComponentsBuilder.queryParam("jobinstanceid", jobInstanceId);
         uriComponentsBuilder.queryParam("startindex", startIndexParam);
         uriComponentsBuilder.queryParam("pagesize", pageSizeParam);
         final ResponseEntity<JobExecutionPage> response = restTemplate.getForEntity(uriComponentsBuilder.toUriString(), JobExecutionPage.class, jobInstanceId);
@@ -70,8 +72,12 @@ public class RemoteJobServerService implements JobServerService {
 
     @Override
     public JobExecutionPage getJobExecutionPage(final Long jobInstanceId, final LightminClientApplication lightminClientApplication) {
-        final String uri = getClientUri(lightminClientApplication) + "/jobexecutionpages/{jobinstanceid}/all";
-        final ResponseEntity<JobExecutionPage> response = restTemplate.getForEntity(uri, JobExecutionPage.class, jobInstanceId);
+        final String uri = getClientUri(lightminClientApplication) + "/jobexecutionpages/all";
+        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
+        uriComponentsBuilder.queryParam("jobinstanceid", jobInstanceId);
+        final ResponseEntity<JobExecutionPage> response = restTemplate.getForEntity(uriComponentsBuilder.toUriString(),
+                JobExecutionPage.class,
+                jobInstanceId);
         checkHttpOk(response);
         return response.getBody();
     }

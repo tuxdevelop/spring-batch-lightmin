@@ -174,13 +174,4 @@ public final class ResourceToAdminMapper {
         return response;
     }
 
-    public void attachJobIncremeters(final JobParameters jobParameters, final JobIncrementer jobIncrementer) {
-        //possibile values NONE, DATE
-        if (JobIncrementer.DATE.equals(jobIncrementer)) {
-            final JobParameter jobParameter = new JobParameter();
-            jobParameter.setParameterType(ParameterType.DATE);
-            jobParameter.setParameter(new Date());
-            jobParameters.getParameters().put(jobIncrementer.getIncrementerIdentifier(), jobParameter);
-        }
-    }
 }

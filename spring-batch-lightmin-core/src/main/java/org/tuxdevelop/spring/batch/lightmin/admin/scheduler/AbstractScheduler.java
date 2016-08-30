@@ -11,8 +11,6 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
-import java.util.Date;
-
 /**
  * @author Marcel Becker
  * @version 0.1
@@ -56,8 +54,7 @@ abstract class AbstractScheduler implements InitializingBean {
             }
             if (JobIncrementer.DATE.equals(jobIncrementer)) {
                 final JobParametersBuilder jobParametersBuilder = new JobParametersBuilder(jobParameters);
-                jobParameters = jobParametersBuilder.addDate(JobIncrementer.DATE.getIncrementerIdentifier(), new Date())
-                        .toJobParameters();
+                jobParameters = jobParametersBuilder.addLong(JobIncrementer.DATE.getIncrementerIdentifier(), System.currentTimeMillis()).toJobParameters();
             }
         }
 

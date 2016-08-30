@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobLaunch;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.model.JobLauncherModel;
 import org.tuxdevelop.spring.batch.lightmin.model.JobNameModel;
@@ -29,14 +32,14 @@ public class JobLauncherController extends CommonController {
 
     @Autowired
     public JobLauncherController(final JobServerService jobServerService,
-            final RegistrationBean registrationBean) {
+                                 final RegistrationBean registrationBean) {
         this.jobServerService = jobServerService;
         this.registrationBean = registrationBean;
     }
 
     @RequestMapping(value = "/jobLaunchers", method = RequestMethod.GET)
     public void initJobLaunchers(final Model model,
-            @RequestParam(value = "applicationid") final String applicationid) {
+                                 @RequestParam(value = "applicationid") final String applicationid) {
         final LightminClientApplication lightminClientApplication = registrationBean.get(applicationid);
         model.addAttribute("jobNames", lightminClientApplication.getLightminClientInformation().getRegisteredJobs());
         model.addAttribute("jobName", new JobNameModel());
@@ -45,12 +48,11 @@ public class JobLauncherController extends CommonController {
 
     @RequestMapping(value = "/jobLauncher", method = RequestMethod.GET)
     public void configureJobLauncher(@RequestParam(value = "jobName") final String jobName,
-            @RequestParam(value = "applicationid") final String applicationid,
-            final Model model) {
-        final LightminClientApplication lightminClientApplication = registrationBean.get(applicationid);
+                                     @RequestParam(value = "id") final String applicationId,
+                                     final Model model) {
+        final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
         final JobLauncherModel jobLauncherModel = new JobLauncherModel();
-        final JobParameters oldJobParameters = jobServerService.getLastJobParameters(jobName,
-                lightminClientApplication);
+        final JobParameters oldJobParameters = jobServerService.getLastJobParameters(jobName, lightminClientApplication);
         jobLauncherModel.setJobName(jobName);
         jobLauncherModel.setJobParameters(ParameterParser.parseParametersToString(oldJobParameters));
         model.addAttribute("jobLauncherModel", jobLauncherModel);
@@ -60,17 +62,28 @@ public class JobLauncherController extends CommonController {
     }
 
     @RequestMapping(value = "/jobLauncher", method = RequestMethod.POST)
-    public String launchJob(@ModelAttribute("jobLauncherModel") final JobLauncherModel jobLauncherModel) {
-        final LightminClientApplication lightminClientApplication = registrationBean
-                .get(jobLauncherModel.getApplicationId());
+    public String launchJob(@ModelAttribute("jobLauncherModel") final JobLauncherModel jobLauncherModel,
+                            @RequestParam("id") final String applicationId) {
+        final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
         final String jobName = jobLauncherModel.getJobName();
         final JobParameters jobParameters = ParameterParser
                 .parseParametersStringToJobParameters(jobLauncherModel.getJobParameters());
         final JobLaunch jobLaunch = new JobLaunch();
+        attacheIncremeter(jobLauncherModel, jobParameters);
         jobLaunch.setJobName(jobName);
         jobLaunch.setJobParameters(jobParameters);
         jobServerService.launchJob(jobLaunch, lightminClientApplication);
-        return "redirect:job?jobname=" + jobName + "&applicationid=" + jobLauncherModel.getApplicationId();
+        return "redirect:job?jobname=" + jobName + "&applicationid=" + applicationId;
+    }
+
+    void attacheIncremeter(final JobLauncherModel jobLauncherModel, final JobParameters jobParameters) {
+        final JobIncrementer jobIncrementer = jobLauncherModel.getJobIncrementer();
+        if (JobIncrementer.DATE.equals(jobIncrementer)) {
+            final JobParameter jobParameter = new JobParameter();
+            jobParameter.setParameter(System.currentTimeMillis());
+            jobParameter.setParameterType(ParameterType.LONG);
+            jobParameters.getParameters().put(jobIncrementer.name(), jobParameter);
+        }
     }
 
 }

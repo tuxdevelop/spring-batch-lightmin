@@ -49,7 +49,7 @@ public final class ParameterParser {
         final Map<String, org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter> parameters = jobParameters.getParameters();
         final Map<String, Object> parameterMap = new HashMap<>();
         for (final Entry<String, org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter> entry : parameters.entrySet()) {
-            parameterMap.put(entry.getKey(), entry.getValue());
+            parameterMap.put(entry.getKey(), entry.getValue().getParameter());
         }
         return parseParameterMapToString(parameterMap);
     }

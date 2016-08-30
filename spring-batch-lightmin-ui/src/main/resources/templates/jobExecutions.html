@@ -4,6 +4,7 @@
 <head th:include="fragments/layout :: header"/>
 <body>
 <div th:include="fragments/layout :: menu"></div>
+<div th:include="fragments/applicationMenu :: applicationMenu"></div>
 <div class="viewport">
     <div class="container content">
         <div class="row-fluid">
@@ -12,7 +13,7 @@
                 <tr>
                     <th colspan="10">
                         <a href="#"
-                           th:href="@{job(jobname=${jobName})}"
+                           th:href="@{job(jobname=${jobName},applicationid=${clientApplication.id})}"
                            th:text="${jobName}"> </a>
                     </th>
                 </tr>
@@ -33,7 +34,7 @@
                 <tr th:each="jobExecution : ${jobExecutions}">
                     <td th:text="${jobExecution.jobInstanceId}"/>
                     <td><a href="#"
-                           th:href="@{execution(jobExecutionId=${jobExecution.jobExecution.id})}"
+                           th:href="@{execution(jobExecutionId=${jobExecution.jobExecution.id},applicationid=${clientApplication.id})}"
                            th:text="${jobExecution.jobExecution.id}"></a></td>
                     <td th:text="${jobExecution.jobName}"/>
                     <td th:text="${jobExecution.jobExecution.createTime}"/>
@@ -48,7 +49,7 @@
                                 <form method="post" class="form-inline pull-right"
                                       th:if="${jobExecution.jobExecution.status.name() == 'COMPLETED'
                                                       || jobExecution.jobExecution.status.name() == 'FAILED' || jobExecution.jobExecution.status.name() == 'ABANDONED'}"
-                                      th:action="@{executionRestart(jobExecutionId=${jobExecution.jobExecution.id},jobInstanceId=${jobExecution.jobInstanceId})}">
+                                      th:action="@{executionRestart(jobExecutionId=${jobExecution.jobExecution.id},jobInstanceId=${jobExecution.jobInstanceId},applicationid=${clientApplication.id})}">
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-success btn-sm">Restart</button>
                                     </div>
@@ -56,7 +57,7 @@
                                 <form method="post" class="form-inline pull-right"
                                       th:if="${jobExecution.jobExecution.status.name() == 'STARTING'
                                                       || jobExecution.jobExecution.status.name() == 'STARTED' || jobExecution.jobExecution.status.name() == 'UNKNOWN'}"
-                                      th:action="@{executionStop(jobExecutionId=${jobExecution.jobExecution.id},jobInstanceId=${jobExecution.jobInstanceId})}">
+                                      th:action="@{executionStop(jobExecutionId=${jobExecution.jobExecution.id},jobInstanceId=${jobExecution.jobInstanceId},applicationid=${clientApplication.id})}">
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-danger btn-sm">Stop</button>
                                     </div>
@@ -68,11 +69,13 @@
                 </tbody>
             </table>
             <span class="text-left" th:if="${pageModel.hasPrevious}">
-        <a href="#" th:href="@{executions(jobInstanceId=${jobInstanceId},startindex=${pageModel.previousStartIndex})}"
+        <a href="#"
+           th:href="@{executions(jobInstanceId=${jobInstanceId},startindex=${pageModel.previousStartIndex},applicationid=${clientApplication.id})}"
            class="btn btn-inverse btn-small">&laquo; prev</a>
       </span>
-      <span class="text-right" th:if="${pageModel.hasMore}">
-        <a href="#" th:href="@{executions(jobInstanceId=${jobInstanceId},startindex=${pageModel.nextStartIndex})}"
+            <span class="text-right" th:if="${pageModel.hasMore}">
+        <a href="#"
+           th:href="@{executions(jobInstanceId=${jobInstanceId},startindex=${pageModel.nextStartIndex},applicationid=${clientApplication.id})}"
            class="btn btn-inverse btn-small">next &raquo;</a>
       </span>
         </div>

@@ -4,6 +4,7 @@
 <head th:include="fragments/layout :: header"/>
 <body>
 <div th:include="fragments/layout :: menu"></div>
+<div th:include="fragments/applicationMenu :: applicationMenu"></div>
 <div class="viewport">
     <div class="container content">
         <div class="row-fluid">
@@ -24,7 +25,7 @@
                     <td>Job Instance Id</td>
                     <td>
                         <a href="#"
-                           th:href="@{executions(jobInstanceId=${jobExecution.jobInstanceId})}"
+                           th:href="@{executions(jobInstanceId=${jobExecution.jobInstanceId},applicationid=${clientApplication.id})}"
                            th:text="${jobExecution.jobInstanceId}"> </a>
                     </td>
                 </tr>
