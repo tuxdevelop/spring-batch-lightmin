@@ -82,7 +82,6 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
 
 
     @Override
-    @SuppressWarnings("UnusedAssignment")
     public synchronized JobConfiguration update(final JobConfiguration jobConfiguration)
             throws NoSuchJobConfigurationException {
         getJobConfiguration(jobConfiguration.getJobConfigurationId());

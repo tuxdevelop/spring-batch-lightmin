@@ -6,17 +6,20 @@
 </head>
 <body>
   <div class="navbar navbar-default navbar-fixed-top"
-       th:fragment="adminMenu">
+       th:fragment="applicationMenu">
     <div class="container-fluid">
       <header class="navbar header--navbar desktop-only">
         <div class="navbar-inner">
           <div class="container-fluid">
             <ul class="nav navbar-nav">
+             <li class="navbar-link">
+                <a href="#" th:href="@{jobs(applicationid=${clientApplication.id})}">Jobs</a>
+              </li>	
               <li class="navbar-link">
-                <a href="#" th:href="@{jobConfigurations}">Job Configurations</a>
+                <a href="#" th:href="@{jobConfigurations(applicationid=${clientApplication.id})}">Job Configurations</a>
               </li>
               <li class="navbar-link">
-                <a href="#" th:href="@{jobLaunchers}">Job Launcher</a>
+                <a href="#" th:href="@{jobLaunchers(applicationid=${clientApplication.id})}">Job Launcher</a>
               </li>
             </ul>
           </div>

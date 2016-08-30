@@ -1,12 +1,19 @@
 package org.tuxdevelop.spring.batch.lightmin.server.api.controller;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collection;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ResponseBody
@@ -19,10 +26,13 @@ public class RegistrationController {
         this.registrationBean = registrationBean;
     }
 
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LightminClientApplication> register(@RequestBody final LightminClientApplication lightminClientApplication) {
+    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<LightminClientApplication> register(
+            @RequestBody final LightminClientApplication lightminClientApplication) {
         log.debug("Register LightminClientApplication {}", lightminClientApplication);
-        final LightminClientApplication registeredLightminClientApplication = registrationBean.register(lightminClientApplication);
+        final LightminClientApplication registeredLightminClientApplication = registrationBean
+                .register(lightminClientApplication);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredLightminClientApplication);
     }
 
@@ -35,5 +45,12 @@ public class RegistrationController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<LightminClientApplication[]> getAll() {
+        final Collection<LightminClientApplication> lightminClientApplications = registrationBean.getAll();
+        return ResponseEntity.ok(
+                lightminClientApplications.toArray(new LightminClientApplication[lightminClientApplications.size()]));
     }
 }

@@ -3,12 +3,14 @@ package org.tuxdevelop.spring.batch.lightmin.server.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.tuxdevelop.spring.batch.lightmin.configuration.EnableSpringBatchLightmin;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.MapLightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 
 @Configuration
 @Import(SpringBatchLightminWebConfiguration.class)
+@EnableSpringBatchLightmin
 public class CommonServerConfiguration {
 
     @Bean

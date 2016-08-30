@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
-<head th:include="fragments/layout :: header"/>
+	xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/layout :: header" />
 <body>
-<div th:include="fragments/layout :: menu"/>
-<div class="container content">
-    <div class="row-fluid">
-        <h3>Spring Batch Lightmin Applications</h3>
-        <table class="table boxed">
-            <thead>
-            <tr>
-                <th colspan="2">
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="clientApplication : ${clientApplications}">
-                <td th:text="${clientApplication.name}"/>
-                <td th:text="${clientApplication.serviceUrl}"/>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+	<div th:include="fragments/layout :: menu" />
+	<div class="container content">
+		<div class="row-fluid">
+			<h3>Spring Batch Lightmin Applications</h3>
+			<table class="table boxed">
+				<thead>
+					<tr>
+						<th colspan="3"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="clientApplication : ${clientApplications}">
+						<td th:text="${clientApplication.name}" />
+						<td th:text="${clientApplication.serviceUrl}" />
+						<td>
+							 <a href="#" th:href="@{application(applicationid=${clientApplication.id})}">
+							 	 <button type="button" class="btn btn-success btn-mini">Info</button>
+							 </a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 
 </body>
 </html>

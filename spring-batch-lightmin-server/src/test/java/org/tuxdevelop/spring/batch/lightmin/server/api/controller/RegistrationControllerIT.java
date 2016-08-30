@@ -1,6 +1,10 @@
 package org.tuxdevelop.spring.batch.lightmin.server.api.controller;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,14 +22,13 @@ import org.tuxdevelop.spring.batch.lightmin.server.ITServerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.ITServerConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebIntegrationTest({"server.port=0", "management.port=0"})
-@SpringApplicationConfiguration(classes = {ITServerConfigurationApplication.class, ITServerConfiguration.class})
+@WebIntegrationTest({ "server.port=0", "management.port=0" })
+@SpringApplicationConfiguration(classes = { ITServerConfigurationApplication.class, ITServerConfiguration.class })
 public class RegistrationControllerIT {
-
 
     private static final String LOCALHOST = "http://localhost";
     private static final String PORT = "8080";
@@ -39,10 +42,11 @@ public class RegistrationControllerIT {
 
     @Test
     public void testRegister() {
-        final LightminClientApplication lightminClientApplication = createLightminClientApplication
-                ("registerApplicationName");
+        final LightminClientApplication lightminClientApplication = createLightminClientApplication(
+                "registerApplicationName");
 
-        final ResponseEntity<LightminClientApplication> response = restTemplate.postForEntity(LOCALHOST + ":" + getServerPort() + "/api/applications",
+        final ResponseEntity<LightminClientApplication> response = restTemplate.postForEntity(
+                LOCALHOST + ":" + getServerPort() + "/api/applications",
                 lightminClientApplication, LightminClientApplication.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         log.info("Registered LightminClientApplication {}", response.getBody());
@@ -50,11 +54,12 @@ public class RegistrationControllerIT {
 
     @Test
     public void testUnregister() {
-        final LightminClientApplication lightminClientApplication = createLightminClientApplication
-                ("unregisterApplicationName");
-        final ResponseEntity<LightminClientApplication> response = restTemplate.postForEntity(LOCALHOST + ":" + getServerPort() +
+        final LightminClientApplication lightminClientApplication = createLightminClientApplication(
+                "unregisterApplicationName");
+        final ResponseEntity<LightminClientApplication> response = restTemplate
+                .postForEntity(LOCALHOST + ":" + getServerPort() +
                         "/api/applications",
-                lightminClientApplication, LightminClientApplication.class);
+                        lightminClientApplication, LightminClientApplication.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         final LightminClientApplication registeredClientApplication = response.getBody();
         log.info("Registered LightminClientApplication {}", registeredClientApplication);
@@ -66,6 +71,25 @@ public class RegistrationControllerIT {
         restTemplate.delete(uri);
         final LightminClientApplication deletedLightminApplicationClient = registrationBean.get(applicationId);
         assertThat(deletedLightminApplicationClient).isNull();
+    }
+
+    @Test
+    public void testGetAll() {
+        final LightminClientApplication lightminClientApplication = createLightminClientApplication(
+                "unregisterApplicationName");
+        final ResponseEntity<LightminClientApplication> responseCreated = restTemplate.postForEntity(
+                LOCALHOST + ":" + getServerPort() + "/api/applications",
+                lightminClientApplication, LightminClientApplication.class);
+        assertThat(responseCreated.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        log.info("Registered LightminClientApplication {}", responseCreated.getBody());
+        final ResponseEntity<LightminClientApplication[]> response = restTemplate
+                .getForEntity(LOCALHOST + ":" + getServerPort() +
+                        "/api/applications", LightminClientApplication[].class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        final List<LightminClientApplication> lightminClientApplications = Arrays.asList(response.getBody());
+        assertThat(lightminClientApplications).hasSize(1);
+        final LightminClientApplication fetchedLightminClientApplication = lightminClientApplications.get(0);
+        assertThat(fetchedLightminClientApplication).isEqualTo(responseCreated.getBody());
     }
 
     @After

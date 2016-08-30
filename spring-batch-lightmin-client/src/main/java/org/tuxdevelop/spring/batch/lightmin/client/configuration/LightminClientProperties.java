@@ -1,7 +1,8 @@
 package org.tuxdevelop.spring.batch.lightmin.client.configuration;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
@@ -11,8 +12,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.event.EventListener;
 import org.springframework.util.StringUtils;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import lombok.Getter;
+import lombok.Setter;
 
 @ConfigurationProperties(prefix = "spring.batch.lightmin.client")
 public class LightminClientProperties {
@@ -34,20 +35,18 @@ public class LightminClientProperties {
     private Integer managementPort;
 
     @Getter
-    private String name;
+    private final String name;
     @Getter
-    private String healthEndpointId;
+    private final String healthEndpointId;
 
-    private ManagementServerProperties managementServerProperties;
-    private ServerProperties serverProperties;
+    private final ManagementServerProperties managementServerProperties;
+    private final ServerProperties serverProperties;
 
     @Autowired
     public LightminClientProperties(final ManagementServerProperties managementServerProperties,
-                                    final ServerProperties serverProperties,
-                                    @Value("${spring.application.name:spring-boot-application}")
-                                    final String name,
-                                    @Value("${endpoints.health.id:health}")
-                                    final String healthEndpointId) {
+            final ServerProperties serverProperties,
+            @Value("${spring.application.name:spring-boot-application}") final String name,
+            @Value("${endpoints.health.id:health}") final String healthEndpointId) {
         this.name = name;
         this.healthEndpointId = healthEndpointId;
         this.managementServerProperties = managementServerProperties;
@@ -115,15 +114,16 @@ public class LightminClientProperties {
                 address = getHostAddress();
             }
             return append(createLocalUri(address.getHostAddress(), serverPort),
-                    serverProperties.getContextPath());
+                    serverProperties.getServletPath());
 
         }
         return append(createLocalUri(getHostAddress().getCanonicalHostName(), serverPort),
-                serverProperties.getContextPath());
+                serverProperties.getServletPath());
     }
 
     private String createLocalUri(final String host, final int port) {
-        final String scheme = serverProperties.getSsl() != null && serverProperties.getSsl().isEnabled() ? "https" : "http";
+        final String scheme = serverProperties.getSsl() != null && serverProperties.getSsl().isEnabled() ? "https"
+                : "http";
         return scheme + "://" + host + ":" + port;
     }
 
