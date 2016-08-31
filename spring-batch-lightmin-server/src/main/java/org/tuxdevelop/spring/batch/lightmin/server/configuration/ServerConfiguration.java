@@ -3,12 +3,16 @@ package org.tuxdevelop.spring.batch.lightmin.server.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.tuxdevelop.spring.batch.lightmin.server.admin.AdminServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.admin.RemoteAdminServerServiceBean;
 import org.tuxdevelop.spring.batch.lightmin.server.api.controller.RegistrationController;
+import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnApplicationReadyEventListener;
+import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnLightminClientApplicationRegisteredEventListener;
 import org.tuxdevelop.spring.batch.lightmin.server.job.JobServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.job.RemoteJobServerService;
+import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.support.ClientApplicationStatusUpdater;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 
 @Configuration
@@ -21,18 +25,36 @@ public class ServerConfiguration {
     }
 
     @Bean
-    public AdminServerService adminServerService(final RestTemplate restTemplate) {
-        return new RemoteAdminServerServiceBean(restTemplate);
+    public AdminServerService adminServerService(final LightminServerProperties lightminServerProperties) {
+        return new RemoteAdminServerServiceBean(CommonServerConfiguration.RestTemplateFactory.getRestTemplate(lightminServerProperties));
     }
 
     @Bean
-    public JobServerService jobServerService(final RestTemplate restTemplate) {
-        return new RemoteJobServerService(restTemplate);
+    public JobServerService jobServerService(final LightminServerProperties lightminServerProperties) {
+        return new RemoteJobServerService(CommonServerConfiguration.RestTemplateFactory.getRestTemplate(lightminServerProperties));
     }
 
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    public ClientApplicationStatusUpdater clientApplicationStatusUpdater(final LightminServerProperties lightminServerProperties,
+                                                                         final LightminApplicationRepository lightminApplicationRepository) {
+        return new ClientApplicationStatusUpdater(CommonServerConfiguration.RestTemplateFactory.getRestTemplate(lightminServerProperties), lightminApplicationRepository);
+    }
+
+    @Bean
+    public ScheduledTaskRegistrar serverScheduledTaskRegistrar() {
+        return new ScheduledTaskRegistrar();
+    }
+
+    @Bean
+    public OnApplicationReadyEventListener onApplicationReadyEventListener(final ScheduledTaskRegistrar serverScheduledTaskRegistrar,
+                                                                           final ClientApplicationStatusUpdater clientApplicationStatusUpdater,
+                                                                           final LightminServerProperties lightminServerProperties) {
+        return new OnApplicationReadyEventListener(serverScheduledTaskRegistrar, clientApplicationStatusUpdater, lightminServerProperties);
+    }
+
+    @Bean
+    public OnLightminClientApplicationRegisteredEventListener onLightminClientApplicationRegisteredEventListener(final ClientApplicationStatusUpdater clientApplicationStatusUpdater) {
+        return new OnLightminClientApplicationRegisteredEventListener(clientApplicationStatusUpdater);
     }
 
 }

@@ -3,6 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.server.event;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.springframework.context.ApplicationEvent;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 
 import java.io.Serializable;
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * @since 0.3
  */
 @EqualsAndHashCode
-public abstract class LightminClientApplicationEvent implements Serializable {
+public abstract class LightminClientApplicationEvent extends ApplicationEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,6 +25,7 @@ public abstract class LightminClientApplicationEvent implements Serializable {
 
     public LightminClientApplicationEvent(final LightminClientApplication lightminClientApplication,
                                           final EventType eventType) {
+        super(lightminClientApplication);
         this.lightminClientApplication = lightminClientApplication;
         this.eventType = eventType;
         this.eventDateInMillis = System.currentTimeMillis();

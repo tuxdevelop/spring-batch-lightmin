@@ -5,10 +5,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.LightminClientRegistrator;
-import org.tuxdevelop.spring.batch.lightmin.client.registration.RegistrationLightminClientApplicationListener;
+import org.tuxdevelop.spring.batch.lightmin.client.registration.RegistrationLightminClientApplicationBean;
+import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnApplicationReadyEventListener;
+import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnContextClosedEventListener;
+import org.tuxdevelop.spring.batch.lightmin.configuration.CommonSpringBatchLightminConfiguration;
 
 import java.util.Collections;
 
@@ -18,6 +22,7 @@ import java.util.Collections;
  */
 @Configuration
 @EnableConfigurationProperties(value = {LightminClientProperties.class, LightminProperties.class})
+@Import(value = {CommonSpringBatchLightminConfiguration.class})
 public class LightminClientConfiguration {
 
     @Bean
@@ -41,14 +46,25 @@ public class LightminClientConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public RegistrationLightminClientApplicationListener registrationLightminClientApplicationListener(
+    public RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean(
             final LightminClientRegistrator lightminClientRegistrator,
             final LightminProperties lightminProperties) {
-        final RegistrationLightminClientApplicationListener registrationLightminClientApplicationListener =
-                new RegistrationLightminClientApplicationListener(lightminClientRegistrator);
-        registrationLightminClientApplicationListener.setAutoRegister(lightminProperties.isAutoRegistration());
-        registrationLightminClientApplicationListener.setAutoDeregister(lightminProperties.isAutoDeregistration());
-        registrationLightminClientApplicationListener.setRegisterPeriod(lightminProperties.getPeriod());
-        return registrationLightminClientApplicationListener;
+        final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean =
+                new RegistrationLightminClientApplicationBean(lightminClientRegistrator);
+        registrationLightminClientApplicationBean.setAutoRegister(lightminProperties.isAutoRegistration());
+        registrationLightminClientApplicationBean.setAutoDeregister(lightminProperties.isAutoDeregistration());
+        registrationLightminClientApplicationBean.setRegisterPeriod(lightminProperties.getPeriod());
+        return registrationLightminClientApplicationBean;
+    }
+
+    @Bean
+    public OnApplicationReadyEventListener onApplicationReadyEventListener(final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean,
+                                                                           final LightminClientProperties lightminClientProperties) {
+        return new OnApplicationReadyEventListener(registrationLightminClientApplicationBean, lightminClientProperties);
+    }
+
+    @Bean
+    public OnContextClosedEventListener onContextClosedEventListener(final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean) {
+        return new OnContextClosedEventListener(registrationLightminClientApplicationBean);
     }
 }

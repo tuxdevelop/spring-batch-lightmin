@@ -1,19 +1,16 @@
 package org.tuxdevelop.spring.batch.lightmin.client.configuration;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.event.EventListener;
 import org.springframework.util.StringUtils;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 @ConfigurationProperties(prefix = "spring.batch.lightmin.client")
 public class LightminClientProperties {
@@ -44,20 +41,13 @@ public class LightminClientProperties {
 
     @Autowired
     public LightminClientProperties(final ManagementServerProperties managementServerProperties,
-            final ServerProperties serverProperties,
-            @Value("${spring.application.name:spring-boot-application}") final String name,
-            @Value("${endpoints.health.id:health}") final String healthEndpointId) {
+                                    final ServerProperties serverProperties,
+                                    @Value("${spring.application.name:spring-boot-application}") final String name,
+                                    @Value("${endpoints.health.id:health}") final String healthEndpointId) {
         this.name = name;
         this.healthEndpointId = healthEndpointId;
         this.managementServerProperties = managementServerProperties;
         this.serverProperties = serverProperties;
-    }
-
-    @EventListener
-    public void onApplicationReady(final ApplicationReadyEvent event) {
-        serverPort = event.getApplicationContext().getEnvironment().getProperty("local.server.port", Integer.class);
-        managementPort = event.getApplicationContext().getEnvironment()
-                .getProperty("local.management.port", Integer.class, serverPort);
     }
 
     public String getManagementUrl() {
@@ -67,8 +57,7 @@ public class LightminClientProperties {
 
         if ((managementPort == null || managementPort.equals(serverPort))
                 && getServiceUrl() != null) {
-            return append(append(getServiceUrl(), serverProperties.getServletPrefix()),
-                    managementServerProperties.getContextPath());
+            return append(getServiceUrl(), managementServerProperties.getContextPath());
         }
 
         if (managementPort == null) {
@@ -113,17 +102,16 @@ public class LightminClientProperties {
             if (address == null) {
                 address = getHostAddress();
             }
-            return append(createLocalUri(address.getHostAddress(), serverPort),
-                    serverProperties.getServletPath());
+            return append(append(createLocalUri(address.getHostAddress(), serverPort),
+                    serverProperties.getServletPath()), serverProperties.getContextPath());
 
         }
-        return append(createLocalUri(getHostAddress().getCanonicalHostName(), serverPort),
-                serverProperties.getServletPath());
+        return append(append(createLocalUri(getHostAddress().getCanonicalHostName(), serverPort),
+                serverProperties.getServletPath()), serverProperties.getContextPath());
     }
 
     private String createLocalUri(final String host, final int port) {
-        final String scheme = serverProperties.getSsl() != null && serverProperties.getSsl().isEnabled() ? "https"
-                : "http";
+        final String scheme = serverProperties.getSsl() != null && serverProperties.getSsl().isEnabled() ? "https" : "http";
         return scheme + "://" + host + ":" + port;
     }
 

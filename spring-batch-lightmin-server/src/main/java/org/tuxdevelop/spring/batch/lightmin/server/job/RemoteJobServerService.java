@@ -84,7 +84,7 @@ public class RemoteJobServerService implements JobServerService {
 
     @Override
     public void restartJobExecution(final Long jobExecutionId, final LightminClientApplication lightminClientApplication) {
-        final String uri = getClientUri(lightminClientApplication) + "/jobexecutions/{jobexecutionid}/start";
+        final String uri = getClientUri(lightminClientApplication) + "/jobexecutions/{jobexecutionid}/restart";
         final ResponseEntity<Void> response = restTemplate.getForEntity(uri, Void.class, jobExecutionId);
         checkHttpOk(response);
     }

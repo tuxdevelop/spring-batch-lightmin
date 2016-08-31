@@ -29,4 +29,10 @@ public class ApplicationController {
         final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
         model.addAttribute("clientApplication", lightminClientApplication);
     }
+
+    @RequestMapping(value = "/remove", method = RequestMethod.GET)
+    public String removeApplication(@RequestParam("applicationid") final String applicationId) {
+        registrationBean.deleteRegistration(applicationId);
+        return "redirect:/";
+    }
 }

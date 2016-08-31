@@ -445,3 +445,32 @@ dl.health-status td {
 div.spacer {
     padding-top: 10px;
 }
+
+.status-UP {
+    color: #00AA00;
+    font-weight: bold;
+}
+
+.status-OFFLINE {
+    color: #000000;
+    font-weight: bold;
+}
+
+.status-DOWN,
+.status-OUT_OF_SERVICE {
+    color: #DD0000;
+    font-weight: bold;
+}
+
+.status-UNKNOWN {
+    font-weight: bold;
+    color: #FF8800;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.text-mute {
+    color: #527A7A;
+}

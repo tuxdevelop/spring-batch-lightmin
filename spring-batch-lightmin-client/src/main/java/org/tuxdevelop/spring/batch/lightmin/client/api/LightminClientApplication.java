@@ -2,8 +2,15 @@ package org.tuxdevelop.spring.batch.lightmin.client.api;
 
 
 import lombok.Data;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerType;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.SchedulerStatus;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.TaskExecutorType;
+import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 @Data
 public class LightminClientApplication implements Serializable {
@@ -18,5 +25,23 @@ public class LightminClientApplication implements Serializable {
     private LightminClientApplicationStatus lightminClientApplicationStatus;
     private LightminClientInformation lightminClientInformation;
 
+    public static LightminClientApplication createApplication(final List<String> jobNames,
+                                                              final LightminClientProperties lightminClientProperties) {
+        final LightminClientInformation lightminClientInformation = new LightminClientInformation();
+        lightminClientInformation.setRegisteredJobs(jobNames);
+        lightminClientInformation.setSupportedJobIncrementers(Arrays.asList(JobIncrementer.values()));
+        lightminClientInformation.setSupportedSchedulerTypes(Arrays.asList(JobSchedulerType.values()));
+        lightminClientInformation.setSupportedSchedulerStatuses(Arrays.asList(SchedulerStatus.values()));
+        lightminClientInformation.setSupportedTaskExecutorTypes(Arrays.asList(TaskExecutorType.values()));
+
+        final LightminClientApplication lightminClientApplication = new LightminClientApplication();
+        lightminClientApplication.setHealthUrl(lightminClientProperties.getHealthUrl());
+        lightminClientApplication.setName(lightminClientProperties.getName());
+        lightminClientApplication.setServiceUrl(lightminClientProperties.getServiceUrl());
+        lightminClientApplication.setManagementUrl(lightminClientProperties.getManagementUrl());
+        lightminClientApplication.setLightminClientInformation(lightminClientInformation);
+
+        return lightminClientApplication;
+    }
 
 }

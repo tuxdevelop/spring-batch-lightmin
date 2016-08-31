@@ -71,7 +71,7 @@ public class JobControllerIT extends CommonControllerIT {
                     .param("jobInstanceId", launchedJobInstanceId.toString())
                     .param("applicationid", applicationId)
             ).andExpect(status().isFound()).andExpect(view().name
-                    ("redirect:executions?jobInstanceId=" + launchedJobInstanceId + "& applicationid=" +
+                    ("redirect:executions?jobInstanceId=" + launchedJobInstanceId + "&applicationid=" +
                             applicationId));
         } catch (final Exception e) {
             fail(e.getMessage());

@@ -4,16 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerType;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.SchedulerStatus;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.TaskExecutorType;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
-import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientInformation;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminProperties;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -48,7 +45,7 @@ public class LightminClientRegistrator {
 
     public Boolean register() {
         Boolean isRegistrationSuccessful = Boolean.FALSE;
-        final LightminClientApplication lightminClientApplication = createApplication();
+        final LightminClientApplication lightminClientApplication = LightminClientApplication.createApplication(new LinkedList<>(jobRegistry.getJobNames()), lightminClientProperties);
         for (final String lightminUrl : lightminProperties.getLightminUrl()) {
             try {
                 @SuppressWarnings("rawtypes") final
@@ -100,25 +97,6 @@ public class LightminClientRegistrator {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         return HttpHeaders.readOnlyHttpHeaders(headers);
-    }
-
-    private LightminClientApplication createApplication() {
-        final List<String> jobNames = new LinkedList<>(jobRegistry.getJobNames());
-        final LightminClientInformation lightminClientInformation = new LightminClientInformation();
-        lightminClientInformation.setRegisteredJobs(jobNames);
-        lightminClientInformation.setSupportedJobIncrementers(Arrays.asList(JobIncrementer.values()));
-        lightminClientInformation.setSupportedSchedulerTypes(Arrays.asList(JobSchedulerType.values()));
-        lightminClientInformation.setSupportedSchedulerStatuses(Arrays.asList(SchedulerStatus.values()));
-        lightminClientInformation.setSupportedTaskExecutorTypes(Arrays.asList(TaskExecutorType.values()));
-
-        final LightminClientApplication lightminClientApplication = new LightminClientApplication();
-        lightminClientApplication.setHealthUrl(lightminClientProperties.getHealthUrl());
-        lightminClientApplication.setName(lightminClientProperties.getName());
-        lightminClientApplication.setServiceUrl(lightminClientProperties.getServiceUrl());
-        lightminClientApplication.setManagementUrl(lightminClientProperties.getManagementUrl());
-        lightminClientApplication.setLightminClientInformation(lightminClientInformation);
-
-        return lightminClientApplication;
     }
 
 

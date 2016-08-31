@@ -16,11 +16,6 @@
 package org.tuxdevelop.spring.batch.lightmin.client.registration;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.ContextClosedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 
@@ -33,7 +28,7 @@ import java.util.concurrent.ScheduledFuture;
  * @since 0.3
  */
 @Slf4j
-public class RegistrationLightminClientApplicationListener {
+public class RegistrationLightminClientApplicationBean {
 
     private final LightminClientRegistrator lightminClientRegistrator;
     private final TaskScheduler taskScheduler;
@@ -43,57 +38,42 @@ public class RegistrationLightminClientApplicationListener {
     private volatile ScheduledFuture<?> scheduledTask;
 
 
-    public RegistrationLightminClientApplicationListener(final LightminClientRegistrator lightminClientRegistrator,
-                                                         final TaskScheduler taskScheduler) {
+    public RegistrationLightminClientApplicationBean(final LightminClientRegistrator lightminClientRegistrator,
+                                                     final TaskScheduler taskScheduler) {
         this.lightminClientRegistrator = lightminClientRegistrator;
         this.taskScheduler = taskScheduler;
     }
 
-    public RegistrationLightminClientApplicationListener(final LightminClientRegistrator lightminClientRegistrator,
-                                                         final ScheduledExecutorService scheduler) {
+    public RegistrationLightminClientApplicationBean(final LightminClientRegistrator lightminClientRegistrator,
+                                                     final ScheduledExecutorService scheduler) {
         this(lightminClientRegistrator, new ConcurrentTaskScheduler(scheduler));
     }
 
-    public RegistrationLightminClientApplicationListener(final LightminClientRegistrator lightminClientRegistrator) {
+    public RegistrationLightminClientApplicationBean(final LightminClientRegistrator lightminClientRegistrator) {
         this(lightminClientRegistrator, Executors.newSingleThreadScheduledExecutor());
     }
 
-    @EventListener
-    @Order(Ordered.LOWEST_PRECEDENCE)
-    public void onApplicationReady(final ApplicationReadyEvent event) {
-        if (autoRegister) {
-            startRegisterTask();
-        }
-    }
-
-    @EventListener
-    @Order(Ordered.LOWEST_PRECEDENCE)
-    public void onClosedContext(final ContextClosedEvent event) {
-        stopRegisterTask();
-
-        if (autoDeregister) {
-            lightminClientRegistrator.deregister();
-        }
-    }
-
     public void startRegisterTask() {
-        if (scheduledTask != null && !scheduledTask.isDone()) {
-            return;
-        }
-
-        scheduledTask = taskScheduler.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                lightminClientRegistrator.register();
+        if (autoRegister) {
+            if (scheduledTask != null && !scheduledTask.isDone()) {
+                return;
             }
-        }, registerPeriod);
-        log.debug("Scheduled registration task for every {}ms", registerPeriod);
+            scheduledTask = taskScheduler.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    lightminClientRegistrator.register();
+                }
+            }, registerPeriod);
+            log.debug("Scheduled registration task for every {}ms", registerPeriod);
+        }
     }
 
     public void stopRegisterTask() {
-        if (scheduledTask != null && !scheduledTask.isDone()) {
-            scheduledTask.cancel(true);
-            log.debug("Canceled registration task");
+        if (autoDeregister) {
+            if (scheduledTask != null && !scheduledTask.isDone()) {
+                scheduledTask.cancel(Boolean.TRUE);
+                log.debug("Canceled registration task");
+            }
         }
     }
 

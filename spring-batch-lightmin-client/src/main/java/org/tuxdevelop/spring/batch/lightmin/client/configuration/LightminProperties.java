@@ -9,7 +9,7 @@ public class LightminProperties {
 
     private String[] url;
     private String apiPath = "api/applications";
-    private Long period = 10_000L;
+    private Long period = 10000L;
     private String username;
     private String password;
     private boolean autoDeregistration;

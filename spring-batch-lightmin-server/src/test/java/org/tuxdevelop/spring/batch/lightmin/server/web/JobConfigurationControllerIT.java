@@ -68,7 +68,7 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
                     .andExpect
                             (status().isFound())
                     .andExpect
-                            (view().name("redirect:jobConfigurations"));
+                            (view().name("redirect:jobConfigurations?applicationid=" + applicationId));
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -91,7 +91,7 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
                     .andExpect
                             (status().isFound())
                     .andExpect
-                            (view().name("redirect:jobConfigurations"));
+                            (view().name("redirect:jobConfigurations?applicationid=" + applicationId));
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -107,7 +107,7 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
                     .andExpect
                             (status().isFound())
                     .andExpect
-                            (view().name("redirect:jobConfigurations"));
+                            (view().name("redirect:jobConfigurations?applicationid=" + applicationId));
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -122,7 +122,7 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
                     .andExpect
                             (status().isFound())
                     .andExpect
-                            (view().name("redirect:jobConfigurations"));
+                            (view().name("redirect:jobConfigurations?applicationid=" + applicationId));
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -137,7 +137,7 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
                     .andExpect
                             (status().isFound())
                     .andExpect
-                            (view().name("redirect:jobConfigurations"));
+                            (view().name("redirect:jobConfigurations?applicationid=" + applicationId));
         } catch (final Exception e) {
             fail(e.getMessage());
         }

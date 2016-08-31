@@ -37,8 +37,12 @@ public class RegistrationBean implements ApplicationEventPublisherAware {
         LightminApplicationValidator.validate(lightminClientApplication);
         final String applicationId = ApplicationUrlIdGenerator.generateId(lightminClientApplication);
         LightminApplicationValidator.checkApplicationId(applicationId);
-        final LightminClientApplicationStatus lightminClientApplicationStatus = getExistingStatusInfo(applicationId);
-
+        final LightminClientApplicationStatus lightminClientApplicationStatus;
+        if (lightminClientApplication.getLightminClientApplicationStatus() != null) {
+            lightminClientApplicationStatus = lightminClientApplication.getLightminClientApplicationStatus();
+        } else {
+            lightminClientApplicationStatus = getExistingStatusInfo(applicationId);
+        }
         lightminClientApplication.setId(applicationId);
         lightminClientApplication.setLightminClientApplicationStatus(lightminClientApplicationStatus);
 

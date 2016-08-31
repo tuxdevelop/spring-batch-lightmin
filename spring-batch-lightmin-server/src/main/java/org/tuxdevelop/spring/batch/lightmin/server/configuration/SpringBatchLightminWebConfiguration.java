@@ -5,19 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.tuxdevelop.spring.batch.lightmin.configuration.RestServiceConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.server.web.AdminController;
-import org.tuxdevelop.spring.batch.lightmin.server.web.ApplicationController;
-import org.tuxdevelop.spring.batch.lightmin.server.web.IndexController;
-import org.tuxdevelop.spring.batch.lightmin.server.web.JobConfigurationController;
-import org.tuxdevelop.spring.batch.lightmin.server.web.JobController;
-import org.tuxdevelop.spring.batch.lightmin.server.web.JobLauncherController;
-import org.tuxdevelop.spring.batch.lightmin.server.web.StepController;
+import org.tuxdevelop.spring.batch.lightmin.server.web.*;
 
 @Configuration
-@Import(value = { AdminController.class, IndexController.class, JobConfigurationController.class, JobController.class,
-        JobLauncherController.class, StepController.class, RestServiceConfiguration.class,
-        ApplicationController.class })
+@Import(value = {AdminController.class, IndexController.class, JobConfigurationController.class, JobController.class,
+        JobLauncherController.class, StepController.class, ApplicationController.class})
 public class SpringBatchLightminWebConfiguration {
 
     @Bean

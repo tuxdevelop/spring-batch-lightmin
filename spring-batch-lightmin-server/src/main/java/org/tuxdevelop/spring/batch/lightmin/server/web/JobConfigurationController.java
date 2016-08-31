@@ -1,9 +1,5 @@
 package org.tuxdevelop.spring.batch.lightmin.server.web;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +20,10 @@ import org.tuxdevelop.spring.batch.lightmin.server.admin.AdminServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 import org.tuxdevelop.spring.batch.lightmin.util.ParameterParser;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
+
 /**
  * @author Marcel Becker
  * @since 0.1
@@ -36,14 +36,14 @@ public class JobConfigurationController extends CommonController {
 
     @Autowired
     public JobConfigurationController(final AdminServerService adminServerService,
-            final RegistrationBean registrationBean) {
+                                      final RegistrationBean registrationBean) {
         this.adminServerService = adminServerService;
         this.registrationBean = registrationBean;
     }
 
     @RequestMapping(value = "/jobConfigurations", method = RequestMethod.GET)
     public void getJobConfigurations(@RequestParam("applicationid") final String applicationId,
-            final Model model) {
+                                     final Model model) {
         final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
         final Collection<JobConfigurationModel> jobConfigurationModels = getJobConfigurationModels(
                 lightminClientApplication);
@@ -53,11 +53,12 @@ public class JobConfigurationController extends CommonController {
 
     @RequestMapping(value = "/jobConfigurationAdd", method = RequestMethod.GET)
     public void initAddJobConfiguration(@RequestParam("applicationid") final String applicationId,
-            final Model model) {
+                                        final Model model) {
         final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
         final LightminClientInformation lightminClientInformation = lightminClientApplication
                 .getLightminClientInformation();
         final JobConfigurationAddModel jobConfigurationAddModel = new JobConfigurationAddModel();
+        jobConfigurationAddModel.setApplicationId(lightminClientApplication.getId());
         model.addAttribute("jobConfigurationAddModel", jobConfigurationAddModel);
         model.addAttribute("jobNames", lightminClientInformation.getRegisteredJobs());
         model.addAttribute("jobSchedulerTypes", lightminClientInformation.getSupportedSchedulerTypes());
@@ -69,8 +70,8 @@ public class JobConfigurationController extends CommonController {
 
     @RequestMapping(value = "/jobConfigurationEdit", method = RequestMethod.GET)
     public String initEditJobConfiguration(@RequestParam("jobConfigurationId") final Long jobConfigurationId,
-            @RequestParam("applicationid") final String applicationId,
-            final Model model) {
+                                           @RequestParam("applicationid") final String applicationId,
+                                           final Model model) {
         final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
         final LightminClientInformation lightminClientInformation = lightminClientApplication
                 .getLightminClientInformation();
@@ -91,6 +92,7 @@ public class JobConfigurationController extends CommonController {
         jobConfigurationAddModel
                 .setSchedulerStatus(jobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus());
         jobConfigurationAddModel.setJobIncrementer(jobConfiguration.getJobIncrementer());
+        jobConfigurationAddModel.setApplicationId(lightminClientApplication.getId());
         model.addAttribute("jobConfigurationAddModel", jobConfigurationAddModel);
         model.addAttribute("jobSchedulerTypes", lightminClientInformation.getSupportedSchedulerTypes());
         model.addAttribute("taskExecutorTypes", lightminClientInformation.getSupportedTaskExecutorTypes());
@@ -106,7 +108,7 @@ public class JobConfigurationController extends CommonController {
                 .get(jobConfigurationAddModel.getApplicationId());
         final JobConfiguration jobConfiguration = mapModelToJobConfiguration(jobConfigurationAddModel);
         adminServerService.saveJobConfiguration(jobConfiguration, lightminClientApplication);
-        return "redirect:jobConfigurations";
+        return "redirect:jobConfigurations?applicationid=" + jobConfigurationAddModel.getApplicationId();
     }
 
     @RequestMapping(value = "/jobConfigurationEdit", method = RequestMethod.POST)
@@ -116,46 +118,46 @@ public class JobConfigurationController extends CommonController {
                 .get(jobConfigurationAddModel.getApplicationId());
         final JobConfiguration jobConfiguration = mapModelToJobConfiguration(jobConfigurationAddModel);
         adminServerService.updateJobConfiguration(jobConfiguration, lightminClientApplication);
-        return "redirect:jobConfigurations";
+        return "redirect:jobConfigurations?applicationid=" + jobConfigurationAddModel.getApplicationId();
     }
 
     @RequestMapping(value = "/jobConfigurations", method = RequestMethod.POST)
     public String deleteJobConfiguration(@RequestParam("jobConfigurationId") final long jobConfigurationId,
-            @RequestParam("applicationid") final String applicationId,
-            final Model model) {
+                                         @RequestParam("applicationid") final String applicationId,
+                                         final Model model) {
         final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
         adminServerService.deleteJobConfiguration(jobConfigurationId, lightminClientApplication);
         final Collection<JobConfigurationModel> jobConfigurationModels = getJobConfigurationModels(
                 lightminClientApplication);
         model.addAttribute("jobConfigurationModels", jobConfigurationModels);
         model.addAttribute("clientApplication", lightminClientApplication);
-        return "redirect:jobConfigurations";
+        return "redirect:jobConfigurations?applicationid=" + applicationId;
     }
 
     @RequestMapping(value = "/jobConfigurationSchedulerStart", method = RequestMethod.POST)
     public String startJobConfigurationScheduler(@RequestParam("jobConfigurationId") final long jobConfigurationId,
-            @RequestParam("applicationid") final String applicationId,
-            final Model model) {
+                                                 @RequestParam("applicationid") final String applicationId,
+                                                 final Model model) {
         final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
         adminServerService.startJobConfigurationScheduler(jobConfigurationId, lightminClientApplication);
         final Collection<JobConfigurationModel> jobConfigurationModels = getJobConfigurationModels(
                 lightminClientApplication);
         model.addAttribute("jobConfigurationModels", jobConfigurationModels);
         model.addAttribute("clientApplication", lightminClientApplication);
-        return "redirect:jobConfigurations";
+        return "redirect:jobConfigurations?applicationid=" + applicationId;
     }
 
     @RequestMapping(value = "/jobConfigurationSchedulerStop", method = RequestMethod.POST)
     public String stopJobConfigurationScheduler(@RequestParam("jobConfigurationId") final long jobConfigurationId,
-            @RequestParam("applicationid") final String applicationId,
-            final Model model) {
+                                                @RequestParam("applicationid") final String applicationId,
+                                                final Model model) {
         final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
         adminServerService.stopJobConfigurationScheduler(jobConfigurationId, lightminClientApplication);
         final Collection<JobConfigurationModel> jobConfigurationModels = getJobConfigurationModels(
                 lightminClientApplication);
         model.addAttribute("jobConfigurationModels", jobConfigurationModels);
         model.addAttribute("clientApplication", lightminClientApplication);
-        return "redirect:jobConfigurations";
+        return "redirect:jobConfigurations?applicationid=" + applicationId;
     }
 
     private Collection<JobConfigurationModel> getJobConfigurationModels(

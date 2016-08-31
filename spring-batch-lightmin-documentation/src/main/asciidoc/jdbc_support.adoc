@@ -1,6 +1,6 @@
 === Jdbc Support
 For production environments, the _Spring Batch Lightmin_ also provides jdbc components, to get the _Spring Batch Job_
- meta informations from a database and to store the _JobConfigurations_. To use a persistent way to store your
+ meta informations from a database and to lightminApplicationRepository the _JobConfigurations_. To use a persistent way to lightminApplicationRepository your
  _JobConfigurations_, you have to install a schema of _Spring Batch Lightmin_ next to your _Spring Batch_ tables.
  The DDL scripts for various database types are located within the core-module of the _Spring Batch Lightmin_.
  If a _DataSource_ bean is available in the context, the _Spring Batch Lightmin_ will create a

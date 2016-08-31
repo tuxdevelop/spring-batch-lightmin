@@ -3,14 +3,17 @@ package org.tuxdevelop.spring.batch.lightmin.server.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.tuxdevelop.spring.batch.lightmin.configuration.EnableSpringBatchLightmin;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.web.client.RestTemplate;
+import org.tuxdevelop.spring.batch.lightmin.client.configuration.BasicAuthHttpRequestInterceptor;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.MapLightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 
+import java.util.Collections;
+
 @Configuration
-@Import(SpringBatchLightminWebConfiguration.class)
-@EnableSpringBatchLightmin
+@Import(value = {SpringBatchLightminWebConfiguration.class})
 public class CommonServerConfiguration {
 
     @Bean
@@ -23,4 +26,23 @@ public class CommonServerConfiguration {
         return new RegistrationBean(lightminApplicationRepository);
     }
 
+    static class RestTemplateFactory {
+
+        private static RestTemplate restTemplate;
+
+        static RestTemplate getRestTemplate(final LightminServerProperties lightminServerProperties) {
+
+            if (restTemplate == null) {
+                restTemplate = new RestTemplate();
+            }
+            if (lightminServerProperties.getClientUserName() != null) {
+                restTemplate.setInterceptors(
+                        Collections.<ClientHttpRequestInterceptor>singletonList(
+                                new BasicAuthHttpRequestInterceptor(lightminServerProperties.getClientUserName(),
+                                        lightminServerProperties.getClientPassword()))
+                );
+            }
+            return restTemplate;
+        }
+    }
 }

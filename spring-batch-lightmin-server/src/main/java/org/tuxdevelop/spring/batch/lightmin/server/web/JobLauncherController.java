@@ -82,7 +82,7 @@ public class JobLauncherController extends CommonController {
             final JobParameter jobParameter = new JobParameter();
             jobParameter.setParameter(System.currentTimeMillis());
             jobParameter.setParameterType(ParameterType.LONG);
-            jobParameters.getParameters().put(jobIncrementer.name(), jobParameter);
+            jobParameters.getParameters().put(jobIncrementer.getIncrementerIdentifier(), jobParameter);
         }
     }
 

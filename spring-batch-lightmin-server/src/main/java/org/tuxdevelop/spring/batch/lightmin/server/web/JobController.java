@@ -121,7 +121,7 @@ public class JobController extends CommonController {
                                       @RequestParam(value = "applicationid") final String applicationId) {
         final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
         jobServerService.restartJobExecution(jobExecutionId, lightminClientApplication);
-        return "redirect:executions?jobInstanceId=" + jobInstanceId + "& applicationid=" + applicationId;
+        return "redirect:executions?jobInstanceId=" + jobInstanceId + "&applicationid=" + applicationId;
     }
 
     @RequestMapping(value = "/executionStop", method = RequestMethod.POST)
@@ -130,7 +130,7 @@ public class JobController extends CommonController {
                                    @RequestParam(value = "applicationid") final String applicationId) {
         final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
         jobServerService.stopJobExecution(jobExecutionId, lightminClientApplication);
-        return "redirect:executions?jobInstanceId=" + jobInstanceId + "& applicationid=" + applicationId;
+        return "redirect:executions?jobInstanceId=" + jobInstanceId + "&applicationid=" + applicationId;
     }
 
     void enrichJobExecution(final JobExecutionModel jobExecutionModel,

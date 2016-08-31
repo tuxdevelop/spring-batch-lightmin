@@ -61,8 +61,8 @@ public class RemoteAdminServerServiceBean implements AdminServerService {
 
     @Override
     public void deleteJobConfiguration(final Long jobConfigurationId, final LightminClientApplication lightminClientApplication) {
-        final String uri = getClientUri(lightminClientApplication);
-        restTemplate.delete(uri + "/" + jobConfigurationId);
+        final String uri = getClientUri(lightminClientApplication) + "/jobconfiguration/{jobconfigurationid}";
+        restTemplate.delete(uri, jobConfigurationId);
     }
 
     @Override
