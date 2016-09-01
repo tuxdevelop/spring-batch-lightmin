@@ -25,11 +25,8 @@ public class LightminClientRegistrator {
     private final AtomicReference<String> registeredId = new AtomicReference<>();
 
     private LightminClientProperties lightminClientProperties;
-
     private LightminProperties lightminProperties;
-
     private RestTemplate restTemplate;
-
     private JobRegistry jobRegistry;
 
     public LightminClientRegistrator(final LightminClientProperties lightminClientProperties,

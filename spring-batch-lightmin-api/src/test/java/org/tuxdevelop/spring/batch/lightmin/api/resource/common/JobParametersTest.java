@@ -1,7 +1,6 @@
-package org.tuxdevelop.spring.batch.lightmin.api.resource;
+package org.tuxdevelop.spring.batch.lightmin.api.resource.common;
 
 import org.tuxdevelop.spring.batch.lightmin.PojoTestBase;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 
 
 public class JobParametersTest extends PojoTestBase {

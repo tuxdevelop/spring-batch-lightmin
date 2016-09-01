@@ -11,6 +11,8 @@ import org.springframework.util.StringUtils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
 
 @ConfigurationProperties(prefix = "spring.batch.lightmin.client")
 public class LightminClientProperties {
@@ -30,6 +32,10 @@ public class LightminClientProperties {
     @Getter
     @Setter
     private Integer managementPort;
+
+    @Getter
+    @Setter
+    private Map<String, String> externalLinks = new HashMap<>();
 
     @Getter
     private final String name;

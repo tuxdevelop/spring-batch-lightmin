@@ -9,7 +9,12 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.TaskExecutorType;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * @author Marcel Becker
+ * @since 0.3
+ */
 @Data
 public class LightminClientInformation implements Serializable {
 
@@ -20,6 +25,7 @@ public class LightminClientInformation implements Serializable {
     private List<TaskExecutorType> supportedTaskExecutorTypes;
     private List<JobIncrementer> supportedJobIncrementers;
     private List<String> registeredJobs;
+    private Map<String, String> externalLinks;
 
     public LightminClientInformation() {
 

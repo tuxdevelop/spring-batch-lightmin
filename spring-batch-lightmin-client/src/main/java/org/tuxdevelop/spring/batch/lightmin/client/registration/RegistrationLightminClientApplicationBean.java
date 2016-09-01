@@ -15,6 +15,7 @@
  */
 package org.tuxdevelop.spring.batch.lightmin.client.registration;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
@@ -30,12 +31,17 @@ import java.util.concurrent.ScheduledFuture;
 @Slf4j
 public class RegistrationLightminClientApplicationBean {
 
+    @Setter
+    private boolean autoDeregister = false;
+    @Setter
+    private boolean autoRegister = true;
+    @Setter
+    private long registerPeriod = 10000L;
+
+    private volatile ScheduledFuture<?> scheduledTask;
+
     private final LightminClientRegistrator lightminClientRegistrator;
     private final TaskScheduler taskScheduler;
-    private boolean autoDeregister = false;
-    private boolean autoRegister = true;
-    private long registerPeriod = 10_000L;
-    private volatile ScheduledFuture<?> scheduledTask;
 
 
     public RegistrationLightminClientApplicationBean(final LightminClientRegistrator lightminClientRegistrator,
@@ -75,17 +81,5 @@ public class RegistrationLightminClientApplicationBean {
                 log.debug("Canceled registration task");
             }
         }
-    }
-
-    public void setAutoDeregister(final boolean autoDeregister) {
-        this.autoDeregister = autoDeregister;
-    }
-
-    public void setAutoRegister(final boolean autoRegister) {
-        this.autoRegister = autoRegister;
-    }
-
-    public void setRegisterPeriod(final long registerPeriod) {
-        this.registerPeriod = registerPeriod;
     }
 }

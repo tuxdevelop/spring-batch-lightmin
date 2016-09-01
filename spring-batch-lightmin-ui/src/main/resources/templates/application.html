@@ -58,7 +58,23 @@
             </tr>
             <tr>
                 <td class="bold">External Links</td>
-                <td></td>
+                <td>
+                    <table>
+                        <thead>
+                        <th colspan="3"/>
+                        </thead>
+                        <tbody>
+                        <tr th:each="link : ${clientApplication.lightminClientInformation.externalLinks}">
+                            <td th:text="${link.key}"/>
+                            <td>&nbsp;|&nbsp;</td>
+                            <td>
+                                <a class="text-mute" href="#" th:href="${link.value}" th:text="${link.value}"
+                                   target="_blank"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
             </tr>
             </tbody>
         </table>

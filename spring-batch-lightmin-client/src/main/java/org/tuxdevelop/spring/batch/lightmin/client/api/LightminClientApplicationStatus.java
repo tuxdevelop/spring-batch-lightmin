@@ -3,6 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.client.api;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -16,7 +17,9 @@ import java.io.Serializable;
 public class LightminClientApplicationStatus implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Getter
     private final String status;
+    @Getter
     private final Long timeInMills;
 
     private LightminClientApplicationStatus(final String status, final long timeInMills) {
@@ -48,14 +51,6 @@ public class LightminClientApplicationStatus implements Serializable {
 
     public static LightminClientApplicationStatus ofOffline() {
         return valueOf("OFFLINE");
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public long getTimestamp() {
-        return timeInMills;
     }
 
 }

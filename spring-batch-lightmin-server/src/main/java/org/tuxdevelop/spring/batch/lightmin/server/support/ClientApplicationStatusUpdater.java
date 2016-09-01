@@ -49,7 +49,7 @@ public class ClientApplicationStatusUpdater implements ApplicationEventPublisher
     public void updateStatusForAllApplications() {
         final long now = System.currentTimeMillis();
         for (final LightminClientApplication lightminClientApplication : lightminApplicationRepository.findAll()) {
-            if (now - heartBeatPeriod > lightminClientApplication.getLightminClientApplicationStatus().getTimestamp()) {
+            if (now - heartBeatPeriod > lightminClientApplication.getLightminClientApplicationStatus().getTimeInMills()) {
                 updateStatus(lightminClientApplication);
             }
         }

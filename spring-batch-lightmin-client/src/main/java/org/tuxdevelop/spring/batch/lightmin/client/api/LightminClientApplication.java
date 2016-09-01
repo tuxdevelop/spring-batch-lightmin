@@ -33,6 +33,7 @@ public class LightminClientApplication implements Serializable {
         lightminClientInformation.setSupportedSchedulerTypes(Arrays.asList(JobSchedulerType.values()));
         lightminClientInformation.setSupportedSchedulerStatuses(Arrays.asList(SchedulerStatus.values()));
         lightminClientInformation.setSupportedTaskExecutorTypes(Arrays.asList(TaskExecutorType.values()));
+        lightminClientInformation.setExternalLinks(lightminClientProperties.getExternalLinks());
 
         final LightminClientApplication lightminClientApplication = new LightminClientApplication();
         lightminClientApplication.setHealthUrl(lightminClientProperties.getHealthUrl());
@@ -40,7 +41,6 @@ public class LightminClientApplication implements Serializable {
         lightminClientApplication.setServiceUrl(lightminClientProperties.getServiceUrl());
         lightminClientApplication.setManagementUrl(lightminClientProperties.getManagementUrl());
         lightminClientApplication.setLightminClientInformation(lightminClientInformation);
-
         return lightminClientApplication;
     }
 

@@ -15,7 +15,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
  */
 @Controller
 @RequestMapping("/application")
-public class ApplicationController {
+public class ApplicationController extends CommonController {
 
     private final RegistrationBean registrationBean;
 

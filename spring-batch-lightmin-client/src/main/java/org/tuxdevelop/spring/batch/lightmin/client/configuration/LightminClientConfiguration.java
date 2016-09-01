@@ -46,9 +46,8 @@ public class LightminClientConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean(
-            final LightminClientRegistrator lightminClientRegistrator,
-            final LightminProperties lightminProperties) {
+    public RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean(final LightminClientRegistrator lightminClientRegistrator,
+                                                                                               final LightminProperties lightminProperties) {
         final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean =
                 new RegistrationLightminClientApplicationBean(lightminClientRegistrator);
         registrationLightminClientApplicationBean.setAutoRegister(lightminProperties.isAutoRegistration());
