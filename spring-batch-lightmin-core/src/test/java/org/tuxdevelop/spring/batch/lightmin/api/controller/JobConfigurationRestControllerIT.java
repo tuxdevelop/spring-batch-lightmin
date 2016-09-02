@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class JobConfigurationRestControllerIT extends CommonControllerIT {
 
     @Test
-    public void getJobConfigurationsIT() {
+    public void testGetJobConfigurations() {
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController.JobConfigurationRestControllerAPI
                 .JOB_CONFIGURATIONS;
         final ResponseEntity<JobConfigurations> result = restTemplate.getForEntity(uri, JobConfigurations.class);
@@ -32,7 +32,7 @@ public class JobConfigurationRestControllerIT extends CommonControllerIT {
     }
 
     @Test
-    public void getJobConfigurationsByJobNameIT() {
+    public void testGetJobConfigurationsByJobName() {
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS_JOB_NAME;
         final ResponseEntity<JobConfigurations> result = restTemplate.getForEntity(uri, JobConfigurations.class,
@@ -44,7 +44,7 @@ public class JobConfigurationRestControllerIT extends CommonControllerIT {
     }
 
     @Test
-    public void getJobConfigurationByIdIT() {
+    public void testGetJobConfigurationById() {
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobConfigurationRestControllerAPI.JOB_CONFIGURATION_JOB_CONFIGURATION_ID;
         final ResponseEntity<JobConfiguration> result = restTemplate.getForEntity(uri, JobConfiguration.class, addedJobConfigurationId);
@@ -55,7 +55,7 @@ public class JobConfigurationRestControllerIT extends CommonControllerIT {
     }
 
     @Test
-    public void addJobConfigurationIT() {
+    public void testAddJobConfiguration() {
         final String uri = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS;
         final JobConfiguration jobConfiguration = AdminToResourceMapper.map(createJobConfiguration());
@@ -72,7 +72,7 @@ public class JobConfigurationRestControllerIT extends CommonControllerIT {
     }
 
     @Test
-    public void updateJobConfigurationIT() {
+    public void testUpdateJobConfiguration() {
         final String uriGet = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobConfigurationRestControllerAPI.JOB_CONFIGURATION_JOB_CONFIGURATION_ID;
         final ResponseEntity<JobConfiguration> result = restTemplate.getForEntity(uriGet, JobConfiguration.class, addedJobConfigurationId);
@@ -98,7 +98,7 @@ public class JobConfigurationRestControllerIT extends CommonControllerIT {
     }
 
     @Test
-    public void deleteJobConfigurationByIdIT() {
+    public void testDeleteJobConfigurationById() {
         final String uriAdd = LOCALHOST + ":" + getServerPort() + AbstractRestController
                 .JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS;
         final JobConfiguration jobConfiguration = AdminToResourceMapper.map(createJobConfiguration());

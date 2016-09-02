@@ -12,6 +12,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Marcel Becker
+ * @since 0.3
+ */
 public final class AdminToResourceMapper {
 
     private AdminToResourceMapper() {

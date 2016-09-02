@@ -73,17 +73,6 @@ public final class BatchToResourceMapper {
         return response;
     }
 
-    static List<StepExecution> mapStepExecutions(final Collection<org.springframework.batch.core.StepExecution>
-                                                         stepExecutions) {
-        final List<StepExecution> response = new LinkedList<>();
-        if (!stepExecutions.isEmpty()) {
-            for (final org.springframework.batch.core.StepExecution stepExecution : stepExecutions) {
-                response.add(map(stepExecution));
-            }
-        }
-        return response;
-    }
-
     public static StepExecution map(final org.springframework.batch.core.StepExecution stepExecution) {
         final StepExecution response = new StepExecution();
         response.setId(stepExecution.getId());
@@ -164,6 +153,17 @@ public final class BatchToResourceMapper {
                 break;
             default:
                 throw new SpringBatchLightminApplicationException("Unknown ParameterType: " + parameterType);
+        }
+        return response;
+    }
+
+    static List<StepExecution> mapStepExecutions(final Collection<org.springframework.batch.core.StepExecution>
+                                                         stepExecutions) {
+        final List<StepExecution> response = new LinkedList<>();
+        if (!stepExecutions.isEmpty()) {
+            for (final org.springframework.batch.core.StepExecution stepExecution : stepExecutions) {
+                response.add(map(stepExecution));
+            }
         }
         return response;
     }

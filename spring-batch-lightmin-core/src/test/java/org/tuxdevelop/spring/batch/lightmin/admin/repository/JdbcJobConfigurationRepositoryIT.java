@@ -210,7 +210,7 @@ public class JdbcJobConfigurationRepositoryIT {
         assertThat(secondAddedJobConfiguration).isNotNull();
         assertThat(secondAddedJobConfiguration.getJobConfigurationId()).isEqualTo(2L);
         assertThat(secondAddedJobConfiguration.getJobSchedulerConfiguration()).isNotNull();
-        final Collection<String> jobNames = new LinkedList<String>();
+        final Collection<String> jobNames = new LinkedList<>();
         jobNames.add("sampleJob");
         jobNames.add("sampleJobSecond");
         final Collection<JobConfiguration> jobConfigurations = jobConfigurationRepository

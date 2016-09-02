@@ -44,11 +44,12 @@
     </modules>
 
     <properties>
-        <assertj.version>1.7.1</assertj.version>
         <platform-bom.version>2.0.7.RELEASE</platform-bom.version>
+        <assertj.version>1.7.1</assertj.version>
         <openpojo.version>0.8.0</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
         <datafactory.version>0.8</datafactory.version>
+        <spring-restdocs.version>1.1.2.RELEASE</spring-restdocs.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-compiler-plugin.source>1.7</maven-compiler-plugin.source>
@@ -79,7 +80,7 @@
                 <artifactId>assertj-core</artifactId>
                 <version>${assertj.version}</version>
             </dependency>
-            
+
             <!--datafactory -->
             <dependency>
                 <groupId>org.fluttercode.datafactory</groupId>

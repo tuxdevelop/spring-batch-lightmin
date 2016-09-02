@@ -142,7 +142,7 @@ public class ControllerServiceEntryBean implements ServiceEntry {
         final JobInstancePage jobInstancePage = new JobInstancePage();
         jobInstancePage.setJobName(jobName);
         jobInstancePage.setJobInstances(BatchToResourceMapper.mapInstances(jobInstanceCollection));
-        jobInstancePage.setPageSize(pageSize);
+        jobInstancePage.setPageSize(jobInstanceCollection.size());
         jobInstancePage.setStartIndex(startIndex);
         jobInstancePage.setTotalJobInstanceCount(jobInstanceCount);
         return jobInstancePage;

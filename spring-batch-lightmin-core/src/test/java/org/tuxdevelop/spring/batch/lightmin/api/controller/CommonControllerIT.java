@@ -53,9 +53,9 @@ public abstract class CommonControllerIT {
     protected RestTemplate restTemplate;
 
     protected Long addedJobConfigurationId;
-
     protected Long launchedJobExecutionId;
     protected Long launchedJobInstanceId;
+    protected Long launchedStepExecutionId;
 
     protected int getServerPort() {
         return embeddedWebApplicationContext.getEmbeddedServletContainer().getPort();
@@ -77,6 +77,7 @@ public abstract class CommonControllerIT {
                     Date()).toJobParameters());
             launchedJobExecutionId = execution.getId();
             launchedJobInstanceId = execution.getJobInstance().getId();
+            launchedStepExecutionId = execution.getStepExecutions().iterator().next().getId();
         } catch (final Exception e) {
             fail(e.getMessage());
         }

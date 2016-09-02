@@ -37,8 +37,8 @@ public class JobRestController extends AbstractRestController implements Initial
     }
 
     @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID_ALL, produces = PRODUCES, method = RequestMethod.GET)
-    public ResponseEntity<JobExecutionPage> getJobExecutionsByJobInstanceId(@RequestParam("jobinstanceid") final Long
-                                                                                    jobInstanceId) {
+    public ResponseEntity<JobExecutionPage> getAllJobExecutionsByJobInstanceId(@RequestParam("jobinstanceid") final Long
+                                                                                       jobInstanceId) {
         final JobExecutionPage jobInstanceExecutions = serviceEntry.getJobExecutionPage(jobInstanceId);
         return ResponseEntity.ok(jobInstanceExecutions);
     }
