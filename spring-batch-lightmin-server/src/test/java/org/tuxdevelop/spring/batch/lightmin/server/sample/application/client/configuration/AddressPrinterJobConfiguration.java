@@ -20,8 +20,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.Address;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.ProcessingState;
-import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.AddressDAO;
-import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDAO;
+import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.AddressDao;
+import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDao;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -85,15 +85,15 @@ public class AddressPrinterJobConfiguration {
         return new ItemProcessor<Long, Address>() {
 
             @Autowired
-            private BatchTaskAddressDAO batchTaskAddressDAO;
+            private BatchTaskAddressDao batchTaskAddressDao;
 
             @Autowired
-            private AddressDAO addressDAO;
+            private AddressDao addressDao;
 
             @Override
             public Address process(final Long id) throws Exception {
-                batchTaskAddressDAO.updateProcessingState(id, ProcessingState.PRINTED);
-                return addressDAO.getAddressById(id);
+                batchTaskAddressDao.updateProcessingState(id, ProcessingState.PRINTED);
+                return addressDao.getAddressById(id);
             }
         };
     }

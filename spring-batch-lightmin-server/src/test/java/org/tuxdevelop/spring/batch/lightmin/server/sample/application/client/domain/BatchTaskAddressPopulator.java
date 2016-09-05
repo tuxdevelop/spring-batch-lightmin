@@ -5,13 +5,13 @@ import org.fluttercode.datafactory.impl.DataFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDAO;
+import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDao;
 
 @Component
 public class BatchTaskAddressPopulator {
 
     @Autowired
-    private BatchTaskAddressDAO batchTaskAddressDAO;
+    private BatchTaskAddressDao batchTaskAddressDao;
 
     private DataFactory dataFactory;
 
@@ -23,7 +23,7 @@ public class BatchTaskAddressPopulator {
     public void populateData() {
         for (int i = 0; i < 1000; i++) {
             final BatchTaskAddress batchTaskAddress = createBatchTaskAddress();
-            batchTaskAddressDAO.add(batchTaskAddress);
+            batchTaskAddressDao.add(batchTaskAddress);
         }
     }
 

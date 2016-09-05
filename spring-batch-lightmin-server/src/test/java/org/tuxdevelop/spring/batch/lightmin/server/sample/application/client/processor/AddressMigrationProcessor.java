@@ -8,23 +8,23 @@ import org.springframework.stereotype.Component;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.Address;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.BatchTaskAddress;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.ProcessingState;
-import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.AddressDAO;
+import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.AddressDao;
 
 @Slf4j
 @Component
 public class AddressMigrationProcessor implements ItemProcessor<BatchTaskAddress, BatchTaskAddress> {
 
-    private final AddressDAO addressDAO;
+    private final AddressDao addressDao;
 
     @Autowired
-    public AddressMigrationProcessor(final AddressDAO addressDAO) {
-        this.addressDAO = addressDAO;
+    public AddressMigrationProcessor(final AddressDao addressDao) {
+        this.addressDao = addressDao;
     }
 
     @Override
     public BatchTaskAddress process(final BatchTaskAddress batchTaskAddress) throws Exception {
         final Address address = mapToAddress(batchTaskAddress);
-        addressDAO.add(address);
+        addressDao.add(address);
         batchTaskAddress.setProcessingState(ProcessingState.SUCCESS);
         return batchTaskAddress;
     }
