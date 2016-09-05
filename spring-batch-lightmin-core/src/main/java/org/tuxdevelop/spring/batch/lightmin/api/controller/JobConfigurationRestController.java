@@ -62,15 +62,15 @@ public class JobConfigurationRestController extends AbstractRestController imple
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @RequestMapping(value = JobConfigurationRestControllerAPI.JOB_CONFIGURATION_SCHEDULER_START, method = RequestMethod.GET)
-    public ResponseEntity<Void> startJobConfigurationScheduler(@PathVariable("jobconfigurationid") final Long jobConfigurationId) {
-        serviceEntry.startJobConfigurationScheduler(jobConfigurationId);
+    @RequestMapping(value = JobConfigurationRestControllerAPI.JOB_CONFIGURATION_START, method = RequestMethod.GET)
+    public ResponseEntity<Void> startJobConfiguration(@PathVariable("jobconfigurationid") final Long jobConfigurationId) {
+        serviceEntry.startJobConfiguration(jobConfigurationId);
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = JobConfigurationRestControllerAPI.JOB_CONFIGURATION_SCHEDULER_STOP, method = RequestMethod.GET)
-    public ResponseEntity<Void> stopJobConfigurationScheduler(@PathVariable("jobconfigurationid") final Long jobConfigurationId) {
-        serviceEntry.stopJobConfigurationScheduler(jobConfigurationId);
+    @RequestMapping(value = JobConfigurationRestControllerAPI.JOB_CONFIGURATION_STOP, method = RequestMethod.GET)
+    public ResponseEntity<Void> stopJobConfiguration(@PathVariable("jobconfigurationid") final Long jobConfigurationId) {
+        serviceEntry.stopJobConfiguration(jobConfigurationId);
         return ResponseEntity.ok().build();
     }
 

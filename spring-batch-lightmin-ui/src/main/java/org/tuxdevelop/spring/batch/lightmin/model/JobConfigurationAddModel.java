@@ -1,10 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.model;
 
 import lombok.Data;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerType;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.SchedulerStatus;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.TaskExecutorType;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.*;
 
 /**
  * @author Marcel Becker
@@ -19,9 +16,14 @@ public class JobConfigurationAddModel {
     private String cronExpression;
     private Long fixedDelay;
     private Long initialDelay;
-    private TaskExecutorType taskExecutorType;
     private String jobParameters;
     private SchedulerStatus schedulerStatus;
+    private JobListenerType jobListenerType;
+    private ListenerStatus listenerStatus;
+    private String sourceFolder;
+    private String filePattern;
+    private Long pollerPeriod;
     private JobIncrementer jobIncrementer;
+    private TaskExecutorType taskExecutorType;
     private String applicationId;
 }

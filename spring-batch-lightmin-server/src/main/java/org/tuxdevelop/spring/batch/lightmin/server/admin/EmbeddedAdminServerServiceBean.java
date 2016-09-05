@@ -53,12 +53,12 @@ public class EmbeddedAdminServerServiceBean implements AdminServerService {
 
     @Override
     public void startJobConfigurationScheduler(final Long jobConfigurationId, final LightminClientApplication lightminClientApplication) {
-        serviceEntry.startJobConfigurationScheduler(jobConfigurationId);
+        serviceEntry.startJobConfiguration(jobConfigurationId);
     }
 
     @Override
     public void stopJobConfigurationScheduler(final Long jobConfigurationId, final LightminClientApplication lightminClientApplication) {
-        serviceEntry.stopJobConfigurationScheduler(jobConfigurationId);
+        serviceEntry.stopJobConfiguration(jobConfigurationId);
     }
 
 }

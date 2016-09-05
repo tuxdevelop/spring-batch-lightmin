@@ -1,8 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.support;
 
 import org.springframework.batch.core.JobInstance;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.AdminToResourceMapper;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.BatchToResourceMapper;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.ResourceToAdminMapper;
@@ -22,7 +20,6 @@ import java.util.Map;
  * @author Marcel Becker
  * @since 0.3
  */
-@Component
 public class ControllerServiceEntryBean implements ServiceEntry {
 
     private final AdminService adminService;
@@ -30,7 +27,6 @@ public class ControllerServiceEntryBean implements ServiceEntry {
     private final StepService stepService;
     private final JobLauncherBean jobLauncherBean;
 
-    @Autowired
     public ControllerServiceEntryBean(final AdminService adminService,
                                       final JobService jobService,
                                       final StepService stepService,
@@ -85,13 +81,13 @@ public class ControllerServiceEntryBean implements ServiceEntry {
     }
 
     @Override
-    public void stopJobConfigurationScheduler(final Long jobConfigurationId) {
-        adminService.stopJobConfigurationScheduler(jobConfigurationId);
+    public void stopJobConfiguration(final Long jobConfigurationId) {
+        adminService.stopJobConfiguration(jobConfigurationId);
     }
 
     @Override
-    public void startJobConfigurationScheduler(final Long jobConfigurationId) {
-        adminService.startJobConfigurationScheduler(jobConfigurationId);
+    public void startJobConfiguration(final Long jobConfigurationId) {
+        adminService.startJobConfiguration(jobConfigurationId);
     }
 
     @Override

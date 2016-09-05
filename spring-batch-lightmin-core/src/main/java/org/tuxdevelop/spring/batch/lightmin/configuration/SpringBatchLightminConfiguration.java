@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 
 import javax.sql.DataSource;
 
@@ -17,12 +19,12 @@ import javax.sql.DataSource;
 @Configuration
 public class SpringBatchLightminConfiguration {
 
-    private DataSource dataSource;
+    private ApplicationContext applicationContext;
     private SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
 
-    @Autowired(required = false)
-    public void setDataSource(final DataSource dataSource) {
-        this.dataSource = dataSource;
+    @Autowired
+    public void setApplicationContext(final ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     @Autowired
@@ -35,22 +37,21 @@ public class SpringBatchLightminConfiguration {
     @ConditionalOnMissingBean(BatchConfigurer.class)
     public BatchConfigurer batchConfigurer() {
         final DefaultSpringBatchLightminBatchConfigurer batchConfigurer;
-        if (dataSource != null && !springBatchLightminConfigurationProperties.getRepositoryForceMap()) {
-            if (springBatchLightminConfigurationProperties.getRepositoryTablePrefix() != null &&
-                    !springBatchLightminConfigurationProperties.getRepositoryTablePrefix().isEmpty()) {
-                batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource,
-                        springBatchLightminConfigurationProperties.getRepositoryTablePrefix());
-            } else {
-                batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource);
-            }
-        } else if (springBatchLightminConfigurationProperties.getRepositoryTablePrefix() != null &&
-                !springBatchLightminConfigurationProperties.getRepositoryTablePrefix().isEmpty()) {
-            batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(
-                    springBatchLightminConfigurationProperties.getRepositoryTablePrefix());
-        } else {
-            batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer();
-        }
+        final BatchRepositoryType batchRepositoryType = springBatchLightminConfigurationProperties.getBatchRepositoryType();
+        switch (batchRepositoryType) {
+            case JDBC:
+                final DataSource dataSource = applicationContext.getBean(
+                        springBatchLightminConfigurationProperties.getBatchDataSourceName(), DataSource.class);
+                final String tablePrefix = springBatchLightminConfigurationProperties.getRepositoryTablePrefix();
+                batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource, tablePrefix);
+                break;
+            case MAP:
+                batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer();
+                break;
+            default:
+                throw new SpringBatchLightminConfigurationException("Unknown BatchRepositoryType: " + batchRepositoryType);
 
+        }
         return batchConfigurer;
     }
 
@@ -58,18 +59,8 @@ public class SpringBatchLightminConfiguration {
     @Bean
     @ConditionalOnMissingBean(SpringBatchLightminConfigurator.class)
     public SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator(final BatchConfigurer batchConfigurer) {
-        final DefaultSpringBatchLightminConfigurator configuration;
-        final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Create DefaultSpringBatchLightminConfigurator ");
-        if (dataSource != null) {
-            configuration = new DefaultSpringBatchLightminConfigurator(dataSource, springBatchLightminConfigurationProperties);
-            stringBuilder.append("with dataSource and repositoryTablePrefix: ");
-            stringBuilder.append(springBatchLightminConfigurationProperties.getRepositoryTablePrefix());
-        } else {
-            configuration = new DefaultSpringBatchLightminConfigurator(springBatchLightminConfigurationProperties);
-        }
+        final DefaultSpringBatchLightminConfigurator configuration = new DefaultSpringBatchLightminConfigurator(springBatchLightminConfigurationProperties, applicationContext);
         configuration.setBatchConfigurer(batchConfigurer);
-        log.info(stringBuilder.toString());
         return configuration;
     }
 }

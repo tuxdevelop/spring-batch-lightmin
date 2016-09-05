@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.repository.dao.AbstractJdbcBatchMetadataDao;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -33,6 +34,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     private final JobConfigurationDAO jobConfigurationDAO;
     private final JobSchedulerConfigurationDAO jobSchedulerConfigurationDAO;
     private final JobConfigurationParameterDAO jobConfigurationParameterDAO;
+    private final JobListenerConfigurationDAO jobListenerConfigurationDAO;
 
     public JdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate, final String tablePrefix) {
         this.jdbcTemplate = jdbcTemplate;
@@ -44,6 +46,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         this.jobSchedulerConfigurationDAO = new JobSchedulerConfigurationDAO(jdbcTemplate, tablePrefix);
         this.jobConfigurationDAO = new JobConfigurationDAO(jdbcTemplate, tablePrefix);
         this.jobConfigurationParameterDAO = new JobConfigurationParameterDAO(jdbcTemplate, tablePrefix);
+        this.jobListenerConfigurationDAO = new JobListenerConfigurationDAO(jdbcTemplate, tablePrefix);
     }
 
     @Override
@@ -51,6 +54,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         if (checkJobConfigurationExists(jobConfigurationId)) {
             final JobConfiguration jobConfiguration = jobConfigurationDAO.getById(jobConfigurationId);
             jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
+            jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
             jobConfigurationParameterDAO.attachParameters(jobConfiguration);
             return jobConfiguration;
         } else {
@@ -66,6 +70,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             final List<JobConfiguration> jobConfigurations = jobConfigurationDAO.getByJobName(jobName);
             for (final JobConfiguration jobConfiguration : jobConfigurations) {
                 jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
+                jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
                 jobConfigurationParameterDAO.attachParameters(jobConfiguration);
             }
             return jobConfigurations;
@@ -80,7 +85,12 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     public JobConfiguration add(final JobConfiguration jobConfiguration) {
         final Long jobConfigurationId = jobConfigurationDAO.add(jobConfiguration);
         jobConfiguration.setJobConfigurationId(jobConfigurationId);
-        jobSchedulerConfigurationDAO.add(jobConfiguration);
+        if (jobConfiguration.getJobSchedulerConfiguration() != null) {
+            jobSchedulerConfigurationDAO.add(jobConfiguration);
+        }
+        if (jobConfiguration.getJobListenerConfiguration() != null) {
+            jobListenerConfigurationDAO.add(jobConfiguration);
+        }
         jobConfigurationParameterDAO.add(jobConfiguration);
         return jobConfiguration;
     }
@@ -90,7 +100,12 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         final Long jobConfigurationId = jobConfiguration.getJobConfigurationId();
         if (checkJobConfigurationExists(jobConfigurationId)) {
             jobConfigurationDAO.update(jobConfiguration);
-            jobSchedulerConfigurationDAO.update(jobConfiguration);
+            if (jobConfiguration.getJobSchedulerConfiguration() != null) {
+                jobSchedulerConfigurationDAO.update(jobConfiguration);
+            }
+            if (jobConfiguration.getJobListenerConfiguration() != null) {
+                jobListenerConfigurationDAO.update(jobConfiguration);
+            }
             jobConfigurationParameterDAO.delete(jobConfigurationId);
             jobConfigurationParameterDAO.add(jobConfiguration);
             return jobConfiguration;
@@ -107,6 +122,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         if (checkJobConfigurationExists(jobConfigurationId)) {
             jobConfigurationParameterDAO.delete(jobConfigurationId);
             jobSchedulerConfigurationDAO.delete(jobConfigurationId);
+            jobListenerConfigurationDAO.delete(jobConfigurationId);
             jobConfigurationDAO.delete(jobConfigurationId);
         } else {
             final String message = "No jobConfiguration could be found for id:" + jobConfiguration;
@@ -120,6 +136,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         final List<JobConfiguration> jobConfigurations = jobConfigurationDAO.getAll();
         for (final JobConfiguration jobConfiguration : jobConfigurations) {
             jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
+            jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
             jobConfigurationParameterDAO.attachParameters(jobConfiguration);
         }
         return jobConfigurations;
@@ -130,6 +147,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         final List<JobConfiguration> jobConfigurations = jobConfigurationDAO.getAllByJobNames(jobNames);
         for (final JobConfiguration jobConfiguration : jobConfigurations) {
             jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
+            jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
             jobConfigurationParameterDAO.attachParameters(jobConfiguration);
         }
         return jobConfigurations;
@@ -278,6 +296,107 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     /**
      *
      */
+    private static class JobListenerConfigurationDAO {
+
+        private static final String TABLE_NAME = "%sJOB_LISTENER_CONFIGURATION";
+
+        private static final String GET_JOB_LISTENER_QUERY = "SELECT * FROM " + TABLE_NAME + " WHERE "
+                + JobListenerConfigurationDomain.JOB_CONFIGURATION_ID + " = ?";
+
+        private static final String DELETE_STATEMENT = "DELETE FROM " + TABLE_NAME + " WHERE "
+                + JobListenerConfigurationDomain.JOB_CONFIGURATION_ID + " = ?";
+
+        private static final String UPDATE_STATEMENT = "UPDATE " + TABLE_NAME + " SET "
+                + JobListenerConfigurationDomain.LISTENER_TYPE + " = ? , "
+                + JobListenerConfigurationDomain.FILE_PATTERN + " = ? , "
+                + JobListenerConfigurationDomain.SOURCE_FOLDER + " = ? , "
+                + JobListenerConfigurationDomain.TASK_EXECUTOR_TYPE + " = ? , "
+                + JobListenerConfigurationDomain.POLLER_PERIOD + " = ? , "
+                + JobListenerConfigurationDomain.BEAN_NAME + " = ? , "
+                + JobListenerConfigurationDomain.STATUS + " = ? WHERE "
+                + JobListenerConfigurationDomain.JOB_CONFIGURATION_ID + " = ? ";
+
+
+        private final JdbcTemplate jdbcTemplate;
+        private final SimpleJdbcInsert simpleJdbcInsert;
+        private final String tablePrefix;
+
+        JobListenerConfigurationDAO(final JdbcTemplate jdbcTemplate, final String tablePrefix) {
+            this.jdbcTemplate = jdbcTemplate;
+            this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(
+                    String.format(TABLE_NAME, tablePrefix))
+                    .usingGeneratedKeyColumns(JobListenerConfigurationDomain.ID);
+            this.tablePrefix = tablePrefix;
+        }
+
+        public Long add(final JobConfiguration jobConfiguration) {
+            final Map<String, ?> keyValues = map(jobConfiguration);
+            final Number key = simpleJdbcInsert.executeAndReturnKey(keyValues);
+            return key.longValue();
+        }
+
+        public void update(final JobConfiguration jobConfiguration) {
+            final JobListenerConfiguration jobListenerConfiguration = jobConfiguration.getJobListenerConfiguration();
+            final String sql = String.format(UPDATE_STATEMENT, tablePrefix);
+            final Object[] objects = {
+                    jobListenerConfiguration.getJobListenerType().getId(),
+                    jobListenerConfiguration.getFilePattern(),
+                    jobListenerConfiguration.getSourceFolder(),
+                    jobListenerConfiguration.getTaskExecutorType().getId(),
+                    jobListenerConfiguration.getPollerPeriod(),
+                    jobListenerConfiguration.getBeanName(),
+                    jobListenerConfiguration.getListenerStatus().getValue(),
+                    jobConfiguration.getJobConfigurationId()
+            };
+            final int[] types = {
+                    Types.INTEGER,
+                    Types.VARCHAR,
+                    Types.VARCHAR,
+                    Types.INTEGER,
+                    Types.NUMERIC,
+                    Types.VARCHAR,
+                    Types.VARCHAR,
+                    Types.NUMERIC
+            };
+            jdbcTemplate.update(sql, objects, types);
+        }
+
+        public void delete(final Long jobConfigurationId) {
+            final String sql = String.format(DELETE_STATEMENT, tablePrefix);
+            jdbcTemplate.update(sql, new Object[]{jobConfigurationId}, new int[]{Types.NUMERIC});
+        }
+
+        void attachJobListenerConfiguration(final JobConfiguration jobConfiguration) {
+            final String sql = String.format(GET_JOB_LISTENER_QUERY, tablePrefix);
+            try {
+                final JobListenerConfiguration jobListenerConfiguration = jdbcTemplate.queryForObject(sql,
+                        new JobListenerConfigurationRowMapper(), jobConfiguration.getJobConfigurationId());
+                jobConfiguration.setJobListenerConfiguration(jobListenerConfiguration);
+            } catch (final DataAccessException e) {
+                log.debug("Could not get JobListenerConfiguration for jobConfigurationId {}", jobConfiguration.getJobConfigurationId());
+            }
+        }
+
+        private Map<String, Object> map(final JobConfiguration jobConfiguration) {
+            final JobListenerConfiguration jobListenerConfiguration = jobConfiguration.getJobListenerConfiguration();
+            final Map<String, Object> keyValues = new HashMap<>();
+            keyValues.put(JobListenerConfigurationDomain.LISTENER_TYPE, jobListenerConfiguration.getJobListenerType().getId());
+            keyValues.put(JobListenerConfigurationDomain.SOURCE_FOLDER, jobListenerConfiguration.getSourceFolder());
+            keyValues.put(JobListenerConfigurationDomain.FILE_PATTERN, jobListenerConfiguration.getFilePattern());
+            keyValues.put(JobListenerConfigurationDomain.STATUS, jobListenerConfiguration.getListenerStatus().getValue());
+            keyValues.put(JobListenerConfigurationDomain.JOB_CONFIGURATION_ID, jobConfiguration.getJobConfigurationId());
+            keyValues.put(JobListenerConfigurationDomain.BEAN_NAME, jobListenerConfiguration.getBeanName());
+            keyValues.put(JobListenerConfigurationDomain.TASK_EXECUTOR_TYPE, jobListenerConfiguration.getTaskExecutorType().getId());
+            keyValues.put(JobListenerConfigurationDomain.POLLER_PERIOD, jobListenerConfiguration.getPollerPeriod());
+            return keyValues;
+        }
+
+    }
+
+
+    /**
+     *
+     */
     private static class JobSchedulerConfigurationDAO {
 
         private static final String TABLE_NAME = "%sJOB_SCHEDULER_CONFIGURATION";
@@ -318,9 +437,13 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
         void attachJobSchedulerConfiguration(final JobConfiguration jobConfiguration) {
             final String sql = String.format(GET_JOB_SCHEDULER_QUERY, tablePrefix);
-            final JobSchedulerConfiguration jobSchedulerConfiguration = jdbcTemplate.queryForObject(sql,
-                    new JobSchedulerConfigurationRowMapper(), jobConfiguration.getJobConfigurationId());
-            jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
+            try {
+                final JobSchedulerConfiguration jobSchedulerConfiguration = jdbcTemplate.queryForObject(sql,
+                        new JobSchedulerConfigurationRowMapper(), jobConfiguration.getJobConfigurationId());
+                jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
+            } catch (final DataAccessException e) {
+                log.debug("Clound not get JobSchedulerConfiguration for jobConfigurationId {}", jobConfiguration.getJobConfigurationId());
+            }
         }
 
         public void update(final JobConfiguration jobConfiguration) {
@@ -544,6 +667,25 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             jobConfigurationParameter.setParameterType(resultSet
                     .getLong(JobConfigurationParameterDomain.PARAMETER_TYPE));
             return jobConfigurationParameter;
+        }
+    }
+
+    private static class JobListenerConfigurationRowMapper implements RowMapper<JobListenerConfiguration> {
+
+        @Override
+        public JobListenerConfiguration mapRow(final ResultSet result, final int rowNum) throws SQLException {
+            final JobListenerConfiguration jobListenerConfiguration = new JobListenerConfiguration();
+            jobListenerConfiguration.setFilePattern(result.getString(JobListenerConfigurationDomain.FILE_PATTERN));
+            jobListenerConfiguration.setSourceFolder(result.getString(JobListenerConfigurationDomain.SOURCE_FOLDER));
+            jobListenerConfiguration.setBeanName(result.getString(JobListenerConfigurationDomain.BEAN_NAME));
+            final JobListenerType jobListenerType = JobListenerType.getById(result.getLong(JobListenerConfigurationDomain.LISTENER_TYPE));
+            jobListenerConfiguration.setJobListenerType(jobListenerType);
+            final ListenerStatus listenerStatus = ListenerStatus.getByValue(result.getString(JobListenerConfigurationDomain.STATUS));
+            jobListenerConfiguration.setListenerStatus(listenerStatus);
+            final TaskExecutorType taskExecutorType = TaskExecutorType.getById(result.getLong(JobListenerConfigurationDomain.TASK_EXECUTOR_TYPE));
+            jobListenerConfiguration.setTaskExecutorType(taskExecutorType);
+            jobListenerConfiguration.setPollerPeriod(result.getLong(JobListenerConfigurationDomain.POLLER_PERIOD));
+            return jobListenerConfiguration;
         }
     }
 

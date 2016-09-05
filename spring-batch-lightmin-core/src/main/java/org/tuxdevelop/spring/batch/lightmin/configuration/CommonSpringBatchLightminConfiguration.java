@@ -84,9 +84,17 @@ public class CommonSpringBatchLightminConfiguration {
     }
 
     @Bean
+    public ListenerService listenerService(final BeanRegistrar beanRegistrar,
+                                           final JobRegistry jobRegistry,
+                                           final JobRepository jobRepository) {
+        return new DefaultListenerService(beanRegistrar, jobRegistry, jobRepository);
+    }
+
+    @Bean
     public AdminService adminService(final JobConfigurationRepository jobConfigurationRepository,
-                                     final SchedulerService schedulerService) throws Exception {
-        return new DefaultAdminService(jobConfigurationRepository, schedulerService);
+                                     final SchedulerService schedulerService,
+                                     final ListenerService listenerService) throws Exception {
+        return new DefaultAdminService(jobConfigurationRepository, schedulerService, listenerService);
     }
 
     @Bean
@@ -103,8 +111,9 @@ public class CommonSpringBatchLightminConfiguration {
     public JobCreationListener jobCreationListener(final ApplicationContext applicationContext,
                                                    final JobRegistry jobRegistry,
                                                    final AdminService adminService,
-                                                   final SchedulerService schedulerService) throws Exception {
-        return new JobCreationListener(applicationContext, jobRegistry, adminService, schedulerService);
+                                                   final SchedulerService schedulerService,
+                                                   final ListenerService listenerService) throws Exception {
+        return new JobCreationListener(applicationContext, jobRegistry, adminService, schedulerService, listenerService);
     }
 
     @Bean

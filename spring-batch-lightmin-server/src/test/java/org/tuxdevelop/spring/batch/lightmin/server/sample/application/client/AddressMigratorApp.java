@@ -5,11 +5,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.integration.annotation.IntegrationComponentScan;
+import org.springframework.integration.config.EnableIntegration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.EnableSpringBatchLightminClient;
 
 @EnableScheduling
 @EnableSpringBatchLightminClient
+@EnableIntegration
+@IntegrationComponentScan
 @SpringBootApplication(exclude = {BatchAutoConfiguration.class})
 @PropertySource(value = "classpath:properties/sample/client/client.properties")
 @ComponentScan(basePackages = "org.tuxdevelop.spring.batch.lightmin.server.sample.application.client")

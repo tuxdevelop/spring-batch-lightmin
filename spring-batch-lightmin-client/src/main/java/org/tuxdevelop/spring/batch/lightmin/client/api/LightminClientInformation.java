@@ -1,12 +1,10 @@
 package org.tuxdevelop.spring.batch.lightmin.client.api;
 
 import lombok.Data;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerType;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.SchedulerStatus;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.TaskExecutorType;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.*;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +22,8 @@ public class LightminClientInformation implements Serializable {
     private List<SchedulerStatus> supportedSchedulerStatuses;
     private List<TaskExecutorType> supportedTaskExecutorTypes;
     private List<JobIncrementer> supportedJobIncrementers;
+    private List<JobListenerType> supportedJobListenerTypes;
+    private List<ListenerStatus> supportedListenerStatuses;
     private List<String> registeredJobs;
     private Map<String, String> externalLinks;
 
@@ -33,6 +33,9 @@ public class LightminClientInformation implements Serializable {
         this.supportedSchedulerStatuses = new LinkedList<>();
         this.supportedTaskExecutorTypes = new LinkedList<>();
         this.supportedJobIncrementers = new LinkedList<>();
+        this.supportedJobListenerTypes = new LinkedList<>();
+        this.supportedListenerStatuses = new LinkedList<>();
         this.registeredJobs = new LinkedList<>();
+        this.externalLinks = new HashMap<>();
     }
 }

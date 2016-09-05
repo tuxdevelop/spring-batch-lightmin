@@ -8,9 +8,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.ListenerStatus;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
+import org.tuxdevelop.spring.batch.lightmin.admin.listener.Listener;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
+import org.tuxdevelop.spring.batch.lightmin.service.ListenerService;
 import org.tuxdevelop.spring.batch.lightmin.service.SchedulerService;
 import org.tuxdevelop.spring.batch.lightmin.util.CommonJobFactory;
 
@@ -28,13 +31,15 @@ public class JobCreationListener implements ApplicationListener<ContextRefreshed
     private final JobRegistry jobRegistry;
     private final AdminService adminService;
     private final SchedulerService schedulerService;
+    private final ListenerService listenerService;
 
     public JobCreationListener(final ApplicationContext applicationContext, final JobRegistry jobRegistry,
-                               final AdminService adminService, final SchedulerService schedulerService) {
+                               final AdminService adminService, final SchedulerService schedulerService, final ListenerService listenerService) {
         this.applicationContext = applicationContext;
         this.jobRegistry = jobRegistry;
         this.adminService = adminService;
         this.schedulerService = schedulerService;
+        this.listenerService = listenerService;
     }
 
     @Override
@@ -60,7 +65,11 @@ public class JobCreationListener implements ApplicationListener<ContextRefreshed
             for (final JobConfiguration jobConfiguration : jobConfigurations) {
                 final String jobName = jobConfiguration.getJobName();
                 if (jobRegistry.getJobNames().contains(jobName)) {
-                    schedulerService.registerSchedulerForJob(jobConfiguration);
+                    if (jobConfiguration.getJobSchedulerConfiguration() != null) {
+                        schedulerService.registerSchedulerForJob(jobConfiguration);
+                    } else if (jobConfiguration.getJobListenerConfiguration() != null) {
+                        listenerService.registerListenerForJob(jobConfiguration);
+                    }
                 } else {
                     log.debug("No Job with jobName " + jobName + " is present. Registration canceled");
                 }
@@ -75,6 +84,18 @@ public class JobCreationListener implements ApplicationListener<ContextRefreshed
                     log.debug("scheduling bean: " + schedulerEntry.getKey());
                     scheduler.schedule();
                     log.debug("scheduled bean: " + schedulerEntry.getKey());
+                }
+            }
+        }
+
+        final Map<String, Listener> listenerMap = applicationContext.getBeansOfType(Listener.class);
+        if (listenerMap != null) {
+            for (final Map.Entry<String, Listener> listenerEntry : listenerMap.entrySet()) {
+                final Listener listener = listenerEntry.getValue();
+                if (ListenerStatus.ACTIVE.equals(listener.getListenerStatus())) {
+                    log.debug("activating Listener bean: {}", listenerEntry.getKey());
+                    listener.start();
+                    log.debug("activated Listener bean: {}", listenerEntry.getKey());
                 }
             }
         }

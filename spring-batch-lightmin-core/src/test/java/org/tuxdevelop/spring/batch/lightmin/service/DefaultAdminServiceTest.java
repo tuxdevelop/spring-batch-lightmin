@@ -34,6 +34,8 @@ public class DefaultAdminServiceTest {
 
     @Mock
     private SchedulerService schedulerService;
+    @Mock
+    private ListenerService listenerService;
 
     @InjectMocks
     private DefaultAdminService defaultAdminService;
@@ -240,7 +242,7 @@ public class DefaultAdminServiceTest {
         jobSchedulerConfiguration.setBeanName(beanName);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenReturn(jobConfiguration);
-        defaultAdminService.stopJobConfigurationScheduler(jobConfigurationId);
+        defaultAdminService.stopJobConfiguration(jobConfigurationId);
         verify(schedulerService, times(1)).terminate(beanName);
     }
 
@@ -250,7 +252,7 @@ public class DefaultAdminServiceTest {
         final Long jobConfigurationId = 10L;
         when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId))
                 .thenThrow(NoSuchJobConfigurationException.class);
-        defaultAdminService.stopJobConfigurationScheduler(jobConfigurationId);
+        defaultAdminService.stopJobConfiguration(jobConfigurationId);
     }
 
     @Test
@@ -262,7 +264,7 @@ public class DefaultAdminServiceTest {
         jobSchedulerConfiguration.setBeanName(beanName);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId)).thenReturn(jobConfiguration);
-        defaultAdminService.startJobConfigurationScheduler(jobConfigurationId);
+        defaultAdminService.startJobConfiguration(jobConfigurationId);
         verify(schedulerService, times(1)).schedule(beanName, Boolean.FALSE);
     }
 
@@ -272,13 +274,13 @@ public class DefaultAdminServiceTest {
         final Long jobConfigurationId = 10L;
         when(jobConfigurationRepository.getJobConfiguration(jobConfigurationId))
                 .thenThrow(NoSuchJobConfigurationException.class);
-        defaultAdminService.startJobConfigurationScheduler(jobConfigurationId);
+        defaultAdminService.startJobConfiguration(jobConfigurationId);
     }
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        defaultAdminService = new DefaultAdminService(jobConfigurationRepository, schedulerService);
+        defaultAdminService = new DefaultAdminService(jobConfigurationRepository, schedulerService, listenerService);
     }
 
 }

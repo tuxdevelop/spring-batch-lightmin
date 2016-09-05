@@ -2,10 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.client.api;
 
 
 import lombok.Data;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerType;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.SchedulerStatus;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.TaskExecutorType;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.*;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 
 import java.io.Serializable;
@@ -33,6 +30,8 @@ public class LightminClientApplication implements Serializable {
         lightminClientInformation.setSupportedSchedulerTypes(Arrays.asList(JobSchedulerType.values()));
         lightminClientInformation.setSupportedSchedulerStatuses(Arrays.asList(SchedulerStatus.values()));
         lightminClientInformation.setSupportedTaskExecutorTypes(Arrays.asList(TaskExecutorType.values()));
+        lightminClientInformation.setSupportedJobListenerTypes(Arrays.asList(JobListenerType.values()));
+        lightminClientInformation.setSupportedListenerStatuses(Arrays.asList(ListenerStatus.values()));
         lightminClientInformation.setExternalLinks(lightminClientProperties.getExternalLinks());
 
         final LightminClientApplication lightminClientApplication = new LightminClientApplication();

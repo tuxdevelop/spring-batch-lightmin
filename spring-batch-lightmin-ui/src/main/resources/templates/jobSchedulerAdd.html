@@ -5,6 +5,7 @@
 <body>
 <div th:include="fragments/layout :: menu"></div>
 <div th:include="fragments/applicationMenu :: applicationMenu"></div>
+<div th:include="fragments/jobConfigurationsMenu :: jobConfigurationsMenu"></div>
 <div class="viewport">
     <div class="container content">
         <div class="row-fluid">
@@ -12,7 +13,7 @@
                 <thead>
                 <tr>
                     <th colspan="1">
-                        Job Configuration
+                        Job Scheduler Configuration
                     </th>
                 </tr>
                 </thead>
@@ -45,52 +46,50 @@
                                         </label>
                                     </td>
                                     <td>
-                                        <select class="form-control" id="jobSchedulerType"
-                                                th:field="*{jobSchedulerType}" th:value="*{jobSchedulerType}">
-                                            <option th:each="type : ${jobSchedulerTypes}"
-                                                    th:value="${type}" th:text="${type.name()}">Job
-                                                Scheduler Type
-                                            </option>
-                                        </select>
+                                        <input readonly="readonly" id="jobSchedulerType" class="form-control"
+                                               th:value="*{jobSchedulerType}"
+                                               th:field="*{jobSchedulerType}"/>
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td>
-                                        <label for="cronExpression">
-                                            CRON Expression
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <input class="form-control" id="cronExpression" type="text"
-                                               th:value="*{cronExpression}" th:field="*{cronExpression}"/>
-                                    </td>
-                                </tr>
+                                <div th:if="${jobSchedulerType == 'CRON'}">
+                                    <tr>
+                                        <td>
+                                            <label for="cronExpression">
+                                                CRON Expression
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" id="cronExpression" type="text"
+                                                   th:value="*{cronExpression}" th:field="*{cronExpression}"/>
+                                        </td>
+                                    </tr>
+                                </div>
 
+                                <div th:if="${jobSchedulerType == 'PERIOD'}">
+                                    <tr>
+                                        <td>
+                                            <label for="fixedDelay">
+                                                Fixed Delay
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" id="fixedDelay" type="text"
+                                                   th:value="*{fixedDelay}" th:field="*{fixedDelay}"/>
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <td>
-                                        <label for="fixedDelay">
-                                            Fixed Delay
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <input class="form-control" id="fixedDelay" type="text"
-                                               th:value="*{fixedDelay}" th:field="*{fixedDelay}"/>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <label for="initialDelay">
-                                            Initial Delay</label>
-                                    </td>
-                                    <td>
-                                        <input class="form-control" id="initialDelay" type="text"
-                                               th:value="*{initialDelay}" th:field="*{initialDelay}"/>
-                                    </td>
-                                </tr>
-
+                                    <tr>
+                                        <td>
+                                            <label for="initialDelay">
+                                                Initial Delay</label>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" id="initialDelay" type="text"
+                                                   th:value="*{initialDelay}" th:field="*{initialDelay}"/>
+                                        </td>
+                                    </tr>
+                                </div>
                                 <tr>
                                     <td>
                                         <label for="taskExecutorType">

@@ -355,79 +355,146 @@ dl.health-status td {
 }
 
 /** Application-Header **/
-.header--application .navbar-inner,
-.header--application-urls .navbar-inner {
-    font-family: Montserrat, sans-serif;
-    position: absolute;
-    z-index: 999;
+.header--application {
+    margin-bottom: 40px;
+    font-size: 15px;
+}
+
+.header--application .navbar-inner {
+    background-color: #404040;
     background-image: none;
+    border-radius: 0;
     filter: none;
-    background-color: #666;
     border: none;
     border-bottom: 1px solid #34302D;
     box-shadow: none;
-    position: relative;
-    border-radius: 0;
-    padding: 0;
 }
 
-.header--application .application--name {
-    font-family: "Montserrat", sans-serif;
+.header--application .nav-tabs {
+    border: 0;
+}
+
+.header--application .nav > li > a {
+    color: #f2f2f2;
+}
+
+.header--application .nav > li > a:hover,
+.header--application .nav > li > a:focus,
+.header--application .nav-tabs > li > a:hover,
+.header--application .nav-tabs > li > a:focus {
+    color: #6db33f;
+}
+
+.header--application .nav-tabs > li > a,
+.header--application .nav-tabs > li > a:hover,
+.header--application .nav-tabs > li > a:focus {
+    background-color: #404040;
+    border: 0;
+    padding: 9px 13px 8px 13px;
+    border-bottom: 1px solid #34302D;
+}
+
+.header--application .nav-tabs > .active > a,
+.header--application .nav-tabs > .active > a:hover,
+.header--application .nav-tabs > .active > a:focus {
+    color: #333333;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+    border-left: 1px solid #34302D;
+    border-right: 1px solid #34302D;
+    border-top: 4px solid #6db33f;
+    padding: 5px 12px 8px 12px;
+}
+
+.header--application .application--status {
     font-size: 24px;
     line-height: 24px;
-    color: #ebf1e7;
-    display: inline-block;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 20px;
 }
 
-.header--application .navbar-inner .navbar-link a {
-    color: #eeeeee;
-    text-transform: uppercase;
-    text-shadow: none;
+.header--application .application--title {
+    color: #f1f1f1;
+    font-size: 24px;
+    line-height: 24px;
+    margin: 20px 20px 20px 0;
+}
+
+.application--urls {
+    list-style: none;
+    text-align: right;
     font-size: 14px;
-    line-height: 14px;
-    padding: 16px 10px;
-    transition: all 0.15s;
-    -webkit-transition: all 0.15s;
-    -moz-transition: all 0.15s;
-    -o-transition: all 0.15s;
-    -ms-transition: all 0.15s;
+    color: #888;
+    margin-top: 20px;
+    height: 0;
 }
 
-.header--application .navbar-inner .navbar-link:hover a,
-.header--application .navbar-inner .navbar-link.active a {
-    color: #ebf1e7;
-    background-color: #666;
-    box-shadow: none;
+.application--urls > li > a {
+    color: #f1f1f1;
 }
 
-.header--application .navbar-inner .navbar-link a > span {
-    transition: color 0.15s;
-    -webkit-transition: color 0.15s;
-    -moz-transition: color 0.15s;
-    -o-transition: color 0.15s;
-    -ms-transition: color 0.15s;
+.application--urls > li > a:hover,
+.application--urls > li > a:focus {
+    color: #c7c7c7;
+    text-decoration: none;
 }
 
-.header--application .navbar-inner .navbar-link:hover a > span,
-.header--application .navbar-inner .navbar-link.active a > span {
-    border-top: 2px solid #6db33f;
-    border-bottom: 2px solid #6db33f;
+.application-list {
+    background-color: #f9f9f9;
 }
 
-.header--application-urls .navbar-inner {
-    background-color: #dedede;
+.table .group-column {
+    border-right: 1px solid #dddddd;
+    color: #999999;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
 }
 
-.header--application-urls .navbar-inner li > a,
-.header--application-urls .navbar-inner li > a:hover {
-    text-shadow: none;
-    color: #34302D;
+.table .group-column:hover {
+    background-color: #c7c7c7;
+    color: #f9f9f9;
 }
 
-.header--application-urls .navbar-inner li > a:hover {
-    text-decoration: underline;
+/* ---------- */
+
+.sortable {
+    cursor: pointer;
+}
+
+.sorted-ascending,
+.sorted-descending {
+    color: #6db33f;
+}
+
+.sorted-ascending::after {
+    content: " \25b2";
+}
+
+.sorted-descending::after {
+    content: " \25bc";
+}
+
+/* ---------- */
+
+.status-UP {
+    color: #00AA00;
+    font-weight: bold;
+}
+
+.status-OFFLINE {
+    color: #000000;
+    font-weight: bold;
+}
+
+.status-DOWN,
+.status-OUT_OF_SERVICE {
+    color: #DD0000;
+    font-weight: bold;
+}
+
+.status-UNKNOWN {
+    font-weight: bold;
+    color: #FF8800;
 }
 
 .text-spring {

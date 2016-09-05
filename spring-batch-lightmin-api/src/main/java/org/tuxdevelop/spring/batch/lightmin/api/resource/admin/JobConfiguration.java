@@ -18,6 +18,7 @@ public class JobConfiguration implements Serializable {
     private Long jobConfigurationId;
     private String jobName;
     private JobSchedulerConfiguration jobSchedulerConfiguration;
+    private JobListenerConfiguration jobListenerConfiguration;
     private JobParameters jobParameters;
     private JobIncrementer jobIncrementer;
 

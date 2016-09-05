@@ -42,17 +42,19 @@ public class BeanRegistrar {
                              final Map<String, Object> propertyValues,
                              final Map<String, String> propertyReferences,
                              final Set<String> dependsOnBeans) {
-        final BeanDefinitionBuilder builder = BeanDefinitionBuilder
-                .rootBeanDefinition(beanClass);
+        final BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(beanClass);
         builder.setAutowireMode(AbstractBeanDefinition.DEPENDENCY_CHECK_ALL);
         addConstructorArgReferences(builder, constructorReferences);
         addConstructorArgValues(builder, constructorValues);
         addPropertyReference(builder, propertyReferences);
         addPropertyValues(builder, propertyValues);
         addDependsOnBean(builder, dependsOnBeans);
-        final DefaultListableBeanFactory factory = (DefaultListableBeanFactory) context
-                .getBeanFactory();
+        final DefaultListableBeanFactory factory = (DefaultListableBeanFactory) context.getBeanFactory();
         factory.registerBeanDefinition(beanName, builder.getBeanDefinition());
+    }
+
+    public Object initializeBean(final String beanName, final Object bean) {
+        return context.getBeanFactory().initializeBean(bean, beanName);
     }
 
     /**
@@ -62,8 +64,7 @@ public class BeanRegistrar {
      * @throws NoSuchBeanDefinitionException if the context does not contain a bean with the given name
      */
     public void unregisterBean(final String beanName) {
-        final BeanDefinitionRegistry factory = (BeanDefinitionRegistry) context
-                .getAutowireCapableBeanFactory();
+        final BeanDefinitionRegistry factory = (BeanDefinitionRegistry) context.getAutowireCapableBeanFactory();
         if (factory.containsBeanDefinition(beanName)) {
             ((DefaultListableBeanFactory) factory).destroySingleton(beanName);
             factory.removeBeanDefinition(beanName);

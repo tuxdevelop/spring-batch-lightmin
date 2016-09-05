@@ -134,7 +134,7 @@ public class JobConfigurationRestControllerIT extends CommonControllerIT {
     public void testStartJobConfigurationScheduler() {
         final ResponseEntity<Void> response = restTemplate.getForEntity(
                 LOCALHOST + ":" + getServerPort() + AbstractRestController.JobConfigurationRestControllerAPI
-                        .JOB_CONFIGURATION_SCHEDULER_START, Void.class, addedJobConfigurationId);
+                        .JOB_CONFIGURATION_START, Void.class, addedJobConfigurationId);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         final ResponseEntity<JobConfiguration> responseEntity = restTemplate.getForEntity
                 (LOCALHOST + ":" + getServerPort() + AbstractRestController.JobConfigurationRestControllerAPI
@@ -149,7 +149,7 @@ public class JobConfigurationRestControllerIT extends CommonControllerIT {
     public void testStopJobConfigurationScheduler() {
         final ResponseEntity<Void> response = restTemplate.getForEntity(
                 LOCALHOST + ":" + getServerPort() + AbstractRestController.JobConfigurationRestControllerAPI
-                        .JOB_CONFIGURATION_SCHEDULER_START, Void.class, addedJobConfigurationId);
+                        .JOB_CONFIGURATION_START, Void.class, addedJobConfigurationId);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         final ResponseEntity<JobConfiguration> responseEntity = restTemplate.getForEntity
                 (LOCALHOST + ":" + getServerPort() + AbstractRestController.JobConfigurationRestControllerAPI
@@ -160,7 +160,7 @@ public class JobConfigurationRestControllerIT extends CommonControllerIT {
                 .RUNNING);
         final ResponseEntity<Void> responseStop = restTemplate.getForEntity(
                 LOCALHOST + ":" + getServerPort() + AbstractRestController.JobConfigurationRestControllerAPI
-                        .JOB_CONFIGURATION_SCHEDULER_STOP, Void.class, addedJobConfigurationId);
+                        .JOB_CONFIGURATION_STOP, Void.class, addedJobConfigurationId);
         assertThat(responseStop.getStatusCode()).isEqualTo(HttpStatus.OK);
         final ResponseEntity<JobConfiguration> responseEntityStopped = restTemplate.getForEntity
                 (LOCALHOST + ":" + getServerPort() + AbstractRestController.JobConfigurationRestControllerAPI

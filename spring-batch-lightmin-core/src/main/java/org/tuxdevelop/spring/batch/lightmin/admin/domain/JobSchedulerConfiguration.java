@@ -10,8 +10,8 @@ import org.quartz.CronExpression;
  * @version 0.1
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@ToString(callSuper = false)
+@EqualsAndHashCode
+@ToString
 public class JobSchedulerConfiguration extends AbstractConfiguration {
 
     private JobSchedulerType jobSchedulerType;

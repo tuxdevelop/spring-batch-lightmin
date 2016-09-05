@@ -41,18 +41,41 @@ public final class AdminToResourceMapper {
         response.setJobIncrementer(map(jobConfiguration.getJobIncrementer()));
         response.setJobParameters(map(jobConfiguration.getJobParameters()));
         response.setJobSchedulerConfiguration(map(jobConfiguration.getJobSchedulerConfiguration()));
+        response.setJobListenerConfiguration(map(jobConfiguration.getJobListenerConfiguration()));
         return response;
     }
 
     public static JobSchedulerConfiguration map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration jobSchedulerConfiguration) {
 
-        final JobSchedulerConfiguration response = new JobSchedulerConfiguration();
-        response.setCronExpression(jobSchedulerConfiguration.getCronExpression());
-        response.setFixedDelay(jobSchedulerConfiguration.getFixedDelay());
-        response.setInitialDelay(jobSchedulerConfiguration.getInitialDelay());
-        response.setJobSchedulerType(map(jobSchedulerConfiguration.getJobSchedulerType()));
-        response.setSchedulerStatus(map(jobSchedulerConfiguration.getSchedulerStatus()));
-        response.setTaskExecutorType(map(jobSchedulerConfiguration.getTaskExecutorType()));
+        final JobSchedulerConfiguration response;
+        if (jobSchedulerConfiguration != null) {
+            response = new JobSchedulerConfiguration();
+            response.setCronExpression(jobSchedulerConfiguration.getCronExpression());
+            response.setFixedDelay(jobSchedulerConfiguration.getFixedDelay());
+            response.setInitialDelay(jobSchedulerConfiguration.getInitialDelay());
+            response.setJobSchedulerType(map(jobSchedulerConfiguration.getJobSchedulerType()));
+            response.setSchedulerStatus(map(jobSchedulerConfiguration.getSchedulerStatus()));
+            response.setTaskExecutorType(map(jobSchedulerConfiguration.getTaskExecutorType()));
+        } else {
+            response = null;
+        }
+        return response;
+    }
+
+    public static JobListenerConfiguration map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerConfiguration jobListenerConfiguration) {
+
+        final JobListenerConfiguration response;
+        if (jobListenerConfiguration != null) {
+            response = new JobListenerConfiguration();
+            response.setListenerStatus(map(jobListenerConfiguration.getListenerStatus()));
+            response.setTaskExecutorType(map(jobListenerConfiguration.getTaskExecutorType()));
+            response.setFilePattern(jobListenerConfiguration.getFilePattern());
+            response.setSourceFolder(jobListenerConfiguration.getSourceFolder());
+            response.setJobListenerType(map(jobListenerConfiguration.getJobListenerType()));
+            response.setPollerPeriod(jobListenerConfiguration.getPollerPeriod());
+        } else {
+            response = null;
+        }
         return response;
     }
 
@@ -92,6 +115,35 @@ public final class AdminToResourceMapper {
                 break;
             default:
                 throw new SpringBatchLightminApplicationException("Unknown SchedulerStatus: " + schedulerStatus);
+        }
+        return response;
+    }
+
+    static ListenerStatus map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.ListenerStatus listenerStatus) {
+        final ListenerStatus response;
+        switch (listenerStatus) {
+            case ACTIVE:
+                response = ListenerStatus.ACTIVE;
+                break;
+            case STOPPED:
+                response = ListenerStatus.STOPPED;
+                break;
+            default:
+                throw new SpringBatchLightminApplicationException("Unknown ListenerStatus: " + listenerStatus);
+
+        }
+        return response;
+    }
+
+    static JobListenerType map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerType jobListenerType) {
+        final JobListenerType response;
+        switch (jobListenerType) {
+            case LOCAL_FOLDER_LISTENER:
+                response = JobListenerType.LOCAL_FOLDER_LISTENER;
+                break;
+            default:
+                throw new SpringBatchLightminApplicationException("Unknown JobListenerType: " + jobListenerType);
+
         }
         return response;
     }

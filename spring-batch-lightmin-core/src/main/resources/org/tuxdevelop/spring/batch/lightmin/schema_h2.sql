@@ -14,7 +14,19 @@ CREATE TABLE BATCH_JOB_SCHEDULER_CONFIGURATION (
   task_executor_type   INT                          NOT NULL,
   bean_name            VARCHAR(255)                 NOT NULL,
   status               VARCHAR(255)                 NOT NULL,
-  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION(job_configuration_id)
+  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION (job_configuration_id)
+);
+
+CREATE TABLE BATCH_JOB_LISTENER_CONFIGURATION (
+  id                   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
+  job_configuration_id NUMERIC                      NOT NULL,
+  listener_type        INT                          NOT NULL,
+  source_folder        VARCHAR(255)                 NULL,
+  file_pattern         VARCHAR(255)                 NULL,
+  poller_period        NUMERIC                      NOT NULL,
+  status               VARCHAR(255)                 NOT NULL,
+  task_executor_type   INT                          NOT NULL,
+  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION (job_configuration_id)
 );
 
 CREATE TABLE BATCH_JOB_CONFIGURATION_PARAMETERS (
@@ -23,6 +35,6 @@ CREATE TABLE BATCH_JOB_CONFIGURATION_PARAMETERS (
   parameter_name       VARCHAR(255)                 NOT NULL,
   parameter_value      VARCHAR(255)                 NOT NULL,
   parameter_type       INT                          NOT NULL,
-  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION(job_configuration_id)
+  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION (job_configuration_id)
 );
 

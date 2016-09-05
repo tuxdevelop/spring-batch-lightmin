@@ -19,6 +19,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.support.incrementer.AbstractDataFieldMaxValueIncrementer;
 import org.springframework.jdbc.support.incrementer.DataFieldMaxValueIncrementer;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.util.StringUtils;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 
 import javax.annotation.PostConstruct;
@@ -57,21 +58,15 @@ public class DefaultSpringBatchLightminBatchConfigurer implements BatchConfigure
     public DefaultSpringBatchLightminBatchConfigurer() {
     }
 
-    public DefaultSpringBatchLightminBatchConfigurer(final String tablePrefix) {
-        this.tablePrefix = tablePrefix;
-    }
-
-    public DefaultSpringBatchLightminBatchConfigurer(final DataSource dataSource) {
-        setDataSource(dataSource);
-    }
-
     public DefaultSpringBatchLightminBatchConfigurer(final DataSource dataSource,
                                                      final String tablePrefix) {
+        assert dataSource != null : "DataSource must not be null";
+        assert StringUtils.hasText(tablePrefix) : "tablePrefix must not be null or empty";
         setDataSource(dataSource);
         this.tablePrefix = tablePrefix;
     }
 
-    public void setDataSource(final DataSource dataSource) {
+    private void setDataSource(final DataSource dataSource) {
         this.dataSource = dataSource;
         this.transactionManager = new DataSourceTransactionManager(dataSource);
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -108,13 +103,10 @@ public class DefaultSpringBatchLightminBatchConfigurer implements BatchConfigure
             }
             this.jobLauncher = createJobLauncher();
         } catch (final Exception e) {
-            log.error("Error while creating DefaultSpringBatchLightminConfiguration: "
-                    + e.getMessage());
-            throw new SpringBatchLightminConfigurationException(e,
-                    e.getMessage());
+            log.error("Error while creating DefaultSpringBatchLightminConfiguration: " + e.getMessage());
+            throw new SpringBatchLightminConfigurationException(e, e.getMessage());
         }
     }
-
 
     protected void createJdbcComponents() throws Exception {
 

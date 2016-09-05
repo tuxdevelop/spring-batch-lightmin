@@ -36,8 +36,8 @@ public abstract class AbstractRestController {
         public static final String JOB_CONFIGURATIONS = ROOT_URI + "/jobconfigurations";
         public static final String JOB_CONFIGURATIONS_JOB_NAME = JOB_CONFIGURATIONS + "/{jobname}";
         public static final String JOB_CONFIGURATION_JOB_CONFIGURATION_ID = JOB_CONFIGURATIONS + "/jobconfiguration/{jobconfigurationid}";
-        public static final String JOB_CONFIGURATION_SCHEDULER_START = JOB_CONFIGURATIONS + "/{jobconfigurationid}/start";
-        public static final String JOB_CONFIGURATION_SCHEDULER_STOP = JOB_CONFIGURATIONS + "/{jobconfigurationid}/stop";
+        public static final String JOB_CONFIGURATION_START = JOB_CONFIGURATIONS + "/{jobconfigurationid}/start";
+        public static final String JOB_CONFIGURATION_STOP = JOB_CONFIGURATIONS + "/{jobconfigurationid}/stop";
     }
 
     public final class JobLauncherRestControllerAPI {

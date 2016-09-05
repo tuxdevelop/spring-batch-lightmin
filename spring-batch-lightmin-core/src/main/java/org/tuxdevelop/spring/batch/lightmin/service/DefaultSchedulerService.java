@@ -3,17 +3,11 @@ package org.tuxdevelop.spring.batch.lightmin.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.task.AsyncTaskExecutor;
-import org.springframework.core.task.SyncTaskExecutor;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.CronScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
@@ -21,9 +15,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @Slf4j
@@ -127,10 +119,10 @@ public class DefaultSchedulerService implements SchedulerService {
     private String registerScheduler(final JobConfiguration jobConfiguration, final Class<?> schedulerClass) {
         try {
             final Set<Object> constructorValues = new HashSet<>();
-            final JobLauncher jobLauncher = createJobLauncher(jobConfiguration.getJobSchedulerConfiguration()
-                    .getTaskExecutorType());
+            final JobLauncher jobLauncher = ServiceUtil.createJobLauncher(jobConfiguration.getJobSchedulerConfiguration().getTaskExecutorType(),
+                    jobRepository);
             final Job job = jobRegistry.getJob(jobConfiguration.getJobName());
-            final JobParameters jobParameters = mapToJobParameters(jobConfiguration.getJobParameters());
+            final JobParameters jobParameters = ServiceUtil.mapToJobParameters(jobConfiguration.getJobParameters());
             final JobSchedulerConfiguration jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
             final String beanName;
             if (jobSchedulerConfiguration.getBeanName() == null || jobSchedulerConfiguration.getBeanName().isEmpty()) {
@@ -151,44 +143,6 @@ public class DefaultSchedulerService implements SchedulerService {
             return beanName;
         } catch (final Exception e) {
             throw new SpringBatchLightminConfigurationException(e, e.getMessage());
-        }
-    }
-
-    private JobLauncher createJobLauncher(final TaskExecutorType taskExecutorType) {
-        final SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
-        jobLauncher.setJobRepository(jobRepository);
-        if (TaskExecutorType.ASYNCHRONOUS.equals(taskExecutorType)) {
-            final AsyncTaskExecutor taskExecutor = new ConcurrentTaskExecutor();
-            jobLauncher.setTaskExecutor(taskExecutor);
-        } else if (TaskExecutorType.SYNCHRONOUS.equals(taskExecutorType)) {
-            final TaskExecutor taskExecutor = new SyncTaskExecutor();
-            jobLauncher.setTaskExecutor(taskExecutor);
-        }
-        return jobLauncher;
-    }
-
-    private JobParameters mapToJobParameters(final Map<String, Object> parameters) {
-        final JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
-        if (parameters != null) {
-            for (final Map.Entry<String, Object> parameter : parameters.entrySet()) {
-                final String parameterName = parameter.getKey();
-                final Object parameterValue = parameter.getValue();
-                attachJobParameter(jobParametersBuilder, parameterName, parameterValue);
-            }
-        }
-        return jobParametersBuilder.toJobParameters();
-    }
-
-    private void attachJobParameter(final JobParametersBuilder jobParametersBuilder, final String parameterName,
-                                    final Object parameterValue) {
-        if (parameterValue instanceof Long) {
-            jobParametersBuilder.addLong(parameterName, (Long) parameterValue);
-        } else if (parameterValue instanceof Date) {
-            jobParametersBuilder.addDate(parameterName, (Date) parameterValue);
-        } else if (parameterValue instanceof String) {
-            jobParametersBuilder.addString(parameterName, (String) parameterValue);
-        } else {
-            log.error("Could not add Parameter. Cause: Unsupported Parameter Type:" + parameterValue.getClass() + " !");
         }
     }
 

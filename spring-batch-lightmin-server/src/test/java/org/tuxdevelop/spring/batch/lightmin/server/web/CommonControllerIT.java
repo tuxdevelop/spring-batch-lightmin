@@ -20,6 +20,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRep
 import org.tuxdevelop.spring.batch.lightmin.server.ITConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.ITJobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
+import org.tuxdevelop.spring.batch.lightmin.service.ListenerService;
 import org.tuxdevelop.spring.batch.lightmin.service.SchedulerService;
 
 import java.util.Collection;
@@ -44,6 +45,8 @@ public abstract class CommonControllerIT {
     private SchedulerService schedulerService;
     @Autowired
     private LightminApplicationRepository lightminApplicationRepository;
+    @Autowired
+    private ListenerService listenerService;
 
     protected MockMvc mockMvc;
     protected Long launchedJobExecutionId;
@@ -52,11 +55,13 @@ public abstract class CommonControllerIT {
     protected JobConfiguration addedJobConfiguration;
     protected JobExecution jobExecution;
     protected String applicationId;
+    protected JobConfiguration addedListenerJobConfiguration;
 
     @Before
     public void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         addJobConfigurations();
+        addJobListenerConfiguration();
         launchSimpleJob();
         applicationId = lightminApplicationRepository.findAll().iterator().next().getId();
     }
@@ -76,6 +81,24 @@ public abstract class CommonControllerIT {
         jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
         addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
         schedulerService.registerSchedulerForJob(addedJobConfiguration);
+    }
+
+    protected void addJobListenerConfiguration() {
+        final JobListenerConfiguration jobListenerConfiguration = new JobListenerConfiguration();
+        jobListenerConfiguration.setListenerStatus(ListenerStatus.STOPPED);
+        jobListenerConfiguration.setPollerPeriod(1000L);
+        jobListenerConfiguration.setFilePattern("*.txt");
+        jobListenerConfiguration.setSourceFolder("src/test");
+        jobListenerConfiguration.setTaskExecutorType(TaskExecutorType.SYNCHRONOUS);
+        jobListenerConfiguration.setBeanName("myTestBean");
+        jobListenerConfiguration.setJobListenerType(JobListenerType.LOCAL_FOLDER_LISTENER);
+        final JobConfiguration jobConfiguration = new JobConfiguration();
+        jobConfiguration.setJobName("simpleJob");
+        jobConfiguration.setJobConfigurationId(1L);
+        jobConfiguration.setJobIncrementer(JobIncrementer.DATE);
+        jobConfiguration.setJobListenerConfiguration(jobListenerConfiguration);
+        addedListenerJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
+        listenerService.registerListenerForJob(addedListenerJobConfiguration);
     }
 
     private void launchSimpleJob() {

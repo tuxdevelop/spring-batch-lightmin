@@ -26,9 +26,14 @@ public class SpringBatchLightminWebConfiguration {
                 viewControllerRegistry.addViewController("/execution").setViewName("jobExecution");
                 viewControllerRegistry.addViewController("/executionRestart").setViewName("jobExecutions");
                 viewControllerRegistry.addViewController("/executionStop").setViewName("jobExecutions");
-                viewControllerRegistry.addViewController("/jobConfigurations").setViewName("jobConfigurations");
-                viewControllerRegistry.addViewController("/jobConfigurationAdd").setViewName("jobConfigurationAdd");
-                viewControllerRegistry.addViewController("/jobConfigurationEdit").setViewName("jobConfigurationEdit");
+                viewControllerRegistry.addViewController("/jobSchedulerConfigurations").setViewName("jobSchedulerConfigurations");
+                viewControllerRegistry.addViewController("/jobSchedulerConfigurationAdd").setViewName("jobSchedulerConfigurationAdd");
+                viewControllerRegistry.addViewController("/jobListenerConfigurations").setViewName("jobListenerConfigurations");
+                viewControllerRegistry.addViewController("/jobListenerConfigurationAdd").setViewName("jobListenerConfigurationAdd");
+                viewControllerRegistry.addViewController("/jobSchedulerAdd").setViewName("jobSchedulerAdd");
+                viewControllerRegistry.addViewController("/jobListenerAdd").setViewName("jobListenerAdd");
+                viewControllerRegistry.addViewController("/jobSchedulerEdit").setViewName("jobSchedulerEdit");
+                viewControllerRegistry.addViewController("/jobListenerEdit").setViewName("jobListenerEdit");
                 viewControllerRegistry.addViewController("/jobConfiguration").setViewName("jobConfiguration");
                 viewControllerRegistry.addViewController("/jobLaunchers").setViewName("jobLaunchers");
                 viewControllerRegistry.addViewController("/jobLauncher").setViewName("jobLauncher");

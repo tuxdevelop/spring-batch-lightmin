@@ -3,9 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.api.resource;
 
 import org.junit.Test;
 import org.tuxdevelop.spring.batch.lightmin.TestHelper;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
+import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
@@ -51,6 +49,34 @@ public class AdminToResourceMapperTest {
         assertThat(jobConfiguration.getJobName()).isEqualTo(compareWith.getJobName());
         assertThat(jobConfiguration.getJobConfigurationId()).isEqualTo(compareWith.getJobConfigurationId());
         assertJobParameters(jobConfiguration.getJobParameters(), compareWith.getJobParameters());
+        assertJobSchedulerConfiguration(jobConfiguration.getJobSchedulerConfiguration(), compareWith
+                .getJobSchedulerConfiguration());
+    }
+
+    private void assertJobSchedulerConfiguration(final org.tuxdevelop.spring.batch.lightmin.api.resource.admin
+            .JobSchedulerConfiguration jobSchedulerConfiguration, final JobSchedulerConfiguration compareWith) {
+        assertThat(jobSchedulerConfiguration.getFixedDelay()).isEqualTo(compareWith.getFixedDelay());
+        assertThat(jobSchedulerConfiguration.getInitialDelay()).isEqualTo(compareWith.getInitialDelay());
+        assertThat(jobSchedulerConfiguration.getCronExpression()).isEqualTo(compareWith.getCronExpression());
+        assertJobSchedulerType(jobSchedulerConfiguration.getJobSchedulerType(), compareWith.getJobSchedulerType());
+        assertSchedulerStatus(jobSchedulerConfiguration.getSchedulerStatus(), compareWith.getSchedulerStatus());
+        assertTaskExecuorType(jobSchedulerConfiguration.getTaskExecutorType(), compareWith.getTaskExecutorType());
+
+    }
+
+    private void assertJobSchedulerType(final org.tuxdevelop.spring.batch.lightmin.api.resource.admin
+            .JobSchedulerType jobSchedulerType, final JobSchedulerType compareWith) {
+        assertThat(jobSchedulerType.name()).isEqualTo(compareWith.name());
+    }
+
+    private void assertTaskExecuorType(final org.tuxdevelop.spring.batch.lightmin.api.resource.admin
+            .TaskExecutorType taskExecutorType, final TaskExecutorType compareWith) {
+        assertThat(taskExecutorType.name()).isEqualTo(compareWith.name());
+    }
+
+    private void assertSchedulerStatus(final org.tuxdevelop.spring.batch.lightmin.api.resource.admin
+            .SchedulerStatus schedulerStatus, final SchedulerStatus compareWith) {
+        assertThat(schedulerStatus.name()).isEqualTo(compareWith.name());
     }
 
     private void assertJobParameters(final JobParameters jobParameters, final Map<String, Object> jobParameterMap) {

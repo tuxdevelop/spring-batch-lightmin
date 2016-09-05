@@ -5,6 +5,7 @@
 <body>
 <div th:include="fragments/layout :: menu"></div>
 <div th:include="fragments/applicationMenu :: applicationMenu"></div>
+<div th:include="fragments/jobConfigurationsMenu :: jobConfigurationsMenu"></div>
 <div class="viewport">
     <div class="container content">
         <div class="row-fluid">
@@ -24,12 +25,12 @@
                                   th:action="@{jobConfigurationEdit}"
                                   th:object="${jobConfigurationAddModel}" action="#" method="post">
                                 <tr>
-                                    <td>
+                                    <td type="hidden">
                                         <label for="jobConfigurationId">
                                             Job Configuration Id
                                         </label>
                                     </td>
-                                    <td>
+                                    <td type="hidden">
                                         <input readonly="readonly" id="jobConfigurationId" class="form-control"
                                                th:value="*{jobConfigurationId}"
                                                th:field="*{jobConfigurationId}"/>

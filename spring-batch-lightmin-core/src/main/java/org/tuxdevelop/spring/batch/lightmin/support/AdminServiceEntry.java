@@ -78,7 +78,7 @@ public interface AdminServiceEntry {
      *
      * @param jobConfigurationId id of the {@link org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration}
      */
-    void stopJobConfigurationScheduler(Long jobConfigurationId);
+    void stopJobConfiguration(Long jobConfigurationId);
 
     /**
      * Starts the Scheduler of the {@link org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration} of the
@@ -86,5 +86,5 @@ public interface AdminServiceEntry {
      *
      * @param jobConfigurationId id of the {@link org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration}
      */
-    void startJobConfigurationScheduler(Long jobConfigurationId);
+    void startJobConfiguration(Long jobConfigurationId);
 }

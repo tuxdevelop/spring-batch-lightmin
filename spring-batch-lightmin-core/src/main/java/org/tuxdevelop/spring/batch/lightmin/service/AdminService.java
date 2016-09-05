@@ -49,7 +49,6 @@ public interface AdminService extends InitializingBean {
      * .JobConfiguration} . The key of the maps belongs to a job name.
      *
      * @param jobNames Collection of job names get the configurations for.
-     *
      * @return all known {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration}s
      */
     Map<String, Collection<JobConfiguration>> getJobConfigurationMap(final Collection<String> jobNames);
@@ -77,7 +76,7 @@ public interface AdminService extends InitializingBean {
      *
      * @param jobConfigurationId id of the {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration}
      */
-    void stopJobConfigurationScheduler(Long jobConfigurationId);
+    void stopJobConfiguration(Long jobConfigurationId);
 
     /**
      * Starts the Scheduler of the {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration} of the
@@ -85,5 +84,5 @@ public interface AdminService extends InitializingBean {
      *
      * @param jobConfigurationId id of the {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration}
      */
-    void startJobConfigurationScheduler(Long jobConfigurationId);
+    void startJobConfiguration(Long jobConfigurationId);
 }
