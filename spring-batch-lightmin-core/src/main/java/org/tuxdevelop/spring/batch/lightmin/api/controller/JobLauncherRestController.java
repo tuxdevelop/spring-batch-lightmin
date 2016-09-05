@@ -23,6 +23,12 @@ public class JobLauncherRestController extends AbstractRestController {
         this.serviceEntry = serviceEntry;
     }
 
+    /**
+     * Lauches a {@link org.springframework.batch.core.Job} with the given values of the {@link JobLaunch} parameter
+     *
+     * @param jobLaunch the launch information for the Job
+     * @return HTTP Status Code 201
+     */
     @RequestMapping(value = JobLauncherRestControllerAPI.JOB_LAUNCH, consumes = CONSUMES, method = RequestMethod.POST)
     public ResponseEntity<Void> launchJob(@RequestBody final JobLaunch jobLaunch) {
         serviceEntry.launchJob(jobLaunch);

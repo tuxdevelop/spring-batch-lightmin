@@ -5,6 +5,10 @@ import lombok.Data;
 import java.util.Collection;
 import java.util.LinkedList;
 
+/**
+ * @author Marcel Becker
+ * @Since 0.3
+ */
 @Data
 public class ApplicationJobInfo {
 

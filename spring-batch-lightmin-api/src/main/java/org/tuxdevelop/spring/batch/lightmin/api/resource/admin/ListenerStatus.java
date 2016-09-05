@@ -3,6 +3,10 @@ package org.tuxdevelop.spring.batch.lightmin.api.resource.admin;
 
 import lombok.Getter;
 
+/**
+ * @author Marcel Becker
+ * @since 0.3
+ */
 public enum ListenerStatus {
 
     ACTIVE("ACTIVE"),

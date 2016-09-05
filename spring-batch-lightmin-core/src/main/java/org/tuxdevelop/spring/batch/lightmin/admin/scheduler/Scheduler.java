@@ -4,6 +4,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
 
 /**
  * @author Marcel Becker
+ * @see AbstractScheduler
  * @since 0.1
  */
 public interface Scheduler {

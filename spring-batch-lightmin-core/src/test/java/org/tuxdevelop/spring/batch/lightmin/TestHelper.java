@@ -68,12 +68,23 @@ public class TestHelper {
         return new StepExecution(stepName, jobExecution);
     }
 
+    public static JobConfiguration createJobConfiguration(final JobListenerConfiguration jobListenerConfiguration) {
+        final JobConfiguration jobConfiguration = createJobConfiguration();
+        jobConfiguration.setJobListenerConfiguration(jobListenerConfiguration);
+        return jobConfiguration;
+    }
+
     public static JobConfiguration createJobConfiguration(final JobSchedulerConfiguration jobSchedulerConfiguration) {
+        final JobConfiguration jobConfiguration = createJobConfiguration();
+        jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
+        return jobConfiguration;
+    }
+
+    private static JobConfiguration createJobConfiguration() {
         final JobConfiguration jobConfiguration = new JobConfiguration();
         jobConfiguration.setJobName("sampleJob");
         jobConfiguration.setJobIncrementer(JobIncrementer.DATE);
         jobConfiguration.setJobParameters(new HashMap<String, Object>());
-        jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
         return jobConfiguration;
     }
 
@@ -89,15 +100,44 @@ public class TestHelper {
         return jobSchedulerConfiguration;
     }
 
+    public static JobListenerConfiguration createJobListenerConfiguration(final String sourceFolder,
+                                                                          final String pattern,
+                                                                          final JobListenerType jobListenerType) {
+        final JobListenerConfiguration jobListenerConfiguration = new JobListenerConfiguration();
+        jobListenerConfiguration.setJobListenerType(jobListenerType);
+        jobListenerConfiguration.setTaskExecutorType(TaskExecutorType.SYNCHRONOUS);
+        jobListenerConfiguration.setSourceFolder(sourceFolder);
+        jobListenerConfiguration.setFilePattern(pattern);
+        jobListenerConfiguration.setPollerPeriod(1000L);
+        jobListenerConfiguration.setListenerStatus(ListenerStatus.STOPPED);
+        return jobListenerConfiguration;
+    }
+
     public static org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration createJobConfiguration
             (final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerConfiguration jobSchedulerConfiguration) {
+        final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration jobConfiguration =
+                createJobConfigurationApi();
+        jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
+        return jobConfiguration;
+    }
+
+    public static org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration createJobConfiguration
+            (final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobListenerConfiguration jobListenerConfiguration) {
+        final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration jobConfiguration =
+                createJobConfigurationApi();
+        jobConfiguration.setJobListenerConfiguration(jobListenerConfiguration);
+        return jobConfiguration;
+    }
+
+    private static org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration createJobConfigurationApi
+            () {
         final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration jobConfiguration = new org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration();
         jobConfiguration.setJobName("sampleJob");
         jobConfiguration.setJobIncrementer(org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer.DATE);
         jobConfiguration.setJobParameters(new JobParameters());
-        jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
         return jobConfiguration;
     }
+
 
     public static org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerConfiguration createJobSchedulerConfiguration(final String cronExpression,
                                                                                                                                     final Long fixedDelay,
@@ -111,5 +151,19 @@ public class TestHelper {
         jobSchedulerConfiguration.setTaskExecutorType(org.tuxdevelop.spring.batch.lightmin.api.resource.admin.TaskExecutorType.SYNCHRONOUS);
         jobSchedulerConfiguration.setSchedulerStatus(org.tuxdevelop.spring.batch.lightmin.api.resource.admin.SchedulerStatus.INITIALIZED);
         return jobSchedulerConfiguration;
+    }
+
+    public static org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobListenerConfiguration createJobListenerConfiguration(final String sourceFolder,
+                                                                                                                                  final String pattern,
+                                                                                                                                  final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobListenerType jobListenerType) {
+        final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobListenerConfiguration jobListenerConfiguration
+                = new org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobListenerConfiguration();
+        jobListenerConfiguration.setJobListenerType(jobListenerType);
+        jobListenerConfiguration.setTaskExecutorType(org.tuxdevelop.spring.batch.lightmin.api.resource.admin.TaskExecutorType.SYNCHRONOUS);
+        jobListenerConfiguration.setSourceFolder(sourceFolder);
+        jobListenerConfiguration.setFilePattern(pattern);
+        jobListenerConfiguration.setPollerPeriod(1000L);
+        jobListenerConfiguration.setListenerStatus(org.tuxdevelop.spring.batch.lightmin.api.resource.admin.ListenerStatus.STOPPED);
+        return jobListenerConfiguration;
     }
 }

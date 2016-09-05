@@ -44,6 +44,32 @@ public class ResourceToAdminMapperTest {
         assertJobConfigurations(result, jobConfigurationsToMap);
     }
 
+    @Test
+    public void testMapJobConfigurationsWithListener() {
+        final Collection<org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration> jobConfigurations = new LinkedList<>();
+        final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobListenerConfiguration jobListenerConfiguration = TestHelper.createJobListenerConfiguration
+                ("src/test/", "*.txt", org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobListenerType.LOCAL_FOLDER_LISTENER);
+        final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobListenerConfiguration);
+        jobConfiguration.setJobConfigurationId(1L);
+        final Map<String, JobParameter> parameters = new HashMap<>();
+        final JobParameter jobParameterDouble = new JobParameter();
+        jobParameterDouble.setParameter(10.1);
+        jobParameterDouble.setParameterType(ParameterType.DOUBLE);
+        final JobParameter jobParameterLong = new JobParameter();
+        jobParameterLong.setParameter(20L);
+        jobParameterLong.setParameterType(ParameterType.LONG);
+        parameters.put("double", jobParameterDouble);
+        parameters.put("long", jobParameterLong);
+        final JobParameters jobParameters = new JobParameters();
+        jobParameters.setParameters(parameters);
+        jobConfiguration.setJobParameters(jobParameters);
+        jobConfigurations.add(jobConfiguration);
+        final JobConfigurations jobConfigurationsToMap = new JobConfigurations();
+        jobConfigurationsToMap.setJobConfigurations(jobConfigurations);
+        final Collection<JobConfiguration> result = ResourceToAdminMapper.map(jobConfigurationsToMap);
+        assertJobConfigurations(result, jobConfigurationsToMap);
+    }
+
     private void assertJobConfigurations(final Collection<JobConfiguration> jobConfigurationCollection, final JobConfigurations jobConfigurations) {
         for (final JobConfiguration jobConfiguration : jobConfigurationCollection) {
             final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration compareWith = getById
@@ -61,16 +87,33 @@ public class ResourceToAdminMapperTest {
         assertJobParameters(jobConfiguration.getJobParameters(), compareWith.getJobParameters());
         assertJobSchedulerConfiguration(jobConfiguration.getJobSchedulerConfiguration(), compareWith
                 .getJobSchedulerConfiguration());
+        assertJobListenerConfiguration(jobConfiguration.getJobListenerConfiguration(), compareWith.getJobListenerConfiguration());
     }
 
     private void assertJobSchedulerConfiguration(final JobSchedulerConfiguration jobSchedulerConfiguration,
                                                  final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerConfiguration compareWith) {
-        assertThat(jobSchedulerConfiguration.getFixedDelay()).isEqualTo(compareWith.getFixedDelay());
-        assertThat(jobSchedulerConfiguration.getInitialDelay()).isEqualTo(compareWith.getInitialDelay());
-        assertThat(jobSchedulerConfiguration.getCronExpression()).isEqualTo(compareWith.getCronExpression());
-        assertJobSchedulerType(jobSchedulerConfiguration.getJobSchedulerType(), compareWith.getJobSchedulerType());
-        assertSchedulerStatus(jobSchedulerConfiguration.getSchedulerStatus(), compareWith.getSchedulerStatus());
-        assertTaskExecuorType(jobSchedulerConfiguration.getTaskExecutorType(), compareWith.getTaskExecutorType());
+        if (jobSchedulerConfiguration != null) {
+            assertThat(jobSchedulerConfiguration.getFixedDelay()).isEqualTo(compareWith.getFixedDelay());
+            assertThat(jobSchedulerConfiguration.getInitialDelay()).isEqualTo(compareWith.getInitialDelay());
+            assertThat(jobSchedulerConfiguration.getCronExpression()).isEqualTo(compareWith.getCronExpression());
+            assertJobSchedulerType(jobSchedulerConfiguration.getJobSchedulerType(), compareWith.getJobSchedulerType());
+            assertSchedulerStatus(jobSchedulerConfiguration.getSchedulerStatus(), compareWith.getSchedulerStatus());
+            assertTaskExecuorType(jobSchedulerConfiguration.getTaskExecutorType(), compareWith.getTaskExecutorType());
+        } else {
+            assertThat(compareWith).isNull();
+        }
+    }
+
+    private void assertJobListenerConfiguration(final JobListenerConfiguration jobListenerConfiguration,
+                                                final org.tuxdevelop.spring.batch.lightmin.api.resource.admin
+                                                        .JobListenerConfiguration compareWith) {
+        if (jobListenerConfiguration != null) {
+            assertThat(jobListenerConfiguration.getFilePattern()).isEqualTo(compareWith.getFilePattern());
+            assertThat(jobListenerConfiguration.getSourceFolder()).isEqualTo(compareWith.getSourceFolder());
+            assertThat(jobListenerConfiguration.getPollerPeriod()).isEqualTo(compareWith.getPollerPeriod());
+        } else {
+            assertThat(compareWith).isNull();
+        }
 
     }
 

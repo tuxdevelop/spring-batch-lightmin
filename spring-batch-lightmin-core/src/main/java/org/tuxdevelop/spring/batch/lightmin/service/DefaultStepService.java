@@ -5,6 +5,12 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
+/**
+ * Default implementation of {@link org.tuxdevelop.spring.batch.lightmin.service.StepService}
+ *
+ * @author Marcel Becker
+ * @since 0.1
+ */
 public class DefaultStepService implements StepService {
 
     private final JobExplorer jobExplorer;

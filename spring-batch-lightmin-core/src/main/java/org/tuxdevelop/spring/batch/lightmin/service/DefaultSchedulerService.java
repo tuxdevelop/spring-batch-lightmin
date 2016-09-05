@@ -18,6 +18,12 @@ import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Default implementation of {@link org.tuxdevelop.spring.batch.lightmin.service.SchedulerService}
+ *
+ * @author Marcel Becker
+ * @since 0.1
+ */
 @Slf4j
 public class DefaultSchedulerService implements SchedulerService {
 

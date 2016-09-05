@@ -8,6 +8,8 @@ import org.tuxdevelop.spring.batch.lightmin.support.ServiceEntry;
 import java.util.Map;
 
 /**
+ * Embedded implementation of theb {@link AdminServerService}
+ *
  * @author Marcel Becker
  * @since 0.3
  */

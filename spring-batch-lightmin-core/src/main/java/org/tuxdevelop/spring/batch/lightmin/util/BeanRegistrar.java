@@ -53,10 +53,6 @@ public class BeanRegistrar {
         factory.registerBeanDefinition(beanName, builder.getBeanDefinition());
     }
 
-    public Object initializeBean(final String beanName, final Object bean) {
-        return context.getBeanFactory().initializeBean(bean, beanName);
-    }
-
     /**
      * unregisters a bean of the current application context
      *

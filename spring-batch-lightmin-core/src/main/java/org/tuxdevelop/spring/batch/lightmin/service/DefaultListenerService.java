@@ -21,6 +21,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Default implementation of {@link org.tuxdevelop.spring.batch.lightmin.service.ListenerService}
+ *
  * @author Marcel Becker
  * @since 0.3
  */
@@ -66,7 +68,12 @@ public class DefaultListenerService implements ListenerService, InitializingBean
     @Override
     public void refreshListenerForJob(final JobConfiguration jobConfiguration) {
         unregisterListenerForJob(jobConfiguration.getJobListenerConfiguration().getBeanName());
-        registerListenerForJob(jobConfiguration);
+        final String beanName = registerListenerForJob(jobConfiguration);
+        final Listener listener = applicationContext.getBean(beanName, Listener.class);
+        if (ListenerStatus.ACTIVE.equals(listener.getListenerStatus())) {
+            listener.start();
+        }
+
     }
 
     @Override
@@ -113,7 +120,6 @@ public class DefaultListenerService implements ListenerService, InitializingBean
             final Set<Object> constructorValues = new HashSet<>();
             constructorValues.add(listenerConstructorWrapper);
             beanRegistrar.registerBean(FolderListener.class, beanName, constructorValues, null, null, null, null);
-            final FolderListener folderListener = applicationContext.getBean(beanName, FolderListener.class);
         } catch (final Exception e) {
             throw new SpringBatchLightminConfigurationException(e, e.getMessage());
         }

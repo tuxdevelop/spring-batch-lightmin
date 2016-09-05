@@ -51,6 +51,7 @@ public class AdminToResourceMapperTest {
         assertJobParameters(jobConfiguration.getJobParameters(), compareWith.getJobParameters());
         assertJobSchedulerConfiguration(jobConfiguration.getJobSchedulerConfiguration(), compareWith
                 .getJobSchedulerConfiguration());
+        assertJobListenerConfiguration(jobConfiguration.getJobListenerConfiguration(), compareWith.getJobListenerConfiguration());
     }
 
     private void assertJobSchedulerConfiguration(final org.tuxdevelop.spring.batch.lightmin.api.resource.admin
@@ -61,6 +62,18 @@ public class AdminToResourceMapperTest {
         assertJobSchedulerType(jobSchedulerConfiguration.getJobSchedulerType(), compareWith.getJobSchedulerType());
         assertSchedulerStatus(jobSchedulerConfiguration.getSchedulerStatus(), compareWith.getSchedulerStatus());
         assertTaskExecuorType(jobSchedulerConfiguration.getTaskExecutorType(), compareWith.getTaskExecutorType());
+
+    }
+
+    private void assertJobListenerConfiguration(final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobListenerConfiguration jobListenerConfiguration,
+                                                final JobListenerConfiguration compareWith) {
+        if (jobListenerConfiguration != null) {
+            assertThat(jobListenerConfiguration.getFilePattern()).isEqualTo(compareWith.getFilePattern());
+            assertThat(jobListenerConfiguration.getSourceFolder()).isEqualTo(compareWith.getSourceFolder());
+            assertThat(jobListenerConfiguration.getPollerPeriod()).isEqualTo(compareWith.getPollerPeriod());
+        } else {
+            assertThat(compareWith).isNull();
+        }
 
     }
 

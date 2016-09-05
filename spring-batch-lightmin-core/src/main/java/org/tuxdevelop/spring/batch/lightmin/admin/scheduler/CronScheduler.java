@@ -19,7 +19,7 @@ import java.util.TimeZone;
  */
 @Slf4j
 @Getter
-public class CronScheduler extends AbstractScheduler implements Scheduler {
+public class CronScheduler extends AbstractScheduler {
 
     private final JobConfiguration jobConfiguration;
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;

@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * @author Marcel Becker
+ * @since 0.3
+ */
 @ConfigurationProperties(value = "spring.batch.lightmin.server")
 public class LightminServerProperties {
 

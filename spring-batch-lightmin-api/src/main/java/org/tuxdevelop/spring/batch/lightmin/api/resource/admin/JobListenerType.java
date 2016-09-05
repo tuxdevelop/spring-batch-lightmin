@@ -6,5 +6,5 @@ package org.tuxdevelop.spring.batch.lightmin.api.resource.admin;
  */
 public enum JobListenerType {
 
-    LOCAL_FOLDER_LISTENER;
+    LOCAL_FOLDER_LISTENER
 }

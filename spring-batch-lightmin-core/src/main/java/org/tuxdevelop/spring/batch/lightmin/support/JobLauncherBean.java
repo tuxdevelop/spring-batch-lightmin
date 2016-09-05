@@ -20,6 +20,11 @@ public class JobLauncherBean {
         JobRegistry = jobRegistry;
     }
 
+    /**
+     * Lauches a {@link org.springframework.batch.core.Job} with the given values of the {@link JobLaunch} parameter
+     *
+     * @param jobLaunch the launch information for the Job
+     */
     public void launchJob(final JobLaunch jobLaunch) {
         final Job job;
         try {

@@ -16,6 +16,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.ListenerStatus;
 
 /**
  * @author Marcel Becker
+ * @see FolderListener
  * @since 0.3
  */
 public abstract class AbstractListener implements Listener {

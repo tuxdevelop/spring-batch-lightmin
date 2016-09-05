@@ -69,7 +69,6 @@ public class FolderListenerIT {
         listenerConstructorWrapper.setJobConfiguration(jobConfiguration);
         listenerConstructorWrapper.setJobLauncher(jobLauncher);
         listenerConstructorWrapper.setJobParameters(new JobParametersBuilder().toJobParameters());
-        //final FolderListener folderListener = new FolderListener(listenerConstructorWrapper);
         final Set<Object> constructorValues = new HashSet<>();
         constructorValues.add(listenerConstructorWrapper);
         beanRegistrar.registerBean(FolderListener.class, beanName, constructorValues, null, null, null, null);

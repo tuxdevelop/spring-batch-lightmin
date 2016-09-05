@@ -14,8 +14,10 @@ import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplica
 /**
  * @author Marcel Becker
  * @version 0.1
+ * @see PeriodScheduler
+ * @see CronScheduler
  */
-abstract class AbstractScheduler implements InitializingBean {
+abstract class AbstractScheduler implements Scheduler, InitializingBean {
 
     @Setter
     private SchedulerStatus status;

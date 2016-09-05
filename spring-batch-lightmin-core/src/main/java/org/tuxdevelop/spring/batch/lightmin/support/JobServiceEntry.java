@@ -10,14 +10,21 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 public interface JobServiceEntry {
 
     /**
-     * @param jobExecutionId
-     * @return
+     * Retrieves a {@link JobExecution} for a given id
+     *
+     * @param jobExecutionId the id of the jobExecution
+     * @return the JobExecution
      */
     JobExecution getByJobExecutionId(final Long jobExecutionId);
 
     /**
-     * @param jobInstanceId
-     * @return
+     * Retrieves {@link JobExecutionPage} containing {@link JobExecution}s for a given
+     * {@link org.springframework.batch.core.JobInstance} id
+     *
+     * @param jobInstanceId the id of the JobInstance
+     * @param startIndex    the index position of the page
+     * @param pageSize      the size of the page
+     * @return the JobExecutionPage
      */
     JobExecutionPage getJobExecutionPage(final Long jobInstanceId,
                                          final Integer startIndex,
@@ -25,58 +32,78 @@ public interface JobServiceEntry {
 
 
     /**
-     * @param jobInstanceId
-     * @return
+     * Retrieves {@link JobExecutionPage} containing {@link JobExecution}s for a given
+     * {@link org.springframework.batch.core.JobInstance} id
+     *
+     * @param jobInstanceId the id of the JobInstance
+     * @return the JobExecutionPage
      */
     JobExecutionPage getJobExecutionPage(final Long jobInstanceId);
 
     /**
-     * @param jobName
-     * @param startIndex
-     * @param pageSize
-     * @return
+     * Retrieves {@link JobInstancePage} containing {@link JobInstance}s for a given name of a
+     * {@link org.springframework.batch.core.Job}
+     *
+     * @param jobName    the name of the Spring Batch Job
+     * @param startIndex the index position of the page
+     * @param pageSize   the size of the page
+     * @return the JobInstancePage
      */
     JobInstancePage getJobInstancesByJobName(final String jobName,
                                              final int startIndex,
                                              final int pageSize);
 
     /**
-     * @return
+     * Retrieves high level {@link ApplicationJobInfo} of the Application
+     *
+     * @return the ApplicationJobInfo
      */
     ApplicationJobInfo getApplicationJobInfo();
 
 
     /**
-     * @param jobName
-     * @return
+     * Retrieves high level {@link JobInfo} of a {@link org.springframework.batch.core.Job} for a given job name
+     *
+     * @param jobName the name of the Spring Batch Job
+     * @return the JobInfo
      */
     JobInfo getJobInfo(final String jobName);
 
     /**
-     * @param jobExecutionId
+     * Restarts a {@link org.springframework.batch.core.JobExecution} of a given id
+     *
+     * @param jobExecutionId the id of the JobExecution
      */
     void restartJobExecution(final Long jobExecutionId);
 
     /**
-     * @param jobExecutionId
+     * Stops a {@link org.springframework.batch.core.JobExecution} of a given id
+     *
+     * @param jobExecutionId the id of the JobExecution
      */
     void stopJobExecution(final Long jobExecutionId);
 
     /**
-     * @param jobExecutionId
-     * @param stepExecutionId
-     * @return
+     * Retrieves a {@link StepExecution} of a {@link org.springframework.batch.core.JobExecution}
+     *
+     * @param jobExecutionId  the id of the {@link org.springframework.batch.core.JobExecution}
+     * @param stepExecutionId the id of the {@link org.springframework.batch.core.StepExecution}
+     * @return the StepExecution
      */
     StepExecution getStepExecution(final Long jobExecutionId, final Long stepExecutionId);
 
     /**
-     * @param jobLaunch
+     * Lauches a {@link org.springframework.batch.core.Job} with the given values of the {@link JobLaunch} parameter
+     *
+     * @param jobLaunch the launch information for the Job
      */
     void launchJob(final JobLaunch jobLaunch);
 
     /**
-     * @param jobName
-     * @return
+     * Retrieves the last used {@link JobParameters} of a {@link org.springframework.batch.core.Job} run
+     *
+     * @param jobName the name of Spring Batch Job
+     * @return the JobParamaters
      */
     JobParameters getLastJobParameters(final String jobName);
 }

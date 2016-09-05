@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Default implementation of the {@link ServiceEntry}
+ *
  * @author Marcel Becker
  * @since 0.3
  */

@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 /**
  * @author Marcel Becker
- * @version 0.1
+ * @version 0.3
  */
 @Data
 public class JobConfigurations implements Serializable {

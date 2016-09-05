@@ -6,6 +6,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Marcel Becker
+ * @Since 0.3
+ */
 @Data
 public class JobParameters implements Serializable {
 

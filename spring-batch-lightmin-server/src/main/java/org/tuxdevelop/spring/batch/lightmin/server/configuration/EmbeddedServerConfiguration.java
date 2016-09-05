@@ -16,6 +16,10 @@ import org.tuxdevelop.spring.batch.lightmin.server.job.JobServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 import org.tuxdevelop.spring.batch.lightmin.support.ServiceEntry;
 
+/**
+ * @author Marcel Becker
+ * @since 0.3
+ */
 @Configuration
 @EnableConfigurationProperties(value = {LightminClientProperties.class, LightminProperties.class})
 @Import(value = {CommonServerConfiguration.class, CommonSpringBatchLightminConfiguration.class})

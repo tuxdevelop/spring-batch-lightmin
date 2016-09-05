@@ -15,6 +15,10 @@ import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicatio
 import org.tuxdevelop.spring.batch.lightmin.server.support.ClientApplicationStatusUpdater;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 
+/**
+ * @author Marcel Becker
+ * @since 0.3
+ */
 @Configuration
 @Import(value = {CommonServerConfiguration.class, LightminServerProperties.class})
 public class ServerConfiguration {

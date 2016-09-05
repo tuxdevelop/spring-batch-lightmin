@@ -20,7 +20,8 @@ import org.springframework.context.annotation.Import;
 import java.lang.annotation.*;
 
 /**
- * @author Marcel Beckerx
+ * @author Marcel Becker
+ * @since 0.3
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

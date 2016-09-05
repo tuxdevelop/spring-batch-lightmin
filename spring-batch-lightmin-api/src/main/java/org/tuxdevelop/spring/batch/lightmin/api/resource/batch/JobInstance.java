@@ -4,6 +4,10 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author Marcel Becker
+ * @Since 0.3
+ */
 @Data
 public class JobInstance implements Serializable {
 

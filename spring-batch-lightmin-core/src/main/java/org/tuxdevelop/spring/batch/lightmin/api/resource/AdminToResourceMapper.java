@@ -45,7 +45,7 @@ public final class AdminToResourceMapper {
         return response;
     }
 
-    public static JobSchedulerConfiguration map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration jobSchedulerConfiguration) {
+    private static JobSchedulerConfiguration map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration jobSchedulerConfiguration) {
 
         final JobSchedulerConfiguration response;
         if (jobSchedulerConfiguration != null) {
@@ -62,7 +62,7 @@ public final class AdminToResourceMapper {
         return response;
     }
 
-    public static JobListenerConfiguration map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerConfiguration jobListenerConfiguration) {
+    private static JobListenerConfiguration map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerConfiguration jobListenerConfiguration) {
 
         final JobListenerConfiguration response;
         if (jobListenerConfiguration != null) {
@@ -79,8 +79,8 @@ public final class AdminToResourceMapper {
         return response;
     }
 
-    static TaskExecutorType map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.TaskExecutorType
-                                        taskExecutorType) {
+    private static TaskExecutorType map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.TaskExecutorType
+                                                taskExecutorType) {
         final TaskExecutorType response;
         switch (taskExecutorType) {
             case SYNCHRONOUS:
@@ -97,7 +97,7 @@ public final class AdminToResourceMapper {
         return response;
     }
 
-    static SchedulerStatus map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus schedulerStatus) {
+    private static SchedulerStatus map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus schedulerStatus) {
 
         final SchedulerStatus response;
         switch (schedulerStatus) {
@@ -119,7 +119,7 @@ public final class AdminToResourceMapper {
         return response;
     }
 
-    static ListenerStatus map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.ListenerStatus listenerStatus) {
+    private static ListenerStatus map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.ListenerStatus listenerStatus) {
         final ListenerStatus response;
         switch (listenerStatus) {
             case ACTIVE:
@@ -135,7 +135,7 @@ public final class AdminToResourceMapper {
         return response;
     }
 
-    static JobListenerType map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerType jobListenerType) {
+    private static JobListenerType map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerType jobListenerType) {
         final JobListenerType response;
         switch (jobListenerType) {
             case LOCAL_FOLDER_LISTENER:
@@ -148,7 +148,7 @@ public final class AdminToResourceMapper {
         return response;
     }
 
-    static JobSchedulerType map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType jobSchedulerType) {
+    private static JobSchedulerType map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType jobSchedulerType) {
 
         final JobSchedulerType response;
 
@@ -178,7 +178,7 @@ public final class AdminToResourceMapper {
         return new JobParameters(jobParameterMap);
     }
 
-    static JobParameter mapJobParameter(final Object value) {
+    private static JobParameter mapJobParameter(final Object value) {
         final JobParameter response = new JobParameter();
         final ParameterType parameterType = mapObjectToParameterType(value);
         response.setParameterType(parameterType);
@@ -187,8 +187,8 @@ public final class AdminToResourceMapper {
     }
 
 
-    static JobIncrementer map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer
-                                      jobIncrementer) {
+    private static JobIncrementer map(final org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer
+                                              jobIncrementer) {
         final JobIncrementer response;
 
         switch (jobIncrementer) {
@@ -203,7 +203,7 @@ public final class AdminToResourceMapper {
         return response;
     }
 
-    static ParameterType mapObjectToParameterType(final Object value) {
+    private static ParameterType mapObjectToParameterType(final Object value) {
         final ParameterType response;
         if (value instanceof Long) {
             response = ParameterType.LONG;

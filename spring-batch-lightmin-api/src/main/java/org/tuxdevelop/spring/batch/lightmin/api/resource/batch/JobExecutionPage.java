@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @author Marcel Becker
- * @version 0.1
+ * @Since 0.3
  */
 @Data
 public class JobExecutionPage implements Serializable {

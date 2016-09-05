@@ -17,7 +17,7 @@ import java.util.Date;
  */
 @Slf4j
 @Getter
-public class PeriodScheduler extends AbstractScheduler implements Scheduler {
+public class PeriodScheduler extends AbstractScheduler {
 
     private final JobConfiguration jobConfiguration;
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;

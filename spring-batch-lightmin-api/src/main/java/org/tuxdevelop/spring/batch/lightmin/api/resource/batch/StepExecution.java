@@ -6,6 +6,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Marcel Becker
+ * @Since 0.3
+ */
 @Data
 public class StepExecution implements Serializable {
 

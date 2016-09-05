@@ -11,14 +11,32 @@ import java.util.Collection;
 public interface LightminApplicationRepository {
 
 
+    /**
+     * @param lightminClientApplication
+     * @return
+     */
     LightminClientApplication save(final LightminClientApplication lightminClientApplication);
 
+    /**
+     * @return
+     */
     Collection<LightminClientApplication> findAll();
 
+    /**
+     * @param id
+     * @return
+     */
     LightminClientApplication find(final String id);
 
+    /**
+     * @param id
+     * @return
+     */
     LightminClientApplication delete(final String id);
 
+    /**
+     *
+     */
     void clear();
 
 

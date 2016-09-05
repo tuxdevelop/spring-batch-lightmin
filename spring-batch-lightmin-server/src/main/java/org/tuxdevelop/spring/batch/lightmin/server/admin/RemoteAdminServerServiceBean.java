@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Remote implementation of theb {@link AdminServerService}
+ *
  * @author Marcel Becker
  * @since 0.3
  */

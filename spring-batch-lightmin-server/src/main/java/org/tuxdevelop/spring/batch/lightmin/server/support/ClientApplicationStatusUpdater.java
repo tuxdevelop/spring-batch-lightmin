@@ -15,6 +15,7 @@
  */
 package org.tuxdevelop.spring.batch.lightmin.server.support;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
@@ -38,6 +39,7 @@ public class ClientApplicationStatusUpdater implements ApplicationEventPublisher
     private final LightminApplicationRepository lightminApplicationRepository;
     private final RestTemplate restTemplate;
     private ApplicationEventPublisher publisher;
+    @Setter
     private long heartBeatPeriod = 10000L;
 
     public ClientApplicationStatusUpdater(final RestTemplate restTemplate,
@@ -92,10 +94,6 @@ public class ClientApplicationStatusUpdater implements ApplicationEventPublisher
             lightminClientApplicationStatus = LightminClientApplicationStatus.ofOffline();
         }
         return lightminClientApplicationStatus;
-    }
-
-    public void setStatusLifetime(final long heartBeatPeriod) {
-        this.heartBeatPeriod = heartBeatPeriod;
     }
 
     @Override

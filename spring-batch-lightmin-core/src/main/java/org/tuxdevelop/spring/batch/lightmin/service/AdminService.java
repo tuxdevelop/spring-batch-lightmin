@@ -8,6 +8,7 @@ import java.util.Map;
 
 /**
  * @author Marcel Becker
+ * @see DefaultAdminService
  * @since 0.1
  */
 public interface AdminService extends InitializingBean {

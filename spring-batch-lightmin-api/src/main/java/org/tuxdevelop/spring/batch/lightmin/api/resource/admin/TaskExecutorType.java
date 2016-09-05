@@ -7,6 +7,6 @@ package org.tuxdevelop.spring.batch.lightmin.api.resource.admin;
 public enum TaskExecutorType {
 
     SYNCHRONOUS,
-    ASYNCHRONOUS;
+    ASYNCHRONOUS
 
 }

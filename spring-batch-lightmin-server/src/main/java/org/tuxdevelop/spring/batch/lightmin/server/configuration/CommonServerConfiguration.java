@@ -12,6 +12,10 @@ import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 
 import java.util.Collections;
 
+/**
+ * @author Marcel Becker
+ * @since 0.3
+ */
 @Configuration
 @Import(value = {SpringBatchLightminWebConfiguration.class})
 public class CommonServerConfiguration {
