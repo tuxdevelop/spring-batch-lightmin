@@ -18,7 +18,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.ITConfigurationApplication;
-import org.tuxdevelop.spring.batch.lightmin.server.ITJobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.ITConfigurationEmbedded;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.service.ListenerService;
 import org.tuxdevelop.spring.batch.lightmin.service.SchedulerService;
@@ -29,7 +29,7 @@ import static org.assertj.core.api.Fail.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
-@SpringApplicationConfiguration(classes = {ITConfigurationApplication.class, ITJobConfiguration.class})
+@SpringApplicationConfiguration(classes = {ITConfigurationApplication.class, ITConfigurationEmbedded.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class CommonControllerIT {
 

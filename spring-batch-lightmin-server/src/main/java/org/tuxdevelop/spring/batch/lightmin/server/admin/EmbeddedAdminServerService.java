@@ -8,16 +8,16 @@ import org.tuxdevelop.spring.batch.lightmin.support.ServiceEntry;
 import java.util.Map;
 
 /**
- * Embedded implementation of theb {@link AdminServerService}
+ * Embedded implementation of the {@link AdminServerService}
  *
  * @author Marcel Becker
  * @since 0.3
  */
-public class EmbeddedAdminServerServiceBean implements AdminServerService {
+public class EmbeddedAdminServerService implements AdminServerService {
 
     private final ServiceEntry serviceEntry;
 
-    public EmbeddedAdminServerServiceBean(final ServiceEntry serviceEntry) {
+    public EmbeddedAdminServerService(final ServiceEntry serviceEntry) {
         this.serviceEntry = serviceEntry;
     }
 

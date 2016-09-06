@@ -9,7 +9,7 @@ import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientP
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminProperties;
 import org.tuxdevelop.spring.batch.lightmin.configuration.CommonSpringBatchLightminConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.admin.AdminServerService;
-import org.tuxdevelop.spring.batch.lightmin.server.admin.EmbeddedAdminServerServiceBean;
+import org.tuxdevelop.spring.batch.lightmin.server.admin.EmbeddedAdminServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnApplicationReadyEventEmbeddedListener;
 import org.tuxdevelop.spring.batch.lightmin.server.job.EmbeddedJobServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.job.JobServerService;
@@ -27,7 +27,7 @@ public class EmbeddedServerConfiguration {
 
     @Bean
     public AdminServerService adminServerService(final ServiceEntry serviceEntry) {
-        return new EmbeddedAdminServerServiceBean(serviceEntry);
+        return new EmbeddedAdminServerService(serviceEntry);
     }
 
     @Bean

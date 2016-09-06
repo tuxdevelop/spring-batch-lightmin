@@ -13,16 +13,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Remote implementation of theb {@link AdminServerService}
+ * Remote implementation of the {@link AdminServerService}
  *
  * @author Marcel Becker
  * @since 0.3
  */
-public class RemoteAdminServerServiceBean implements AdminServerService {
+public class RemoteAdminServerService implements AdminServerService {
 
     private final RestTemplate restTemplate;
 
-    public RemoteAdminServerServiceBean(final RestTemplate restTemplate) {
+    public RemoteAdminServerService(final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

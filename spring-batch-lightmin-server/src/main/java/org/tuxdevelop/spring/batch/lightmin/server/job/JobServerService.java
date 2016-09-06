@@ -12,19 +12,26 @@ public interface JobServerService {
 
 
     /**
-     * @param jobExecutionId
-     * @param lightminClientApplication
-     * @return
+     * Retrieves a {@link JobExecution} for a given id
+     * for a given {@link LightminClientApplication}
+     *
+     * @param jobExecutionId            the id of the jobExecution
+     * @param lightminClientApplication the LightminClientApplication
+     * @return the JobExecution
      */
     JobExecution getJobExecution(Long jobExecutionId,
                                  LightminClientApplication lightminClientApplication);
 
     /**
-     * @param jobName
-     * @param startIndex
-     * @param pageSize
-     * @param lightminClientApplication
-     * @return
+     * Retrieves {@link JobInstancePage} containing {@link JobInstance}s for a given name of a
+     * {@link org.springframework.batch.core.Job}
+     * for a given {@link LightminClientApplication}
+     *
+     * @param jobName                   the name of the Spring Batch Job
+     * @param startIndex                the index position of the page
+     * @param pageSize                  the size of the page
+     * @param lightminClientApplication the LightminClientApplication
+     * @return the JobInstancePage
      */
     JobInstancePage getJobInstances(String jobName,
                                     Integer startIndex,
@@ -32,19 +39,26 @@ public interface JobServerService {
                                     LightminClientApplication lightminClientApplication);
 
     /**
-     * @param jobName
-     * @param lightminClientApplication
-     * @return
+     * Retrieves high level {@link JobInfo} of a {@link org.springframework.batch.core.Job} for a given job name
+     * for a given {@link LightminClientApplication}
+     *
+     * @param jobName                   the name of the Spring Batch Job
+     * @param lightminClientApplication the LightminClientApplication
+     * @return the JobInfo
      */
     JobInfo getJobInfo(String jobName,
                        LightminClientApplication lightminClientApplication);
 
     /**
-     * @param jobInstanceId
-     * @param startIndex
-     * @param pageSize
-     * @param lightminClientApplication
-     * @return
+     * Retrieves {@link JobExecutionPage} containing {@link JobExecution}s for a given
+     * {@link org.springframework.batch.core.JobInstance} id
+     * for a given {@link LightminClientApplication}
+     *
+     * @param jobInstanceId             the id of the JobInstance
+     * @param startIndex                the index position of the page
+     * @param pageSize                  the size of the page
+     * @param lightminClientApplication the LightminClientApplication
+     * @return the JobExecutionPage
      */
     JobExecutionPage getJobExecutionPage(final Long jobInstanceId,
                                          final Integer startIndex,
@@ -52,44 +66,63 @@ public interface JobServerService {
                                          final LightminClientApplication lightminClientApplication);
 
     /**
-     * @param jobInstanceId
-     * @param lightminClientApplication
-     * @return
+     * Retrieves {@link JobExecutionPage} containing {@link JobExecution}s for a given
+     * {@link org.springframework.batch.core.JobInstance} id
+     * for a given {@link LightminClientApplication}
+     *
+     * @param jobInstanceId             the id of the JobInstance
+     * @param lightminClientApplication the LightminClientApplication
+     * @return the JobExecutionPage
      */
     JobExecutionPage getJobExecutionPage(Long jobInstanceId,
                                          LightminClientApplication lightminClientApplication);
 
     /**
-     * @param jobExecutionId
-     * @param lightminClientApplication
+     * Restarts a {@link org.springframework.batch.core.JobExecution} of a given id
+     * for a given {@link LightminClientApplication}
+     *
+     * @param jobExecutionId            the id of the JobExecution
+     * @param lightminClientApplication the LightminClientApplication
      */
     void restartJobExecution(final Long jobExecutionId, final LightminClientApplication lightminClientApplication);
 
     /**
-     * @param jobExecutionId
-     * @param lightminClientApplication
+     * Stops a {@link org.springframework.batch.core.JobExecution} of a given id
+     * for a given {@link LightminClientApplication}
+     *
+     * @param jobExecutionId            the id of the JobExecution
+     * @param lightminClientApplication the LightminClientApplication
      */
     void stopJobExecution(final Long jobExecutionId, final LightminClientApplication lightminClientApplication);
 
     /**
-     * @param jobExecutionId
-     * @param stepExecutionId
-     * @param lightminClientApplication
-     * @return
+     * Retrieves a {@link StepExecution} of a {@link org.springframework.batch.core.JobExecution}
+     * for a given {@link LightminClientApplication}
+     *
+     * @param jobExecutionId            the id of the {@link org.springframework.batch.core.JobExecution}
+     * @param stepExecutionId           the id of the {@link org.springframework.batch.core.StepExecution}
+     * @param lightminClientApplication the LightminClientApplication
+     * @return the StepExecution
      */
     StepExecution getStepExecution(Long jobExecutionId, Long stepExecutionId, LightminClientApplication lightminClientApplication);
 
 
     /**
-     * @param jobLaunch
-     * @param lightminClientApplication
+     * Lauches a {@link org.springframework.batch.core.Job} with the given values of the {@link JobLaunch} parameter
+     * for a given {@link LightminClientApplication}
+     *
+     * @param jobLaunch                 the launch information for the Job
+     * @param lightminClientApplication the LightminClientApplication
      */
     void launchJob(final JobLaunch jobLaunch, final LightminClientApplication lightminClientApplication);
 
     /**
-     * @param jobName
-     * @param lightminClientApplication
-     * @return
+     * Retrieves the last used {@link JobParameters} of a {@link org.springframework.batch.core.Job} run
+     * for a given {@link LightminClientApplication}
+     *
+     * @param jobName                   the name of Spring Batch Job
+     * @param lightminClientApplication the LightminClientApplication
+     * @return the JobParameters
      */
     JobParameters getLastJobParameters(final String jobName, final LightminClientApplication lightminClientApplication);
 }

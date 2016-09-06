@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.tuxdevelop.spring.batch.lightmin.server.admin.AdminServerService;
-import org.tuxdevelop.spring.batch.lightmin.server.admin.RemoteAdminServerServiceBean;
+import org.tuxdevelop.spring.batch.lightmin.server.admin.RemoteAdminServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.api.controller.RegistrationController;
 import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnApplicationReadyEventListener;
 import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnLightminClientApplicationRegisteredEventListener;
@@ -30,7 +30,7 @@ public class ServerConfiguration {
 
     @Bean
     public AdminServerService adminServerService(final LightminServerProperties lightminServerProperties) {
-        return new RemoteAdminServerServiceBean(CommonServerConfiguration.RestTemplateFactory.getRestTemplate(lightminServerProperties));
+        return new RemoteAdminServerService(CommonServerConfiguration.RestTemplateFactory.getRestTemplate(lightminServerProperties));
     }
 
     @Bean
