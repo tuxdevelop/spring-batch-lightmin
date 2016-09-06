@@ -8,6 +8,6 @@ import org.tuxdevelop.spring.batch.lightmin.server.configuration.EnableEmbeddedS
 @Configuration
 @EnableEmbeddedSpringBatchLightminServer
 @Import(value = {ITJobConfiguration.class})
-@PropertySource(value = "classpath:application.properties")
+@PropertySource(value = "classpath:properties/local_client.properties")
 public class ITConfigurationEmbedded {
 }

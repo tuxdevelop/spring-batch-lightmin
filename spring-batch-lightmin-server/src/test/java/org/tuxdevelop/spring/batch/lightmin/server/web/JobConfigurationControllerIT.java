@@ -159,7 +159,8 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
         try {
             this.mockMvc.perform(post("/jobConfigurationStart")
                     .param("jobConfigurationId", addedJobConfiguration.getJobConfigurationId().toString())
-                    .param("applicationid", applicationId))
+                    .param("applicationid", applicationId)
+                    .param("redirect", "jobSchedulerConfigurations"))
                     .andExpect
                             (status().isFound())
                     .andExpect
@@ -174,7 +175,8 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
         try {
             this.mockMvc.perform(post("/jobConfigurationStop")
                     .param("jobConfigurationId", addedJobConfiguration.getJobConfigurationId().toString())
-                    .param("applicationid", applicationId))
+                    .param("applicationid", applicationId)
+                    .param("redirect", "jobSchedulerConfigurations"))
                     .andExpect
                             (status().isFound())
                     .andExpect
