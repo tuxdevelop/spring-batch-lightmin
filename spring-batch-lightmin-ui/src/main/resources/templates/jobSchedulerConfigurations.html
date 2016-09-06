@@ -100,14 +100,14 @@
                                             <form method="post" class="form-inline pull-right"
                                                   th:if="${jobConfiguration.jobSchedulerConfiguration.schedulerStatus.value == 'STOPPED'
                                                       || jobConfiguration.jobSchedulerConfiguration.schedulerStatus.value == 'INITIALIZED'}"
-                                                  th:action="@{jobConfigurationStart(jobConfigurationId=${jobConfiguration.jobConfigurationId},applicationid=${clientApplication.id})}">
+                                                  th:action="@{jobConfigurationStart(jobConfigurationId=${jobConfiguration.jobConfigurationId},applicationid=${clientApplication.id},redirect='jobSchedulerConfigurations')}">
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-success btn-sm">Start</button>
                                                 </div>
                                             </form>
                                             <form method="post" class="form-inline pull-right"
                                                   th:if="${jobConfiguration.jobSchedulerConfiguration.schedulerStatus.value == 'RUNNING'}"
-                                                  th:action="@{jobConfigurationStop(jobConfigurationId=${jobConfiguration.jobConfigurationId},applicationid=${clientApplication.id})}">
+                                                  th:action="@{jobConfigurationStop(jobConfigurationId=${jobConfiguration.jobConfigurationId},applicationid=${clientApplication.id},redirect='jobSchedulerConfigurations')}">
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-danger btn-sm">Stop</button>
                                                 </div>

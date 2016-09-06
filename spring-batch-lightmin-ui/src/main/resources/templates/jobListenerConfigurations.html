@@ -95,7 +95,7 @@
 
                                             <form method="post" class="form-inline pull-right"
                                                   th:if="${jobConfiguration.jobListenerConfiguration.listenerStatus.value == 'STOPPED'}"
-                                                  th:action="@{jobConfigurationStart(jobConfigurationId=${jobConfiguration.jobConfigurationId},applicationid=${clientApplication.id})}">
+                                                  th:action="@{jobConfigurationStart(jobConfigurationId=${jobConfiguration.jobConfigurationId},applicationid=${clientApplication.id},redirect='jobListenerConfigurations')}">
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-success btn-sm">Activate
                                                     </button>
@@ -103,7 +103,7 @@
                                             </form>
                                             <form method="post" class="form-inline pull-right"
                                                   th:if="${jobConfiguration.jobListenerConfiguration.listenerStatus.value == 'ACTIVE'}"
-                                                  th:action="@{jobConfigurationStop(jobConfigurationId=${jobConfiguration.jobConfigurationId},applicationid=${clientApplication.id})}">
+                                                  th:action="@{jobConfigurationStop(jobConfigurationId=${jobConfiguration.jobConfigurationId},applicationid=${clientApplication.id},redirect='jobListenerConfigurations')}">
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-danger btn-sm">Stop</button>
                                                 </div>

@@ -88,6 +88,8 @@ public class DefaultAdminService implements AdminService {
                     log.info("Scheduler not started, no scheduling triggered!");
                 }
             } else if (existingJobConfiguration.getJobListenerConfiguration() != null) {
+                final String existingBeanName = existingJobConfiguration.getJobListenerConfiguration().getBeanName();
+                jobConfiguration.getJobListenerConfiguration().setBeanName(existingBeanName);
                 jobConfigurationRepository.update(jobConfiguration);
                 listenerService.refreshListenerForJob(jobConfiguration);
             }
