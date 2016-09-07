@@ -1,0 +1,40 @@
+=== Server Configuration
+
+The _SpringBatchLightmin-Server_ provides defaults configurations.
+These configurations can be overridden via properties.
+
+==== Context Path
+
+If the server has a concret context path, which is different from the servlet path,
+the default value can be overriden by the following property.
+
+[source, java]
+----
+#default ""
+spring.batch.lightmin.server.context-path=/my-path
+----
+
+==== Heartbeat period
+
+The _Heartbeat period_ is the time in mills to check the health status of the clients.
+
+[source, java]
+----
+#default 100000
+spring.batch.lightmin.server.heartbeat-period=1000
+----
+
+==== Credentials
+
+If the server has to pass username and password to the clients, the values can be
+configured via properties.
+
+[source, java]
+----
+spring.batch.lightmin.server.client-user-name=username
+----
+
+[source, java]
+----
+spring.batch.lightmin.server.client-password=password
+----

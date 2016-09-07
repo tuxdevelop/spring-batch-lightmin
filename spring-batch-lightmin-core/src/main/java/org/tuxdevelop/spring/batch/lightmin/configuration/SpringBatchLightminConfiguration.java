@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
@@ -17,6 +18,7 @@ import javax.sql.DataSource;
  */
 @Slf4j
 @Configuration
+@EnableBatchProcessing
 public class SpringBatchLightminConfiguration {
 
     private ApplicationContext applicationContext;

@@ -7,10 +7,9 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.TaskExecutorType;
 
 import java.util.Date;
@@ -24,7 +23,7 @@ public abstract class ServiceUtil {
         final SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
         jobLauncher.setJobRepository(jobRepository);
         if (TaskExecutorType.ASYNCHRONOUS.equals(taskExecutorType)) {
-            final AsyncTaskExecutor taskExecutor = new ConcurrentTaskExecutor();
+            final SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor();
             jobLauncher.setTaskExecutor(taskExecutor);
         } else if (TaskExecutorType.SYNCHRONOUS.equals(taskExecutorType)) {
             final TaskExecutor taskExecutor = new SyncTaskExecutor();

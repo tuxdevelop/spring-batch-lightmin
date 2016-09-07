@@ -522,6 +522,9 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_embedded_server">Embedded Server</a></li>
 <li><a href="#_getting_the_lastest_snapshots">Getting the lastest SNAPSHOTS</a></li>
 <li><a href="#_jdbc_support">Jdbc Support</a></li>
+<li><a href="#_in_memory_support">In Memory Support</a></li>
+<li><a href="#_server_configuration">Server Configuration</a></li>
+<li><a href="#_client_configuration">Client Configuration</a></li>
 </ul>
 </li>
 <li><a href="#_job_configurations">Job Configurations</a>
@@ -743,9 +746,7 @@ embedded server mode is provided.</p>
 <p>For production environments, the <em>Spring Batch Lightmin</em> also provides jdbc components, to get the <em>Spring Batch Job</em>
  meta informations from a database and to lightminApplicationRepository the <em>JobConfigurations</em>. To use a persistent way to lightminApplicationRepository your
  <em>JobConfigurations</em>, you have to install a schema of <em>Spring Batch Lightmin</em> next to your <em>Spring Batch</em> tables.
- The DDL scripts for various database types are located within the core-module of the <em>Spring Batch Lightmin</em>.
- If a <em>DataSource</em> bean is available in the context, the <em>Spring Batch Lightmin</em> will create a
- <em>JdbcJobConfigurationRepository</em>.</p>
+ The DDL scripts for various database types are located within the core-module of the <em>Spring Batch Lightmin</em>.</p>
 </div>
 <div class="sect3">
 <h4 id="_properties">Properties</h4>
@@ -753,19 +754,247 @@ embedded server mode is provided.</p>
 <p>If you have to use a different table prefix for the Spring Batch database schema and the job configuration database
 schema, you have to set the <em>*-table-prefix</em> properties in your application.properties. The default value is <em>BATCH_</em>.
 The <em>Spring Batch Lightmin</em> configuration tries to create <em>Jdbc</em>-components, if a bean of type <em>DataSource</em> is
-available within the <em>Spring Context</em>. The <em>*-force-map</em>-properties can override the behavior and let the <em>Spring
-Batch Lightmin</em> create <em>Map</em>-components.</p>
+available within the <em>Spring Context</em>. If an other <em>DataSource</em> than the default one, with the name <em>dataSource</em>,
+the properties <em>*.data-source-name</em> for <em>Lightmin</em> and <em>*.batch-data-source-name</em> for
+<em>Spring Batch</em> will override the defaults.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="properties">#Set the table prefix for Spring Batch tables, default BATCH_
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="predefined-type">Set</span> the table prefix <span class="keyword">for</span> <span class="predefined-type">Spring</span> Batch tables, <span class="keyword">default</span> BATCH_
 spring.batch.lightmin.repository-table-prefix=MY_BATCH_PREFIX
-#Set the table prefix for Spring Batch Lightmin configuration tables, default BATCH__
+<span class="error">#</span><span class="predefined-type">Set</span> the table prefix <span class="keyword">for</span> <span class="predefined-type">Spring</span> Batch Lightmin configuration tables, <span class="keyword">default</span> BATCH__
 spring.batch.lightmin.configuration-table-prefix=MY_BATCH_PREFIX_
-#If set to true, a MapJobRepository will be created, default false
-spring.batch.lightmin.repository-force-map=false
-#If set to true, a MapJobConfigurationRepository will be created, default false
-spring.batch.lightmin.configuration-force-map=false</code></pre>
+<span class="error">#</span><span class="keyword">default</span> jdbc
+spring.batch.lightmin.batch-repository-type=jdbc
+<span class="error">#</span><span class="keyword">default</span> jdbc
+spring.batch.lightmin.lightmin-repository-type=jdbc
+<span class="error">#</span><span class="keyword">default</span> dataSource
+spring.batch.lightmin.data-source-name=dataSource
+<span class="error">#</span><span class="keyword">default</span> dataSource
+spring.batch.lightmin.batch-data-source-name=dataSource</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_in_memory_support">In Memory Support</h3>
+<div class="paragraph">
+<p>If there is no reason to persist the <em>Lightmin Configurations</em> or the <em>Batch Job Meta Informations</em>,
+the <em>SpringBatchLightmin</em> also provides <em>Map</em> - implementations for the repositories.</p>
+</div>
+<div class="sect3">
+<h4 id="_properties_2">Properties</h4>
+<div class="paragraph">
+<p>In order to use the <em>Map</em>-implementations, the following properties have to be set.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> jdbc
+spring.batch.lightmin.batch-repository-type=map
+<span class="error">#</span><span class="keyword">default</span> jdbc
+spring.batch.lightmin.lightmin-repository-type=map</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_server_configuration">Server Configuration</h3>
+<div class="paragraph">
+<p>The <em>SpringBatchLightmin-Server</em> provides defaults configurations.
+These configurations can be overridden via properties.</p>
+</div>
+<div class="sect3">
+<h4 id="_context_path">Context Path</h4>
+<div class="paragraph">
+<p>If the server has a concret context path, which is different from the servlet path,
+the default value can be overriden by the following property.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
+spring.batch.lightmin.server.context-path=/my-path</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_heartbeat_period">Heartbeat period</h4>
+<div class="paragraph">
+<p>The <em>Heartbeat period</em> is the time in mills to check the health status of the clients.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> <span class="integer">100000</span>
+spring.batch.lightmin.server.heartbeat-period=<span class="integer">1000</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_credentials">Credentials</h4>
+<div class="paragraph">
+<p>If the server has to pass username and password to the clients, the values can be
+configured via properties.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.server.client-user-name=username</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.server.client-password=password</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_client_configuration">Client Configuration</h3>
+<div class="paragraph">
+<p>The <em>SpringBatchLightmin-Client</em> tries to configure all client side properties
+by using the <em>Spring Boot</em> auto configured <em>Server-</em>,<em>ManagementServer-</em> and <em>Actuator-Properties</em>,
+excepted the <em>url</em> of the <em>SpringBatchLightmin-Server</em>. All these properties can be overridden.</p>
+</div>
+<div class="sect3">
+<h4 id="_lightmin_server">Lightmin Server</h4>
+<div class="paragraph">
+<p>The <em>url</em> is a mendatory property. The value is a comma separated list of server urls.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.server.url=http:<span class="comment">//localhost:8090, http://localhost:9000</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_api">API</h4>
+<div class="paragraph">
+<p>The <em>api</em> property gives the relative path to the server side api.
+If the value is my/api and the <em>url</em> value is <a href="http://server:8080" class="bare">http://server:8080</a>, the client tries
+to register at <a href="http://server:8080/my/api" class="bare">http://server:8080/my/api</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> api/applications
+spring.batch.lightmin.server.api=api/application</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_registration_period">Registration Period</h4>
+<div class="paragraph">
+<p>The <em>period</em> is the time in millis, the client tries to register at the servers.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> <span class="integer">10000</span>
+spring.batch.lightmin.server.period=<span class="integer">100</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_credentials_2">Credentials</h4>
+<div class="paragraph">
+<p>If the client needs credentials to access the server, <em>username</em> and <em>password</em>
+ can be set via properties.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.server.username=username</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.server.password=password</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_auto_registration">Auto Registration</h4>
+<div class="paragraph">
+<p>If <em>auto-registration</em> is set to true, the client tries to register itself automatically.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> <span class="predefined-constant">true</span>
+spring.batch.lightmin.server.auto-registration=<span class="predefined-constant">true</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_auto_de_registration">Auto De-Registration</h4>
+<div class="paragraph">
+<p>If <em>auto-deregistration</em> is set to true, the client calls the server for de-registration before the shutdown.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> <span class="predefined-constant">false</span>
+spring.batch.lightmin.server.auto-deregistration=<span class="predefined-constant">false</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_register_once">Register Once</h4>
+<div class="paragraph">
+<p>If <em>register-once</em> is set to true, the client will register itself only at one server.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> <span class="predefined-constant">true</span>
+spring.batch.lightmin.server.auto-register-once=<span class="predefined-constant">true</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_service_url">Service Url</h4>
+<div class="paragraph">
+<p>The <em>service-url</em> is the url of client.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.client.service-url=http:<span class="comment">//localhost:8080/my-app</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_management_url">Management Url</h4>
+<div class="paragraph">
+<p>The <em>management-url</em> is the management url of the client.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.client.management-url=http:<span class="comment">//localhost:8080/management</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_health_url">Health Url</h4>
+<div class="paragraph">
+<p>The <em>management-url</em> is the health url of the client, it is used by the server to check the status.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.client.health-url=http:<span class="comment">//localhost:8080/management/health</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_server_port">Server Port</h4>
+<div class="paragraph">
+<p>The <em>server-port</em> is the application port.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.client.server-port=<span class="integer">8080</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_management_port">Management Port</h4>
+<div class="paragraph">
+<p>The <em>server-port</em> is the application management port.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.client.management-port=<span class="integer">8081</span></code></pre>
 </div>
 </div>
 </div>
@@ -796,7 +1025,7 @@ spring.batch.lightmin.configuration-force-map=false</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_properties_2">Properties</h4>
+<h4 id="_properties_3">Properties</h4>
 <div class="sect4">
 <h5 id="_job_configuration_id">Job Configuration Id</h5>
 <div class="paragraph">
@@ -1920,7 +2149,7 @@ already beeb launched, the <em>JobParameters</em> of the last run will be shown.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-09-07 12:08:11 +02:00
+Last updated 2016-09-07 15:57:32 +02:00
 </div>
 </div>
 </body>

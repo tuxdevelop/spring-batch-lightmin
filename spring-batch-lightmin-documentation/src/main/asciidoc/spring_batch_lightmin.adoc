@@ -9,6 +9,12 @@ include::getting_started.adoc[]
 
 include::jdbc_support.adoc[]
 
+include::map_support.adoc[]
+
+include::server_configuration.adoc[]
+
+include::client_configuration.adoc[]
+
 include::job_configuration.adoc[]
 
 include::rest_api.adoc[]
