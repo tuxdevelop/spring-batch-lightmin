@@ -2,8 +2,8 @@
 :toc:
 :asciidoctor-source: ./spring-batch-lightmin-documentation/src/main/asciidoc
 
-The _Spring Batch Lightmin_ is a library on top of the _Spring Batch_ Framework. It provides the basic _Spring
-Batch_ infrastructure components
+The _Spring Batch Lightmin_ is a client-server library on top of the _Spring Batch_ and _Spring Boot_ to monitor and configure _Spring Batch Jobs_.
+By enabling the _Spring Batch Lightmin_, a _BatchConfigurer_ will be registered and provides
 
 * JobRepository
 * JobOperator
@@ -12,25 +12,130 @@ Batch_ infrastructure components
 * JobBuilderFactory
 * StepBuilderFactory
 
-and depending beans.
+and depending beans out of the box.
 
-To monitor the Spring Batch Jobs, the _Spring Batch Lightmin_ provides a web interface. The web interface also
-manages _JobConfigurations_, which can be used for time triggered job runs.
+=== Overview
+
+image::overview.svg[]
 
 The documentation can be found at http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/next/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[Spring Batch Linghtmin Documentation]
 
 == Getting Started
 
-=== Maven Dependencies
+=== Server
+
+==== Maven Dependencies
 
 [source,xml]
 ----
 <dependency>
     <groupId>org.tuxdevelop</groupId>
-    <artifactId>spring-batch-lightmin-ui</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <artifactId>spring-batch-lightmin-server</artifactId>
+    <version>{spring-batch-lightmin.version}</version>
 </dependency>
 ----
+
+==== Enable the Server
+
+[source,java]
+----
+@SpringBootApplication
+@EnableSpringBatchLightminServer
+public class LightminServer {
+
+
+    public static void main(final String[] args) {
+        SpringApplication.run(LightminServer.class, args);
+    }
+}
+----
+
+The code above enables the _SpringBatchLightminServer_ with default properties.
+
+===== application.properties
+
+[source, java]
+----
+server.port=8090
+----
+
+=== Client
+
+==== Maven Dependencies
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-client</artifactId>
+    <version>{spring-batch-lightmin.version}</version>
+</dependency>
+----
+
+==== Enable the Client
+
+[source, java]
+----
+@SpringBootApplication
+@EnableSpringBatchLightminClient
+public class LightminClient {
+
+    public static void main(final String[] args) {
+        SpringApplication.run(LightminClient.class, args);
+    }
+
+}
+----
+
+The code above enables the _SpringBatchLightminClient_ with the default configuration.
+The default configuration provides a _JdbcJobRepository_, _JdbcConfigurationRepostor_ and
+needs a configured _DataSource_ with the bean name _dataSource_.
+
+In order to register to the _SpringBatchLightminServer_, the property
+_spring.batch.lightmin.server.url_ has to be set.
+
+===== application.properties
+
+[source, java]
+----
+spring.batch.lightmin.server.url=http://localhost:8090
+----
+
+=== Embedded Server
+
+If you want to use the _SpringBatchLightmin_ in a single application contex, an
+embedded server mode is provided.
+
+==== Maven Dependencies
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-server</artifactId>
+    <version>{spring-batch-lightmin.version}</version>
+</dependency>
+----
+
+==== Enable the Server
+
+[source,java]
+----
+@SpringBootApplication
+@EnableEmbeddedSpringBatchLightminServer
+public class LightminEmbeddedServer {
+
+
+    public static void main(final String[] args) {
+        SpringApplication.run(LightminEmbeddedServer.class, args);
+    }
+}
+----
+
+The code above will boostrap the _SpringBatchLightminClient_ and the
+_SpringBatchLightminServer_ in an embedded mode.
+
+=== Getting the lastest SNAPSHOTS
 
 In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapshot repository.
 
@@ -44,52 +149,6 @@ In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapsh
 </repositories>
 ----
 
-=== Enable Spring Batch Lightmin
-
-To enable the _Spring Batch Lightmin_, you have to add the _@EnableSpringBatchLightminUI_ annotation to a
-Spring configuration class of your application.
-
-[source,java]
-----
-@Configuration
-@SpringBootApplication
-@EnableSpringBatchLightminUI
-public class AddressMigratorApp {
-
-    public static void main(final String[] args) {
-        SpringApplication.run(AddressMigratorApp.class, args);
-    }
-
-}
-----
-
-=== Jdbc Support
-For production environments, the _Spring Batch Lightmin_ also provides jdbc components, to get the _Spring Batch Job_
- meta informations from a database and to lightminApplicationRepository the _JobConfigurations_. To use a persistent way to lightminApplicationRepository your
- _JobConfigurations_, you have to install a schema of _Spring Batch Lightmin_ next to your _Spring Batch_ tables.
- The DDL scripts for various database types are located within the core-module of the _Spring Batch Lightmin_.
- If a _DataSource_ bean is available in the context, the _Spring Batch Lightmin_ will create a
- _JdbcJobConfigurationRepository_.
-
-==== Properties
-
-If you have to use a different table prefix for the Spring Batch database schema and the job configuration database
-schema, you have to set the _*-table-prefix_ properties in your application.properties. The default value is _BATCH__.
-The _Spring Batch Lightmin_ configuration tries to create _Jdbc_-components, if a bean of type _DataSource_ is
-available within the _Spring Context_. The _*-force-map_-properties can override the behavior and let the _Spring
-Batch Lightmin_ create _Map_-components.
-
-[source,properties]
-----
-#Set the table prefix for Spring Batch tables, default BATCH_
-spring.batch.lightmin.repository-table-prefix=MY_BATCH_PREFIX
-#Set the table prefix for Spring Batch Lightmin configuration tables, default BATCH__
-spring.batch.lightmin.configuration-table-prefix=MY_BATCH_PREFIX_
-#If set to true, a MapJobRepository will be created, default false
-spring.batch.lightmin.repository-force-map=false
-#If set to true, a MapJobConfigurationRepository will be created, default false
-spring.batch.lightmin.configuration-force-map=false
-----
 
 == Spring Batch Lightmin UI
 
