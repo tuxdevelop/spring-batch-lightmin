@@ -1,6 +1,6 @@
 = Spring Batch Lightmin
 Version {docVersion}
-:toc:
+:toc: left
 :imagesdir: images
 
 include::introduction.adoc[]

@@ -1,7 +1,7 @@
 == Introduction
 
-The _Spring Batch Lightmin_ is a library on top of the _Spring Batch_ Framework. It provides the basic _Spring
-Batch_ infrastructure components
+The _Spring Batch Lightmin_ is a client-server library on top of the _Spring Batch_ and _Spring Boot_ to monitor and configure _Spring Batch Jobs_.
+By enabling the _Spring Batch Lightmin_, a _BatchConfigurer_ will be registered and provides
 
 * JobRepository
 * JobOperator
@@ -10,7 +10,8 @@ Batch_ infrastructure components
 * JobBuilderFactory
 * StepBuilderFactory
 
-and depending beans.
+and depending beans out of the box.
 
-To monitor the Spring Batch Jobs, the _Spring Batch Lightmin_ provides a web interface. The web interface also
-manages _JobConfigurations_, which can be used for time triggered job runs.
+=== Overview
+
+image::overview.svg[]

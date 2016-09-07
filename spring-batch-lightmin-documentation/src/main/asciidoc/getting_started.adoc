@@ -1,15 +1,119 @@
 == Getting Started
 
-=== Maven Dependencies
+=== Server
+
+==== Maven Dependencies
 
 [source,xml]
 ----
 <dependency>
     <groupId>org.tuxdevelop</groupId>
-    <artifactId>spring-batch-lightmin-ui</artifactId>
+    <artifactId>spring-batch-lightmin-server</artifactId>
     <version>{spring-batch-lightmin.version}</version>
 </dependency>
 ----
+
+==== Enable the Server
+
+[source,java]
+----
+@SpringBootApplication
+@EnableSpringBatchLightminServer
+public class LightminServer {
+
+
+    public static void main(final String[] args) {
+        SpringApplication.run(LightminServer.class, args);
+    }
+}
+----
+
+The code above enables the _SpringBatchLightminServer_ with default properties.
+
+===== application.properties
+
+[source, java]
+----
+server.port=8090
+----
+
+=== Client
+
+==== Maven Dependencies
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-client</artifactId>
+    <version>{spring-batch-lightmin.version}</version>
+</dependency>
+----
+
+==== Enable the Client
+
+[source, java]
+----
+@SpringBootApplication
+@EnableSpringBatchLightminClient
+public class LightminClient {
+
+    public static void main(final String[] args) {
+        SpringApplication.run(LightminClient.class, args);
+    }
+
+}
+----
+
+The code above enables the _SpringBatchLightminClient_ with the default configuration.
+The default configuration provides a _JdbcJobRepository_, _JdbcConfigurationRepostor_ and
+needs a configured _DataSource_ with the bean name _dataSource_.
+
+In order to register to the _SpringBatchLightminServer_, the property
+_spring.batch.lightmin.server.url_ has to be set.
+
+===== application.properties
+
+[source, java]
+----
+spring.batch.lightmin.server.url=http://localhost:8090
+----
+
+=== Embedded Server
+
+If you want to use the _SpringBatchLightmin_ in a single application contex, an
+embedded server mode is provided.
+
+==== Maven Dependencies
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-server</artifactId>
+    <version>{spring-batch-lightmin.version}</version>
+</dependency>
+----
+
+==== Enable the Server
+
+[source,java]
+----
+@SpringBootApplication
+@EnableEmbeddedSpringBatchLightminServer
+public class LightminEmbeddedServer {
+
+
+    public static void main(final String[] args) {
+        SpringApplication.run(LightminEmbeddedServer.class, args);
+    }
+}
+----
+
+The code above will boostrap the _SpringBatchLightminClient_ and the
+_SpringBatchLightminServer_ in an embedded mode.
+
+=== Getting the lastest SNAPSHOTS
 
 In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapshot repository.
 
@@ -21,50 +125,4 @@ In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapsh
         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
 </repositories>
-----
-
-=== Enable Spring Batch Lightmin
-
-To enable the _Spring Batch Lightmin_, you have to add the _@EnableSpringBatchLightminUI_ annotation to a
-Spring configuration class of your application.
-
-[source,java]
-----
-@Configuration
-@SpringBootApplication
-@EnableSpringBatchLightminUI
-public class AddressMigratorApp {
-
-    public static void main(final String[] args) {
-        SpringApplication.run(AddressMigratorApp.class, args);
-    }
-}
-----
-
-To use _Spring Batch Lightmin_ without UI, following maven dependency is reqired
-
-[source, xml]
-----
-<dependency>
-    <groupId>org.tuxdevelop</groupId>
-    <artifactId>spring-batch-lightmin-core</artifactId>
-    <version>{spring-batch-lightmin.version}</version>
-</dependency>
-----
-
-The annotation _@EnableSpringBatchLightmin_ will set up the _Spring Batch Lightmin_ without the user interface.
-The REST-API will be available.
-
-[source,java]
-----
-@Configuration
-@SpringBootApplication
-@EnableSpringBatchLightmin
-public class AddressMigratorApp {
-
-    public static void main(final String[] args) {
-        SpringApplication.run(AddressMigratorApp.class, args);
-    }
-
-}
 ----

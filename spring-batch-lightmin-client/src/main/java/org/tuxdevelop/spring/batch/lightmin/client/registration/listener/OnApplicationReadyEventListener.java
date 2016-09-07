@@ -8,6 +8,7 @@ import org.tuxdevelop.spring.batch.lightmin.client.registration.RegistrationLigh
 
 public class OnApplicationReadyEventListener implements ApplicationListener<ContextRefreshedEvent> {
 
+    private static final int SERVER_PORT_DEFAULT = 8080;
     private final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean;
     private final LightminClientProperties lightminClientProperties;
 
@@ -18,7 +19,13 @@ public class OnApplicationReadyEventListener implements ApplicationListener<Cont
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
-        final Integer serverPort = event.getApplicationContext().getEnvironment().getProperty("server.port", Integer.class);
+        final Integer serverPortEnv = event.getApplicationContext().getEnvironment().getProperty("server.port", Integer.class);
+        final Integer serverPort;
+        if (serverPortEnv == null) {
+            serverPort = SERVER_PORT_DEFAULT;
+        } else {
+            serverPort = serverPortEnv;
+        }
         final Integer managementPort = event.getApplicationContext().getEnvironment().getProperty("management.port", Integer.class, serverPort);
         lightminClientProperties.setServerPort(serverPort);
         lightminClientProperties.setManagementPort(managementPort);

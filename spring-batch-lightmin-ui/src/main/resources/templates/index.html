@@ -33,10 +33,13 @@
                                    href="#" th:href="@{application(applicationid=${clientApplication.id})}">
                                     <button type="button" class="btn btn-success btn-sm">Info</button>
                                 </a>
-
-                                <a href="#" th:href="@{application/remove(applicationid=${clientApplication.id})}">
-                                    <button type="button" class="btn btn-danger btn-sm">Remove</button>
-                                </a>
+                                <span style="padding-right: 10px;"/>
+                                <form method="post" class="form-inline pull-right" id="removeApplication"
+                                      th:action="@{application(applicationid=${clientApplication.id})}">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </td>

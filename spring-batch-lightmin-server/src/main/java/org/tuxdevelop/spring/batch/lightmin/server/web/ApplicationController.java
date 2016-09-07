@@ -30,9 +30,9 @@ public class ApplicationController extends CommonController {
         model.addAttribute("clientApplication", lightminClientApplication);
     }
 
-    @RequestMapping(value = "/remove", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.POST)
     public String removeApplication(@RequestParam("applicationid") final String applicationId) {
         registrationBean.deleteRegistration(applicationId);
-        return "redirect:/";
+        return "redirect:index";
     }
 }
