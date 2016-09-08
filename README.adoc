@@ -163,7 +163,7 @@ image::index.png[]
 The application information view is the entry point to the monitoring and administration of a client application. The overview shows the important endpoints, all known _Spring Batch Jobs_ and configured external links of the client application.
 The Menu gives the access to monitoring (Job), administration (Job Configurations) and job launcher sections.
 
-images::application_info.png[]
+image::application_info.png[]
 
 === Jobs
 
@@ -333,7 +333,6 @@ Additional job parameter, to give each job instance uniqueness.
 
 image::job_launcher_select.png[]
 
-image::job_launcher.png[]
 
 ===== Job Name
 
@@ -341,7 +340,7 @@ Name of the _Spring Batch Job_
 
 ===== Job Launcher Configuration
 
-image::job_launcher_configure.png[]
+image::job_launcher.png[]
 
 ====== Job Parameters
 

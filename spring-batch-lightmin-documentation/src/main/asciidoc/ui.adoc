@@ -181,15 +181,13 @@ Additional job parameter, to give each job instance uniqueness.
 
 image::job_launcher_select.png[]
 
-image::job_launcher.png[]
-
 ===== Job Name
 
 Name of the _Spring Batch Job_
 
 ===== Job Launcher Configuration
 
-image::job_launcher_configure.png[]
+image::job_launcher.png[]
 
 ====== Job Parameters
 
