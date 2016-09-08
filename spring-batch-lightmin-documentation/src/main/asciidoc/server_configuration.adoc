@@ -5,8 +5,8 @@ These configurations can be overridden via properties.
 
 ==== Context Path
 
-If the server has a concret context path, which is different from the servlet path,
-the default value can be overriden by the following property.
+If the server has a concrete context path, which is different from the servlet path,
+the default value can be overridden by the following property.
 
 [source, java]
 ----

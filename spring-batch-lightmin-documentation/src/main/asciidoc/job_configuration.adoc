@@ -38,7 +38,7 @@ currently supported
 * Date
 
 ===== Job Incrementer
-The _jobIncrementer_ is a job parameter which will be added to existing job parameters. This incremeter can be used to
+The _jobIncrementer_ is a job parameter which will be added to existing job parameters. This incrementer can be used to
 trigger a new _JobInstance_ of a _Job_.
 
 [source,java]

@@ -103,7 +103,7 @@ spring.batch.lightmin.server.url=http://localhost:8090
 
 === Embedded Server
 
-If you want to use the _SpringBatchLightmin_ in a single application contex, an
+If you want to use the _SpringBatchLightmin_ in a single application context, an
 embedded server mode is provided.
 
 ==== Maven Dependencies

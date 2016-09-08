@@ -1,12 +1,12 @@
 === Client Configuration
 
 The _SpringBatchLightmin-Client_ tries to configure all client side properties
-by using the _Spring Boot_ auto configured _Server-_,_ManagementServer-_ and _Actuator-Properties_,
+by using the _Spring Boot_ auto configured _Server-_, _ManagementServer-_ and _Actuator-Properties_,
 excepted the _url_ of the _SpringBatchLightmin-Server_. All these properties can be overridden.
 
 ==== Lightmin Server
 
-The _url_ is a mendatory property. The value is a comma separated list of server urls.
+The _url_ is a mandatory property. The value is a comma separated list of server urls.
 
 [source, java]
 ----
