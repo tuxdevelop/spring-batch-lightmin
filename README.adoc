@@ -16,7 +16,7 @@ and depending beans out of the box.
 
 === Overview
 
-image::overview.svg[]
+image::overview.png[]
 
 The documentation can be found at http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/next/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[Spring Batch Linghtmin Documentation]
 
@@ -152,18 +152,22 @@ In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapsh
 
 == Spring Batch Lightmin UI
 
-=== Index
+=== Applications
 
-The welcome page of the _Spring Batch Lightmin_ shows the hostname/ip-address and the servlet path of the current
-instance. At this point, all available REST-endpoints and operations are also listed. In order to get deeper into the
-_Lightmin_, you have to navigate through the top bar.
+The start page of the _SpringBatchLightmin_ shows all register applications. The status value shows the current health status of the application.
 
 image::index.png[]
 
+=== Application Information
+
+The application information view is the entry point to the monitoring and administration of a client application. The overview shows the important endpoints, all known _Spring Batch Jobs_ and configured external links of the client application.
+The Menu gives the access to monitoring (Job), administration (Job Configurations) and job launcher sections.
+
+images::application_info.png[]
+
 === Jobs
 
-On startup, the _Spring Batch Lightmin_ scans the _Spring Context_ to register all beans of the type _Job_ and make
-them available into the _JobRegistry_. All known jobs will be listed in the jobs tab with their current instance count.
+ All known jobs  of the client application will be listed in the jobs tab with their current instance count.
 To get more detailed informations about the job instances, you have to click on the job name, you want to view.
 
 image::jobs.png[]
@@ -177,7 +181,7 @@ image::job_instances.png[]
 
 ==== Job Executions
 
-The view will show an overview of all executions for the selected instance id. To get detailes of the job execution,
+The view will show an overview of all executions for the selected instance id. To get details of the job execution,
 click on the desired id.
 
 image::job_instance.png[]
@@ -188,27 +192,31 @@ The job execution view shows you a detailed overview about the job and step exec
 
 image::job_execution.png[]
 
-=== Admin
-
-==== Job Configurations
+=== Job Configurations
 
 The job configurations view gives an overview about all stored job configurations. At this point, you can add and delete
- new job configurations, start and stop the scheduler of the job configurations and edit existing configurations.
+ new job configurations, start and stop and edit existing configurations.
 
-image::job_configurations.png[]
+==== Job Scheduler
 
-===== Add Job Configuration
+_Job Scheduler Configurations_ are cron or time based scheduler.
 
-image::job_configuration_add.png[]
+image::job_scheduler_configurations.png[]
 
-====== Job Name
+===== Add Job Scheduler Configuration
 
-Registered _Spring Batch Jobs_.
+image::scheduler_select.png[]
 
 ====== Job Scheduler Type
 
 * CRON
 * PERIOD
+
+image::scheduler_add.png[]
+
+====== Job Name
+
+Registered _Spring Batch Jobs_.
 
 ====== CRON Expression
 
@@ -257,44 +265,44 @@ Additional job parameter, to give each job instance uniqueness.
 * NONE
 * DATE
 
-===== Edit Job Configuration
+==== Job Listener
 
-image::job_configuration_edit.png[]
+_Job Listener Configurations_ bases on event, e.g. the viewed folder gets a new file.
 
-====== Job Configuration Id
+===== Add Job Listener configuration
 
-Technical identifier of the configuration.
+image::listener_select.png[]
+
+====== Job Scheduler Type
+
+* LOCALE FOLDER LISTENER
+
+image::listener_add.png[]
 
 ====== Job Name
 
 Registered _Spring Batch Jobs_.
 
-====== Job Scheduler Type
+====== Source Folder
 
-* CRON
-* PERIOD
+The path to the listened folder
 
-====== CRON Expression
+====== File Pattern
 
-CRON expression, if the _Job Scheduler Type_ is _CRON_
+Ant based file pattern, e.g. *.txt
 
-====== Fixed Delay
+====== Poller Period
 
-Restart delay, if the _Job Scheduler Type_ is _PERIOD_
-
-====== Initial Delay
-
-Initial delay of the first job launch, if the _Job Scheduler Type_ is _PERIOD_
+The time in millis between the the current and the next folder scan.
 
 ====== Task Executor Type
 
 * SYNCHRONOUS
 * ASYNCHRONOUS
 
-====== Scheduler Status
+====== Listener Status
 
-* INITIALIZED
-* RUNNING
+* ACTIVE
 * STOPPED
 
 ====== Job Parameters
@@ -322,6 +330,8 @@ Additional job parameter, to give each job instance uniqueness.
 * DATE
 
 ==== Job Launcher
+
+image::job_launcher_select.png[]
 
 image::job_launcher.png[]
 
