@@ -14,11 +14,13 @@ By enabling the _Spring Batch Lightmin_, a _BatchConfigurer_ will be registered 
 
 and depending beans out of the box.
 
-=== Overview
-
-image::overview.png[]
+== Documentation
 
 The documentation can be found at http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/next/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[Spring Batch Linghtmin Documentation]
+
+== Overview
+
+image::overview.png[]
 
 == Getting Started
 

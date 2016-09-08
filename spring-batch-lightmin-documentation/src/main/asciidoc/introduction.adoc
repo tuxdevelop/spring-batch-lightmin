@@ -14,4 +14,4 @@ and depending beans out of the box.
 
 === Overview
 
-image::overview.svg[]
+image::overview.png[]
