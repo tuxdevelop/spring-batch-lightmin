@@ -12,11 +12,21 @@
     <artifactId>spring-batch-lightmin-documentation</artifactId>
 
     <properties>
+        <!-- rest docs -->
+        <snippets>${project.build.directory}/generated-snippets</snippets>
+        <!-- jacoco -->
         <jacoco.skip>true</jacoco.skip>
     </properties>
 
     <dependencies>
         <!-- lightmin -->
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-server</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.tuxdevelop</groupId>
             <artifactId>spring-batch-lightmin-core</artifactId>
@@ -25,6 +35,12 @@
         </dependency>
 
         <!-- spring boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -56,6 +72,17 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+            <!-- surefire -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Documentation.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -63,7 +90,7 @@
                 <executions>
                     <execution>
                         <id>output-html</id>
-                        <phase>generate-resources</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>process-asciidoc</goal>
                         </goals>
@@ -76,6 +103,7 @@
                             <outputDirectory>src/main/doc</outputDirectory>
                             <attributes>
                                 <docVersion>${project.version}</docVersion>
+                                <snippets>${snippets}</snippets>
                             </attributes>
                         </configuration>
                     </execution>

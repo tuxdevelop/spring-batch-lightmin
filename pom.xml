@@ -57,7 +57,8 @@
         <nexus-staging-maven-plugin.version>1.6.3</nexus-staging-maven-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
-        <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>2.19</maven-surefire-plugin.version>
+        <maven-failsaife-plugin.version>2.19</maven-failsaife-plugin.version>
         <asciidoctor.version>1.5.2</asciidoctor.version>
         <!-- jacoco -->
         <jacoco.skip>false</jacoco.skip>
@@ -243,6 +244,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsaife-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>default-integration-test</id>

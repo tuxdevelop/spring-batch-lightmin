@@ -1,401 +1,94 @@
 == REST API
 
-=== Job
+=== Server
 
-==== Get Job Execution by Id
+==== Register
 
-* HTTP-Method GET
-* Produces _application/json_
+===== Curl
 
-===== URI
+include::{snippets}/registrationcontroller/test-register/curl-request.adoc[]
 
-[source, html]
-----
-http://server:port/api/jobExecutions/{jobExecutionId}
-----
+===== HTTP Request
 
-===== Response
+include::{snippets}/registrationcontroller/test-register/http-request.adoc[]
 
-[source,json]
-----
-{
-   jobName:"addressMigrationJob",
-   jobInstanceId:1,
-   jobExecutions:[
-      {
-         id:2,
-         version:2,
-         jobParameters:{
-            parameters:{
-               DATE_INCREMENTER:{
-                  identifying:true,
-                  value:1447515678658,
-                  type:"DATE"
-               }
-            },
-            empty:false
-         },
-         jobInstance:{
-            id:1,
-            version:0,
-            jobName:"addressMigrationJob",
-            instanceId:1
-         },
-         stepExecutions:[
+===== HTTP Response
 
-         ],
-         status:"COMPLETED",
-         startTime:1447515678738,
-         createTime:1447515678697,
-         endTime:1447515679416,
-         lastUpdated:1447515679416,
-         exitStatus:{
-            exitCode:"COMPLETED",
-            exitDescription:"",
-            running:false
-         },
-         executionContext:{
-            dirty:false,
-            empty:true
-         },
-         jobConfigurationName:null,
-         running:false,
-         jobId:1,
-         stopping:false,
-         failureExceptions:[
+include::{snippets}/registrationcontroller/test-register/http-response.adoc[]
 
-         ],
-         allFailureExceptions:[
+==== Unregister
 
-         ]
-      }
-   ]
-}
-----
+===== Curl
 
-==== Get JobExecutions by Job Instance Id
+include::{snippets}/registrationcontroller/test-unregister/curl-request.adoc[]
 
-* HTTP-Method GET
-* Produces _application/json_
+===== HTTP Request
 
-===== URI
+include::{snippets}/registrationcontroller/test-unregister/http-request.adoc[]
 
-[source, html]
-----
-http://server:port/api//jobExecutions/jobInstances/{jobInstanceId}
-----
+===== HTTP Response
 
-===== Response
+include::{snippets}/jobregistrationcontroller/test-unregister/http-response.adoc[]
 
-[source,json]
-----
-{
-   jobName:"addressMigrationJob",
-   jobInstanceId:1,
-   jobExecutions:[
-      {
-         id:2,
-         version:2,
-         jobParameters:{
-            parameters:{
-               DATE_INCREMENTER:{
-                  identifying:true,
-                  value:1447515678658,
-                  type:"DATE"
-               }
-            },
-            empty:false
-         },
-         jobInstance:{
-            id:1,
-            version:0,
-            jobName:"addressMigrationJob",
-            instanceId:1
-         },
-         stepExecutions:[
+==== Get All Lightmin Client Applications
 
-         ],
-         status:"COMPLETED",
-         startTime:1447515678738,
-         createTime:1447515678697,
-         endTime:1447515679416,
-         lastUpdated:1447515679416,
-         exitStatus:{
-            exitCode:"COMPLETED",
-            exitDescription:"",
-            running:false
-         },
-         executionContext:{
-            dirty:false,
-            empty:true
-         },
-         jobConfigurationName:null,
-         running:false,
-         jobId:1,
-         stopping:false,
-         failureExceptions:[
+===== Curl
 
-         ],
-         allFailureExceptions:[
+include::{snippets}/registrationcontroller/testget-all/curl-request.adoc[]
 
-         ]
-      }
-   ]
-}
-----
+===== HTTP Request
 
-==== Get Job Instances By Job Name
+include::{snippets}/registrationcontroller/testget-all/http-request.adoc[]
 
-* HTTP-Method GET
-* Produces _application/json_
+===== HTTP Response
 
-===== URI
+include::{snippets}/jobregistrationcontroller/testget-all/http-response.adoc[]
 
-[source, html]
-----
-http://server:port/api/jobInstances/{jobName}
-----
+=== Client
 
-===== Response
+==== Jobs
 
-[source,json]
-----
-{
-   startIndex:0,
-   pageSize:10,
-   jobName:"addressMigrationJob",
-   jobInstances:[
-      {
-         id:4,
-         version:0,
-         jobName:"addressMigrationJob",
-         instanceId:4
-      },
-      {
-         id:3,
-         version:0,
-         jobName:"addressMigrationJob",
-         instanceId:3
-      },
-      {
-         id:1,
-         version:0,
-         jobName:"addressMigrationJob",
-         instanceId:1
-      }
-   ]
-}
-----
+===== Get All Job Executions
 
-=== Job Configuration
+====== Curl
 
-==== Get Job Configurations
+include::{snippets}/jobcontroller/testget-all-job-executions-by-job-instance-id/curl-request.adoc[]
 
-* HTTP-Method GET
-* Produces _application/json_
+====== HTTP Request
 
-===== URI
+include::{snippets}/jobcontroller/testget-all-job-executions-by-job-instance-id/http-request.adoc[]
 
-[source, html]
-----
-http://server:port/api/jobConfigurations
-----
+====== HTTP Response
 
-===== Response
+include::{snippets}/jobcontroller/testget-all-job-executions-by-job-instance-id/http-response.adoc[]
 
-[source,json]
-----
-{
-   jobName:"ALL_JOBS",
-   jobConfigurations:[
-      {
-         jobConfigurationId:1,
-         jobName:"addressMigrationJob",
-         jobSchedulerConfiguration:{
-            jobSchedulerType:"PERIOD",
-            cronExpression:null,
-            initialDelay:10,
-            fixedDelay:60000,
-            taskExecutorType:"SYNCHRONOUS",
-            beanName:"addressMigrationJobSYNCHRONOUSLY1",
-            schedulerStatus:"RUNNING"
-         },
-         jobParameters:{
+===== Get Job Executions
 
-         },
-         jobIncrementer:"DATE"
-      },
-      {
-         jobConfigurationId:3,
-         jobName:"addressPrinterJob",
-         jobSchedulerConfiguration:{
-            jobSchedulerType:"PERIOD",
-            cronExpression:null,
-            initialDelay:10,
-            fixedDelay:6000,
-            taskExecutorType:"SYNCHRONOUS",
-            beanName:"addressPrinterJobSYNCHRONOUSLY1",
-            schedulerStatus:"RUNNING"
-         },
-         jobParameters:{
+====== Curl
 
-         },
-         jobIncrementer:"NONE"
-      }
-   ]
-}
-----
+include::{snippets}/jobcontroller/testget-job-executions-by-job-instance-id/curl-request.adoc[]
 
-==== Get Job Configurations By Job Name
+====== HTTP Request
 
-* HTTP-Method GET
-* Produces _application/json_
+include::{snippets}/jobcontroller/testget-job-executions-by-job-instance-id/http-request.adoc[]
 
-===== URI
+====== HTTP Response
 
-[source, html]
-----
-http://server:port/api/jobConfigurations/{jobName}
-----
+include::{snippets}/jobcontroller/testget-job-executions-by-job-instance-id/http-response.adoc[]
 
-===== Response
 
-[source,json]
-----
-{
-   jobName:"addressMigrationJob",
-   jobConfigurations:[
-      {
-         jobConfigurationId:1,
-         jobName:"addressMigrationJob",
-         jobSchedulerConfiguration:{
-            jobSchedulerType:"PERIOD",
-            cronExpression:null,
-            initialDelay:10,
-            fixedDelay:60000,
-            taskExecutorType:"SYNCHRONOUS",
-            beanName:"addressMigrationJobSYNCHRONOUSLY1",
-            schedulerStatus:"RUNNING"
-         },
-         jobParameters:{
+===== Get Job Execution
 
-         },
-         jobIncrementer:"DATE"
-      }
-   ]
-}
-----
+====== Curl
 
-==== Get Job Configurations By Id
+include::{snippets}/jobcontroller/testget-job-execution-by-id/curl-request.adoc[]
 
-* HTTP-Method GET
-* Produces _application/json_
+====== HTTP Request
 
-===== URI
+include::{snippets}/jobcontroller/testget-job-execution-by-id/http-request.adoc[]
 
-[source, html]
-----
-http://server:port/api/jobConfigurations/jobConfiguration/{jobConfigurationId}
-----
+====== HTTP Response
 
-===== Response
+include::{snippets}/jobcontroller/testget-job-execution-by-id/http-response.adoc[]
 
-[source,json]
-----
-{
-   jobConfigurationId:1,
-   jobName:"addressMigrationJob",
-   jobSchedulerConfiguration:{
-      jobSchedulerType:"PERIOD",
-      cronExpression:null,
-      initialDelay:10,
-      fixedDelay:60000,
-      taskExecutorType:"SYNCHRONOUS",
-      beanName:"addressMigrationJobSYNCHRONOUSLY1",
-      schedulerStatus:"RUNNING"
-   },
-   jobParameters:{
-
-   },
-   jobIncrementer:"DATE"
-}
-----
-
-==== Add Configuration
-
-* HTTP-Method POST
-* Consumes _application/json_
-
-===== URI
-
-[source, html]
-----
-http://server:port/api/jobConfigurations
-----
-
-===== Body
-[source, json]
-----
-{
-   jobConfigurationId:null,
-   jobName:"addressMigrationJob",
-   jobSchedulerConfiguration:{
-      jobSchedulerType:"PERIOD",
-      cronExpression:null,
-      initialDelay:10,
-      fixedDelay:60000,
-      taskExecutorType:"SYNCHRONOUS",
-      beanName:"addressMigrationJobSYNCHRONOUSLY1",
-      schedulerStatus:"RUNNING"
-   },
-   jobParameters:{
-
-   },
-   jobIncrementer:"DATE"
-}
-----
-
-==== Update Configuration
-
-* HTTP-Method PUT
-* Consumes _application/json_
-
-===== URI
-
-[source, html]
-----
-http://server:port/api/jobConfigurations
-----
-
-===== Body
-[source, json]
-----
-{
-   jobConfigurationId:1,
-   jobName:"addressMigrationJob",
-   jobSchedulerConfiguration:{
-      jobSchedulerType:"PERIOD",
-      cronExpression:null,
-      initialDelay:10,
-      fixedDelay:60000,
-      taskExecutorType:"SYNCHRONOUS",
-      beanName:"addressMigrationJobSYNCHRONOUSLY1",
-      schedulerStatus:"RUNNING"
-   },
-   jobParameters:{
-
-   },
-   jobIncrementer:"DATE"
-}
-----
-
-==== Delete Job Configuration
-
-* HTTP-Method DELETE
-
-===== URI
-
-[source, html]
-----
-http://server:port/api/jobConfigurations/jobConfiguration/{jobConfigurationId}
-----
+==== Job Configurations

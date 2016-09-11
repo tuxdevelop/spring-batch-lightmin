@@ -40,31 +40,33 @@ public final class ResourceToAdminMapper {
 
     public static org.springframework.batch.core.JobParameters map(final JobParameters jobParameters) {
         final Map<String, org.springframework.batch.core.JobParameter> parametersMap = new HashMap<>();
-        for (final Map.Entry<String, JobParameter> entry : jobParameters.getParameters().entrySet()) {
-            final org.springframework.batch.core.JobParameter.ParameterType parameterType = map(entry.getValue()
-                    .getParameterType());
-            final org.springframework.batch.core.JobParameter jobParameter;
-            switch (parameterType) {
-                case STRING:
-                    jobParameter = new org.springframework.batch.core.JobParameter((String) entry.getValue()
-                            .getParameter());
-                    break;
-                case DOUBLE:
-                    jobParameter = new org.springframework.batch.core.JobParameter((Double) entry.getValue()
-                            .getParameter());
-                    break;
-                case LONG:
-                    jobParameter = new org.springframework.batch.core.JobParameter((Long) entry.getValue()
-                            .getParameter());
-                    break;
-                case DATE:
-                    jobParameter = new org.springframework.batch.core.JobParameter((Date) entry.getValue()
-                            .getParameter());
-                    break;
-                default:
-                    throw new SpringBatchLightminApplicationException("Unknown JobParameterType: " + entry.getValue().getParameterType());
+        if (jobParameters != null) {
+            for (final Map.Entry<String, JobParameter> entry : jobParameters.getParameters().entrySet()) {
+                final org.springframework.batch.core.JobParameter.ParameterType parameterType = map(entry.getValue()
+                        .getParameterType());
+                final org.springframework.batch.core.JobParameter jobParameter;
+                switch (parameterType) {
+                    case STRING:
+                        jobParameter = new org.springframework.batch.core.JobParameter((String) entry.getValue()
+                                .getParameter());
+                        break;
+                    case DOUBLE:
+                        jobParameter = new org.springframework.batch.core.JobParameter((Double) entry.getValue()
+                                .getParameter());
+                        break;
+                    case LONG:
+                        jobParameter = new org.springframework.batch.core.JobParameter((Long) entry.getValue()
+                                .getParameter());
+                        break;
+                    case DATE:
+                        jobParameter = new org.springframework.batch.core.JobParameter((Date) entry.getValue()
+                                .getParameter());
+                        break;
+                    default:
+                        throw new SpringBatchLightminApplicationException("Unknown JobParameterType: " + entry.getValue().getParameterType());
+                }
+                parametersMap.put(entry.getKey(), jobParameter);
             }
-            parametersMap.put(entry.getKey(), jobParameter);
         }
         return new org.springframework.batch.core.JobParameters(parametersMap);
     }
@@ -205,9 +207,11 @@ public final class ResourceToAdminMapper {
 
     private static Map<String, Object> mapToMap(final JobParameters jobParameters) {
         final Map<String, Object> jobParameterMap = new HashMap<>();
-        final Map<String, JobParameter> parameters = jobParameters.getParameters();
-        for (final Map.Entry<String, JobParameter> entry : parameters.entrySet()) {
-            jobParameterMap.put(entry.getKey(), entry.getValue().getParameter());
+        if (jobParameters != null && jobParameters.getParameters() != null) {
+            final Map<String, JobParameter> parameters = jobParameters.getParameters();
+            for (final Map.Entry<String, JobParameter> entry : parameters.entrySet()) {
+                jobParameterMap.put(entry.getKey(), entry.getValue().getParameter());
+            }
         }
         return jobParameterMap;
     }

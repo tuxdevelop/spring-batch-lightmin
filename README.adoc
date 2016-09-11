@@ -169,7 +169,7 @@ image::application_info.png[]
 
 === Jobs
 
- All known jobs  of the client application will be listed in the jobs tab with their current instance count.
+All known jobs  of the client application will be listed in the jobs tab with their current instance count.
 To get more detailed informations about the job instances, you have to click on the job name, you want to view.
 
 image::jobs.png[]
