@@ -6,13 +6,13 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.RegistrationLightminClientApplicationBean;
 
-public class OnApplicationReadyEventListener implements ApplicationListener<ContextRefreshedEvent> {
+public class OnClientApplicationReadyEventListener implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final int SERVER_PORT_DEFAULT = 8080;
     private final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean;
     private final LightminClientProperties lightminClientProperties;
 
-    public OnApplicationReadyEventListener(final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean, final LightminClientProperties lightminClientProperties) {
+    public OnClientApplicationReadyEventListener(final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean, final LightminClientProperties lightminClientProperties) {
         this.registrationLightminClientApplicationBean = registrationLightminClientApplicationBean;
         this.lightminClientProperties = lightminClientProperties;
     }

@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.tuxdevelop.spring.batch.lightmin.client.ITConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.LightminClientRegistrator;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.RegistrationLightminClientApplicationBean;
-import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnApplicationReadyEventListener;
+import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnClientApplicationReadyEventListener;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnContextClosedEventListener;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,9 +32,9 @@ public class LightminClientConfigurationIT {
         final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean =
                 applicationContext.getBean(RegistrationLightminClientApplicationBean.class);
         assertThat(registrationLightminClientApplicationBean).isNotNull();
-        final OnApplicationReadyEventListener onApplicationReadyEventListener = applicationContext.getBean
-                (OnApplicationReadyEventListener.class);
-        assertThat(onApplicationReadyEventListener).isNotNull();
+        final OnClientApplicationReadyEventListener onClientApplicationReadyEventListener = applicationContext.getBean
+                (OnClientApplicationReadyEventListener.class);
+        assertThat(onClientApplicationReadyEventListener).isNotNull();
         final OnContextClosedEventListener onContextClosedEventListener = applicationContext.getBean
                 (OnContextClosedEventListener.class);
         assertThat(onContextClosedEventListener).isNotNull();

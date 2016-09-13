@@ -271,6 +271,8 @@ Additional job parameter, to give each job instance uniqueness.
 
 _Job Listener Configurations_ bases on event, e.g. the viewed folder gets a new file.
 
+image::job_listener_configurations.png[]
+
 ===== Add Job Listener configuration
 
 image::listener_select.png[]

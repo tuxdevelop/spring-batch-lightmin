@@ -10,7 +10,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.LightminClientRegistrator;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.RegistrationLightminClientApplicationBean;
-import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnApplicationReadyEventListener;
+import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnClientApplicationReadyEventListener;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnContextClosedEventListener;
 import org.tuxdevelop.spring.batch.lightmin.configuration.CommonSpringBatchLightminConfiguration;
 
@@ -57,9 +57,9 @@ public class LightminClientConfiguration {
     }
 
     @Bean
-    public OnApplicationReadyEventListener onApplicationReadyEventListener(final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean,
-                                                                           final LightminClientProperties lightminClientProperties) {
-        return new OnApplicationReadyEventListener(registrationLightminClientApplicationBean, lightminClientProperties);
+    public OnClientApplicationReadyEventListener onClientApplicationReadyEventListener(final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean,
+                                                                                       final LightminClientProperties lightminClientProperties) {
+        return new OnClientApplicationReadyEventListener(registrationLightminClientApplicationBean, lightminClientProperties);
     }
 
     @Bean
