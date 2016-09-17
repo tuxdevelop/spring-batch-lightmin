@@ -28,7 +28,7 @@ include::{snippets}/registrationcontroller/test-unregister/http-request.adoc[]
 
 ===== HTTP Response
 
-include::{snippets}/jobregistrationcontroller/test-unregister/http-response.adoc[]
+include::{snippets}/registrationcontroller/test-unregister/http-response.adoc[]
 
 ==== Get All Lightmin Client Applications
 
@@ -42,7 +42,7 @@ include::{snippets}/registrationcontroller/testget-all/http-request.adoc[]
 
 ===== HTTP Response
 
-include::{snippets}/jobregistrationcontroller/testget-all/http-response.adoc[]
+include::{snippets}/registrationcontroller/testget-all/http-response.adoc[]
 
 === Client
 
@@ -52,43 +52,171 @@ include::{snippets}/jobregistrationcontroller/testget-all/http-response.adoc[]
 
 ====== Curl
 
-include::{snippets}/jobcontroller/testget-all-job-executions-by-job-instance-id/curl-request.adoc[]
+include::{snippets}/jobcontroller/test-get-all-job-executions-by-job-instance-id/curl-request.adoc[]
 
 ====== HTTP Request
 
-include::{snippets}/jobcontroller/testget-all-job-executions-by-job-instance-id/http-request.adoc[]
+include::{snippets}/jobcontroller/test-get-all-job-executions-by-job-instance-id/http-request.adoc[]
 
 ====== HTTP Response
 
-include::{snippets}/jobcontroller/testget-all-job-executions-by-job-instance-id/http-response.adoc[]
+include::{snippets}/jobcontroller/test-get-all-job-executions-by-job-instance-id/http-response.adoc[]
 
 ===== Get Job Executions
 
 ====== Curl
 
-include::{snippets}/jobcontroller/testget-job-executions-by-job-instance-id/curl-request.adoc[]
+include::{snippets}/jobcontroller/test-get-job-executions-by-job-instance-id/curl-request.adoc[]
 
 ====== HTTP Request
 
-include::{snippets}/jobcontroller/testget-job-executions-by-job-instance-id/http-request.adoc[]
+include::{snippets}/jobcontroller/test-get-job-executions-by-job-instance-id/http-request.adoc[]
 
 ====== HTTP Response
 
-include::{snippets}/jobcontroller/testget-job-executions-by-job-instance-id/http-response.adoc[]
+include::{snippets}/jobcontroller/test-get-job-executions-by-job-instance-id/http-response.adoc[]
 
 
 ===== Get Job Execution
 
 ====== Curl
 
-include::{snippets}/jobcontroller/testget-job-execution-by-id/curl-request.adoc[]
+include::{snippets}/jobcontroller/test-get-job-execution-by-id/curl-request.adoc[]
 
 ====== HTTP Request
 
-include::{snippets}/jobcontroller/testget-job-execution-by-id/http-request.adoc[]
+include::{snippets}/jobcontroller/test-get-job-execution-by-id/http-request.adoc[]
 
 ====== HTTP Response
 
-include::{snippets}/jobcontroller/testget-job-execution-by-id/http-response.adoc[]
+include::{snippets}/jobcontroller/test-get-job-execution-by-id/http-response.adoc[]
+
+==== Job Launcher
+
+===== Launch Job
+
+====== Curl
+
+include::{snippets}/joblaunchercontroller/testlaunch-job/curl-request.adoc[]
+
+====== HTTP Request
+
+include::{snippets}/joblaunchercontroller/testlaunch-job/http-request.adoc[]
+
+====== HTTP Response
+
+include::{snippets}/joblaunchercontroller/testlaunch-job/http-response.adoc[]
 
 ==== Job Configurations
+
+===== Get Job Configuration By Id
+
+====== Curl
+
+include::{snippets}/jobconfigurationcontroller/test-get-job-configuration-by-id/curl-request.adoc[]
+
+====== HTTP Request
+
+include::{snippets}/jobconfigurationcontroller/test-get-job-configuration-by-id/http-request.adoc[]
+
+====== HTTP Response
+
+include::{snippets}/jobconfigurationcontroller/test-get-job-configuration-by-id/http-response.adoc[]
+
+===== Get Job Configurations
+
+====== Curl
+
+include::{snippets}/jobconfigurationcontroller/test-get-job-configurations/curl-request.adoc[]
+
+====== HTTP Request
+
+include::{snippets}/jobconfigurationcontroller/test-get-job-configurations/http-request.adoc[]
+
+====== HTTP Response
+
+include::{snippets}/jobconfigurationcontroller/test-get-job-configurations/http-response.adoc[]
+
+===== Get Job Configuration By Job Name
+
+====== Curl
+
+include::{snippets}/jobconfigurationcontroller/test-get-job-configurations-by-job-name/curl-request.adoc[]
+
+====== HTTP Request
+
+include::{snippets}/jobconfigurationcontroller/test-get-job-configurations-by-job-name/http-request.adoc[]
+
+====== HTTP Response
+
+include::{snippets}/jobconfigurationcontroller/test-get-job-configurations-by-job-name/http-response.adoc[]
+
+===== Add Job Configuration
+
+====== Curl
+
+include::{snippets}/jobconfigurationcontroller/test-add-job-configuration/curl-request.adoc[]
+
+====== HTTP Request
+
+include::{snippets}/jobconfigurationcontroller/test-add-job-configuration/http-request.adoc[]
+
+====== HTTP Response
+
+include::{snippets}/jobconfigurationcontroller/test-add-job-configuration/http-response.adoc[]
+
+===== Update Job Configuration
+
+====== Curl
+
+include::{snippets}/jobconfigurationcontroller/test-update-job-configuration/curl-request.adoc[]
+
+====== HTTP Request
+
+include::{snippets}/jobconfigurationcontroller/test-update-job-configuration/http-request.adoc[]
+
+====== HTTP Response
+
+include::{snippets}/jobconfigurationcontroller/test-update-job-configuration/http-response.adoc[]
+
+===== Delete Job Configuration
+
+====== Curl
+
+include::{snippets}/jobconfigurationcontroller/testdelete-job-configuration-by-id/curl-request.adoc[]
+
+====== HTTP Request
+
+include::{snippets}/jobconfigurationcontroller/testdelete-job-configuration-by-id/http-request.adoc[]
+
+====== HTTP Response
+
+include::{snippets}/jobconfigurationcontroller/testdelete-job-configuration-by-id/http-response.adoc[]
+
+===== Start Job Configuration
+
+====== Curl
+
+include::{snippets}/jobconfigurationcontroller/test-start-job-configuration/curl-request.adoc[]
+
+====== HTTP Request
+
+include::{snippets}/jobconfigurationcontroller/test-start-job-configuration/http-request.adoc[]
+
+====== HTTP Response
+
+include::{snippets}/jobconfigurationcontroller/test-start-job-configuration/http-response.adoc[]
+
+===== Stop Job Configuration
+
+====== Curl
+
+include::{snippets}/jobconfigurationcontroller/test-stop-job-configuration/curl-request.adoc[]
+
+====== HTTP Request
+
+include::{snippets}/jobconfigurationcontroller/test-stop-job-configuration/http-request.adoc[]
+
+====== HTTP Response
+
+include::{snippets}/jobconfigurationcontroller/test-stop-job-configuration/http-response.adoc[]

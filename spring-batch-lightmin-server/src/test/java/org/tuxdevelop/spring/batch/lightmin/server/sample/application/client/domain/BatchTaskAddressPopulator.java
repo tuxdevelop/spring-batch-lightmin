@@ -5,25 +5,25 @@ import org.fluttercode.datafactory.impl.DataFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDao;
+import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDAO;
 
 @Component
 public class BatchTaskAddressPopulator {
 
+    private final BatchTaskAddressDAO batchTaskAddressDAO;
+    private final DataFactory dataFactory;
+
     @Autowired
-    private BatchTaskAddressDao batchTaskAddressDao;
-
-    private DataFactory dataFactory;
-
-    public BatchTaskAddressPopulator() {
+    public BatchTaskAddressPopulator(final BatchTaskAddressDAO batchTaskAddressDAO) {
         this.dataFactory = new DataFactory();
+        this.batchTaskAddressDAO = batchTaskAddressDAO;
     }
 
     @Scheduled(fixedDelay = 300000L)
     public void populateData() {
         for (int i = 0; i < 1000; i++) {
             final BatchTaskAddress batchTaskAddress = createBatchTaskAddress();
-            batchTaskAddressDao.add(batchTaskAddress);
+            batchTaskAddressDAO.add(batchTaskAddress);
         }
     }
 

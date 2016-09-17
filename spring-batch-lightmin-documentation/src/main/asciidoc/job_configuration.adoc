@@ -6,13 +6,12 @@ A job Configuration contains properties, which describes how a job should be lau
 
 [source,java]
 ----
-public class JobConfiguration extends AbstractConfiguration implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class JobConfiguration extends AbstractConfiguration {
 
 	private Long jobConfigurationId;
 	private String jobName;
 	private JobSchedulerConfiguration jobSchedulerConfiguration;
+	private JobListenerConfiguration jobListenerConfiguration;
 	private Map<String, Object> jobParameters;
 	private JobIncrementer jobIncrementer;
 
@@ -123,6 +122,81 @@ public enum SchedulerStatus {
     IN_TERMINATION("IN TERMINATION");
 ----
 
+===== Job Listener Configuration
+
+The _Job Listner Configurations_ can be registered, to listen for events and triggers a job.
+
+[source, java]
+----
+public class JobListenerConfiguration extends AbstractConfiguration {
+
+    private JobListenerType jobListenerType;
+    private String sourceFolder;
+    private String filePattern;
+    private Long pollerPeriod;
+    private String beanName;
+    private ListenerStatus listenerStatus;
+    private TaskExecutorType taskExecutorType;
+----
+
+====== Job Listener Type
+
+[source,java]
+----
+public enum JobListenerType {
+
+    LOCAL_FOLDER_LISTENER(1L);
+}
+----
+
+* LOCAL FOLDER LISTENER
+
+If the _LOCAL FOLDER LISTENER_ event is fired, the absolut path to the file will be passed as _Job Parameter_ with
+the name *_fileSource_* to the _Job Launcher_.
+
+====== Source Folder
+
+The file system folder, the listener should be registered for
+
+====== File Pattern
+
+Ant based pattern, to filter files, which should be used for the event.
+
+====== Poller Period
+
+====== Bean Name
+
+The name of spring bean.
+
+====== Listener Status
+
+The _Listener Status_ indicates the current status of the Listener Configuration
+
+[source, java]
+----
+public enum ListenerStatus {
+
+    ACTIVE("ACTIVE"),
+    STOPPED("STOPPED");
+}
+----
+
+
+====== Task Executor
+
+The _TaskExecutorType_ determines, if the launch of a _Job_ should be synchronously or asynchronously.
+If the value is set to _SYNCHRONOUS_, the task executor will wait, until the previous run is
+finished. On _ASYNCHRONOUS_ mode, the job will be launched, if a new event occurs.
+
+[source,java]
+----
+public enum TaskExecutorType {
+    SYNCHRONOUS("SYNCHRONOUS", 1L),
+    ASYNCHRONOUS("ASYNCHRONOUS", 2L);
+}
+----
+
+
 === JobConfiguration Repository
 
 The _JobConfigurationRepository_ describes an interface, to manage _JobConfigurations_.
@@ -176,7 +250,19 @@ CREATE TABLE BATCH_JOB_SCHEDULER_CONFIGURATION (
   task_executor_type   INT                          NOT NULL,
   bean_name            VARCHAR(255)                 NOT NULL,
   status               VARCHAR(255)                 NOT NULL,
-  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION(job_configuration_id)
+  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION (job_configuration_id)
+);
+
+CREATE TABLE BATCH_JOB_LISTENER_CONFIGURATION (
+  id                   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
+  job_configuration_id NUMERIC                      NOT NULL,
+  listener_type        INT                          NOT NULL,
+  source_folder        VARCHAR(255)                 NULL,
+  file_pattern         VARCHAR(255)                 NULL,
+  poller_period        NUMERIC                      NOT NULL,
+  status               VARCHAR(255)                 NOT NULL,
+  task_executor_type   INT                          NOT NULL,
+  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION (job_configuration_id)
 );
 
 CREATE TABLE BATCH_JOB_CONFIGURATION_PARAMETERS (
@@ -185,9 +271,8 @@ CREATE TABLE BATCH_JOB_CONFIGURATION_PARAMETERS (
   parameter_name       VARCHAR(255)                 NOT NULL,
   parameter_value      VARCHAR(255)                 NOT NULL,
   parameter_type       INT                          NOT NULL,
-  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION(job_configuration_id)
+  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION (job_configuration_id)
 );
-
 
 ----
 

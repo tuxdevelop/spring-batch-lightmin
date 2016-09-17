@@ -11,16 +11,26 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 @Component
-public class AddressDao {
+public class AddressDAO {
 
-    private static final String INSERT_STATEMENT = "INSERT INTO address (id,street_line, city_line)VALUES(?,?,?)";
+    private static final String INSERT_STATEMENT =
+            "INSERT INTO address (" +
+                    "id," +
+                    "street_line," +
+                    " city_line)" +
+                    "VALUES(" +
+                    "?," +
+                    "?," +
+                    "?)";
 
-    private static final String GET_BY_ID_QUERY = "SELECT * FROM address WHERE id = ?";
+    private static final String GET_BY_ID_QUERY =
+            "SELECT * FROM address" +
+                    " WHERE id = ?";
 
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public AddressDao(final JdbcTemplate jdbcTemplate) {
+    public AddressDAO(final JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -30,7 +40,10 @@ public class AddressDao {
     }
 
     public Address getAddressById(final Long id) {
-        return jdbcTemplate.queryForObject(GET_BY_ID_QUERY, new Object[]{id}, new int[]{Types.NUMERIC}, new AddressRowMapper());
+        return jdbcTemplate.queryForObject(GET_BY_ID_QUERY,
+                new Object[]{id},
+                new int[]{Types.NUMERIC},
+                new AddressRowMapper());
     }
 
 

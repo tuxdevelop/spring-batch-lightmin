@@ -1,13 +1,13 @@
 package org.tuxdevelop.spring.batch.lightmin.documentation.api.client;
 
 import com.jayway.restassured.http.ContentType;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.tuxdevelop.spring.batch.lightmin.api.controller.AbstractRestController;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.documentation.api.AbstractServiceDocumentation;
 
 import static com.jayway.restassured.RestAssured.given;
+import static org.assertj.core.api.Fail.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -78,7 +78,6 @@ public class JobConfigurationRestControllerDocumentation extends AbstractService
     }
 
     @Test
-    @Ignore
     public void testAddJobConfiguration() {
         final JobConfiguration jobConfiguration = createApiJobConfiguration();
         given(this.documentationSpec)
@@ -184,5 +183,11 @@ public class JobConfigurationRestControllerDocumentation extends AbstractService
                         .JOB_CONFIGURATION_STOP, addedListenerJobConfigurationId)
                 .then()
                 .assertThat().statusCode(is(200));
+
+        try {
+            Thread.sleep(500L);
+        } catch (final InterruptedException e) {
+            fail(e.getMessage());
+        }
     }
 }

@@ -20,8 +20,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.Address;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.ProcessingState;
-import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.AddressDao;
-import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDao;
+import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.AddressDAO;
+import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDAO;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -30,14 +30,17 @@ import java.util.List;
 @Configuration
 public class AddressPrinterJobConfiguration {
 
-    private static final String SELECT_ADDRESS_QUERY = "SELECT batch_task_id FROM batch_task_address WHERE processing_state = " +
-            ProcessingState.SUCCESS;
+    private static final String SELECT_ADDRESS_QUERY =
+            "SELECT batch_task_id FROM batch_task_address " +
+                    "WHERE processing_state = " + ProcessingState.SUCCESS;
 
-    private static final String SELECT_BATCH_TASK_ADDRESS_TO_DELETE_QUERY = "SELECT batch_task_id FROM batch_task_address " +
-            "WHERE processing_state = " + ProcessingState.PRINTED;
+    private static final String SELECT_BATCH_TASK_ADDRESS_TO_DELETE_QUERY =
+            "SELECT batch_task_id FROM batch_task_address " +
+                    "WHERE processing_state = " + ProcessingState.PRINTED;
 
-    private static final String DELETE_BATCH_TASK_ADDRESS_STATEMENT = "DELETE FROM batch_task_address WHERE " +
-            "batch_task_id = :batch_task_id";
+    private static final String DELETE_BATCH_TASK_ADDRESS_STATEMENT =
+            "DELETE FROM batch_task_address " +
+                    "WHERE batch_task_id = :batch_task_id";
 
     @Bean
     public Job addressPrinterJob(final JobBuilderFactory jobBuilderFactory,
@@ -85,15 +88,15 @@ public class AddressPrinterJobConfiguration {
         return new ItemProcessor<Long, Address>() {
 
             @Autowired
-            private BatchTaskAddressDao batchTaskAddressDao;
+            private BatchTaskAddressDAO batchTaskAddressDAO;
 
             @Autowired
-            private AddressDao addressDao;
+            private AddressDAO addressDAO;
 
             @Override
             public Address process(final Long id) throws Exception {
-                batchTaskAddressDao.updateProcessingState(id, ProcessingState.PRINTED);
-                return addressDao.getAddressById(id);
+                batchTaskAddressDAO.updateProcessingState(id, ProcessingState.PRINTED);
+                return addressDAO.getAddressById(id);
             }
         };
     }

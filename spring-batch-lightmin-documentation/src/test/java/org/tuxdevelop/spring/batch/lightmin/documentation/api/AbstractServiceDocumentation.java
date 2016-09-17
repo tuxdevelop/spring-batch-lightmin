@@ -21,7 +21,6 @@ import org.tuxdevelop.spring.batch.lightmin.ITConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.ITJobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
-import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientInformation;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.LightminClientRegistrator;
@@ -30,6 +29,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
 import org.tuxdevelop.spring.batch.lightmin.support.ServiceEntry;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -187,13 +187,8 @@ public abstract class AbstractServiceDocumentation {
     }
 
     protected LightminClientApplication createLightminClientApplication(final String applicationName) {
-        final LightminClientApplication lightminClientApplication = new LightminClientApplication();
-        lightminClientApplication.setName(applicationName);
-        lightminClientApplication.setServiceUrl("http://localhost:" + getServerPort());
-        lightminClientApplication.setManagementUrl("http://localhost:" + getServerPort() + "/management");
-        lightminClientApplication.setHealthUrl("http://localhost:" + getServerPort() + "/health");
-        lightminClientApplication.setLightminClientInformation(new LightminClientInformation());
-        return lightminClientApplication;
+        return LightminClientApplication.createApplication
+                (Arrays.asList(simpleJob.getName()), lightminClientProperties);
     }
 
     @Before

@@ -117,6 +117,8 @@ Additional job parameter, to give each job instance uniqueness.
 
 _Job Listener Configurations_ bases on event, e.g. the viewed folder gets a new file.
 
+image::job_listener_configurations.png[]
+
 ===== Add Job Listener configuration
 
 image::listener_select.png[]
@@ -124,6 +126,9 @@ image::listener_select.png[]
 ====== Job Scheduler Type
 
 * LOCALE FOLDER LISTENER
+
+If the _LOCAL FOLDER LISTENER_ event is fired, the absolut path to the file will be passed as _Job Parameter_ with
+the name *_fileSource_* to the _Job Launcher_.
 
 image::listener_add.png[]
 

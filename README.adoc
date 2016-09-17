@@ -18,6 +18,10 @@ and depending beans out of the box.
 
 The documentation can be found at http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/next/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[Spring Batch Linghtmin Documentation]
 
+== Samples
+
+Samples of the _Spring Batch Lightmin_ are available at https://github.com/tuxdevelop/spring-batch-lightmin-samples[Sample Applications]
+
 == Overview
 
 image::overview.png[]
@@ -280,6 +284,9 @@ image::listener_select.png[]
 ====== Job Scheduler Type
 
 * LOCALE FOLDER LISTENER
+
+If the _LOCAL FOLDER LISTENER_ event is fired, the absolut path to the file will be passed as _Job Parameter_ with
+the name *_fileSource_* to the _Job Launcher_.
 
 image::listener_add.png[]
 
