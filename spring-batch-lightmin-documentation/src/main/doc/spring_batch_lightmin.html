@@ -1437,94 +1437,20 @@ If the application will be restarted, all stored <em>JobConfigurations</em> will
 <h4 id="_register">Register</h4>
 <div class="sect4">
 <h5 id="_curl">Curl</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
-  &quot;id&quot; : null,
-  &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost&quot;,
-  &quot;lightminClientApplicationStatus&quot; : null,
-  &quot;lightminClientInformation&quot; : {
-    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
-    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
-    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
-    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
-    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
-    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
-    &quot;registeredJobs&quot; : [ &quot;simpleJob&quot; ],
-    &quot;externalLinks&quot; : { }
-  }
-}'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/registrationcontroller/test-register/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_http_request">HTTP Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/applications HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Content-Type: application/json; charset=UTF-8
-Host: localhost
-Content-Length: 708
-
-{
-  &quot;id&quot; : null,
-  &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost&quot;,
-  &quot;lightminClientApplicationStatus&quot; : null,
-  &quot;lightminClientInformation&quot; : {
-    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
-    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
-    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
-    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
-    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
-    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
-    &quot;registeredJobs&quot; : [ &quot;simpleJob&quot; ],
-    &quot;externalLinks&quot; : { }
-  }
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/registrationcontroller/test-register/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_http_response">HTTP Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Sat, 17 Sep 2016 11:21:24 GMT
-Content-Length: 793
-
-{
-  &quot;id&quot; : &quot;ea74363f&quot;,
-  &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:63978&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:63978/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:63978&quot;,
-  &quot;lightminClientApplicationStatus&quot; : {
-    &quot;status&quot; : &quot;OFFLINE&quot;,
-    &quot;timeInMills&quot; : 1474111284532
-  },
-  &quot;lightminClientInformation&quot; : {
-    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
-    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
-    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
-    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
-    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
-    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
-    &quot;registeredJobs&quot; : [ &quot;simpleJob&quot; ],
-    &quot;externalLinks&quot; : { }
-  }
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/registrationcontroller/test-register/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -1532,57 +1458,20 @@ Content-Length: 793
 <h4 id="_unregister">Unregister</h4>
 <div class="sect4">
 <h5 id="_curl_2">Curl</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/7b3a18b7' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/registrationcontroller/test-unregister/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_http_request_2">HTTP Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/7b3a18b7 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Content-Type: application/json; charset=UTF-8
-Host: localhost</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/registrationcontroller/test-unregister/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_http_response_2">HTTP Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Sat, 17 Sep 2016 11:21:26 GMT
-Content-Length: 793
-
-{
-  &quot;id&quot; : &quot;7b3a18b7&quot;,
-  &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:63989&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:63989/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:63989&quot;,
-  &quot;lightminClientApplicationStatus&quot; : {
-    &quot;status&quot; : &quot;OFFLINE&quot;,
-    &quot;timeInMills&quot; : 1474111286269
-  },
-  &quot;lightminClientInformation&quot; : {
-    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
-    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
-    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
-    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
-    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
-    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
-    &quot;registeredJobs&quot; : [ &quot;simpleJob&quot; ],
-    &quot;externalLinks&quot; : { }
-  }
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/registrationcontroller/test-unregister/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -1590,77 +1479,20 @@ Content-Length: 793
 <h4 id="_get_all_lightmin_client_applications">Get All Lightmin Client Applications</h4>
 <div class="sect4">
 <h5 id="_curl_3">Curl</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications' -i -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/registrationcontroller/testget-all/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_http_request_3">HTTP Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/applications HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Content-Type: application/json; charset=UTF-8
-Host: localhost</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/registrationcontroller/testget-all/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_http_response_3">HTTP Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Sat, 17 Sep 2016 11:21:22 GMT
-Content-Length: 1608
-
-[ {
-  &quot;id&quot; : &quot;ce8efdfc&quot;,
-  &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:63967&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:63967/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:63967&quot;,
-  &quot;lightminClientApplicationStatus&quot; : {
-    &quot;status&quot; : &quot;OFFLINE&quot;,
-    &quot;timeInMills&quot; : 1474111282798
-  },
-  &quot;lightminClientInformation&quot; : {
-    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
-    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
-    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
-    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
-    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
-    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
-    &quot;registeredJobs&quot; : [ &quot;simpleJob&quot; ],
-    &quot;externalLinks&quot; : { }
-  }
-}, {
-  &quot;id&quot; : &quot;096c28ef&quot;,
-  &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://192.168.2.106:0&quot;,
-  &quot;healthUrl&quot; : &quot;http://192.168.2.106:0/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://192.168.2.106:0&quot;,
-  &quot;lightminClientApplicationStatus&quot; : {
-    &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1474111282695
-  },
-  &quot;lightminClientInformation&quot; : {
-    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
-    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
-    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
-    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
-    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
-    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
-    &quot;registeredJobs&quot; : [ &quot;simpleBlockingJob&quot;, &quot;simpleJob&quot; ],
-    &quot;externalLinks&quot; : { }
-  }
-} ]</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/registrationcontroller/testget-all/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -1673,94 +1505,20 @@ Content-Length: 1608
 <h5 id="_get_all_job_executions">Get All Job Executions</h5>
 <div class="sect5">
 <h6 id="_curl_4">Curl</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages/all?jobinstanceid=0' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobcontroller/test-get-all-job-executions-by-job-instance-id/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_request_4">HTTP Request</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutionpages/all?jobinstanceid=0 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Host: localhost</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobcontroller/test-get-all-job-executions-by-job-instance-id/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_response_4">HTTP Response</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Sat, 17 Sep 2016 11:21:17 GMT
-Content-Length: 1400
-
-{
-  &quot;startIndex&quot; : 0,
-  &quot;pageSize&quot; : 1,
-  &quot;jobName&quot; : &quot;simpleJob&quot;,
-  &quot;totalJobExecutionCount&quot; : 1,
-  &quot;jobInstanceId&quot; : 0,
-  &quot;jobExecutions&quot; : [ {
-    &quot;id&quot; : 0,
-    &quot;version&quot; : 2,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : {
-        &quot;date&quot; : {
-          &quot;parameter&quot; : 1474111277339,
-          &quot;parameterType&quot; : &quot;DATE&quot;
-        }
-      }
-    },
-    &quot;jobInstance&quot; : {
-      &quot;id&quot; : 0,
-      &quot;version&quot; : 0,
-      &quot;jobName&quot; : &quot;simpleJob&quot;
-    },
-    &quot;stepExecutions&quot; : [ {
-      &quot;id&quot; : 1,
-      &quot;version&quot; : 7,
-      &quot;jobExecutionId&quot; : 0,
-      &quot;stepName&quot; : &quot;simpleStep&quot;,
-      &quot;status&quot; : &quot;COMPLETED&quot;,
-      &quot;readCount&quot; : 4,
-      &quot;writeCount&quot; : 4,
-      &quot;commitCount&quot; : 5,
-      &quot;rollbackCount&quot; : 0,
-      &quot;readSkipCount&quot; : 0,
-      &quot;processSkipCount&quot; : 0,
-      &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1474111277349,
-      &quot;endTime&quot; : 1474111277360,
-      &quot;lastUpdated&quot; : 1474111277360,
-      &quot;exitStatus&quot; : {
-        &quot;exitCode&quot; : &quot;COMPLETED&quot;,
-        &quot;exitDescription&quot; : &quot;&quot;
-      },
-      &quot;terminateOnly&quot; : false,
-      &quot;filterCount&quot; : 0,
-      &quot;failureExceptions&quot; : [ ]
-    } ],
-    &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1474111277342,
-    &quot;createTime&quot; : 1474111277340,
-    &quot;endTime&quot; : 1474111277362,
-    &quot;lastUpdated&quot; : 1474111277362,
-    &quot;exitStatus&quot; : {
-      &quot;exitCode&quot; : &quot;COMPLETED&quot;,
-      &quot;exitDescription&quot; : &quot;&quot;
-    },
-    &quot;failureExceptions&quot; : [ ],
-    &quot;jobConfigurationName&quot; : null
-  } ]
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobcontroller/test-get-all-job-executions-by-job-instance-id/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -1768,94 +1526,20 @@ Content-Length: 1400
 <h5 id="_get_job_executions">Get Job Executions</h5>
 <div class="sect5">
 <h6 id="_curl_5">Curl</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages?jobinstanceid=0&amp;startindex=0&amp;pagesize=5' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobcontroller/test-get-job-executions-by-job-instance-id/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_request_5">HTTP Request</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutionpages?jobinstanceid=0&amp;startindex=0&amp;pagesize=5 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Host: localhost</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobcontroller/test-get-job-executions-by-job-instance-id/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_response_5">HTTP Response</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Sat, 17 Sep 2016 11:21:15 GMT
-Content-Length: 1400
-
-{
-  &quot;startIndex&quot; : 0,
-  &quot;pageSize&quot; : 5,
-  &quot;jobName&quot; : &quot;simpleJob&quot;,
-  &quot;totalJobExecutionCount&quot; : 1,
-  &quot;jobInstanceId&quot; : 0,
-  &quot;jobExecutions&quot; : [ {
-    &quot;id&quot; : 0,
-    &quot;version&quot; : 2,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : {
-        &quot;date&quot; : {
-          &quot;parameter&quot; : 1474111275558,
-          &quot;parameterType&quot; : &quot;DATE&quot;
-        }
-      }
-    },
-    &quot;jobInstance&quot; : {
-      &quot;id&quot; : 0,
-      &quot;version&quot; : 0,
-      &quot;jobName&quot; : &quot;simpleJob&quot;
-    },
-    &quot;stepExecutions&quot; : [ {
-      &quot;id&quot; : 1,
-      &quot;version&quot; : 7,
-      &quot;jobExecutionId&quot; : 0,
-      &quot;stepName&quot; : &quot;simpleStep&quot;,
-      &quot;status&quot; : &quot;COMPLETED&quot;,
-      &quot;readCount&quot; : 4,
-      &quot;writeCount&quot; : 4,
-      &quot;commitCount&quot; : 5,
-      &quot;rollbackCount&quot; : 0,
-      &quot;readSkipCount&quot; : 0,
-      &quot;processSkipCount&quot; : 0,
-      &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1474111275569,
-      &quot;endTime&quot; : 1474111275580,
-      &quot;lastUpdated&quot; : 1474111275580,
-      &quot;exitStatus&quot; : {
-        &quot;exitCode&quot; : &quot;COMPLETED&quot;,
-        &quot;exitDescription&quot; : &quot;&quot;
-      },
-      &quot;terminateOnly&quot; : false,
-      &quot;filterCount&quot; : 0,
-      &quot;failureExceptions&quot; : [ ]
-    } ],
-    &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1474111275562,
-    &quot;createTime&quot; : 1474111275559,
-    &quot;endTime&quot; : 1474111275582,
-    &quot;lastUpdated&quot; : 1474111275582,
-    &quot;exitStatus&quot; : {
-      &quot;exitCode&quot; : &quot;COMPLETED&quot;,
-      &quot;exitDescription&quot; : &quot;&quot;
-    },
-    &quot;failureExceptions&quot; : [ ],
-    &quot;jobConfigurationName&quot; : null
-  } ]
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobcontroller/test-get-job-executions-by-job-instance-id/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -1863,87 +1547,20 @@ Content-Length: 1400
 <h5 id="_get_job_execution">Get Job Execution</h5>
 <div class="sect5">
 <h6 id="_curl_6">Curl</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/0' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobcontroller/test-get-job-execution-by-id/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_request_6">HTTP Request</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutions/0 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Host: localhost</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobcontroller/test-get-job-execution-by-id/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_response_6">HTTP Response</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Sat, 17 Sep 2016 11:21:21 GMT
-Content-Length: 1150
-
-{
-  &quot;id&quot; : 0,
-  &quot;version&quot; : 2,
-  &quot;jobParameters&quot; : {
-    &quot;parameters&quot; : {
-      &quot;date&quot; : {
-        &quot;parameter&quot; : 1474111281028,
-        &quot;parameterType&quot; : &quot;DATE&quot;
-      }
-    }
-  },
-  &quot;jobInstance&quot; : {
-    &quot;id&quot; : 0,
-    &quot;version&quot; : 0,
-    &quot;jobName&quot; : &quot;simpleJob&quot;
-  },
-  &quot;stepExecutions&quot; : [ {
-    &quot;id&quot; : 1,
-    &quot;version&quot; : 7,
-    &quot;jobExecutionId&quot; : 0,
-    &quot;stepName&quot; : &quot;simpleStep&quot;,
-    &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;readCount&quot; : 4,
-    &quot;writeCount&quot; : 4,
-    &quot;commitCount&quot; : 5,
-    &quot;rollbackCount&quot; : 0,
-    &quot;readSkipCount&quot; : 0,
-    &quot;processSkipCount&quot; : 0,
-    &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1474111281036,
-    &quot;endTime&quot; : 1474111281044,
-    &quot;lastUpdated&quot; : 1474111281044,
-    &quot;exitStatus&quot; : {
-      &quot;exitCode&quot; : &quot;COMPLETED&quot;,
-      &quot;exitDescription&quot; : &quot;&quot;
-    },
-    &quot;terminateOnly&quot; : false,
-    &quot;filterCount&quot; : 0,
-    &quot;failureExceptions&quot; : [ ]
-  } ],
-  &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1474111281031,
-  &quot;createTime&quot; : 1474111281029,
-  &quot;endTime&quot; : 1474111281045,
-  &quot;lastUpdated&quot; : 1474111281045,
-  &quot;exitStatus&quot; : {
-    &quot;exitCode&quot; : &quot;COMPLETED&quot;,
-    &quot;exitDescription&quot; : &quot;&quot;
-  },
-  &quot;failureExceptions&quot; : [ ],
-  &quot;jobConfigurationName&quot; : null
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobcontroller/test-get-job-execution-by-id/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -1954,55 +1571,20 @@ Content-Length: 1150
 <h5 id="_launch_job">Launch Job</h5>
 <div class="sect5">
 <h6 id="_curl_7">Curl</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/joblaunches' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
-  &quot;jobName&quot; : &quot;simpleJob&quot;,
-  &quot;jobParameters&quot; : {
-    &quot;parameters&quot; : {
-      &quot;pathToTargetFile&quot; : {
-        &quot;parameter&quot; : &quot;~/input/current_file.csv&quot;,
-        &quot;parameterType&quot; : &quot;STRING&quot;
-      }
-    }
-  }
-}'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/joblaunchercontroller/testlaunch-job/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_request_7">HTTP Request</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/joblaunches HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Content-Type: application/json; charset=UTF-8
-Host: localhost
-Content-Length: 205
-
-{
-  &quot;jobName&quot; : &quot;simpleJob&quot;,
-  &quot;jobParameters&quot; : {
-    &quot;parameters&quot; : {
-      &quot;pathToTargetFile&quot; : {
-        &quot;parameter&quot; : &quot;~/input/current_file.csv&quot;,
-        &quot;parameterType&quot; : &quot;STRING&quot;
-      }
-    }
-  }
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/joblaunchercontroller/testlaunch-job/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_response_7">HTTP Response</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Date: Sat, 17 Sep 2016 11:20:59 GMT</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/joblaunchercontroller/testlaunch-job/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -2013,52 +1595,20 @@ Date: Sat, 17 Sep 2016 11:20:59 GMT</code></pre>
 <h5 id="_get_job_configuration_by_id">Get Job Configuration By Id</h5>
 <div class="sect5">
 <h6 id="_curl_8">Curl</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/1' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-get-job-configuration-by-id/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_request_8">HTTP Request</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/jobconfiguration/1 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Host: localhost</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-get-job-configuration-by-id/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_response_8">HTTP Response</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Sat, 17 Sep 2016 11:20:50 GMT
-Content-Length: 411
-
-{
-  &quot;jobConfigurationId&quot; : 1,
-  &quot;jobName&quot; : &quot;simpleJob&quot;,
-  &quot;jobSchedulerConfiguration&quot; : {
-    &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-    &quot;cronExpression&quot; : null,
-    &quot;initialDelay&quot; : 100000,
-    &quot;fixedDelay&quot; : 100000,
-    &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-    &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-  },
-  &quot;jobListenerConfiguration&quot; : null,
-  &quot;jobParameters&quot; : {
-    &quot;parameters&quot; : { }
-  },
-  &quot;jobIncrementer&quot; : &quot;DATE&quot;
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-get-job-configuration-by-id/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -2066,70 +1616,20 @@ Content-Length: 411
 <h5 id="_get_job_configurations">Get Job Configurations</h5>
 <div class="sect5">
 <h6 id="_curl_9">Curl</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-get-job-configurations/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_request_9">HTTP Request</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Host: localhost</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-get-job-configurations/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_response_9">HTTP Response</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Sat, 17 Sep 2016 11:20:57 GMT
-Content-Length: 949
-
-{
-  &quot;jobConfigurations&quot; : [ {
-    &quot;jobConfigurationId&quot; : 1,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 2,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  } ]
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-get-job-configurations/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -2137,70 +1637,20 @@ Content-Length: 949
 <h5 id="_get_job_configuration_by_job_name">Get Job Configuration By Job Name</h5>
 <div class="sect5">
 <h6 id="_curl_10">Curl</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/simpleJob' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-get-job-configurations-by-job-name/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_request_10">HTTP Request</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/simpleJob HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Host: localhost</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-get-job-configurations-by-job-name/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_response_10">HTTP Response</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Sat, 17 Sep 2016 11:20:52 GMT
-Content-Length: 949
-
-{
-  &quot;jobConfigurations&quot; : [ {
-    &quot;jobConfigurationId&quot; : 1,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 2,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  } ]
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-get-job-configurations-by-job-name/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -2208,63 +1658,20 @@ Content-Length: 949
 <h5 id="_add_job_configuration">Add Job Configuration</h5>
 <div class="sect5">
 <h6 id="_curl_11">Curl</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
-  &quot;jobConfigurationId&quot; : null,
-  &quot;jobName&quot; : &quot;simpleJob&quot;,
-  &quot;jobSchedulerConfiguration&quot; : null,
-  &quot;jobListenerConfiguration&quot; : {
-    &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-    &quot;sourceFolder&quot; : &quot;src/test/resources/input&quot;,
-    &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-    &quot;pollerPeriod&quot; : 1000,
-    &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-    &quot;taskExecutorType&quot; : &quot;SYNCHRONOUS&quot;
-  },
-  &quot;jobParameters&quot; : null,
-  &quot;jobIncrementer&quot; : &quot;DATE&quot;
-}'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-add-job-configuration/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_request_11">HTTP Request</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/jobconfigurations HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Content-Type: application/json; charset=UTF-8
-Host: localhost
-Content-Length: 424
-
-{
-  &quot;jobConfigurationId&quot; : null,
-  &quot;jobName&quot; : &quot;simpleJob&quot;,
-  &quot;jobSchedulerConfiguration&quot; : null,
-  &quot;jobListenerConfiguration&quot; : {
-    &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-    &quot;sourceFolder&quot; : &quot;src/test/resources/input&quot;,
-    &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-    &quot;pollerPeriod&quot; : 1000,
-    &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-    &quot;taskExecutorType&quot; : &quot;SYNCHRONOUS&quot;
-  },
-  &quot;jobParameters&quot; : null,
-  &quot;jobIncrementer&quot; : &quot;DATE&quot;
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-add-job-configuration/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_response_11">HTTP Response</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Date: Sat, 17 Sep 2016 11:20:55 GMT</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-add-job-configuration/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -2272,67 +1679,20 @@ Date: Sat, 17 Sep 2016 11:20:55 GMT</code></pre>
 <h5 id="_update_job_configuration">Update Job Configuration</h5>
 <div class="sect5">
 <h6 id="_curl_12">Curl</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X PUT -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
-  &quot;jobConfigurationId&quot; : 2,
-  &quot;jobName&quot; : &quot;simpleJob&quot;,
-  &quot;jobSchedulerConfiguration&quot; : null,
-  &quot;jobListenerConfiguration&quot; : {
-    &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-    &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-    &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-    &quot;pollerPeriod&quot; : 1000,
-    &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-    &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-  },
-  &quot;jobParameters&quot; : {
-    &quot;parameters&quot; : { }
-  },
-  &quot;jobIncrementer&quot; : &quot;DATE&quot;
-}'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-update-job-configuration/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_request_12">HTTP Request</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">PUT /api/jobconfigurations HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Content-Type: application/json; charset=UTF-8
-Host: localhost
-Content-Length: 440
-
-{
-  &quot;jobConfigurationId&quot; : 2,
-  &quot;jobName&quot; : &quot;simpleJob&quot;,
-  &quot;jobSchedulerConfiguration&quot; : null,
-  &quot;jobListenerConfiguration&quot; : {
-    &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-    &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-    &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-    &quot;pollerPeriod&quot; : 1000,
-    &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-    &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-  },
-  &quot;jobParameters&quot; : {
-    &quot;parameters&quot; : { }
-  },
-  &quot;jobIncrementer&quot; : &quot;DATE&quot;
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-update-job-configuration/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_response_12">HTTP Response</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Date: Sat, 17 Sep 2016 11:20:42 GMT</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-update-job-configuration/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -2340,31 +1700,20 @@ Date: Sat, 17 Sep 2016 11:20:42 GMT</code></pre>
 <h5 id="_delete_job_configuration">Delete Job Configuration</h5>
 <div class="sect5">
 <h6 id="_curl_13">Curl</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/2' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/testdelete-job-configuration-by-id/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_request_13">HTTP Request</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/jobconfigurations/jobconfiguration/2 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Host: localhost</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/testdelete-job-configuration-by-id/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_response_13">HTTP Response</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Date: Sat, 17 Sep 2016 11:20:39 GMT</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/testdelete-job-configuration-by-id/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -2372,31 +1721,20 @@ Date: Sat, 17 Sep 2016 11:20:39 GMT</code></pre>
 <h5 id="_start_job_configuration">Start Job Configuration</h5>
 <div class="sect5">
 <h6 id="_curl_14">Curl</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/2/start' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-start-job-configuration/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_request_14">HTTP Request</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/2/start HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Host: localhost</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-start-job-configuration/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_response_14">HTTP Response</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Date: Sat, 17 Sep 2016 11:20:48 GMT</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-start-job-configuration/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -2404,31 +1742,20 @@ Date: Sat, 17 Sep 2016 11:20:48 GMT</code></pre>
 <h5 id="_stop_job_configuration">Stop Job Configuration</h5>
 <div class="sect5">
 <h6 id="_curl_15">Curl</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/2/stop' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-stop-job-configuration/curl-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_request_15">HTTP Request</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/2/stop HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
-Host: localhost</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-stop-job-configuration/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_http_response_15">HTTP Response</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: it-application:0
-Date: Sat, 17 Sep 2016 11:20:44 GMT</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in rest_api.adoc - include::/home/milo/Development/vcs/git/github/spring-batch-lightmin_branches/master/spring-batch-lightmin-documentation/target/generated-snippets/jobconfigurationcontroller/test-stop-job-configuration/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -2869,7 +2196,7 @@ already beeb launched, the <em>JobParameters</em> of the last run will be shown.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-09-17 12:11:50 +02:00
+Last updated 2016-09-17 14:26:28 +02:00
 </div>
 </div>
 </body>

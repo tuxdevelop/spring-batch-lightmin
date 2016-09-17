@@ -23,7 +23,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.validation.BindException;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.BatchTaskAddress;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.ProcessingState;
-import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDAO;
+import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDao;
 
 import java.io.File;
 import java.util.List;
@@ -78,7 +78,7 @@ public class AddressImportJobConfiguration {
     }
 
     @Bean
-    public ItemWriter<BatchTaskAddress> addressDatabaseWriter(final BatchTaskAddressDAO batchTaskAddressDAO) {
+    public ItemWriter<BatchTaskAddress> addressDatabaseWriter(final BatchTaskAddressDao batchTaskAddressDAO) {
         return new ItemWriter<BatchTaskAddress>() {
             @Override
             public void write(final List<? extends BatchTaskAddress> items) throws Exception {

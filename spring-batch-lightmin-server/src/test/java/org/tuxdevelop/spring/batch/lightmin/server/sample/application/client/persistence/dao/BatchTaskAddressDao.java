@@ -8,7 +8,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.dom
 import java.sql.Types;
 
 @Component
-public class BatchTaskAddressDAO {
+public class BatchTaskAddressDao {
 
     private static final String INSERT_STATEMENT =
             "INSERT INTO batch_task_address (" +
@@ -31,7 +31,7 @@ public class BatchTaskAddressDAO {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public BatchTaskAddressDAO(final JdbcTemplate jdbcTemplate) {
+    public BatchTaskAddressDao(final JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
