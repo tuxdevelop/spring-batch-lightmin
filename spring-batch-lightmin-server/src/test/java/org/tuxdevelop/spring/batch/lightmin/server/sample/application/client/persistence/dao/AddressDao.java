@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 @Component
-public class AddressDAO {
+public class AddressDao {
 
     private static final String INSERT_STATEMENT =
             "INSERT INTO address (" +
@@ -30,7 +30,7 @@ public class AddressDAO {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public AddressDAO(final JdbcTemplate jdbcTemplate) {
+    public AddressDao(final JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

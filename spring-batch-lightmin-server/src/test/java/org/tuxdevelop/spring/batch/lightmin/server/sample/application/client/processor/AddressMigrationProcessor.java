@@ -8,16 +8,16 @@ import org.springframework.stereotype.Component;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.Address;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.BatchTaskAddress;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.ProcessingState;
-import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.AddressDAO;
+import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.AddressDao;
 
 @Slf4j
 @Component
 public class AddressMigrationProcessor implements ItemProcessor<BatchTaskAddress, BatchTaskAddress> {
 
-    private final AddressDAO addressDAO;
+    private final AddressDao addressDAO;
 
     @Autowired
-    public AddressMigrationProcessor(final AddressDAO addressDAO) {
+    public AddressMigrationProcessor(final AddressDao addressDAO) {
         this.addressDAO = addressDAO;
     }
 
