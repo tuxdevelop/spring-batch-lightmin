@@ -15,10 +15,8 @@ import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.restdocs.JUnitRestDocumentation;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.tuxdevelop.spring.batch.lightmin.ITConfigurationApplication;
-import org.tuxdevelop.spring.batch.lightmin.ITJobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
@@ -28,6 +26,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.configuration.LightminServerP
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
 import org.tuxdevelop.spring.batch.lightmin.support.ServiceEntry;
+import org.tuxdevelop.test.configuration.ITJobConfiguration;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,7 +39,6 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 @SpringApplicationConfiguration(classes = {ITConfigurationApplication.class, ITJobConfiguration.class})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class AbstractServiceDocumentation {
 
     @Autowired

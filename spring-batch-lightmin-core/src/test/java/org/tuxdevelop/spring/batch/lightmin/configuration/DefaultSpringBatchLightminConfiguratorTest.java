@@ -7,10 +7,11 @@ import org.springframework.batch.core.launch.support.SimpleJobOperator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.tuxdevelop.spring.batch.lightmin.ITPersistenceConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.dao.JdbcLightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.service.DefaultJobService;
 import org.tuxdevelop.spring.batch.lightmin.service.DefaultStepService;
+import org.tuxdevelop.test.configuration.ITConfiguration;
+import org.tuxdevelop.test.configuration.ITPersistenceConfiguration;
 
 import javax.sql.DataSource;
 
@@ -24,6 +25,8 @@ public class DefaultSpringBatchLightminConfiguratorTest {
 
     @Test
     public void initializeJbdcWithTablePrefixTest() {
+        this.applicationContext = new AnnotationConfigApplicationContext(ITPersistenceConfiguration.class);
+        this.dataSource = applicationContext.getBean("dataSource", DataSource.class);
         final String tablePrefix = "TEST_BATCH";
         springBatchLightminConfigurationProperties.setRepositoryTablePrefix(tablePrefix);
         final DefaultSpringBatchLightminConfigurator configurator =
@@ -40,6 +43,7 @@ public class DefaultSpringBatchLightminConfiguratorTest {
 
     @Test
     public void initializeMapTest() {
+        this.applicationContext = new AnnotationConfigApplicationContext(ITConfiguration.class);
         springBatchLightminConfigurationProperties.setBatchRepositoryType(BatchRepositoryType.MAP);
         springBatchLightminConfigurationProperties.setLightminRepositoryType(LightminRepositoryType.MAP);
         final DefaultSpringBatchLightminConfigurator configurator = new DefaultSpringBatchLightminConfigurator(springBatchLightminConfigurationProperties, applicationContext);
@@ -56,8 +60,6 @@ public class DefaultSpringBatchLightminConfiguratorTest {
     @Before
     public void init() {
         this.springBatchLightminConfigurationProperties = new SpringBatchLightminConfigurationProperties();
-        this.applicationContext = new AnnotationConfigApplicationContext(ITPersistenceConfiguration.class);
-        this.dataSource = applicationContext.getBean("dataSource", DataSource.class);
     }
 
     private void assertMapComponents(final DefaultSpringBatchLightminConfigurator configurator) {

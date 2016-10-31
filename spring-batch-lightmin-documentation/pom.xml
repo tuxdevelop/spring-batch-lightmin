@@ -14,8 +14,6 @@
     <properties>
         <!-- rest docs -->
         <snippets>${project.build.directory}/generated-snippets</snippets>
-        <!-- jacoco -->
-        <jacoco.skip>true</jacoco.skip>
     </properties>
 
     <dependencies>

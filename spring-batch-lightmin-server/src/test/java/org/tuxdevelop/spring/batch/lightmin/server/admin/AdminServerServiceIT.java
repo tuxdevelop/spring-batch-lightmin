@@ -3,7 +3,6 @@ package org.tuxdevelop.spring.batch.lightmin.server.admin;
 
 import org.junit.Test;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerConfiguration;
@@ -22,7 +21,6 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @WebIntegrationTest({"server.port=0", "management.port=0"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class AdminServerServiceIT {
 
     @Test
@@ -32,7 +30,7 @@ public abstract class AdminServerServiceIT {
         getAdminServerService().saveJobConfiguration(jobConfiguration, lightminClientApplication);
         final JobConfigurations result = getAdminServerService().getJobConfigurations(lightminClientApplication);
         assertThat(result).isNotNull();
-        assertThat(result.getJobConfigurations()).hasSize(1);
+        assertThat(result.getJobConfigurations()).isNotEmpty();
     }
 
     @Test
@@ -95,7 +93,7 @@ public abstract class AdminServerServiceIT {
         assertThat(result.containsKey("simpleJob"));
         final JobConfigurations jobConfigurations = result.get("simpleJob");
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
-        assertThat(fetchedJobConfigurations).hasSize(1);
+        assertThat(fetchedJobConfigurations).isNotEmpty();
         final JobConfiguration jobConfigurationResult = fetchedJobConfigurations.iterator().next();
         assertThat(jobConfigurationResult.getJobName()).isEqualTo("simpleJob");
     }

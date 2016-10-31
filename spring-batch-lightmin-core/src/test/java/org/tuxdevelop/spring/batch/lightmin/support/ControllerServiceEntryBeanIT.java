@@ -3,10 +3,8 @@ package org.tuxdevelop.spring.batch.lightmin.support;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.tuxdevelop.spring.batch.lightmin.ITMapConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
@@ -15,6 +13,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerType;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
+import org.tuxdevelop.test.configuration.ITMapConfiguration;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ITMapConfiguration.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ControllerServiceEntryBeanIT {
 
     @Autowired
@@ -45,7 +43,7 @@ public class ControllerServiceEntryBeanIT {
         final JobConfigurations jobConfigurations = serviceEntry.getJobConfigurations(jobNames);
         assertThat(jobConfigurations).isNotNull();
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
-        assertThat(fetchedJobConfigurations).hasSize(1);
+        assertThat(fetchedJobConfigurations).isNotEmpty();
     }
 
     @Test
@@ -61,7 +59,7 @@ public class ControllerServiceEntryBeanIT {
         final JobConfigurations jobConfigurations = serviceEntry.getJobConfigurations(jobNames);
         assertThat(jobConfigurations).isNotNull();
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
-        assertThat(fetchedJobConfigurations).hasSize(1);
+        assertThat(fetchedJobConfigurations).isNotEmpty();
         Long jobConfigurationId = null;
         for (final JobConfiguration fetchedJobConfiguration : fetchedJobConfigurations) {
             jobConfigurationId = fetchedJobConfiguration.getJobConfigurationId();
@@ -113,7 +111,7 @@ public class ControllerServiceEntryBeanIT {
         final JobConfigurations fetchedJobConfigurations = serviceEntry.getJobConfigurationsByJobName(jobName);
         final Collection<JobConfiguration> fetchedJobConfigurationsCollection = fetchedJobConfigurations
                 .getJobConfigurations();
-        assertThat(fetchedJobConfigurationsCollection).hasSize(1);
+        assertThat(fetchedJobConfigurationsCollection).isNotEmpty();
         final JobConfiguration jobConfigurationResult = fetchedJobConfigurationsCollection.iterator().next();
         assertThat(jobConfigurationResult.getJobName()).isEqualTo(jobName);
     }
@@ -132,7 +130,7 @@ public class ControllerServiceEntryBeanIT {
         assertThat(result.containsKey(jobName));
         final JobConfigurations jobConfigurations = result.get(jobName);
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
-        assertThat(fetchedJobConfigurations).hasSize(1);
+        assertThat(fetchedJobConfigurations).isNotEmpty();
         final JobConfiguration jobConfigurationResult = fetchedJobConfigurations.iterator().next();
         assertThat(jobConfigurationResult.getJobName()).isEqualTo(jobName);
     }

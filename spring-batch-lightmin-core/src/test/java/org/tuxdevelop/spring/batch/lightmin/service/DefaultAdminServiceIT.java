@@ -3,15 +3,14 @@ package org.tuxdevelop.spring.batch.lightmin.service;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.tuxdevelop.spring.batch.lightmin.ITMapConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
+import org.tuxdevelop.test.configuration.ITConfiguration;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,8 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = ITMapConfiguration.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@ContextConfiguration(classes = ITConfiguration.class)
 public class DefaultAdminServiceIT {
 
     @Autowired

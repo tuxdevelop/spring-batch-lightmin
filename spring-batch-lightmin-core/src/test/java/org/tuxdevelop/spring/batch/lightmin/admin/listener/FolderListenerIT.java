@@ -10,15 +10,14 @@ import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.tuxdevelop.spring.batch.lightmin.ITConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.ListenerConstructorWrapper;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
+import org.tuxdevelop.test.configuration.ITConfiguration;
 
 import java.io.File;
 import java.util.HashSet;
@@ -30,7 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ITConfiguration.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class FolderListenerIT {
 
     @Autowired

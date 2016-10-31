@@ -52,6 +52,8 @@ public abstract class ServiceUtil {
             jobParametersBuilder.addDate(parameterName, (Date) parameterValue);
         } else if (parameterValue instanceof String) {
             jobParametersBuilder.addString(parameterName, (String) parameterValue);
+        } else if (parameterValue instanceof Double) {
+            jobParametersBuilder.addDouble(parameterName, (Double) parameterValue);
         } else {
             log.error("Could not add Parameter. Cause: Unsupported Parameter Type:" + parameterValue.getClass() + " !");
         }

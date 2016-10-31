@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.server.ITConfigurationApplication;
-import org.tuxdevelop.spring.batch.lightmin.server.ITConfigurationEmbedded;
+import org.tuxdevelop.test.configuration.ITConfigurationEmbedded;
 
 import java.util.LinkedList;
 
