@@ -43,7 +43,7 @@ public abstract class AdminServerServiceIT {
         final JobConfigurations jobConfigurations = getAdminServerService().getJobConfigurations(lightminClientApplication);
         assertThat(jobConfigurations).isNotNull();
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
-        assertThat(fetchedJobConfigurations).hasSize(1);
+        assertThat(fetchedJobConfigurations).isNotEmpty();
         Long jobConfigurationId = null;
         for (final JobConfiguration fetchedJobConfiguration : fetchedJobConfigurations) {
             jobConfigurationId = fetchedJobConfiguration.getJobConfigurationId();
@@ -74,11 +74,11 @@ public abstract class AdminServerServiceIT {
         final JobConfigurations jobConfigurations = getAdminServerService().getJobConfigurations(lightminClientApplication);
         assertThat(jobConfigurations).isNotNull();
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
-        assertThat(fetchedJobConfigurations).hasSize(1);
+        assertThat(fetchedJobConfigurations).isNotEmpty();
         final Long jobConfigurationId = fetchedJobConfigurations.iterator().next().getJobConfigurationId();
         getAdminServerService().deleteJobConfiguration(jobConfigurationId, lightminClientApplication);
         final JobConfigurations jobConfigurationsAfterDelete = getAdminServerService().getJobConfigurations(lightminClientApplication);
-        assertThat(jobConfigurationsAfterDelete.getJobConfigurations()).isEmpty();
+        assertThat(jobConfigurationsAfterDelete.getJobConfigurations()).hasSize(fetchedJobConfigurations.size() - 1);
     }
 
 

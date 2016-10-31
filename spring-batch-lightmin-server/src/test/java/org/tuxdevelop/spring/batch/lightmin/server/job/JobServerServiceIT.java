@@ -52,7 +52,7 @@ public abstract class JobServerServiceIT {
         final JobInfo result = getJobServerService().getJobInfo(simpleJob.getName(), lightminClientApplication);
         assertThat(result).isNotNull();
         assertThat(result.getJobName()).isEqualTo(simpleJob.getName());
-        assertThat(result.getJobInstanceCount()).isEqualTo(1);
+        assertThat(result.getJobInstanceCount()).isGreaterThan(0);
     }
 
     @Test

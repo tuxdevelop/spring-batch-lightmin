@@ -1,5 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.server.web;
 
+import lombok.extern.slf4j.Slf4j;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.Job;
@@ -7,6 +9,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
@@ -16,16 +19,21 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
+import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.server.ITConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 import org.tuxdevelop.spring.batch.lightmin.service.ListenerService;
 import org.tuxdevelop.spring.batch.lightmin.service.SchedulerService;
 import org.tuxdevelop.test.configuration.ITConfigurationEmbedded;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import static org.assertj.core.api.Fail.fail;
 
+@Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 @SpringApplicationConfiguration(classes = {ITConfigurationApplication.class, ITConfigurationEmbedded.class})
@@ -45,6 +53,10 @@ public abstract class CommonControllerIT {
     private LightminApplicationRepository lightminApplicationRepository;
     @Autowired
     private ListenerService listenerService;
+    @Autowired
+    private RegistrationBean registrationBean;
+    @Autowired
+    private LightminClientProperties lightminClientProperties;
 
     protected MockMvc mockMvc;
     protected Long launchedJobExecutionId;
@@ -61,7 +73,17 @@ public abstract class CommonControllerIT {
         addJobConfigurations();
         addJobListenerConfiguration();
         launchSimpleJob();
+        if (lightminApplicationRepository.findAll().size() <= 0) {
+            registrationBean.register(LightminClientApplication.createApplication(
+                    Collections.singletonList(simpleJob.getName()),
+                    lightminClientProperties));
+        }
         applicationId = lightminApplicationRepository.findAll().iterator().next().getId();
+    }
+
+    @After
+    public void clear() {
+        lightminApplicationRepository.clear();
     }
 
     protected void addJobConfigurations() {
@@ -101,7 +123,8 @@ public abstract class CommonControllerIT {
 
     private void launchSimpleJob() {
         try {
-            final JobExecution execution = jobLauncher.run(simpleJob, new JobParametersBuilder().toJobParameters());
+            final JobExecution execution = jobLauncher.run(simpleJob, new JobParametersBuilder().addLong("time",
+                    System.currentTimeMillis()).toJobParameters());
             launchedJobExecutionId = execution.getId();
             launchedJobInstanceId = execution.getJobInstance().getId();
             final Collection<StepExecution> stepExecutions = execution.getStepExecutions();
@@ -111,7 +134,11 @@ public abstract class CommonControllerIT {
             jobExecution = execution;
 
         } catch (final Exception e) {
-            fail(e.getMessage());
+            if (e instanceof JobExecutionAlreadyRunningException) {
+                log.info("Job Already Running");
+            } else {
+                fail(e.getMessage());
+            }
         }
     }
 
