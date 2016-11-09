@@ -45,7 +45,8 @@ public class ITPersistenceConfiguration {
 
     @Bean
     public ITJdbcJobConfigurationRepository itJdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate,
-                                                                             final PlatformTransactionManager dataSourceTransactionManager) {
-        return new ITJdbcJobConfigurationRepository(jdbcTemplate, "BATCH_", dataSourceTransactionManager);
+                                                                             final PlatformTransactionManager dataSourceTransactionManager,
+                                                                             final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
+        return new ITJdbcJobConfigurationRepository(jdbcTemplate, "BATCH_", dataSourceTransactionManager, springBatchLightminConfigurationProperties);
     }
 }

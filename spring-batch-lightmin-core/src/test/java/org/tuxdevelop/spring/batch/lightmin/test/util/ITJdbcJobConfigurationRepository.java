@@ -7,6 +7,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JdbcJobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
 
 public class ITJdbcJobConfigurationRepository extends JdbcJobConfigurationRepository implements ITJobConfigurationRepository {
 
@@ -23,13 +24,16 @@ public class ITJdbcJobConfigurationRepository extends JdbcJobConfigurationReposi
     private final JdbcTemplate jdbcTemplate;
     private final String tablePrefix;
     private final TransactionTemplate transactionTemplate;
+    private final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
 
     public ITJdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate, final String tablePrefix,
-                                            final PlatformTransactionManager platformTransactionManager) {
-        super(jdbcTemplate, tablePrefix);
+                                            final PlatformTransactionManager platformTransactionManager,
+                                            final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
+        super(jdbcTemplate, tablePrefix, springBatchLightminConfigurationProperties.getConfigurationDatabaseSchema());
         this.jdbcTemplate = jdbcTemplate;
         this.tablePrefix = tablePrefix;
         this.transactionTemplate = new TransactionTemplate(platformTransactionManager);
+        this.springBatchLightminConfigurationProperties = springBatchLightminConfigurationProperties;
         transactionTemplate.setReadOnly(Boolean.FALSE);
     }
 
