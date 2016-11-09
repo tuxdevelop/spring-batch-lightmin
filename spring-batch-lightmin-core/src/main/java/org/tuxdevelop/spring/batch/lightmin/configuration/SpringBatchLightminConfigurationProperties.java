@@ -34,6 +34,7 @@ public class SpringBatchLightminConfigurationProperties {
                 throw new SpringBatchLightminConfigurationException("configurationDatabaseSchema must not be empty!");
             }
         }
+        this.configurationDatabaseSchema = configurationDatabaseSchema;
     }
 
     public void setRepositoryForceMap(final Boolean forceMap) {
