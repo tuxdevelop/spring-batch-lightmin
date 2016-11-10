@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin;
+package org.tuxdevelop.test.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -34,11 +34,30 @@ public class ITJobConfiguration {
     }
 
     @Bean
+    public Job simpleBlockingJob() {
+        return jobBuilderFactory
+                .get("simpleBlockingJob")
+                .start(simpleBlockingStep())
+                .build();
+    }
+
+    @Bean
     public Step simpleStep() {
         return stepBuilderFactory
                 .get("simpleStep")
                 .<Long, Long>chunk(1)
                 .reader(new SimpleReader())
+                .writer(new SimpleWriter())
+                .allowStartIfComplete(Boolean.TRUE)
+                .build();
+    }
+
+    @Bean
+    public Step simpleBlockingStep() {
+        return stepBuilderFactory
+                .get("simpleStep")
+                .<Long, Long>chunk(1)
+                .reader(new SimpleBlockingReader())
                 .writer(new SimpleWriter())
                 .allowStartIfComplete(Boolean.TRUE)
                 .build();
@@ -51,6 +70,23 @@ public class ITJobConfiguration {
 
         @Override
         public Long read() throws Exception {
+            final Long value = index >= values.length ? null : values[index];
+            index++;
+            return value;
+        }
+
+    }
+
+    public static class SimpleBlockingReader implements ItemReader<Long> {
+
+        private static final Long[] values = {1L, 2L, 3L, 4L};
+        private int index = 0;
+
+        @Override
+        public Long read() throws Exception {
+            if (index > 3) {
+                index = 0;
+            }
             final Long value = index >= values.length ? null : values[index];
             index++;
             return value;

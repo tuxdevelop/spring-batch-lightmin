@@ -36,17 +36,17 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     private final JobConfigurationParameterDAO jobConfigurationParameterDAO;
     private final JobListenerConfigurationDAO jobListenerConfigurationDAO;
 
-    public JdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate, final String tablePrefix) {
+    public JdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate, final String tablePrefix, final String schema) {
         this.jdbcTemplate = jdbcTemplate;
         if (tablePrefix != null && !tablePrefix.isEmpty()) {
             this.tablePrefix = tablePrefix;
         } else {
             this.tablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
         }
-        this.jobSchedulerConfigurationDAO = new JobSchedulerConfigurationDAO(jdbcTemplate, tablePrefix);
-        this.jobConfigurationDAO = new JobConfigurationDAO(jdbcTemplate, tablePrefix);
-        this.jobConfigurationParameterDAO = new JobConfigurationParameterDAO(jdbcTemplate, tablePrefix);
-        this.jobListenerConfigurationDAO = new JobListenerConfigurationDAO(jdbcTemplate, tablePrefix);
+        this.jobSchedulerConfigurationDAO = new JobSchedulerConfigurationDAO(jdbcTemplate, tablePrefix, schema);
+        this.jobConfigurationDAO = new JobConfigurationDAO(jdbcTemplate, tablePrefix, schema);
+        this.jobConfigurationParameterDAO = new JobConfigurationParameterDAO(jdbcTemplate, tablePrefix, schema);
+        this.jobListenerConfigurationDAO = new JobListenerConfigurationDAO(jdbcTemplate, tablePrefix, schema);
     }
 
     @Override
@@ -206,12 +206,13 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         private final SimpleJdbcInsert simpleJdbcInsert;
         private final String tablePrefix;
 
-        JobConfigurationDAO(final JdbcTemplate jdbcTemplate, final String tablePrefix) {
+        JobConfigurationDAO(final JdbcTemplate jdbcTemplate, final String tablePrefix, final String schema) {
             this.jdbcTemplate = jdbcTemplate;
             this.tablePrefix = tablePrefix;
-            this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(
-                    String.format(TABLE_NAME, tablePrefix)).usingGeneratedKeyColumns(
-                    JobConfigurationDomain.JOB_CONFIGURATION_ID);
+            this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                    .withSchemaName(schema)
+                    .withTableName(String.format(TABLE_NAME, tablePrefix)).usingGeneratedKeyColumns(
+                            JobConfigurationDomain.JOB_CONFIGURATION_ID);
         }
 
         public Long add(final JobConfiguration jobConfiguration) {
@@ -321,10 +322,11 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         private final SimpleJdbcInsert simpleJdbcInsert;
         private final String tablePrefix;
 
-        JobListenerConfigurationDAO(final JdbcTemplate jdbcTemplate, final String tablePrefix) {
+        JobListenerConfigurationDAO(final JdbcTemplate jdbcTemplate, final String tablePrefix, final String schema) {
             this.jdbcTemplate = jdbcTemplate;
-            this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(
-                    String.format(TABLE_NAME, tablePrefix))
+            this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                    .withSchemaName(schema)
+                    .withTableName(String.format(TABLE_NAME, tablePrefix))
                     .usingGeneratedKeyColumns(JobListenerConfigurationDomain.ID);
             this.tablePrefix = tablePrefix;
         }
@@ -421,11 +423,12 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         private final SimpleJdbcInsert simpleJdbcInsert;
         private final String tablePrefix;
 
-        JobSchedulerConfigurationDAO(final JdbcTemplate jdbcTemplate, final String tablePrefix) {
+        JobSchedulerConfigurationDAO(final JdbcTemplate jdbcTemplate, final String tablePrefix, final String schema) {
             this.jdbcTemplate = jdbcTemplate;
             this.tablePrefix = tablePrefix;
-            this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(
-                    String.format(TABLE_NAME, tablePrefix))
+            this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                    .withSchemaName(schema)
+                    .withTableName(String.format(TABLE_NAME, tablePrefix))
                     .usingGeneratedKeyColumns(JobSchedulerConfigurationDomain.ID);
         }
 
@@ -513,11 +516,12 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         private final String tablePrefix;
         private final DateFormat dateFormat;
 
-        JobConfigurationParameterDAO(final JdbcTemplate jdbcTemplate, final String tablePrefix) {
+        JobConfigurationParameterDAO(final JdbcTemplate jdbcTemplate, final String tablePrefix, final String schema) {
             this.jdbcTemplate = jdbcTemplate;
             this.tablePrefix = tablePrefix;
-            this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(
-                    String.format(TABLE_NAME, tablePrefix))
+            this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                    .withSchemaName(schema)
+                    .withTableName(String.format(TABLE_NAME, tablePrefix))
                     .usingGeneratedKeyColumns(JobConfigurationParameterDomain.ID);
             this.dateFormat = new SimpleDateFormat(ParameterParser.DATE_FORMAT_WITH_TIMESTAMP);
         }

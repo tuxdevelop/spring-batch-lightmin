@@ -8,7 +8,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.server.ITConfigurationApplication;
-import org.tuxdevelop.spring.batch.lightmin.server.ITConfigurationEmbedded;
+import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
+import org.tuxdevelop.test.configuration.ITConfigurationEmbedded;
 
 import java.util.LinkedList;
 
@@ -25,6 +26,8 @@ public class EmbeddedJobServerServiceIT extends JobServerServiceIT {
     private JobRegistry jobRegistry;
     @Autowired
     private LightminClientProperties lightminClientProperties;
+    @Autowired
+    private RegistrationBean registrationBean;
 
     @Override
     public JobServerService getJobServerService() {
@@ -34,6 +37,8 @@ public class EmbeddedJobServerServiceIT extends JobServerServiceIT {
 
     @Override
     public LightminClientApplication createLightminClientApplication() {
-        return LightminClientApplication.createApplication(new LinkedList<>(jobRegistry.getJobNames()), lightminClientProperties);
+        final LightminClientApplication lightminClientApplication = LightminClientApplication.createApplication(new LinkedList<>(jobRegistry.getJobNames()), lightminClientProperties);
+        registrationBean.register(lightminClientApplication);
+        return lightminClientApplication;
     }
 }

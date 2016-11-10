@@ -11,14 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.tuxdevelop.spring.batch.lightmin.ITConfigurationApplication;
-import org.tuxdevelop.spring.batch.lightmin.ITJobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
+import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
+import org.tuxdevelop.test.configuration.ITConfiguration;
+import org.tuxdevelop.test.configuration.ITJobConfiguration;
 
 import java.util.Collection;
 import java.util.Date;
@@ -27,8 +29,7 @@ import static org.junit.Assert.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
-@SpringApplicationConfiguration(classes = {ITConfigurationApplication.class, ITJobConfiguration.class})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@SpringApplicationConfiguration(classes = {ITConfigurationApplication.class, ITConfiguration.class, ITJobConfiguration.class})
 public abstract class CommonControllerIT {
 
     public static final String LOCALHOST = "http://localhost";
@@ -48,6 +49,9 @@ public abstract class CommonControllerIT {
 
     @Autowired
     private JobLauncher jobLauncher;
+
+    @Autowired
+    private JobConfigurationRepository jobConfigurationRepository;
 
     @Autowired
     protected RestTemplate restTemplate;
@@ -95,6 +99,17 @@ public abstract class CommonControllerIT {
         jobConfiguration.setJobIncrementer(JobIncrementer.DATE);
         jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
         return jobConfiguration;
+    }
+
+    protected void cleanUp() {
+        final Collection<JobConfiguration> allJobConfigurations = jobConfigurationRepository.getAllJobConfigurations();
+        for (final JobConfiguration jobConfiguration : allJobConfigurations) {
+            try {
+                jobConfigurationRepository.delete(jobConfiguration);
+            } catch (final NoSuchJobConfigurationException e) {
+                fail(e.getMessage());
+            }
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.server;
+package org.tuxdevelop.test.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

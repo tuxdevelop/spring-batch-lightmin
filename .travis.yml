@@ -7,12 +7,12 @@ env:
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "Eg7QVkbaQVeJSYTChIJBnH7Sc4nnRIMwi2N2AMdK3MU6kb1Pe0Hw1qGxfR3dt8IymCQxc1RNdpRuKtMY2h3UaoSklQZ7XAF9WqfXpLHFCFdQ9AB4x/H33PmYHYKfFxjLCpxmIvO2PyVmtXTU2j2fih/SFfreFIltVTjSkELNLrc="
 
-addons:
-  coverity_scan:
-    project:
-      name: "tuxdevelop/spring-batch-lightmin"
-      description: "Build submitted via Travis CI"
-    notification_email: tuxdevelop@gmail.com
-    build_command_prepend: "mvn clean"
-    build_command:   "mvn verify"
-    branch_pattern: master
+#addons:
+#  coverity_scan:
+#    project:
+#      name: "tuxdevelop/spring-batch-lightmin"
+#      description: "Build submitted via Travis CI"
+#    notification_email: tuxdevelop@gmail.com
+#    build_command_prepend: "mvn clean"
+#    build_command:   "mvn verify"
+#    branch_pattern: master

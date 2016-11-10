@@ -11,8 +11,8 @@ import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientP
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.LightminClientRegistrator;
 import org.tuxdevelop.spring.batch.lightmin.server.ITConfigurationApplication;
-import org.tuxdevelop.spring.batch.lightmin.server.ITRemoteConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
+import org.tuxdevelop.test.configuration.ITRemoteConfiguration;
 
 import java.util.Collection;
 

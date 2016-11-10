@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin;
+package org.tuxdevelop.test.configuration;
 
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
