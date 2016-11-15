@@ -172,6 +172,7 @@ public class JobConfigurationRestControllerIT extends CommonControllerIT {
 
     @Before
     public void init() {
+        this.cleanUp();
         this.addJobConfigurations();
     }
 

@@ -13,7 +13,7 @@ import org.springframework.batch.core.explore.JobExplorer;
 import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultStepServiceTest {
@@ -34,6 +34,14 @@ public class DefaultStepServiceTest {
         final StepExecution stepExecution = stepService.getStepExecution(jobExecution, stepExecutionId);
         assertThat(stepExecution).isNotNull();
         assertThat(stepExecution.getStepName()).isEqualTo(STEP_NAME);
+    }
+
+    @Test
+    public void testAttachStepExecutions() {
+        final JobExecution jobExecution = TestHelper.createJobExecution(20L);
+        when(jobExplorer.getJobExecution(jobExecution.getId())).thenReturn(jobExecution);
+        stepService.attachStepExecutions(jobExecution);
+        verify(jobExplorer, times(1)).getJobExecution(jobExecution.getId());
     }
 
     @Before

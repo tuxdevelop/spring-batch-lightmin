@@ -3,6 +3,8 @@ package org.tuxdevelop.spring.batch.lightmin.configuration;
 import lombok.Data;
 import org.springframework.batch.core.repository.dao.AbstractJdbcBatchMetadataDao;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.util.StringUtils;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 
 @Data
 @ConfigurationProperties(prefix = "spring.batch.lightmin")
@@ -24,6 +26,16 @@ public class SpringBatchLightminConfigurationProperties {
 
     private String batchDataSourceName = DEFAULT_DATA_SOURCE_NAME;
     private String dataSourceName = DEFAULT_DATA_SOURCE_NAME;
+    private String configurationDatabaseSchema;
+
+    public void setConfigurationDatabaseSchema(final String configurationDatabaseSchema) {
+        if (configurationDatabaseSchema != null) {
+            if (StringUtils.isEmpty(configurationDatabaseSchema)) {
+                throw new SpringBatchLightminConfigurationException("configurationDatabaseSchema must not be empty!");
+            }
+        }
+        this.configurationDatabaseSchema = configurationDatabaseSchema;
+    }
 
     public void setRepositoryForceMap(final Boolean forceMap) {
         this.repositoryForceMap = forceMap;

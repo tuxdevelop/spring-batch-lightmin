@@ -172,7 +172,9 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
     }
 
     protected void createJdbcJobConfigurationRepository() {
-        this.jobConfigurationRepository = new JdbcJobConfigurationRepository(jdbcTemplate, configurationTablePrefix);
+        final String schema = springBatchLightminConfigurationProperties.getConfigurationDatabaseSchema();
+        log.debug("Using Database Schema {} for configuration", schema);
+        this.jobConfigurationRepository = new JdbcJobConfigurationRepository(jdbcTemplate, configurationTablePrefix, schema);
     }
 
     protected LightminJobExecutionDao createLightminJobExecutionDao() throws Exception {

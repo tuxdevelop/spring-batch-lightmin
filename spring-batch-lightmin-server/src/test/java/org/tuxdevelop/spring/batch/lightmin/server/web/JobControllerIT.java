@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.server.web;
 
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Fail.fail;
@@ -64,6 +65,8 @@ public class JobControllerIT extends CommonControllerIT {
     }
 
     @Test
+    @Ignore
+    //Restart not possible
     public void restartJobExecutionIT() {
         try {
             this.mockMvc.perform(post("/executionRestart")

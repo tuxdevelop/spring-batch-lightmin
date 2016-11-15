@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.api.controller;
 
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,4 +35,8 @@ public class JobLauncherControllerIT extends CommonControllerIT {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
+    @Before
+    public void init() {
+        this.cleanUp();
+    }
 }

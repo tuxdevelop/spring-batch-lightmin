@@ -26,7 +26,7 @@ public class DefaultStepService implements StepService {
 
     @Override
     public void attachStepExecutions(JobExecution jobExecution) {
-        jobExecution = jobExplorer.getJobExecution(jobExecution.getJobId());
+        jobExecution = jobExplorer.getJobExecution(jobExecution.getId());
         if (jobExecution == null) {
             throw new SpringBatchLightminApplicationException("Could not attach StepExecutions for JobExecution");
         }

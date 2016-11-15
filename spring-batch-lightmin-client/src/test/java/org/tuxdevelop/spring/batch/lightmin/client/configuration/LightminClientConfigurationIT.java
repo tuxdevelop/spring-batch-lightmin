@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.tuxdevelop.spring.batch.lightmin.client.ITConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.LightminClientRegistrator;
@@ -19,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebIntegrationTest({"server.port=0", "management.port=0"})
 @SpringApplicationConfiguration(classes = {ITConfigurationApplication.class, LightminClientConfiguration.class})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class LightminClientConfigurationIT {
 
     @Autowired

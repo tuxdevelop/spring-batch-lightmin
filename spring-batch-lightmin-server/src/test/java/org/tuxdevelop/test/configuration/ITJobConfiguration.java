@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.server;
+package org.tuxdevelop.test.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;

@@ -1,10 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.server.api.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.Arrays;
-import java.util.List;
-
+import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,16 +14,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientInformation;
-import org.tuxdevelop.spring.batch.lightmin.server.ITServerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.ITServerConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
+import org.tuxdevelop.test.configuration.ITServerConfiguration;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebIntegrationTest({ "server.port=0", "management.port=0" })
-@SpringApplicationConfiguration(classes = { ITServerConfigurationApplication.class, ITServerConfiguration.class })
+@WebIntegrationTest({"server.port=0", "management.port=0"})
+@SpringApplicationConfiguration(classes = {ITServerConfigurationApplication.class, ITServerConfiguration.class})
 public class RegistrationControllerIT {
 
     private static final String LOCALHOST = "http://localhost";
@@ -58,7 +57,7 @@ public class RegistrationControllerIT {
                 "unregisterApplicationName");
         final ResponseEntity<LightminClientApplication> response = restTemplate
                 .postForEntity(LOCALHOST + ":" + getServerPort() +
-                        "/api/applications",
+                                "/api/applications",
                         lightminClientApplication, LightminClientApplication.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         final LightminClientApplication registeredClientApplication = response.getBody();
