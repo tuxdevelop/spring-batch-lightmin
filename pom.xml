@@ -221,6 +221,8 @@
                     <includes>
                         <include>**/*IT.java</include>
                     </includes>
+                    <reuseForks>false</reuseForks>
+                    <forkCount>1</forkCount>
                 </configuration>
             </plugin>
             <plugin>
