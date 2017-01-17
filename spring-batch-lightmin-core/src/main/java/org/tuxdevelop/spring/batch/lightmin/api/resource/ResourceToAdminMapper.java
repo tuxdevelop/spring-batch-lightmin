@@ -45,22 +45,19 @@ public final class ResourceToAdminMapper {
                 final org.springframework.batch.core.JobParameter.ParameterType parameterType = map(entry.getValue()
                         .getParameterType());
                 final org.springframework.batch.core.JobParameter jobParameter;
+                final String parameter = String.valueOf(entry.getValue().getParameter());
                 switch (parameterType) {
                     case STRING:
-                        jobParameter = new org.springframework.batch.core.JobParameter((String) entry.getValue()
-                                .getParameter());
+                        jobParameter = new org.springframework.batch.core.JobParameter(parameter);
                         break;
                     case DOUBLE:
-                        jobParameter = new org.springframework.batch.core.JobParameter((Double) entry.getValue()
-                                .getParameter());
+                        jobParameter = new org.springframework.batch.core.JobParameter(Double.parseDouble(parameter));
                         break;
                     case LONG:
-                        jobParameter = new org.springframework.batch.core.JobParameter((Long) entry.getValue()
-                                .getParameter());
+                        jobParameter = new org.springframework.batch.core.JobParameter(Long.parseLong(parameter));
                         break;
                     case DATE:
-                        jobParameter = new org.springframework.batch.core.JobParameter((Date) entry.getValue()
-                                .getParameter());
+                        jobParameter = new org.springframework.batch.core.JobParameter(new Date(Long.parseLong(parameter)));
                         break;
                     default:
                         throw new SpringBatchLightminApplicationException("Unknown JobParameterType: " + entry.getValue().getParameterType());
