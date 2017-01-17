@@ -68,7 +68,7 @@ public final class ParameterParser {
                 final Object value = entry.getValue();
                 final String valueType;
                 final String valueString;
-                if (value instanceof Long) {
+                if (value instanceof Long || value instanceof Integer) {
                     valueType = "(Long)";
                     valueString = value.toString();
                 } else if (value instanceof String) {
