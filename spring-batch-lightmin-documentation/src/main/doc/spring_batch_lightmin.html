@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
-<meta name="author" content="Version 0.3.5-SNAPSHOT">
+<meta name="author" content="Version 0.3.5">
 <title>Spring Batch Lightmin</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
@@ -505,7 +505,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="header">
 <h1>Spring Batch Lightmin</h1>
 <div class="details">
-<span id="author" class="author">Version 0.3.5-SNAPSHOT</span><br>
+<span id="author" class="author">Version 0.3.5</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1500,18 +1500,18 @@ Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 10 Feb 2017 19:58:52 GMT
+Date: Fri, 10 Feb 2017 20:31:05 GMT
 Content-Length: 793
 
 {
-  &quot;id&quot; : &quot;8b34bfc3&quot;,
+  &quot;id&quot; : &quot;358df0be&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:64767&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:64767/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:64767&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:65161&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:65161/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:65161&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;OFFLINE&quot;,
-    &quot;timeInMills&quot; : 1486756732666
+    &quot;timeInMills&quot; : 1486758666275
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1534,7 +1534,7 @@ Content-Length: 793
 <h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/8b34bfc3' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/358df0be' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -1542,7 +1542,7 @@ Content-Length: 793
 <h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/8b34bfc3 HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/358df0be HTTP/1.1
 Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
 Host: localhost</code></pre>
@@ -1558,18 +1558,18 @@ Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 10 Feb 2017 19:58:52 GMT
+Date: Fri, 10 Feb 2017 20:31:05 GMT
 Content-Length: 793
 
 {
-  &quot;id&quot; : &quot;8b34bfc3&quot;,
+  &quot;id&quot; : &quot;358df0be&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:64767&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:64767/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:64767&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:65161&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:65161/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:65161&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;OFFLINE&quot;,
-    &quot;timeInMills&quot; : 1486756732666
+    &quot;timeInMills&quot; : 1486758666275
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1616,30 +1616,10 @@ Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 10 Feb 2017 19:58:52 GMT
+Date: Fri, 10 Feb 2017 20:31:05 GMT
 Content-Length: 1623
 
 [ {
-  &quot;id&quot; : &quot;8b34bfc3&quot;,
-  &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:64767&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:64767/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:64767&quot;,
-  &quot;lightminClientApplicationStatus&quot; : {
-    &quot;status&quot; : &quot;OFFLINE&quot;,
-    &quot;timeInMills&quot; : 1486756732666
-  },
-  &quot;lightminClientInformation&quot; : {
-    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
-    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
-    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
-    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
-    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
-    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
-    &quot;registeredJobs&quot; : [ &quot;simpleJob&quot; ],
-    &quot;externalLinks&quot; : { }
-  }
-}, {
   &quot;id&quot; : &quot;882459d6&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
   &quot;managementUrl&quot; : &quot;http://executor.fritz.box:0&quot;,
@@ -1647,7 +1627,7 @@ Content-Length: 1623
   &quot;serviceUrl&quot; : &quot;http://executor.fritz.box:0&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1486756728498
+    &quot;timeInMills&quot; : 1486758661569
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1657,6 +1637,26 @@ Content-Length: 1623
     &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
     &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
     &quot;registeredJobs&quot; : [ &quot;simpleBlockingJob&quot;, &quot;simpleJob&quot; ],
+    &quot;externalLinks&quot; : { }
+  }
+}, {
+  &quot;id&quot; : &quot;358df0be&quot;,
+  &quot;name&quot; : &quot;it-application&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:65161&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:65161/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:65161&quot;,
+  &quot;lightminClientApplicationStatus&quot; : {
+    &quot;status&quot; : &quot;OFFLINE&quot;,
+    &quot;timeInMills&quot; : 1486758666275
+  },
+  &quot;lightminClientInformation&quot; : {
+    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
+    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
+    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
+    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
+    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
+    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
+    &quot;registeredJobs&quot; : [ &quot;simpleJob&quot; ],
     &quot;externalLinks&quot; : { }
   }
 } ]</code></pre>
@@ -1698,7 +1698,7 @@ Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 10 Feb 2017 19:58:52 GMT
+Date: Fri, 10 Feb 2017 20:31:05 GMT
 Content-Length: 1405
 
 {
@@ -1713,7 +1713,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1486756732451,
+          &quot;parameter&quot; : 1486758666070,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -1736,9 +1736,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1486756732456,
-      &quot;endTime&quot; : 1486756732459,
-      &quot;lastUpdated&quot; : 1486756732459,
+      &quot;startTime&quot; : 1486758666077,
+      &quot;endTime&quot; : 1486758666079,
+      &quot;lastUpdated&quot; : 1486758666079,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -1748,10 +1748,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1486756732453,
-    &quot;createTime&quot; : 1486756732451,
-    &quot;endTime&quot; : 1486756732460,
-    &quot;lastUpdated&quot; : 1486756732460,
+    &quot;startTime&quot; : 1486758666072,
+    &quot;createTime&quot; : 1486758666070,
+    &quot;endTime&quot; : 1486758666080,
+    &quot;lastUpdated&quot; : 1486758666080,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1793,7 +1793,7 @@ Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 10 Feb 2017 19:58:52 GMT
+Date: Fri, 10 Feb 2017 20:31:05 GMT
 Content-Length: 1405
 
 {
@@ -1808,7 +1808,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1486756732381,
+          &quot;parameter&quot; : 1486758665996,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -1831,9 +1831,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1486756732386,
-      &quot;endTime&quot; : 1486756732390,
-      &quot;lastUpdated&quot; : 1486756732390,
+      &quot;startTime&quot; : 1486758666001,
+      &quot;endTime&quot; : 1486758666003,
+      &quot;lastUpdated&quot; : 1486758666003,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -1843,10 +1843,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1486756732382,
-    &quot;createTime&quot; : 1486756732381,
-    &quot;endTime&quot; : 1486756732391,
-    &quot;lastUpdated&quot; : 1486756732391,
+    &quot;startTime&quot; : 1486758665997,
+    &quot;createTime&quot; : 1486758665996,
+    &quot;endTime&quot; : 1486758666004,
+    &quot;lastUpdated&quot; : 1486758666004,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1888,7 +1888,7 @@ Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 10 Feb 2017 19:58:52 GMT
+Date: Fri, 10 Feb 2017 20:31:05 GMT
 Content-Length: 1154
 
 {
@@ -1897,7 +1897,7 @@ Content-Length: 1154
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1486756732569,
+        &quot;parameter&quot; : 1486758666180,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -1920,9 +1920,9 @@ Content-Length: 1154
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1486756732575,
-    &quot;endTime&quot; : 1486756732578,
-    &quot;lastUpdated&quot; : 1486756732578,
+    &quot;startTime&quot; : 1486758666185,
+    &quot;endTime&quot; : 1486758666187,
+    &quot;lastUpdated&quot; : 1486758666187,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1932,10 +1932,10 @@ Content-Length: 1154
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1486756732571,
-  &quot;createTime&quot; : 1486756732570,
-  &quot;endTime&quot; : 1486756732578,
-  &quot;lastUpdated&quot; : 1486756732578,
+  &quot;startTime&quot; : 1486758666182,
+  &quot;createTime&quot; : 1486758666180,
+  &quot;endTime&quot; : 1486758666187,
+  &quot;lastUpdated&quot; : 1486758666187,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2001,7 +2001,7 @@ Content-Length: 205
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
-Date: Fri, 10 Feb 2017 19:58:51 GMT</code></pre>
+Date: Fri, 10 Feb 2017 20:31:04 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2038,7 +2038,7 @@ Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 10 Feb 2017 19:58:51 GMT
+Date: Fri, 10 Feb 2017 20:31:04 GMT
 Content-Length: 411
 
 {
@@ -2091,7 +2091,7 @@ Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 10 Feb 2017 19:58:51 GMT
+Date: Fri, 10 Feb 2017 20:31:04 GMT
 Content-Length: 7394
 
 {
@@ -2386,7 +2386,7 @@ Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 10 Feb 2017 19:58:51 GMT
+Date: Fri, 10 Feb 2017 20:31:04 GMT
 Content-Length: 5072
 
 {
@@ -2631,7 +2631,7 @@ Content-Length: 424
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
-Date: Fri, 10 Feb 2017 19:58:51 GMT</code></pre>
+Date: Fri, 10 Feb 2017 20:31:04 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2699,7 +2699,7 @@ Content-Length: 440
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
-Date: Fri, 10 Feb 2017 19:58:49 GMT</code></pre>
+Date: Fri, 10 Feb 2017 20:31:03 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2731,7 +2731,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
-Date: Fri, 10 Feb 2017 19:58:49 GMT</code></pre>
+Date: Fri, 10 Feb 2017 20:31:03 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2763,7 +2763,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
-Date: Fri, 10 Feb 2017 19:58:51 GMT</code></pre>
+Date: Fri, 10 Feb 2017 20:31:04 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2795,7 +2795,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Server: Apache-Coyote/1.1
 X-Application-Context: it-application:0
-Date: Fri, 10 Feb 2017 19:58:49 GMT</code></pre>
+Date: Fri, 10 Feb 2017 20:31:03 GMT</code></pre>
 </div>
 </div>
 </div>
