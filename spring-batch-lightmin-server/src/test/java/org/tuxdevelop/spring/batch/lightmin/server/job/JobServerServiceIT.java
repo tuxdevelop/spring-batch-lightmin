@@ -8,9 +8,14 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.*;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
@@ -73,6 +78,46 @@ public abstract class JobServerServiceIT {
         assertThat(result).isNotNull();
         assertThat(result.getJobExecutionId()).isEqualTo(launchedJobExecutionId);
         assertThat(result.getId()).isEqualTo(launchedStepExecutionId);
+    }
+
+    @Test
+    public void testLaunchJob() {
+        final JobParameters jobParameters = new JobParameters();
+        final JobParameter jobParameter = new JobParameter();
+        jobParameter.setParameter(10.1);
+        jobParameter.setParameterType(ParameterType.DOUBLE);
+        final JobParameter jobParameterDate = new JobParameter();
+        jobParameterDate.setParameter("2017/02/10 13:42:00:001");
+        jobParameterDate.setParameterType(ParameterType.DATE);
+        final JobParameter jobParameterLong = new JobParameter();
+        jobParameterLong.setParameter(10L);
+        jobParameterLong.setParameterType(ParameterType.LONG);
+        final JobParameter jobParameterInteger = new JobParameter();
+        jobParameterInteger.setParameter(10);
+        jobParameterInteger.setParameterType(ParameterType.LONG);
+        final JobParameter jobParameterString = new JobParameter();
+        jobParameterString.setParameter("testString");
+        jobParameterString.setParameterType(ParameterType.STRING);
+        final JobParameter jobParameterInc = new JobParameter();
+        jobParameterInc.setParameter(System.currentTimeMillis());
+        jobParameterInc.setParameterType(ParameterType.LONG);
+        final Map<String, JobParameter> map = new HashMap<>();
+        map.put("doubleValue", jobParameter);
+        map.put("dateValue", jobParameterDate);
+        map.put("longValue", jobParameterLong);
+        map.put("integerValue", jobParameterInteger);
+        map.put("stringValue", jobParameterString);
+        map.put("incrementer", jobParameterInc);
+        jobParameters.setParameters(map);
+        final JobLaunch jobLaunch = new JobLaunch();
+        jobLaunch.setJobName("simpleJob");
+        jobLaunch.setJobParameters(jobParameters);
+        try {
+            getJobServerService().launchJob(jobLaunch, createLightminClientApplication());
+        } catch (final Exception e) {
+            fail(e.getMessage());
+        }
+
     }
 
     public abstract JobServerService getJobServerService();

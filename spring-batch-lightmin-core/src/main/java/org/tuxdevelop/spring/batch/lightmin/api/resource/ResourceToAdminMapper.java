@@ -6,8 +6,12 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.util.ParameterParser;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * @author Marcel Becker
@@ -57,7 +61,7 @@ public final class ResourceToAdminMapper {
                         jobParameter = new org.springframework.batch.core.JobParameter(Long.parseLong(parameter));
                         break;
                     case DATE:
-                        jobParameter = new org.springframework.batch.core.JobParameter(new Date(Long.parseLong(parameter)));
+                        jobParameter = new org.springframework.batch.core.JobParameter(ParameterParser.parseDate(parameter));
                         break;
                     default:
                         throw new SpringBatchLightminApplicationException("Unknown JobParameterType: " + entry.getValue().getParameterType());

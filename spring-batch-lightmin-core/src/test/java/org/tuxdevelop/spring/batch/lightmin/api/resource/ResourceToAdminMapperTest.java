@@ -32,8 +32,12 @@ public class ResourceToAdminMapperTest {
         final JobParameter jobParameterLong = new JobParameter();
         jobParameterLong.setParameter(20L);
         jobParameterLong.setParameterType(ParameterType.LONG);
+        final JobParameter jobParameterDate = new JobParameter();
+        jobParameterDate.setParameter("2017/02/10 13:42:00:001");
+        jobParameterDate.setParameterType(ParameterType.DATE);
         parameters.put("double", jobParameterDouble);
         parameters.put("long", jobParameterLong);
+        parameters.put("date", jobParameterDate);
         final JobParameters jobParameters = new JobParameters();
         jobParameters.setParameters(parameters);
         jobConfiguration.setJobParameters(jobParameters);
