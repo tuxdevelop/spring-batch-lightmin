@@ -25,12 +25,33 @@ public class JobLauncherControllerIT extends CommonControllerIT {
         final JobParameter jobParameter = new JobParameter();
         jobParameter.setParameter(10.1);
         jobParameter.setParameterType(ParameterType.DOUBLE);
+        final JobParameter jobParameterDate = new JobParameter();
+        jobParameterDate.setParameter("2017/02/10 13:42:00:001");
+        jobParameterDate.setParameterType(ParameterType.DATE);
+        final JobParameter jobParameterLong = new JobParameter();
+        jobParameterLong.setParameter(10L);
+        jobParameterLong.setParameterType(ParameterType.LONG);
+        final JobParameter jobParameterInteger = new JobParameter();
+        jobParameterInteger.setParameter(10);
+        jobParameterInteger.setParameterType(ParameterType.LONG);
+        final JobParameter jobParameterString = new JobParameter();
+        jobParameterString.setParameter("testString");
+        jobParameterString.setParameterType(ParameterType.STRING);
+        final JobParameter jobParameterInc = new JobParameter();
+        jobParameterInc.setParameter(System.currentTimeMillis());
+        jobParameterInc.setParameterType(ParameterType.LONG);
         final Map<String, JobParameter> map = new HashMap<>();
         map.put("doubleValue", jobParameter);
+        map.put("dateValue", jobParameterDate);
+        map.put("longValue", jobParameterLong);
+        map.put("integerValue", jobParameterInteger);
+        map.put("stringValue", jobParameterString);
+        map.put("incrementer", jobParameterInc);
         jobParameters.setParameters(map);
         final JobLaunch jobLaunch = new JobLaunch();
         jobLaunch.setJobName(jobName);
         jobLaunch.setJobParameters(jobParameters);
+
         final ResponseEntity<Void> response = restTemplate.postForEntity(uri, jobLaunch, Void.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }

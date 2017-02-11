@@ -293,7 +293,7 @@ public final class ParameterParser {
         return value;
     }
 
-    static Date parseDate(final String dateString) {
+    public static Date parseDate(final String dateString) {
         Date date;
         try {
             date = simpleDateFormatTimeStamp.parse(dateString);
