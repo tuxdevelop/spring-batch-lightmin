@@ -133,7 +133,7 @@ public class AddressPrinterJobConfiguration {
     public JdbcCursorItemReader<Long> addressPrinterReader(final DataSource dataSource) throws Exception {
         final JdbcCursorItemReader<Long> reader = new JdbcCursorItemReader<>();
         reader.setSql(SELECT_ADDRESS_QUERY);
-        reader.setRowMapper(new SingleColumnRowMapper<Long>());
+        reader.setRowMapper(new SingleColumnRowMapper<>());
         reader.setDataSource(dataSource);
         reader.setMaxRows(100);
         reader.afterPropertiesSet();
@@ -144,7 +144,7 @@ public class AddressPrinterJobConfiguration {
     public JdbcCursorItemReader<Long> addressBatchTaskDeletionReader(final DataSource dataSource) throws Exception {
         final JdbcCursorItemReader<Long> reader = new JdbcCursorItemReader<>();
         reader.setSql(SELECT_BATCH_TASK_ADDRESS_TO_DELETE_QUERY);
-        reader.setRowMapper(new SingleColumnRowMapper<Long>());
+        reader.setRowMapper(new SingleColumnRowMapper<>());
         reader.setDataSource(dataSource);
         reader.setMaxRows(50);
         reader.afterPropertiesSet();

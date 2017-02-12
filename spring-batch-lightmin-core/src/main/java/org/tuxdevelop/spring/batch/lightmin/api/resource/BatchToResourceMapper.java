@@ -62,7 +62,7 @@ public final class BatchToResourceMapper {
         final JobParameters response = new JobParameters();
         final Map<String, org.springframework.batch.core.JobParameter> parametersMap = jobParameters.getParameters();
         if (!parametersMap.isEmpty()) {
-            response.setParameters(new HashMap<String, JobParameter>());
+            response.setParameters(new HashMap<>());
             for (final Map.Entry<String, org.springframework.batch.core.JobParameter> entry : parametersMap.entrySet()) {
                 final JobParameter jobParameter = new JobParameter();
                 jobParameter.setParameter(entry.getValue().getValue());

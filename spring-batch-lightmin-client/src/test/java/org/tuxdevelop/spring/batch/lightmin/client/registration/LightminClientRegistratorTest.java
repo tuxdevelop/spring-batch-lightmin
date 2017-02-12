@@ -46,7 +46,7 @@ public class LightminClientRegistratorTest {
         final ResponseEntity<Map> responseEntity = ResponseEntity.status(HttpStatus.CREATED).body(map);
         when(lightminClientProperties.getServiceUrl()).thenReturn("http://localhost:8080");
         when(lightminProperties.getLightminUrl()).thenReturn(new String[]{"http://localhost:8080"});
-        when(jobRegistry.getJobNames()).thenReturn(new LinkedList<String>());
+        when(jobRegistry.getJobNames()).thenReturn(new LinkedList<>());
         when(restTemplate.postForEntity(anyString(), any(Object.class), any(Class.class))).thenReturn(responseEntity);
 
         final Boolean result = lightminClientRegistrator.register();
@@ -60,7 +60,7 @@ public class LightminClientRegistratorTest {
         final ResponseEntity<Map> responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
         when(lightminClientProperties.getServiceUrl()).thenReturn("http://localhost:8080");
         when(lightminProperties.getLightminUrl()).thenReturn(new String[]{"http://localhost:8080"});
-        when(jobRegistry.getJobNames()).thenReturn(new LinkedList<String>());
+        when(jobRegistry.getJobNames()).thenReturn(new LinkedList<>());
         when(restTemplate.postForEntity(anyString(), any(Object.class), any(Class.class))).thenReturn(responseEntity);
 
         final Boolean result = lightminClientRegistrator.register();

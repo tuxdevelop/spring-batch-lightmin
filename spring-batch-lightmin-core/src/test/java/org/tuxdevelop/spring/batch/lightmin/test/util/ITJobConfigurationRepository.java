@@ -4,5 +4,5 @@ import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRep
 
 public interface ITJobConfigurationRepository extends JobConfigurationRepository {
 
-    void clean();
+    void clean(final String applicationName);
 }

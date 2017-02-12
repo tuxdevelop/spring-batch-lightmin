@@ -44,7 +44,7 @@
     </modules>
 
     <properties>
-        <platform-bom.version>2.0.7.RELEASE</platform-bom.version>
+        <platform-bom.version>Athens-SR3</platform-bom.version>
         <assertj.version>1.7.1</assertj.version>
         <openpojo.version>0.8.0</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
@@ -52,13 +52,13 @@
         <spring-restdocs.version>1.1.2.RELEASE</spring-restdocs.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
-        <maven-compiler-plugin.source>1.7</maven-compiler-plugin.source>
-        <maven-compiler-plugin.target>1.7</maven-compiler-plugin.target>
+        <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
+        <maven-compiler-plugin.target>1.8</maven-compiler-plugin.target>
         <nexus-staging-maven-plugin.version>1.6.3</nexus-staging-maven-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
-        <maven-surefire-plugin.version>2.19</maven-surefire-plugin.version>
-        <maven-failsaife-plugin.version>2.19</maven-failsaife-plugin.version>
+        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+        <maven-failsaife-plugin.version>2.19.1</maven-failsaife-plugin.version>
         <asciidoctor.version>1.5.2</asciidoctor.version>
         <!-- jacoco -->
         <jacoco.skip>false</jacoco.skip>

@@ -21,6 +21,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
+import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.server.ITConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
@@ -57,6 +58,8 @@ public abstract class CommonControllerIT {
     private RegistrationBean registrationBean;
     @Autowired
     private LightminClientProperties lightminClientProperties;
+    @Autowired
+    private SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
 
     protected MockMvc mockMvc;
     protected Long launchedJobExecutionId;
@@ -99,7 +102,8 @@ public abstract class CommonControllerIT {
         jobConfiguration.setJobConfigurationId(1L);
         jobConfiguration.setJobIncrementer(JobIncrementer.DATE);
         jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
-        addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
+        addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration,
+                springBatchLightminConfigurationProperties.getApplicationName());
         schedulerService.registerSchedulerForJob(addedJobConfiguration);
     }
 
@@ -117,7 +121,8 @@ public abstract class CommonControllerIT {
         jobConfiguration.setJobConfigurationId(1L);
         jobConfiguration.setJobIncrementer(JobIncrementer.DATE);
         jobConfiguration.setJobListenerConfiguration(jobListenerConfiguration);
-        addedListenerJobConfiguration = jobConfigurationRepository.add(jobConfiguration);
+        addedListenerJobConfiguration = jobConfigurationRepository.add(jobConfiguration,
+                springBatchLightminConfigurationProperties.getApplicationName());
         listenerService.registerListenerForJob(addedListenerJobConfiguration);
     }
 

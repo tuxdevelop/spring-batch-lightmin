@@ -11,11 +11,11 @@ import static org.junit.Assert.fail;
 public class ITMapJobConfigurationRepository extends MapJobConfigurationRepository implements ITJobConfigurationRepository {
 
     @Override
-    public void clean() {
-        final Collection<JobConfiguration> allJobConfigurations = super.getAllJobConfigurations();
+    public void clean(final String applicationName) {
+        final Collection<JobConfiguration> allJobConfigurations = super.getAllJobConfigurations(applicationName);
         for (final JobConfiguration jobConfiguration : allJobConfigurations) {
             try {
-                super.delete(jobConfiguration);
+                super.delete(jobConfiguration,applicationName);
             } catch (final NoSuchJobConfigurationException e) {
                 fail(e.getMessage());
             }

@@ -1,5 +1,6 @@
 CREATE TABLE BATCH_JOB_CONFIGURATION (
   job_configuration_id NUMERIC IDENTITY PRIMARY KEY NOT NULL,
+  application_name     UNIVARCHAR(255) NOT NULL,
   job_name             UNIVARCHAR(255),
   job_incrementer      UNIVARCHAR(255)
 )

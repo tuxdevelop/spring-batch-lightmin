@@ -1,5 +1,6 @@
 CREATE TABLE BATCH_JOB_CONFIGURATION (
   job_configuration_id BIGINT AUTO_INCREMENT NOT NULL,
+  application_name     VARCHAR(255) NOT NULL,
   job_name             VARCHAR(255),
   job_incrementer      VARCHAR(255),
   PRIMARY KEY (job_configuration_id)

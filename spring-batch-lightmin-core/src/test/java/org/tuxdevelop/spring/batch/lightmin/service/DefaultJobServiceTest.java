@@ -66,7 +66,7 @@ public class DefaultJobServiceTest {
 
     @Test
     public void getJobNamesTest() {
-        final Collection<String> jobNames = new HashSet<String>(Arrays.asList(JOB_NAMES));
+        final Collection<String> jobNames = new HashSet<>(Arrays.asList(JOB_NAMES));
         when(jobRegistry.getJobNames()).thenReturn(jobNames);
         final Set<String> fetchedJobNames = jobService.getJobNames();
         assertThat(fetchedJobNames).contains(JOB_NAME, JOB_NAME_2, JOB_NAME_3);
@@ -195,7 +195,7 @@ public class DefaultJobServiceTest {
 
     @Test
     public void getLastJobParametersTest() {
-        final List<JobExecution> jobExecutions = new LinkedList<JobExecution>();
+        final List<JobExecution> jobExecutions = new LinkedList<>();
         final JobParameters jobParameters = new JobParametersBuilder().addLong("long", 1L).addString("String",
                 "someString").toJobParameters();
         final JobExecution jobExecution = new JobExecution(1L, jobParameters, "test");
@@ -207,7 +207,7 @@ public class DefaultJobServiceTest {
 
     @Test
     public void getLastJobParametersNotExistingTest() {
-        final List<JobExecution> jobExecutions = new LinkedList<JobExecution>();
+        final List<JobExecution> jobExecutions = new LinkedList<>();
         final JobParameters jobParameters = new JobParameters();
         when(lightminJobExecutionDao.getJobExecutions(anyString(), anyInt(), anyInt())).thenReturn(jobExecutions);
         final JobParameters result = jobService.getLastJobParameters("test");

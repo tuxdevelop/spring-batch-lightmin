@@ -93,8 +93,9 @@ public class CommonSpringBatchLightminConfiguration {
     @Bean
     public AdminService adminService(final JobConfigurationRepository jobConfigurationRepository,
                                      final SchedulerService schedulerService,
-                                     final ListenerService listenerService) throws Exception {
-        return new DefaultAdminService(jobConfigurationRepository, schedulerService, listenerService);
+                                     final ListenerService listenerService,
+                                     final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) throws Exception {
+        return new DefaultAdminService(jobConfigurationRepository, schedulerService, listenerService, springBatchLightminConfigurationProperties);
     }
 
     @Bean

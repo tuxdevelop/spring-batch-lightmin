@@ -22,8 +22,8 @@ public class RestApiModel {
     private Map<String, List<MethodUriModel>> apiMap;
 
     public RestApiModel() {
-        apiMap = new HashMap<String, List<MethodUriModel>>();
-        final List<MethodUriModel> jobUris = new LinkedList<MethodUriModel>();
+        apiMap = new HashMap<>();
+        final List<MethodUriModel> jobUris = new LinkedList<>();
         jobUris.add(new MethodUriModel(RequestMethod.GET.name(), AbstractRestController.JobRestControllerAPI
                 .JOB_EXECUTIONS_JOB_EXECUTION_ID, UriDescription.JOB_EXECUTIONS_JOB_EXECUTION_ID_GET_DESC));
         jobUris.add(new MethodUriModel(RequestMethod.GET.name(), AbstractRestController.JobRestControllerAPI
@@ -31,7 +31,7 @@ public class RestApiModel {
         jobUris.add(new MethodUriModel(RequestMethod.GET.name(), AbstractRestController.JobRestControllerAPI
                 .JOB_INSTANCES_JOB_NAME, UriDescription.JOB_INSTANCES_JOB_NAME_GET_DESC));
 
-        final List<MethodUriModel> jobConfigurationUris = new LinkedList<MethodUriModel>();
+        final List<MethodUriModel> jobConfigurationUris = new LinkedList<>();
         jobConfigurationUris.add(new MethodUriModel(RequestMethod.GET.name(), AbstractRestController
                 .JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS, UriDescription.JOB_CONFIGURATIONS_GET_DESC));
         jobConfigurationUris.add(new MethodUriModel(RequestMethod.GET.name(), AbstractRestController

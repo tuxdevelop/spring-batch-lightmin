@@ -59,6 +59,7 @@ public class DefaultSpringBatchLightminConfiguratorTest {
 
     @Before
     public void init() {
+
         this.springBatchLightminConfigurationProperties = new SpringBatchLightminConfigurationProperties();
     }
 

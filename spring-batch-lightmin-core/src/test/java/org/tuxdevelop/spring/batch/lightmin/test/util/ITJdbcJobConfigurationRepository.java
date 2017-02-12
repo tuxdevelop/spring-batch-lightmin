@@ -37,16 +37,13 @@ public class ITJdbcJobConfigurationRepository extends JdbcJobConfigurationReposi
         transactionTemplate.setReadOnly(Boolean.FALSE);
     }
 
-    public void clean() {
-        transactionTemplate.execute(new TransactionCallback<Integer>() {
-            @Override
-            public Integer doInTransaction(final TransactionStatus status) {
-                jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_PARAMETERS, tablePrefix));
-                jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_SCHEDULER, tablePrefix));
-                jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_LISTENERS, tablePrefix));
-                jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_CONFIGURATION, tablePrefix));
-                return 1;
-            }
+    public void clean(final String applicationName) {
+        transactionTemplate.execute(status -> {
+            jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_PARAMETERS, tablePrefix));
+            jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_SCHEDULER, tablePrefix));
+            jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_LISTENERS, tablePrefix));
+            jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_CONFIGURATION, tablePrefix));
+            return 1;
         });
     }
 

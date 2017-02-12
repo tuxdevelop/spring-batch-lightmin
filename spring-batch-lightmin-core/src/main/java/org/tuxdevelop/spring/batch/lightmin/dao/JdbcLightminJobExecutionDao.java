@@ -149,7 +149,7 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao
         fromClause = "%PREFIX%JOB_EXECUTION E, %PREFIX%JOB_INSTANCE I" + (fromClause == null ? "" : ", " + fromClause);
         factory.setFromClause(getQuery(fromClause));
         factory.setSelectClause(FIELDS);
-        final Map<String, Order> sortKeys = new HashMap<String, Order>();
+        final Map<String, Order> sortKeys = new HashMap<>();
         sortKeys.put("JOB_EXECUTION_ID", Order.DESCENDING);
         factory.setSortKeys(sortKeys);
         whereClause = "E.JOB_INSTANCE_ID=I.JOB_INSTANCE_ID" + (whereClause == null ? "" : " and " + whereClause);

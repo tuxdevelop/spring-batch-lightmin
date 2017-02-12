@@ -93,7 +93,7 @@ public class FolderListener extends AbstractListener implements Listener {
 
     private void initFileListFilter() throws Exception {
         this.fileFileListFilter = new CompositeFileListFilter<>();
-        fileFileListFilter.addFilter(new AcceptOnceFileListFilter<File>());
+        fileFileListFilter.addFilter(new AcceptOnceFileListFilter<>());
         fileFileListFilter.addFilter(new IgnoreHiddenFileListFilter());
 
         fileFileListFilter.addFilter(new SimplePatternFileListFilter(jobListenerConfiguration.getFilePattern()));

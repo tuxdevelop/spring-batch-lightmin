@@ -39,7 +39,7 @@ public class TestHelper {
     }
 
     public static List<JobInstance> createJobInstances(final long count, final String jobName) {
-        final List<JobInstance> jobInstances = new LinkedList<JobInstance>();
+        final List<JobInstance> jobInstances = new LinkedList<>();
         for (long i = 1; i <= count; i++) {
             final JobInstance jobInstance = new JobInstance(i, jobName);
             jobInstances.add(jobInstance);
@@ -52,7 +52,7 @@ public class TestHelper {
     }
 
     public static List<JobExecution> createJobExecutions(final long count) {
-        final List<JobExecution> jobExecutions = new LinkedList<JobExecution>();
+        final List<JobExecution> jobExecutions = new LinkedList<>();
         for (long i = 1; i <= count; i++) {
             final JobExecution jobExecution = createJobExecution(i);
             jobExecutions.add(jobExecution);
@@ -84,7 +84,7 @@ public class TestHelper {
         final JobConfiguration jobConfiguration = new JobConfiguration();
         jobConfiguration.setJobName("sampleJob");
         jobConfiguration.setJobIncrementer(JobIncrementer.DATE);
-        jobConfiguration.setJobParameters(new HashMap<String, Object>());
+        jobConfiguration.setJobParameters(new HashMap<>());
         return jobConfiguration;
     }
 

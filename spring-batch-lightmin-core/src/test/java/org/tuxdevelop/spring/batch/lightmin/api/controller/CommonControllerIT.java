@@ -17,6 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.tuxdevelop.spring.batch.lightmin.ITConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
 import org.tuxdevelop.test.configuration.ITConfiguration;
@@ -52,6 +53,8 @@ public abstract class CommonControllerIT {
 
     @Autowired
     private JobConfigurationRepository jobConfigurationRepository;
+    @Autowired
+    private SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
 
     @Autowired
     protected RestTemplate restTemplate;
@@ -102,10 +105,11 @@ public abstract class CommonControllerIT {
     }
 
     protected void cleanUp() {
-        final Collection<JobConfiguration> allJobConfigurations = jobConfigurationRepository.getAllJobConfigurations();
+        final Collection<JobConfiguration> allJobConfigurations = jobConfigurationRepository.getAllJobConfigurations(springBatchLightminConfigurationProperties.getApplicationName());
         for (final JobConfiguration jobConfiguration : allJobConfigurations) {
             try {
-                jobConfigurationRepository.delete(jobConfiguration);
+                jobConfigurationRepository.delete(jobConfiguration,
+                        springBatchLightminConfigurationProperties.getApplicationName());
             } catch (final NoSuchJobConfigurationException e) {
                 fail(e.getMessage());
             }

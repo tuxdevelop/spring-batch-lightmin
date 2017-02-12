@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.admin.repository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
@@ -19,7 +20,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Slf4j
 public class MapJobConfigurationRepository implements JobConfigurationRepository {
 
-    private ConcurrentMap<String, Map<Long, JobConfiguration>> jobConfigurations;
+    private ConcurrentMap<String, Map<String, Map<Long, JobConfiguration>>> jobConfigurations;
     private final AtomicLong currentJobId = new AtomicLong(1L);
 
     public MapJobConfigurationRepository() {
@@ -27,12 +28,14 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     }
 
     @Override
-    public JobConfiguration getJobConfiguration(final Long jobConfigurationId) throws NoSuchJobConfigurationException {
-        final Set<String> jobNames = jobConfigurations.keySet();
+    public JobConfiguration getJobConfiguration(final Long jobConfigurationId, final String applicationName) throws
+            NoSuchJobConfigurationException {
+        final Map<String, Map<Long, JobConfiguration>> applicationJobConfigurations = getJobConfigurationsForApplicationName(applicationName);
+        final Set<String> jobNames = applicationJobConfigurations.keySet();
         final Map<Long, JobConfiguration> tempMap = new HashMap<>();
         JobConfiguration jobConfiguration = null;
         for (final String jobName : jobNames) {
-            final Map<Long, JobConfiguration> configurationMap = jobConfigurations.get(jobName);
+            final Map<Long, JobConfiguration> configurationMap = applicationJobConfigurations.get(jobName);
             if (configurationMap != null && !configurationMap.isEmpty()) {
                 tempMap.putAll(configurationMap);
             }
@@ -52,9 +55,10 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     }
 
     @Override
-    public Collection<JobConfiguration> getJobConfigurations(final String jobName) throws NoSuchJobException {
-        if (jobConfigurations.containsKey(jobName)) {
-            return jobConfigurations.get(jobName).values();
+    public Collection<JobConfiguration> getJobConfigurations(final String jobName, final String applicationName) throws NoSuchJobException, NoSuchJobConfigurationException {
+        final Map<String, Map<Long, JobConfiguration>> applicationJobConfigurations = getJobConfigurationsForApplicationName(applicationName);
+        if (applicationJobConfigurations.containsKey(jobName)) {
+            return applicationJobConfigurations.get(jobName).values();
         } else {
             final String message = "No jobConfigurations found for jobName: " + jobName;
             log.error(message);
@@ -63,49 +67,61 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     }
 
     @Override
-    public synchronized JobConfiguration add(final JobConfiguration jobConfiguration) {
+    public synchronized JobConfiguration add(final JobConfiguration jobConfiguration, final String applicationName) {
         final String jobName = jobConfiguration.getJobName();
         if (jobName == null) {
             throw new SpringBatchLightminConfigurationException("jobName must not be null!");
         }
+        if (!StringUtils.hasLength(applicationName)) {
+            throw new SpringBatchLightminConfigurationException("applicationName must not be null or empty");
+        }
+        if (!jobConfigurations.containsKey(applicationName)) {
+            jobConfigurations.put(applicationName, new HashMap<>());
+        }
+        final Map<String, Map<Long, JobConfiguration>> jobConfigurationsMap = jobConfigurations.get(applicationName);
         final Long jobConfigurationId = getNextJobId();
         jobConfiguration.setJobConfigurationId(jobConfigurationId);
-        if (jobConfigurations.containsKey(jobName)) {
-            jobConfigurations.get(jobName).put(jobConfigurationId, jobConfiguration);
+        if (jobConfigurationsMap.containsKey(jobName)) {
+            jobConfigurationsMap.get(jobName).put(jobConfigurationId, jobConfiguration);
         } else {
             final Map<Long, JobConfiguration> jobConfigurationMap = new HashMap<>();
             jobConfigurationMap.put(jobConfigurationId, jobConfiguration);
-            jobConfigurations.put(jobName, jobConfigurationMap);
+            jobConfigurationsMap.put(jobName, jobConfigurationMap);
         }
         return jobConfiguration;
     }
 
 
     @Override
-    public synchronized JobConfiguration update(final JobConfiguration jobConfiguration)
+    public synchronized JobConfiguration update(final JobConfiguration jobConfiguration, final String applicationName)
             throws NoSuchJobConfigurationException {
-        getJobConfiguration(jobConfiguration.getJobConfigurationId());
-        if (jobConfigurations.containsKey(jobConfiguration.getJobName())) {
-            jobConfigurations.get(jobConfiguration.getJobName()).put(jobConfiguration.getJobConfigurationId(),
-                    jobConfiguration);
+        if (jobConfigurations.containsKey(applicationName)) {
+            final Map<String, Map<Long, JobConfiguration>> applicationJobConfigurations = jobConfigurations.get(applicationName);
+            getJobConfiguration(jobConfiguration.getJobConfigurationId(), applicationName);
+            if (applicationJobConfigurations.containsKey(jobConfiguration.getJobName())) {
+                applicationJobConfigurations.get(jobConfiguration.getJobName()).put(jobConfiguration.getJobConfigurationId(),
+                        jobConfiguration);
+            } else {
+                add(jobConfiguration, applicationName);
+            }
         } else {
-            add(jobConfiguration);
+            add(jobConfiguration, applicationName);
         }
         return jobConfiguration;
     }
 
     @Override
-    public synchronized void delete(final JobConfiguration jobConfiguration) throws
-            NoSuchJobConfigurationException {
+    public synchronized void delete(final JobConfiguration jobConfiguration, final String applicationName) throws NoSuchJobConfigurationException {
+        final Map<String, Map<Long, JobConfiguration>> applicationJobConfigurations = jobConfigurations.get(applicationName);
         final String jobName = jobConfiguration.getJobName();
         final Long jobConfigurationId = jobConfiguration.getJobConfigurationId();
         if (jobName == null) {
             throw new SpringBatchLightminApplicationException("jobName must not be null!");
         }
         final JobConfiguration jobConfigurationToDelete;
-        if (jobConfigurations.containsKey(jobName)) {
-            final Map<Long, JobConfiguration> jobConfigurationMap = jobConfigurations.get(jobName);
-            jobConfigurationToDelete = getJobConfiguration(jobConfigurationId);
+        if (applicationJobConfigurations.containsKey(jobName)) {
+            final Map<Long, JobConfiguration> jobConfigurationMap = applicationJobConfigurations.get(jobName);
+            jobConfigurationToDelete = getJobConfiguration(jobConfigurationId, applicationName);
             jobConfigurationMap.remove(jobConfigurationToDelete.getJobConfigurationId());
             log.debug("Removed JobConfiguration with id: " + jobConfiguration.getJobConfigurationId());
         } else {
@@ -117,30 +133,50 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     }
 
     @Override
-    public Collection<JobConfiguration> getAllJobConfigurations() {
+    public Collection<JobConfiguration> getAllJobConfigurations(final String applicationName) {
+        final Map<String, Map<Long, JobConfiguration>> applicationJobConfigurations = jobConfigurations.get(applicationName);
         final Collection<JobConfiguration> jobConfigurationCollection = new LinkedList<>();
-        for (final Map.Entry<String, Map<Long, JobConfiguration>> entry : jobConfigurations.entrySet()) {
-            jobConfigurationCollection.addAll(entry.getValue().values());
+        if (applicationJobConfigurations != null) {
+            for (final Map.Entry<String, Map<Long, JobConfiguration>> entry : applicationJobConfigurations.entrySet()) {
+                jobConfigurationCollection.addAll(entry.getValue().values());
+            }
         }
         return jobConfigurationCollection;
     }
 
     @Override
-    public Collection<JobConfiguration> getAllJobConfigurationsByJobNames(final Collection<String> jobNames) {
+    public Collection<JobConfiguration> getAllJobConfigurationsByJobNames(final Collection<String> jobNames, final String applicationName) {
+        final Map<String, Map<Long, JobConfiguration>> applicationJobConfigurations = jobConfigurations.get(applicationName);
         final Collection<JobConfiguration> jobConfigurationCollection = new LinkedList<>();
-        for (final String jobName : jobNames) {
-            if (jobConfigurations.containsKey(jobName)) {
-                jobConfigurationCollection.addAll(jobConfigurations.get(jobName).values());
-            } else {
-                log.debug("No Configuration found for Job with name: " + jobName);
+        if(applicationJobConfigurations != null) {
+            for (final String jobName : jobNames) {
+                if (applicationJobConfigurations.containsKey(jobName)) {
+                    jobConfigurationCollection.addAll(applicationJobConfigurations.get(jobName).values());
+                } else {
+                    log.debug("No Configuration found for Job with name: " + jobName);
+                }
             }
         }
-
         return jobConfigurationCollection;
     }
 
     private synchronized Long getNextJobId() {
         return currentJobId.getAndIncrement();
+    }
+
+    private Map<String, Map<Long, JobConfiguration>> getJobConfigurationsForApplicationName(final String applicationName) throws NoSuchJobConfigurationException {
+        final Map<String, Map<Long, JobConfiguration>> jobConfigurationMap;
+        if (StringUtils.hasLength(applicationName)) {
+            if (jobConfigurations.containsKey(applicationName)) {
+                jobConfigurationMap = jobConfigurations.get(applicationName);
+            } else {
+                throw new NoSuchJobConfigurationException("Could not determine SpringBatchLightminApplication with " +
+                        "name: " + applicationName);
+            }
+        } else {
+            throw new SpringBatchLightminApplicationException("applicationName must not be null or empty");
+        }
+        return jobConfigurationMap;
     }
 
 }

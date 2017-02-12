@@ -293,6 +293,11 @@ public final class ParameterParser {
         return value;
     }
 
+    /**
+     *
+     * @param dateString
+     * @return
+     */
     public static Date parseDate(final String dateString) {
         Date date;
         try {
