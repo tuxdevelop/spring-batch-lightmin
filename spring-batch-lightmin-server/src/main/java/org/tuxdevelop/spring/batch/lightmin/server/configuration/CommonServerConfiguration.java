@@ -3,12 +3,11 @@ package org.tuxdevelop.spring.batch.lightmin.server.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
-import org.tuxdevelop.spring.batch.lightmin.util.BasicAuthHttpRequestInterceptor;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.MapLightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
+import org.tuxdevelop.spring.batch.lightmin.util.BasicAuthHttpRequestInterceptor;
 
 import java.util.Collections;
 
@@ -41,7 +40,7 @@ public class CommonServerConfiguration {
             }
             if (lightminServerProperties.getClientUserName() != null) {
                 restTemplate.setInterceptors(
-                        Collections.<ClientHttpRequestInterceptor>singletonList(
+                        Collections.singletonList(
                                 new BasicAuthHttpRequestInterceptor(lightminServerProperties.getClientUserName(),
                                         lightminServerProperties.getClientPassword()))
                 );
