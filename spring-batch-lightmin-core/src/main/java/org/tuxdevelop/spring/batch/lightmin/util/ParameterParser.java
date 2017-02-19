@@ -294,9 +294,15 @@ public final class ParameterParser {
     }
 
     /**
+     * Parses a String input to a Date
+     * <p>
+     * supported input formats
+     * <p>
+     * yyyy/MM/dd HH:mm:ss:SSS
+     * yyyy/MM/dd
      *
-     * @param dateString
-     * @return
+     * @param dateString the input String
+     * @return the Date parsed from the input String
      */
     public static Date parseDate(final String dateString) {
         Date date;
