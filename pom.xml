@@ -41,6 +41,7 @@
         <module>spring-batch-lightmin-client</module>
         <module>spring-batch-lightmin-api</module>
         <module>spring-batch-lightmin-server</module>
+        <module>spring-batch-lightmin-repository-server</module>
     </modules>
 
     <properties>
@@ -49,7 +50,6 @@
         <openpojo.version>0.8.0</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
         <datafactory.version>0.8</datafactory.version>
-        <spring-restdocs.version>1.1.2.RELEASE</spring-restdocs.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>

@@ -7,5 +7,6 @@ package org.tuxdevelop.spring.batch.lightmin.configuration;
 public enum LightminRepositoryType {
 
     MAP,
-    JDBC
+    JDBC,
+    REMOTE;
 }

@@ -15,6 +15,7 @@ import org.springframework.jdbc.support.incrementer.DataFieldMaxValueIncrementer
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JdbcJobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.MapJobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.admin.repository.RemoteJobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.dao.JdbcLightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.dao.MapLightminJobExecutionDao;
@@ -132,6 +133,9 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
                 case MAP:
                     createMapJobConfigurationRepository();
                     break;
+                case REMOTE:
+                    createRemoteJobConfigurationRepository();
+                    break;
                 default:
                     throw new SpringBatchLightminConfigurationException("Unknown LightminRepositoryType: " + lightminRepositoryType);
 
@@ -175,6 +179,10 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
         final String schema = springBatchLightminConfigurationProperties.getConfigurationDatabaseSchema();
         log.debug("Using Database Schema {} for configuration", schema);
         this.jobConfigurationRepository = new JdbcJobConfigurationRepository(jdbcTemplate, configurationTablePrefix, schema);
+    }
+
+    protected void createRemoteJobConfigurationRepository() {
+        this.jobConfigurationRepository = new RemoteJobConfigurationRepository(springBatchLightminConfigurationProperties);
     }
 
     protected LightminJobExecutionDao createLightminJobExecutionDao() throws Exception {

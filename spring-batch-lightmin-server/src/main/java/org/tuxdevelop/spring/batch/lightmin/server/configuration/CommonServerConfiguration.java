@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
-import org.tuxdevelop.spring.batch.lightmin.client.configuration.BasicAuthHttpRequestInterceptor;
+import org.tuxdevelop.spring.batch.lightmin.util.BasicAuthHttpRequestInterceptor;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.MapLightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;

@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.client.configuration;
+package org.tuxdevelop.spring.batch.lightmin.util;
 
 import com.fasterxml.jackson.core.Base64Variants;
 import org.springframework.http.HttpRequest;

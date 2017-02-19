@@ -30,11 +30,15 @@ public class SpringBatchLightminConfigurationProperties {
 
     private LightminRepositoryType lightminRepositoryType = LightminRepositoryType.JDBC;
     private BatchRepositoryType batchRepositoryType = BatchRepositoryType.JDBC;
+    private String remoteRepositoryServerUrl;
+    private String remoteRepositoryUsername;
+    private String remoteRepositoryPassword;
 
     private String batchDataSourceName = DEFAULT_DATA_SOURCE_NAME;
     private String dataSourceName = DEFAULT_DATA_SOURCE_NAME;
     private String configurationDatabaseSchema;
     private String applicationName;
+
 
     public void setConfigurationDatabaseSchema(final String configurationDatabaseSchema) {
         if (configurationDatabaseSchema != null) {

@@ -6,13 +6,13 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.LightminClientRegistrator;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.RegistrationLightminClientApplicationBean;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnClientApplicationReadyEventListener;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnContextClosedEventListener;
 import org.tuxdevelop.spring.batch.lightmin.configuration.CommonSpringBatchLightminConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.util.BasicAuthHttpRequestInterceptor;
 
 import java.util.Collections;
 
@@ -33,7 +33,7 @@ public class LightminClientConfiguration {
         final RestTemplate restTemplate = new RestTemplate();
         if (lightminProperties.getUsername() != null) {
             restTemplate.setInterceptors(
-                    Collections.<ClientHttpRequestInterceptor>singletonList(
+                    Collections.singletonList(
                             new BasicAuthHttpRequestInterceptor(lightminProperties.getUsername(),
                                     lightminProperties.getPassword()))
             );
