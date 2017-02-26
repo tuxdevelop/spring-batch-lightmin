@@ -12,10 +12,10 @@ import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.JUnitRestDocumentation;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.ITConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
@@ -36,9 +36,8 @@ import java.util.Set;
 import static org.junit.Assert.fail;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebIntegrationTest({"server.port=0", "management.port=0"})
-@SpringApplicationConfiguration(classes = {ITConfigurationApplication.class, ITJobConfiguration.class})
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {ITConfigurationApplication.class, ITJobConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractServiceDocumentation {
 
     @Autowired
@@ -67,6 +66,8 @@ public abstract class AbstractServiceDocumentation {
     protected RegistrationBean registrationBean;
 
     protected MyThread myThread;
+    @LocalServerPort
+    private Integer serverPort;
 
     @Rule
     public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
@@ -80,33 +81,33 @@ public abstract class AbstractServiceDocumentation {
     protected Long launchedStepExecutionId;
 
     protected int getServerPort() {
-        return embeddedWebApplicationContext.getEmbeddedServletContainer().getPort();
+        return this.serverPort;
     }
 
 
     protected void addJobConfigurations() {
         final JobConfiguration jobConfiguration = createJobConfiguration();
         final JobConfiguration listenerJobConfiguration = createListenerJobConfiguration();
-        adminService.saveJobConfiguration(jobConfiguration);
-        adminService.saveJobConfiguration(listenerJobConfiguration);
-        final Collection<JobConfiguration> jobConfigurations = adminService.getJobConfigurationsByJobName("simpleJob");
+        this.adminService.saveJobConfiguration(jobConfiguration);
+        this.adminService.saveJobConfiguration(listenerJobConfiguration);
+        final Collection<JobConfiguration> jobConfigurations = this.adminService.getJobConfigurationsByJobName("simpleJob");
         for (final JobConfiguration configuration : jobConfigurations) {
             if (configuration.getJobSchedulerConfiguration() != null) {
-                addedJobConfigurationId = configuration.getJobConfigurationId();
+                this.addedJobConfigurationId = configuration.getJobConfigurationId();
             }
             if (configuration.getJobListenerConfiguration() != null) {
-                addedListenerJobConfigurationId = configuration.getJobConfigurationId();
+                this.addedListenerJobConfigurationId = configuration.getJobConfigurationId();
             }
         }
     }
 
     protected void launchSimpleJob() {
         try {
-            final JobExecution execution = jobLauncher.run(simpleJob, new JobParametersBuilder().addDate("date", new
+            final JobExecution execution = this.jobLauncher.run(this.simpleJob, new JobParametersBuilder().addDate("date", new
                     Date()).toJobParameters());
-            launchedJobExecutionId = execution.getId();
-            launchedJobInstanceId = execution.getJobInstance().getId();
-            launchedStepExecutionId = execution.getStepExecutions().iterator().next().getId();
+            this.launchedJobExecutionId = execution.getId();
+            this.launchedJobInstanceId = execution.getJobInstance().getId();
+            this.launchedStepExecutionId = execution.getStepExecutions().iterator().next().getId();
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -114,10 +115,10 @@ public abstract class AbstractServiceDocumentation {
 
     protected void launchSimpleJobWithOutParameters() {
         try {
-            final JobExecution execution = jobLauncher.run(simpleJob, new JobParametersBuilder().toJobParameters());
-            launchedJobExecutionId = execution.getId();
-            launchedJobInstanceId = execution.getJobInstance().getId();
-            launchedStepExecutionId = execution.getStepExecutions().iterator().next().getId();
+            final JobExecution execution = this.jobLauncher.run(this.simpleJob, new JobParametersBuilder().toJobParameters());
+            this.launchedJobExecutionId = execution.getId();
+            this.launchedJobInstanceId = execution.getJobInstance().getId();
+            this.launchedStepExecutionId = execution.getStepExecutions().iterator().next().getId();
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -125,14 +126,14 @@ public abstract class AbstractServiceDocumentation {
 
     protected void launchSimpleBlockingJob() {
         try {
-            myThread = new MyThread(jobLauncher, simpleBlockingJob);
-            myThread.start();
+            this.myThread = new MyThread(this.jobLauncher, this.simpleBlockingJob);
+            this.myThread.start();
             Thread.sleep(500);
-            final Set<JobExecution> jobExecutions = jobExplorer.findRunningJobExecutions(simpleBlockingJob.getName());
+            final Set<JobExecution> jobExecutions = this.jobExplorer.findRunningJobExecutions(this.simpleBlockingJob.getName());
             final JobExecution execution = jobExecutions.iterator().next();
-            launchedJobExecutionId = execution.getId();
-            launchedJobInstanceId = execution.getJobInstance().getId();
-            launchedStepExecutionId = execution.getStepExecutions().iterator().next().getId();
+            this.launchedJobExecutionId = execution.getId();
+            this.launchedJobInstanceId = execution.getJobInstance().getId();
+            this.launchedStepExecutionId = execution.getStepExecutions().iterator().next().getId();
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -186,19 +187,19 @@ public abstract class AbstractServiceDocumentation {
 
     protected LightminClientApplication createLightminClientApplication(final String applicationName) {
         return LightminClientApplication.createApplication
-                (Arrays.asList(simpleJob.getName()), lightminClientProperties);
+                (Arrays.asList(this.simpleJob.getName()), this.lightminClientProperties);
     }
 
     @Before
     public void init() {
-        final int port = embeddedWebApplicationContext.getEmbeddedServletContainer().getPort();
-        lightminClientProperties.setServiceUrl("http://localhost:" + port);
-        lightminClientProperties.setServerPort(port);
-        lightminClientProperties.setManagementPort(port);
-        lightminProperties.setUrl(new String[]{"http://localhost:" + port});
+        final int port = this.embeddedWebApplicationContext.getEmbeddedServletContainer().getPort();
+        this.lightminClientProperties.setServiceUrl("http://localhost:" + port);
+        this.lightminClientProperties.setServerPort(port);
+        this.lightminClientProperties.setManagementPort(port);
+        this.lightminProperties.setUrl(new String[]{"http://localhost:" + port});
         //lightminClientRegistrator.register();
         addJobConfigurations();
-        this.documentationSpec = new RequestSpecBuilder().addFilter(documentationConfiguration(restDocumentation)).build();
+        this.documentationSpec = new RequestSpecBuilder().addFilter(documentationConfiguration(this.restDocumentation)).build();
         launchSimpleJob();
     }
 
@@ -215,7 +216,7 @@ public abstract class AbstractServiceDocumentation {
         @Override
         public void run() {
             try {
-                jobLauncher.run(job, new JobParametersBuilder().toJobParameters());
+                this.jobLauncher.run(this.job, new JobParametersBuilder().toJobParameters());
             } catch (final Exception e) {
                 fail(e.getMessage());
             }

@@ -1,11 +1,10 @@
-package org.tuxdevelop.spring.batch.lightmin;
+package org.tuxdevelop.spring.batch.lightmin.test.util;
 
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 
 import java.util.HashMap;
 
 public class TestHelper {
-
 
     public static JobConfiguration createJobConfiguration(final JobListenerConfiguration jobListenerConfiguration) {
         final JobConfiguration jobConfiguration = createJobConfiguration();
@@ -51,4 +50,5 @@ public class TestHelper {
         jobListenerConfiguration.setListenerStatus(ListenerStatus.STOPPED);
         return jobListenerConfiguration;
     }
+
 }

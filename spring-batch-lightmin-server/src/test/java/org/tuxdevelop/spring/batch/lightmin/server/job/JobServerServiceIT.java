@@ -6,7 +6,6 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.WebIntegrationTest;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.*;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
@@ -20,7 +19,6 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
 
-@WebIntegrationTest({"server.port=0", "management.port=0"})
 public abstract class JobServerServiceIT {
 
     @Autowired
@@ -36,36 +34,36 @@ public abstract class JobServerServiceIT {
     @Test
     public void testGetJobExecution() {
         final LightminClientApplication lightminClientApplication = createLightminClientApplication();
-        final JobExecution result = getJobServerService().getJobExecution(jobExecution.getId(), lightminClientApplication);
+        final JobExecution result = getJobServerService().getJobExecution(this.jobExecution.getId(), lightminClientApplication);
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(jobExecution.getId());
+        assertThat(result.getId()).isEqualTo(this.jobExecution.getId());
     }
 
     @Test
     public void testGetJobInstances() {
         final LightminClientApplication lightminClientApplication = createLightminClientApplication();
-        final JobInstancePage result = getJobServerService().getJobInstances(simpleJob.getName(), 0, 10, lightminClientApplication);
+        final JobInstancePage result = getJobServerService().getJobInstances(this.simpleJob.getName(), 0, 10, lightminClientApplication);
         assertThat(result).isNotNull();
         assertThat(result.getPageSize()).isGreaterThan(0);
         assertThat(result.getTotalJobInstanceCount()).isGreaterThan(0);
-        assertThat(result.getJobName()).isEqualTo(simpleJob.getName());
+        assertThat(result.getJobName()).isEqualTo(this.simpleJob.getName());
     }
 
     @Test
     public void testGetJobInfo() {
         final LightminClientApplication lightminClientApplication = createLightminClientApplication();
-        final JobInfo result = getJobServerService().getJobInfo(simpleJob.getName(), lightminClientApplication);
+        final JobInfo result = getJobServerService().getJobInfo(this.simpleJob.getName(), lightminClientApplication);
         assertThat(result).isNotNull();
-        assertThat(result.getJobName()).isEqualTo(simpleJob.getName());
+        assertThat(result.getJobName()).isEqualTo(this.simpleJob.getName());
         assertThat(result.getJobInstanceCount()).isGreaterThan(0);
     }
 
     @Test
     public void testGetJobExecutionPage() {
         final LightminClientApplication lightminClientApplication = createLightminClientApplication();
-        final JobExecutionPage result = getJobServerService().getJobExecutionPage(launchedJobInstanceId, lightminClientApplication);
+        final JobExecutionPage result = getJobServerService().getJobExecutionPage(this.launchedJobInstanceId, lightminClientApplication);
         assertThat(result).isNotNull();
-        assertThat(result.getJobInstanceId()).isEqualTo(launchedJobInstanceId);
+        assertThat(result.getJobInstanceId()).isEqualTo(this.launchedJobInstanceId);
         assertThat(result.getPageSize()).isEqualTo(1);
         assertThat(result.getTotalJobExecutionCount()).isEqualTo(1);
         assertThat(result.getJobExecutions()).hasSize(1);
@@ -74,10 +72,10 @@ public abstract class JobServerServiceIT {
     @Test
     public void testGetStepExecution() {
         final LightminClientApplication lightminClientApplication = createLightminClientApplication();
-        final StepExecution result = getJobServerService().getStepExecution(launchedJobExecutionId, launchedStepExecutionId, lightminClientApplication);
+        final StepExecution result = getJobServerService().getStepExecution(this.launchedJobExecutionId, this.launchedStepExecutionId, lightminClientApplication);
         assertThat(result).isNotNull();
-        assertThat(result.getJobExecutionId()).isEqualTo(launchedJobExecutionId);
-        assertThat(result.getId()).isEqualTo(launchedStepExecutionId);
+        assertThat(result.getJobExecutionId()).isEqualTo(this.launchedJobExecutionId);
+        assertThat(result.getId()).isEqualTo(this.launchedStepExecutionId);
     }
 
     @Test
@@ -127,16 +125,16 @@ public abstract class JobServerServiceIT {
     @Before
     public void init() {
         try {
-            final org.springframework.batch.core.JobExecution execution = jobLauncher.run(simpleJob, new JobParametersBuilder().addLong("time", System
+            final org.springframework.batch.core.JobExecution execution = this.jobLauncher.run(this.simpleJob, new JobParametersBuilder().addLong("time", System
                     .currentTimeMillis())
                     .toJobParameters());
-            launchedJobExecutionId = execution.getId();
-            launchedJobInstanceId = execution.getJobInstance().getId();
+            this.launchedJobExecutionId = execution.getId();
+            this.launchedJobInstanceId = execution.getJobInstance().getId();
             final Collection<org.springframework.batch.core.StepExecution> stepExecutions = execution.getStepExecutions();
             for (final org.springframework.batch.core.StepExecution stepExecution : stepExecutions) {
-                launchedStepExecutionId = stepExecution.getId();
+                this.launchedStepExecutionId = stepExecution.getId();
             }
-            jobExecution = execution;
+            this.jobExecution = execution;
         } catch (final Exception e) {
             fail(e.getMessage());
         }

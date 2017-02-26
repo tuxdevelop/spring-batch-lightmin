@@ -11,9 +11,8 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -35,9 +34,8 @@ import java.util.Collections;
 import static org.assertj.core.api.Fail.fail;
 
 @Slf4j
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebIntegrationTest({"server.port=0", "management.port=0"})
-@SpringApplicationConfiguration(classes = {ITConfigurationApplication.class, ITConfigurationEmbedded.class})
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {ITConfigurationApplication.class, ITConfigurationEmbedded.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class CommonControllerIT {
 
     @Autowired
@@ -72,21 +70,21 @@ public abstract class CommonControllerIT {
 
     @Before
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
         addJobConfigurations();
         addJobListenerConfiguration();
         launchSimpleJob();
-        if (lightminApplicationRepository.findAll().size() <= 0) {
-            registrationBean.register(LightminClientApplication.createApplication(
-                    Collections.singletonList(simpleJob.getName()),
-                    lightminClientProperties));
+        if (this.lightminApplicationRepository.findAll().size() <= 0) {
+            this.registrationBean.register(LightminClientApplication.createApplication(
+                    Collections.singletonList(this.simpleJob.getName()),
+                    this.lightminClientProperties));
         }
-        applicationId = lightminApplicationRepository.findAll().iterator().next().getId();
+        this.applicationId = this.lightminApplicationRepository.findAll().iterator().next().getId();
     }
 
     @After
     public void clear() {
-        lightminApplicationRepository.clear();
+        this.lightminApplicationRepository.clear();
     }
 
     protected void addJobConfigurations() {
@@ -102,9 +100,9 @@ public abstract class CommonControllerIT {
         jobConfiguration.setJobConfigurationId(1L);
         jobConfiguration.setJobIncrementer(JobIncrementer.DATE);
         jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
-        addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration,
-                springBatchLightminConfigurationProperties.getApplicationName());
-        schedulerService.registerSchedulerForJob(addedJobConfiguration);
+        this.addedJobConfiguration = this.jobConfigurationRepository.add(jobConfiguration,
+                this.springBatchLightminConfigurationProperties.getApplicationName());
+        this.schedulerService.registerSchedulerForJob(this.addedJobConfiguration);
     }
 
     protected void addJobListenerConfiguration() {
@@ -121,22 +119,22 @@ public abstract class CommonControllerIT {
         jobConfiguration.setJobConfigurationId(1L);
         jobConfiguration.setJobIncrementer(JobIncrementer.DATE);
         jobConfiguration.setJobListenerConfiguration(jobListenerConfiguration);
-        addedListenerJobConfiguration = jobConfigurationRepository.add(jobConfiguration,
-                springBatchLightminConfigurationProperties.getApplicationName());
-        listenerService.registerListenerForJob(addedListenerJobConfiguration);
+        this.addedListenerJobConfiguration = this.jobConfigurationRepository.add(jobConfiguration,
+                this.springBatchLightminConfigurationProperties.getApplicationName());
+        this.listenerService.registerListenerForJob(this.addedListenerJobConfiguration);
     }
 
     private void launchSimpleJob() {
         try {
-            final JobExecution execution = jobLauncher.run(simpleJob, new JobParametersBuilder().addLong("time",
+            final JobExecution execution = this.jobLauncher.run(this.simpleJob, new JobParametersBuilder().addLong("time",
                     System.currentTimeMillis()).toJobParameters());
-            launchedJobExecutionId = execution.getId();
-            launchedJobInstanceId = execution.getJobInstance().getId();
+            this.launchedJobExecutionId = execution.getId();
+            this.launchedJobInstanceId = execution.getJobInstance().getId();
             final Collection<StepExecution> stepExecutions = execution.getStepExecutions();
             for (final StepExecution stepExecution : stepExecutions) {
-                launchedStepExecutionId = stepExecution.getId();
+                this.launchedStepExecutionId = stepExecution.getId();
             }
-            jobExecution = execution;
+            this.jobExecution = execution;
 
         } catch (final Exception e) {
             if (e instanceof JobExecutionAlreadyRunningException) {

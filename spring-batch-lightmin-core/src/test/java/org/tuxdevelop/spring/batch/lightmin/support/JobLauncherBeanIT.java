@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobLaunch;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
@@ -14,13 +14,12 @@ import org.tuxdevelop.test.configuration.ITMapConfiguration;
 import java.util.HashMap;
 import java.util.Map;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = ITMapConfiguration.class)
 public class JobLauncherBeanIT {
 
     @Autowired
     private JobLauncherBean jobLauncherBean;
-
 
     @Test
     public void testLaunchJob() {
@@ -34,7 +33,7 @@ public class JobLauncherBeanIT {
         final JobLaunch jobLaunch = new JobLaunch();
         jobLaunch.setJobName("simpleJob");
         jobLaunch.setJobParameters(jobParameters);
-        jobLauncherBean.launchJob(jobLaunch);
+        this.jobLauncherBean.launchJob(jobLaunch);
     }
 
 }

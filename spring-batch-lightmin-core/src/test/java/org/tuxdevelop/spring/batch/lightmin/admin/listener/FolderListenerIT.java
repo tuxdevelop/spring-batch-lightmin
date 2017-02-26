@@ -11,7 +11,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerConfiguration;
@@ -27,7 +27,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = ITConfiguration.class)
 public class FolderListenerIT {
 
@@ -63,21 +63,21 @@ public class FolderListenerIT {
 
         final ListenerConstructorWrapper listenerConstructorWrapper = new ListenerConstructorWrapper();
         listenerConstructorWrapper.setJobIncrementer(JobIncrementer.DATE);
-        listenerConstructorWrapper.setJob(simpleJob);
+        listenerConstructorWrapper.setJob(this.simpleJob);
         listenerConstructorWrapper.setJobConfiguration(jobConfiguration);
-        listenerConstructorWrapper.setJobLauncher(jobLauncher);
+        listenerConstructorWrapper.setJobLauncher(this.jobLauncher);
         listenerConstructorWrapper.setJobParameters(new JobParametersBuilder().toJobParameters());
         final Set<Object> constructorValues = new HashSet<>();
         constructorValues.add(listenerConstructorWrapper);
-        beanRegistrar.registerBean(FolderListener.class, beanName, constructorValues, null, null, null, null);
-        final FolderListener folderListener = applicationContext.getBean(beanName, FolderListener.class);
+        this.beanRegistrar.registerBean(FolderListener.class, beanName, constructorValues, null, null, null, null);
+        final FolderListener folderListener = this.applicationContext.getBean(beanName, FolderListener.class);
         folderListener.start();
         try {
             Thread.sleep(1000);
         } catch (final InterruptedException e) {
             e.printStackTrace();
         }
-        final List<JobInstance> jobinstances = jobExplorer.findJobInstancesByJobName("simpleJob", 0, 10);
+        final List<JobInstance> jobinstances = this.jobExplorer.findJobInstancesByJobName("simpleJob", 0, 10);
         assertThat(jobinstances).hasSize(1);
     }
 

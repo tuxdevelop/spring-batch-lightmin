@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
@@ -22,13 +22,12 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = ITMapConfiguration.class)
 public class ControllerServiceEntryBeanIT {
 
     @Autowired
     private ServiceEntry serviceEntry;
-
 
     @Test
     public void testSaveJobConfiguration() {
@@ -37,10 +36,10 @@ public class ControllerServiceEntryBeanIT {
                 JobSchedulerType.PERIOD);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
-        serviceEntry.saveJobConfiguration(jobConfiguration);
+        this.serviceEntry.saveJobConfiguration(jobConfiguration);
         final Collection<String> jobNames = new LinkedList<>();
         jobNames.add(jobName);
-        final JobConfigurations jobConfigurations = serviceEntry.getJobConfigurations(jobNames);
+        final JobConfigurations jobConfigurations = this.serviceEntry.getJobConfigurations(jobNames);
         assertThat(jobConfigurations).isNotNull();
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
         assertThat(fetchedJobConfigurations).isNotEmpty();
@@ -53,10 +52,10 @@ public class ControllerServiceEntryBeanIT {
                 JobSchedulerType.PERIOD);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
-        serviceEntry.saveJobConfiguration(jobConfiguration);
+        this.serviceEntry.saveJobConfiguration(jobConfiguration);
         final Collection<String> jobNames = new LinkedList<>();
         jobNames.add(jobName);
-        final JobConfigurations jobConfigurations = serviceEntry.getJobConfigurations(jobNames);
+        final JobConfigurations jobConfigurations = this.serviceEntry.getJobConfigurations(jobNames);
         assertThat(jobConfigurations).isNotNull();
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
         assertThat(fetchedJobConfigurations).isNotEmpty();
@@ -65,7 +64,7 @@ public class ControllerServiceEntryBeanIT {
             jobConfigurationId = fetchedJobConfiguration.getJobConfigurationId();
         }
         assertThat(jobConfigurationId).isNotNull();
-        final JobConfiguration fetchedJobConfiguration = serviceEntry.getJobConfigurationById(jobConfigurationId);
+        final JobConfiguration fetchedJobConfiguration = this.serviceEntry.getJobConfigurationById(jobConfigurationId);
         assertThat(fetchedJobConfiguration).isNotNull();
         final JobParameters jobParameters = new JobParameters();
         final Map<String, JobParameter> jobParametersMap = new HashMap<>();
@@ -75,8 +74,8 @@ public class ControllerServiceEntryBeanIT {
         jobParametersMap.put("Double", jobParameter);
         jobParameters.setParameters(jobParametersMap);
         fetchedJobConfiguration.setJobParameters(jobParameters);
-        serviceEntry.updateJobConfiguration(fetchedJobConfiguration);
-        final JobConfiguration updatedJobConfiguration = serviceEntry.getJobConfigurationById(jobConfigurationId);
+        this.serviceEntry.updateJobConfiguration(fetchedJobConfiguration);
+        final JobConfiguration updatedJobConfiguration = this.serviceEntry.getJobConfigurationById(jobConfigurationId);
         assertThat(updatedJobConfiguration).isEqualTo(fetchedJobConfiguration);
     }
 
@@ -87,16 +86,16 @@ public class ControllerServiceEntryBeanIT {
                 JobSchedulerType.PERIOD);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
-        serviceEntry.saveJobConfiguration(jobConfiguration);
+        this.serviceEntry.saveJobConfiguration(jobConfiguration);
         final Collection<String> jobNames = new LinkedList<>();
         jobNames.add(jobName);
-        final JobConfigurations jobConfigurations = serviceEntry.getJobConfigurations(jobNames);
+        final JobConfigurations jobConfigurations = this.serviceEntry.getJobConfigurations(jobNames);
         assertThat(jobConfigurations).isNotNull();
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
         assertThat(fetchedJobConfigurations).hasSize(1);
         final Long jobConfigurationId = fetchedJobConfigurations.iterator().next().getJobConfigurationId();
-        serviceEntry.deleteJobConfiguration(jobConfigurationId);
-        final JobConfigurations jobConfigurationsAfterDelete = serviceEntry.getJobConfigurations(jobNames);
+        this.serviceEntry.deleteJobConfiguration(jobConfigurationId);
+        final JobConfigurations jobConfigurationsAfterDelete = this.serviceEntry.getJobConfigurations(jobNames);
         assertThat(jobConfigurationsAfterDelete.getJobConfigurations()).isEmpty();
     }
 
@@ -107,8 +106,8 @@ public class ControllerServiceEntryBeanIT {
                 JobSchedulerType.PERIOD);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
-        serviceEntry.saveJobConfiguration(jobConfiguration);
-        final JobConfigurations fetchedJobConfigurations = serviceEntry.getJobConfigurationsByJobName(jobName);
+        this.serviceEntry.saveJobConfiguration(jobConfiguration);
+        final JobConfigurations fetchedJobConfigurations = this.serviceEntry.getJobConfigurationsByJobName(jobName);
         final Collection<JobConfiguration> fetchedJobConfigurationsCollection = fetchedJobConfigurations
                 .getJobConfigurations();
         assertThat(fetchedJobConfigurationsCollection).isNotEmpty();
@@ -123,10 +122,10 @@ public class ControllerServiceEntryBeanIT {
                 JobSchedulerType.PERIOD);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
-        serviceEntry.saveJobConfiguration(jobConfiguration);
+        this.serviceEntry.saveJobConfiguration(jobConfiguration);
         final Collection<String> jobNames = new LinkedList<>();
         jobNames.add(jobName);
-        final Map<String, JobConfigurations> result = serviceEntry.getJobConfigurationMap(jobNames);
+        final Map<String, JobConfigurations> result = this.serviceEntry.getJobConfigurationMap(jobNames);
         assertThat(result.containsKey(jobName));
         final JobConfigurations jobConfigurations = result.get(jobName);
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();

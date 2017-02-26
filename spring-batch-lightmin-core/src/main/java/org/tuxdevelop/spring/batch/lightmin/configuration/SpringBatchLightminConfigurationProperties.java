@@ -17,26 +17,23 @@ public class SpringBatchLightminConfigurationProperties {
     @Autowired
     private Environment environment;
 
-    private static final Boolean FORCE_MAP_DEFAULT = Boolean.FALSE;
     private static final String DEFAULT_DATA_SOURCE_NAME = "dataSource";
 
-    @Deprecated
-    private Boolean repositoryForceMap = FORCE_MAP_DEFAULT;
-    @Deprecated
-    private Boolean configurationForceMap = FORCE_MAP_DEFAULT;
-
+    //Table Prefix
     private String repositoryTablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
     private String configurationTablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
-
+    //Repository
     private LightminRepositoryType lightminRepositoryType = LightminRepositoryType.JDBC;
     private BatchRepositoryType batchRepositoryType = BatchRepositoryType.JDBC;
+    //Remote Repository
     private String remoteRepositoryServerUrl;
     private String remoteRepositoryUsername;
     private String remoteRepositoryPassword;
-
+    
     private String batchDataSourceName = DEFAULT_DATA_SOURCE_NAME;
     private String dataSourceName = DEFAULT_DATA_SOURCE_NAME;
     private String configurationDatabaseSchema;
+    //Lightmin Application name
     private String applicationName;
 
 
@@ -49,30 +46,12 @@ public class SpringBatchLightminConfigurationProperties {
         this.configurationDatabaseSchema = configurationDatabaseSchema;
     }
 
-    public void setRepositoryForceMap(final Boolean forceMap) {
-        this.repositoryForceMap = forceMap;
-        if (forceMap) {
-            batchRepositoryType = BatchRepositoryType.MAP;
-        } else {
-            batchRepositoryType = BatchRepositoryType.JDBC;
-        }
-    }
-
-    public void setConfigurationForceMap(final Boolean forceMap) {
-        this.configurationForceMap = forceMap;
-        if (forceMap) {
-            lightminRepositoryType = LightminRepositoryType.MAP;
-        } else {
-            lightminRepositoryType = LightminRepositoryType.JDBC;
-        }
-    }
-
     @PostConstruct
     public void init() {
-        if (!StringUtils.hasText(applicationName)) {
-            applicationName = environment.getProperty("spring.application.name");
+        if (!StringUtils.hasText(this.applicationName)) {
+            this.applicationName = this.environment.getProperty("spring.application.name");
         }
-        if(this.applicationName == null || applicationName.isEmpty()){
+        if (this.applicationName == null || this.applicationName.isEmpty()) {
             throw new SpringBatchLightminConfigurationException("The property spring.batch.lightmin.application-name " +
                     "must not be null or empty. The value has to be set or spring.application.name has to be present!");
         }

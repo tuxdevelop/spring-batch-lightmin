@@ -9,9 +9,8 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.tuxdevelop.spring.batch.lightmin.ITConfigurationApplication;
@@ -28,9 +27,8 @@ import java.util.Date;
 
 import static org.junit.Assert.fail;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebIntegrationTest({"server.port=0", "management.port=0"})
-@SpringApplicationConfiguration(classes = {ITConfigurationApplication.class, ITConfiguration.class, ITJobConfiguration.class})
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {ITConfigurationApplication.class, ITConfiguration.class, ITJobConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class CommonControllerIT {
 
     public static final String LOCALHOST = "http://localhost";
@@ -65,26 +63,26 @@ public abstract class CommonControllerIT {
     protected Long launchedStepExecutionId;
 
     protected int getServerPort() {
-        return embeddedWebApplicationContext.getEmbeddedServletContainer().getPort();
+        return this.embeddedWebApplicationContext.getEmbeddedServletContainer().getPort();
     }
 
 
     protected void addJobConfigurations() {
         final JobConfiguration jobConfiguration = createJobConfiguration();
-        adminService.saveJobConfiguration(jobConfiguration);
-        final Collection<JobConfiguration> jobConfigurations = adminService.getJobConfigurationsByJobName("simpleJob");
+        this.adminService.saveJobConfiguration(jobConfiguration);
+        final Collection<JobConfiguration> jobConfigurations = this.adminService.getJobConfigurationsByJobName("simpleJob");
         for (final JobConfiguration configuration : jobConfigurations) {
-            addedJobConfigurationId = configuration.getJobConfigurationId();
+            this.addedJobConfigurationId = configuration.getJobConfigurationId();
         }
     }
 
     protected void launchSimpleJob() {
         try {
-            final JobExecution execution = jobLauncher.run(simpleJob, new JobParametersBuilder().addDate("date", new
+            final JobExecution execution = this.jobLauncher.run(this.simpleJob, new JobParametersBuilder().addDate("date", new
                     Date()).toJobParameters());
-            launchedJobExecutionId = execution.getId();
-            launchedJobInstanceId = execution.getJobInstance().getId();
-            launchedStepExecutionId = execution.getStepExecutions().iterator().next().getId();
+            this.launchedJobExecutionId = execution.getId();
+            this.launchedJobInstanceId = execution.getJobInstance().getId();
+            this.launchedStepExecutionId = execution.getStepExecutions().iterator().next().getId();
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -105,11 +103,11 @@ public abstract class CommonControllerIT {
     }
 
     protected void cleanUp() {
-        final Collection<JobConfiguration> allJobConfigurations = jobConfigurationRepository.getAllJobConfigurations(springBatchLightminConfigurationProperties.getApplicationName());
+        final Collection<JobConfiguration> allJobConfigurations = this.jobConfigurationRepository.getAllJobConfigurations(this.springBatchLightminConfigurationProperties.getApplicationName());
         for (final JobConfiguration jobConfiguration : allJobConfigurations) {
             try {
-                jobConfigurationRepository.delete(jobConfiguration,
-                        springBatchLightminConfigurationProperties.getApplicationName());
+                this.jobConfigurationRepository.delete(jobConfiguration,
+                        this.springBatchLightminConfigurationProperties.getApplicationName());
             } catch (final NoSuchJobConfigurationException e) {
                 fail(e.getMessage());
             }

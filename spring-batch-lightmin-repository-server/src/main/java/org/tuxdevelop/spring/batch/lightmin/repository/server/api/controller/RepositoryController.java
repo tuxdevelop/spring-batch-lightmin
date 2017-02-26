@@ -29,21 +29,21 @@ public class RepositoryController implements JobConfigurationRepository, Initial
     @Override
     @GetMapping(value = "/{jobconfigurationid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public JobConfiguration getJobConfiguration(@PathVariable(name = "jobconfigurationid") final Long jobConfigurationId, @RequestParam(name = "applicationname") final String applicationName) throws NoSuchJobConfigurationException {
-        return localJobConfigurationRepository.getJobConfiguration(jobConfigurationId, applicationName);
+        return this.localJobConfigurationRepository.getJobConfiguration(jobConfigurationId, applicationName);
     }
 
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Collection<JobConfiguration> getJobConfigurations(@RequestParam(name = "jobname") final String jobName, @RequestParam(name = "applicationname") final String applicationName) throws NoSuchJobException, NoSuchJobConfigurationException {
-        return localJobConfigurationRepository.getJobConfigurations(jobName, applicationName);
+        return this.localJobConfigurationRepository.getJobConfigurations(jobName, applicationName);
     }
 
     @Override
     @PostMapping(value = "/{applicationname}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public JobConfiguration add(@RequestBody final JobConfiguration jobConfiguration, @PathVariable(name = "applicationnamel") final String applicationName) {
+    public JobConfiguration add(@RequestBody final JobConfiguration jobConfiguration, @PathVariable(name = "applicationname") final String applicationName) {
         validateJobConfigurationBody(jobConfiguration);
         jobConfiguration.validateForSave();
-        return localJobConfigurationRepository.add(jobConfiguration, applicationName);
+        return this.localJobConfigurationRepository.add(jobConfiguration, applicationName);
     }
 
     @Override
@@ -51,31 +51,31 @@ public class RepositoryController implements JobConfigurationRepository, Initial
     public JobConfiguration update(@RequestBody final JobConfiguration jobConfiguration, @PathVariable(name = "applicationname") final String applicationName) throws NoSuchJobConfigurationException {
         validateJobConfigurationBody(jobConfiguration);
         jobConfiguration.validateForUpdate();
-        return localJobConfigurationRepository.update(jobConfiguration, applicationName);
+        return this.localJobConfigurationRepository.update(jobConfiguration, applicationName);
     }
 
     @Override
     @PostMapping(value = "/delete/{applicationname}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void delete(@RequestBody final JobConfiguration jobConfiguration, @PathVariable(name = "applicationname") final String applicationName) throws NoSuchJobConfigurationException {
         validateJobConfigurationBody(jobConfiguration);
-        localJobConfigurationRepository.delete(jobConfiguration, applicationName);
+        this.localJobConfigurationRepository.delete(jobConfiguration, applicationName);
     }
 
     @Override
     @GetMapping(value = "/all/{applicationname}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Collection<JobConfiguration> getAllJobConfigurations(@PathVariable(name = "applicationname") final String applicationName) {
-        return localJobConfigurationRepository.getAllJobConfigurations(applicationName);
+        return this.localJobConfigurationRepository.getAllJobConfigurations(applicationName);
     }
 
     @Override
-    @GetMapping(value = "/all/{applicationname}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/all/{applicationname}/jobs", produces = MediaType.APPLICATION_JSON_VALUE)
     public Collection<JobConfiguration> getAllJobConfigurationsByJobNames(@RequestParam(name = "jobnames") final Collection<String> jobNames, @PathVariable(name = "applicationname") final String applicationName) {
-        return localJobConfigurationRepository.getAllJobConfigurationsByJobNames(jobNames, applicationName);
+        return this.localJobConfigurationRepository.getAllJobConfigurationsByJobNames(jobNames, applicationName);
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        assert localJobConfigurationRepository != null : "localJobConfigurationRepository must not be null org empty!";
+        assert this.localJobConfigurationRepository != null : "localJobConfigurationRepository must not be null org empty!";
     }
 
     private void validateJobConfigurationBody(final JobConfiguration jobConfiguration) {

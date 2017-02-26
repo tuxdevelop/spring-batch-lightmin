@@ -10,7 +10,6 @@ import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminPropert
 
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -42,21 +41,19 @@ public class LightminClientRegistrator {
 
     public Boolean register() {
         Boolean isRegistrationSuccessful = Boolean.FALSE;
-        final LightminClientApplication lightminClientApplication = LightminClientApplication.createApplication(new LinkedList<>(jobRegistry.getJobNames()), lightminClientProperties);
-        for (final String lightminUrl : lightminProperties.getLightminUrl()) {
+        final LightminClientApplication lightminClientApplication = LightminClientApplication.createApplication(new LinkedList<>(this.jobRegistry.getJobNames()), this.lightminClientProperties);
+        for (final String lightminUrl : this.lightminProperties.getLightminUrl()) {
             try {
-                @SuppressWarnings("rawtypes") final
-                ResponseEntity<Map> response = restTemplate.postForEntity(lightminUrl,
-                        new HttpEntity<>(lightminClientApplication, HTTP_HEADERS), Map.class);
-
+                final ResponseEntity<LightminClientApplication> response
+                        = this.restTemplate.postForEntity(lightminUrl, new HttpEntity<>(lightminClientApplication, HTTP_HEADERS), LightminClientApplication.class);
                 if (response.getStatusCode().equals(HttpStatus.CREATED)) {
-                    if (registeredId.compareAndSet(null, response.getBody().get("id").toString())) {
+                    if (this.registeredId.compareAndSet(null, response.getBody().getId())) {
                         log.info("Application registered itself as {}", response.getBody());
                     } else {
                         log.debug("Application refreshed itself as {}", response.getBody());
                     }
                     isRegistrationSuccessful = Boolean.TRUE;
-                    if (lightminProperties.isRegisterOnce()) {
+                    if (this.lightminProperties.isRegisterOnce()) {
                         break;
                     }
                 } else {
@@ -65,20 +62,20 @@ public class LightminClientRegistrator {
                 }
             } catch (final Exception ex) {
                 log.warn("Failed to register application as {} at spring-boot-lightminProperties ({}): {}",
-                        lightminClientApplication, lightminProperties.getLightminUrl(), ex.getMessage());
+                        lightminClientApplication, this.lightminProperties.getLightminUrl(), ex.getMessage());
             }
         }
         return isRegistrationSuccessful;
     }
 
     public void deregister() {
-        final String id = registeredId.get();
+        final String id = this.registeredId.get();
         if (id != null) {
-            for (final String lightminUrl : lightminProperties.getLightminUrl()) {
+            for (final String lightminUrl : this.lightminProperties.getLightminUrl()) {
                 try {
-                    restTemplate.delete(lightminUrl + "/" + id);
-                    registeredId.compareAndSet(id, null);
-                    if (lightminProperties.isRegisterOnce()) {
+                    this.restTemplate.delete(lightminUrl + "/" + id);
+                    this.registeredId.compareAndSet(id, null);
+                    if (this.lightminProperties.isRegisterOnce()) {
                         break;
                     }
                 } catch (final Exception ex) {

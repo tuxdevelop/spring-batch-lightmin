@@ -2,7 +2,6 @@ package org.tuxdevelop.spring.batch.lightmin.server.admin;
 
 
 import org.junit.Test;
-import org.springframework.boot.test.WebIntegrationTest;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerConfiguration;
@@ -20,7 +19,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@WebIntegrationTest({"server.port=0", "management.port=0"})
 public abstract class AdminServerServiceIT {
 
     @Test

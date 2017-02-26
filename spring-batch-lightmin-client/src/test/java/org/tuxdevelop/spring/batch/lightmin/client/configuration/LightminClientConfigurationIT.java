@@ -3,10 +3,9 @@ package org.tuxdevelop.spring.batch.lightmin.client.configuration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.client.ITConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.LightminClientRegistrator;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.RegistrationLightminClientApplicationBean;
@@ -15,9 +14,8 @@ import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnConte
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebIntegrationTest({"server.port=0", "management.port=0"})
-@SpringApplicationConfiguration(classes = {ITConfigurationApplication.class, LightminClientConfiguration.class})
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {ITConfigurationApplication.class, LightminClientConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LightminClientConfigurationIT {
 
     @Autowired
@@ -25,15 +23,15 @@ public class LightminClientConfigurationIT {
 
     @Test
     public void testClientConfiguration() {
-        final LightminClientRegistrator lightminClientRegistrator = applicationContext.getBean(LightminClientRegistrator.class);
+        final LightminClientRegistrator lightminClientRegistrator = this.applicationContext.getBean(LightminClientRegistrator.class);
         assertThat(lightminClientRegistrator).isNotNull();
         final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean =
-                applicationContext.getBean(RegistrationLightminClientApplicationBean.class);
+                this.applicationContext.getBean(RegistrationLightminClientApplicationBean.class);
         assertThat(registrationLightminClientApplicationBean).isNotNull();
-        final OnClientApplicationReadyEventListener onClientApplicationReadyEventListener = applicationContext.getBean
+        final OnClientApplicationReadyEventListener onClientApplicationReadyEventListener = this.applicationContext.getBean
                 (OnClientApplicationReadyEventListener.class);
         assertThat(onClientApplicationReadyEventListener).isNotNull();
-        final OnContextClosedEventListener onContextClosedEventListener = applicationContext.getBean
+        final OnContextClosedEventListener onContextClosedEventListener = this.applicationContext.getBean
                 (OnContextClosedEventListener.class);
         assertThat(onContextClosedEventListener).isNotNull();
 
