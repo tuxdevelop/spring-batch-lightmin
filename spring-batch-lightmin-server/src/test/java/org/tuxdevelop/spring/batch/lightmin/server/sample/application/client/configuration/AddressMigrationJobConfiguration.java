@@ -7,13 +7,11 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemStreamReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.ItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.BatchTaskAddress;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.ProcessingState;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.mapper.BatchTaskAddressMapper;
@@ -66,14 +64,11 @@ public class AddressMigrationJobConfiguration {
         final JdbcBatchItemWriter<BatchTaskAddress> writer = new JdbcBatchItemWriter<>();
         writer.setDataSource(dataSource);
         writer.setSql(UPDATE_ADDRESS_STATEMENT);
-        writer.setItemSqlParameterSourceProvider(new ItemSqlParameterSourceProvider<BatchTaskAddress>() {
-            @Override
-            public SqlParameterSource createSqlParameterSource(final BatchTaskAddress item) {
-                final MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-                sqlParameterSource.addValue("processing_state", item.getProcessingState());
-                sqlParameterSource.addValue("batch_task_id", item.getBatchTaskId());
-                return sqlParameterSource;
-            }
+        writer.setItemSqlParameterSourceProvider(item -> {
+            final MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+            sqlParameterSource.addValue("processing_state", item.getProcessingState());
+            sqlParameterSource.addValue("batch_task_id", item.getBatchTaskId());
+            return sqlParameterSource;
         });
         writer.afterPropertiesSet();
         return writer;

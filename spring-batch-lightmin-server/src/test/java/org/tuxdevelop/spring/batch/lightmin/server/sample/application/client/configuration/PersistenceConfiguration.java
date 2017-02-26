@@ -16,8 +16,9 @@ public class PersistenceConfiguration {
     @Bean
     public DataSource dataSource() {
         final EmbeddedDatabaseBuilder embeddedDatabaseBuilder = new EmbeddedDatabaseBuilder();
-        return embeddedDatabaseBuilder.addScript("classpath:create.sql").addScript("classpath:schema_h2.sql")
-                .addScript("classpath:inserts.sql").setType(EmbeddedDatabaseType.H2).build();
+        return embeddedDatabaseBuilder
+                .addScript("classpath:properties/sample/client/sql/create.sql")
+                .setType(EmbeddedDatabaseType.H2).build();
     }
 
     @Bean

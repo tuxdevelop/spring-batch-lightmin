@@ -1,28 +1,32 @@
 INSERT INTO BATCH_JOB_CONFIGURATION
-(job_name, job_incrementer)
+(job_name, application_name,job_incrementer)
 VALUES (
   'addressMigrationJob',
+  'address-migrator',
   'DATE_INCREMENTER'
 );
 
 INSERT INTO BATCH_JOB_CONFIGURATION
-(job_name, job_incrementer)
+(job_name, application_name, job_incrementer)
 VALUES (
   'UnknownJob',
+  'address-migrator',
   'DATE_INCREMENTER'
 );
 
 INSERT INTO BATCH_JOB_CONFIGURATION
-(job_name, job_incrementer)
+(job_name, application_name, job_incrementer)
 VALUES (
   'addressPrinterJob',
+  'address-migrator',
   'NONE'
 );
 
 INSERT INTO BATCH_JOB_CONFIGURATION
-(job_name, job_incrementer)
+(job_name, application_name,job_incrementer)
 VALUES (
   'addressMigrationJob',
+  'address-migrator',
   'DATE_INCREMENTER'
 );
 

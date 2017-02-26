@@ -12,7 +12,7 @@ import java.io.*;
 @Component
 public class AddressFileWriter {
 
-    private static final String PATH = "input";
+    private static final String PATH = "src/test/resources/properties/sample/client/input";
     private static final int FILE_ROWS = 100;
 
     private final DataFactory dataFactory;
@@ -28,6 +28,11 @@ public class AddressFileWriter {
         final Long currentMillis = System.currentTimeMillis();
         final String fileName = "input_" + currentMillis + ".tmp";
         final File file = new File(PATH + File.separator + fileName);
+        try {
+            file.createNewFile();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(file), "utf-8"))) {
             writer.write("zip_code;city;street;house_number");
@@ -56,10 +61,10 @@ public class AddressFileWriter {
 
     private BatchTaskAddress createBatchTaskAddress() {
         final BatchTaskAddress batchTaskAddress = new BatchTaskAddress();
-        final String street = dataFactory.getStreetName();
-        final String houseNumber = dataFactory.getNumberText(4);
-        final String zipCode = dataFactory.getNumberText(5);
-        final String city = dataFactory.getCity();
+        final String street = this.dataFactory.getStreetName();
+        final String houseNumber = this.dataFactory.getNumberText(4);
+        final String zipCode = this.dataFactory.getNumberText(5);
+        final String city = this.dataFactory.getCity();
         batchTaskAddress.setStreet(street);
         batchTaskAddress.setHouseNumber(houseNumber);
         batchTaskAddress.setZipCode(zipCode);
