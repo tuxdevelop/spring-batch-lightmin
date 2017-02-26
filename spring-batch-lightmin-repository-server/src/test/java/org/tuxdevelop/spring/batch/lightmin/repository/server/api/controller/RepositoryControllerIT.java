@@ -72,7 +72,7 @@ public abstract class RepositoryControllerIT {
             assertThat(response).isNotNull();
             assertThat(response.contains(jobConfiguration)).isFalse();
         } catch (NoSuchJobException | NoSuchJobConfigurationException e) {
-            fail(e.getMessage());
+            //ok, jobConfiguration is deleted
         }
     }
 
@@ -109,6 +109,7 @@ public abstract class RepositoryControllerIT {
 
     private JobConfiguration createNewJobConfiguration() {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null, 1000L, 100L, JobSchedulerType.PERIOD);
+        jobSchedulerConfiguration.setBeanName("mySampleBean_" + System.currentTimeMillis());
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
         return this.getJobConfigurationRepository().add(jobConfiguration, APPLICATION_NAME);
     }

@@ -53,10 +53,10 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     public JobConfiguration getJobConfiguration(final Long jobConfigurationId, final String applicationName) throws
             NoSuchJobConfigurationException {
         if (checkJobConfigurationExists(jobConfigurationId, applicationName)) {
-            final JobConfiguration jobConfiguration = jobConfigurationDAO.getById(jobConfigurationId, applicationName);
-            jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
-            jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
-            jobConfigurationParameterDAO.attachParameters(jobConfiguration);
+            final JobConfiguration jobConfiguration = this.jobConfigurationDAO.getById(jobConfigurationId, applicationName);
+            this.jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
+            this.jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
+            this.jobConfigurationParameterDAO.attachParameters(jobConfiguration);
             return jobConfiguration;
         } else {
             final String message = "No jobConfiguration could be found for id:" + jobConfigurationId;
@@ -68,11 +68,11 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     @Override
     public Collection<JobConfiguration> getJobConfigurations(final String jobName, final String applicationName) throws NoSuchJobException {
         if (checkJobConfigurationExists(jobName, applicationName)) {
-            final List<JobConfiguration> jobConfigurations = jobConfigurationDAO.getByJobName(jobName, applicationName);
+            final List<JobConfiguration> jobConfigurations = this.jobConfigurationDAO.getByJobName(jobName, applicationName);
             for (final JobConfiguration jobConfiguration : jobConfigurations) {
-                jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
-                jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
-                jobConfigurationParameterDAO.attachParameters(jobConfiguration);
+                this.jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
+                this.jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
+                this.jobConfigurationParameterDAO.attachParameters(jobConfiguration);
             }
             return jobConfigurations;
         } else {
@@ -84,15 +84,15 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
     @Override
     public JobConfiguration add(final JobConfiguration jobConfiguration, final String applicationName) {
-        final Long jobConfigurationId = jobConfigurationDAO.add(jobConfiguration, applicationName);
+        final Long jobConfigurationId = this.jobConfigurationDAO.add(jobConfiguration, applicationName);
         jobConfiguration.setJobConfigurationId(jobConfigurationId);
         if (jobConfiguration.getJobSchedulerConfiguration() != null) {
-            jobSchedulerConfigurationDAO.add(jobConfiguration);
+            this.jobSchedulerConfigurationDAO.add(jobConfiguration);
         }
         if (jobConfiguration.getJobListenerConfiguration() != null) {
-            jobListenerConfigurationDAO.add(jobConfiguration);
+            this.jobListenerConfigurationDAO.add(jobConfiguration);
         }
-        jobConfigurationParameterDAO.add(jobConfiguration);
+        this.jobConfigurationParameterDAO.add(jobConfiguration);
         return jobConfiguration;
     }
 
@@ -100,15 +100,15 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     public JobConfiguration update(final JobConfiguration jobConfiguration, final String applicationName) throws NoSuchJobConfigurationException {
         final Long jobConfigurationId = jobConfiguration.getJobConfigurationId();
         if (checkJobConfigurationExists(jobConfigurationId, applicationName)) {
-            jobConfigurationDAO.update(jobConfiguration, applicationName);
+            this.jobConfigurationDAO.update(jobConfiguration, applicationName);
             if (jobConfiguration.getJobSchedulerConfiguration() != null) {
-                jobSchedulerConfigurationDAO.update(jobConfiguration);
+                this.jobSchedulerConfigurationDAO.update(jobConfiguration);
             }
             if (jobConfiguration.getJobListenerConfiguration() != null) {
-                jobListenerConfigurationDAO.update(jobConfiguration);
+                this.jobListenerConfigurationDAO.update(jobConfiguration);
             }
-            jobConfigurationParameterDAO.delete(jobConfigurationId);
-            jobConfigurationParameterDAO.add(jobConfiguration);
+            this.jobConfigurationParameterDAO.delete(jobConfigurationId);
+            this.jobConfigurationParameterDAO.add(jobConfiguration);
             return jobConfiguration;
         } else {
             final String message = "No jobConfiguration could be found for id:" + jobConfiguration;
@@ -121,10 +121,10 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     public void delete(final JobConfiguration jobConfiguration, final String applicationName) throws NoSuchJobConfigurationException {
         final Long jobConfigurationId = jobConfiguration.getJobConfigurationId();
         if (checkJobConfigurationExists(jobConfigurationId, applicationName)) {
-            jobConfigurationParameterDAO.delete(jobConfigurationId);
-            jobSchedulerConfigurationDAO.delete(jobConfigurationId);
-            jobListenerConfigurationDAO.delete(jobConfigurationId);
-            jobConfigurationDAO.delete(jobConfigurationId, applicationName);
+            this.jobConfigurationParameterDAO.delete(jobConfigurationId);
+            this.jobSchedulerConfigurationDAO.delete(jobConfigurationId);
+            this.jobListenerConfigurationDAO.delete(jobConfigurationId);
+            this.jobConfigurationDAO.delete(jobConfigurationId, applicationName);
         } else {
             final String message = "No jobConfiguration could be found for id:" + jobConfiguration;
             log.error(message);
@@ -134,30 +134,30 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
     @Override
     public Collection<JobConfiguration> getAllJobConfigurations(final String applicationName) {
-        final List<JobConfiguration> jobConfigurations = jobConfigurationDAO.getAll(applicationName);
+        final List<JobConfiguration> jobConfigurations = this.jobConfigurationDAO.getAll(applicationName);
         for (final JobConfiguration jobConfiguration : jobConfigurations) {
-            jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
-            jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
-            jobConfigurationParameterDAO.attachParameters(jobConfiguration);
+            this.jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
+            this.jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
+            this.jobConfigurationParameterDAO.attachParameters(jobConfiguration);
         }
         return jobConfigurations;
     }
 
     @Override
     public Collection<JobConfiguration> getAllJobConfigurationsByJobNames(final Collection<String> jobNames, final String applicationName) {
-        final List<JobConfiguration> jobConfigurations = jobConfigurationDAO.getAllByJobNames(jobNames, applicationName);
+        final List<JobConfiguration> jobConfigurations = this.jobConfigurationDAO.getAllByJobNames(jobNames, applicationName);
         for (final JobConfiguration jobConfiguration : jobConfigurations) {
-            jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
-            jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
-            jobConfigurationParameterDAO.attachParameters(jobConfiguration);
+            this.jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
+            this.jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
+            this.jobConfigurationParameterDAO.attachParameters(jobConfiguration);
         }
         return jobConfigurations;
     }
 
     @Override
     public void afterPropertiesSet() {
-        assert jdbcTemplate != null;
-        assert tablePrefix != null;
+        assert this.jdbcTemplate != null;
+        assert this.tablePrefix != null;
     }
 
 	/*
@@ -165,11 +165,11 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 	 */
 
     private Boolean checkJobConfigurationExists(final Long jobConfigurationId, final String applicationName) {
-        return jobConfigurationDAO.getJobConfigurationIdCount(jobConfigurationId, applicationName) > 0;
+        return this.jobConfigurationDAO.getJobConfigurationIdCount(jobConfigurationId, applicationName) > 0;
     }
 
     private Boolean checkJobConfigurationExists(final String jobName, final String applicationName) {
-        return jobConfigurationDAO.getJobNameCount(jobName, applicationName) > 0;
+        return this.jobConfigurationDAO.getJobNameCount(jobName, applicationName) > 0;
     }
 
     /**
@@ -186,7 +186,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
                 + " WHERE " + JobConfigurationDomain.JOB_NAME + " = ? AND " + JobConfigurationDomain.APLLICATION_NAME + " = ?";
 
         private static final String UPDATE_STATEMENT = "UPDATE " + TABLE_NAME + " SET "
-                + JobConfigurationDomain.JOB_NAME + "" + " = ? , " + JobConfigurationDomain.JOB_INCREMENTER
+                + JobConfigurationDomain.JOB_NAME + " = ? , " + JobConfigurationDomain.JOB_INCREMENTER
                 + " = ? WHERE " + JobConfigurationDomain.JOB_CONFIGURATION_ID + " = ? AND " + JobConfigurationDomain.APLLICATION_NAME + " = ?";
 
         private static final String DELETE_STATEMENT = "DELETE FROM " + TABLE_NAME + " WHERE "
@@ -219,23 +219,23 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
         public Long add(final JobConfiguration jobConfiguration, final String applicationName) {
             final Map<String, ?> keyValues = map(jobConfiguration, applicationName);
-            final Number key = simpleJdbcInsert.executeAndReturnKey(keyValues);
+            final Number key = this.simpleJdbcInsert.executeAndReturnKey(keyValues);
             return key.longValue();
         }
 
         JobConfiguration getById(final Long jobConfigurationId, final String applicationName) {
-            final String sql = String.format(GET_JOB_CONFIGURATION_QUERY, tablePrefix);
-            return jdbcTemplate.queryForObject(sql, new JobConfigurationRowMapper(), jobConfigurationId, applicationName);
+            final String sql = String.format(GET_JOB_CONFIGURATION_QUERY, this.tablePrefix);
+            return this.jdbcTemplate.queryForObject(sql, new JobConfigurationRowMapper(), jobConfigurationId, applicationName);
         }
 
         List<JobConfiguration> getByJobName(final String jobName, final String applicationName) {
-            final String sql = String.format(GET_JOB_CONFIGURATIONS_BY_JOB_NAME_QUERY, tablePrefix);
-            return jdbcTemplate.query(sql, new JobConfigurationRowMapper(), jobName, applicationName);
+            final String sql = String.format(GET_JOB_CONFIGURATIONS_BY_JOB_NAME_QUERY, this.tablePrefix);
+            return this.jdbcTemplate.query(sql, new JobConfigurationRowMapper(), jobName, applicationName);
         }
 
         public void update(final JobConfiguration jobConfiguration, final String applicationName) {
-            final String sql = String.format(UPDATE_STATEMENT, tablePrefix);
-            jdbcTemplate.update(
+            final String sql = String.format(UPDATE_STATEMENT, this.tablePrefix);
+            this.jdbcTemplate.update(
                     sql,
                     new Object[]{jobConfiguration.getJobName(),
                             jobConfiguration.getJobIncrementer().getIncrementerIdentifier(),
@@ -244,33 +244,33 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         }
 
         public void delete(final Long jobConfigurationId, final String applicationName) {
-            final String sql = String.format(DELETE_STATEMENT, tablePrefix);
-            jdbcTemplate.update(sql, new Object[]{jobConfigurationId, applicationName}, new int[]{Types.NUMERIC, Types.VARCHAR});
+            final String sql = String.format(DELETE_STATEMENT, this.tablePrefix);
+            this.jdbcTemplate.update(sql, new Object[]{jobConfigurationId, applicationName}, new int[]{Types.NUMERIC, Types.VARCHAR});
         }
 
         Long getJobConfigurationIdCount(final Long jobConfiguration, final String applicationName) {
-            final String sql = String.format(GET_JOB_CONFIGURATION_ID_COUNT_STATEMENT, tablePrefix);
-            return jdbcTemplate.queryForObject(sql, new Object[]{jobConfiguration, applicationName}, new int[]{Types.NUMERIC, Types.VARCHAR}, Long.class);
+            final String sql = String.format(GET_JOB_CONFIGURATION_ID_COUNT_STATEMENT, this.tablePrefix);
+            return this.jdbcTemplate.queryForObject(sql, new Object[]{jobConfiguration, applicationName}, new int[]{Types.NUMERIC, Types.VARCHAR}, Long.class);
         }
 
         Long getJobNameCount(final String jobName, final String applicationName) {
-            final String sql = String.format(GET_JOB_NAME_COUNT_STATEMENT, tablePrefix);
-            return jdbcTemplate.queryForObject(sql, new Object[]{jobName, applicationName}, new int[]{Types.VARCHAR, Types.VARCHAR}, Long.class);
+            final String sql = String.format(GET_JOB_NAME_COUNT_STATEMENT, this.tablePrefix);
+            return this.jdbcTemplate.queryForObject(sql, new Object[]{jobName, applicationName}, new int[]{Types.VARCHAR, Types.VARCHAR}, Long.class);
         }
 
         List<JobConfiguration> getAll(final String applicationName) {
-            final String sql = String.format(GET_ALL_JOB_CONFIGURATION_QUERY, tablePrefix);
-            return jdbcTemplate.query(sql, new JobConfigurationRowMapper(), applicationName);
+            final String sql = String.format(GET_ALL_JOB_CONFIGURATION_QUERY, this.tablePrefix);
+            return this.jdbcTemplate.query(sql, new JobConfigurationRowMapper(), applicationName);
         }
 
         List<JobConfiguration> getAllByJobNames(final Collection<String> jobNames, final String applicationName) {
             final String inParameters = parseInCollection(jobNames);
-            final String sql = String.format(GET_ALL_JOB_CONFIGURATION_BY_JOB_NAMES_QUERY, tablePrefix, inParameters);
+            final String sql = String.format(GET_ALL_JOB_CONFIGURATION_BY_JOB_NAMES_QUERY, this.tablePrefix, inParameters);
             final Object[] parameters = new Object[jobNames.size() + 1];
             parameters[0] = applicationName;
-            Object[] jobNamesArray = jobNames.toArray();
-            System.arraycopy(jobNamesArray, 0, parameters, 1, jobNamesArray.length - 1);
-            return jdbcTemplate
+            final Object[] jobNamesArray = jobNames.toArray();
+            System.arraycopy(jobNamesArray, 0, parameters, 1, jobNamesArray.length);
+            return this.jdbcTemplate
                     .query(sql, new JobConfigurationRowMapper(), parameters);
         }
 
@@ -339,13 +339,13 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
         public Long add(final JobConfiguration jobConfiguration) {
             final Map<String, ?> keyValues = map(jobConfiguration);
-            final Number key = simpleJdbcInsert.executeAndReturnKey(keyValues);
+            final Number key = this.simpleJdbcInsert.executeAndReturnKey(keyValues);
             return key.longValue();
         }
 
         public void update(final JobConfiguration jobConfiguration) {
             final JobListenerConfiguration jobListenerConfiguration = jobConfiguration.getJobListenerConfiguration();
-            final String sql = String.format(UPDATE_STATEMENT, tablePrefix);
+            final String sql = String.format(UPDATE_STATEMENT, this.tablePrefix);
             final Object[] objects = {
                     jobListenerConfiguration.getJobListenerType().getId(),
                     jobListenerConfiguration.getFilePattern(),
@@ -366,18 +366,18 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
                     Types.VARCHAR,
                     Types.NUMERIC
             };
-            jdbcTemplate.update(sql, objects, types);
+            this.jdbcTemplate.update(sql, objects, types);
         }
 
         public void delete(final Long jobConfigurationId) {
-            final String sql = String.format(DELETE_STATEMENT, tablePrefix);
-            jdbcTemplate.update(sql, new Object[]{jobConfigurationId}, new int[]{Types.NUMERIC});
+            final String sql = String.format(DELETE_STATEMENT, this.tablePrefix);
+            this.jdbcTemplate.update(sql, new Object[]{jobConfigurationId}, new int[]{Types.NUMERIC});
         }
 
         void attachJobListenerConfiguration(final JobConfiguration jobConfiguration) {
-            final String sql = String.format(GET_JOB_LISTENER_QUERY, tablePrefix);
+            final String sql = String.format(GET_JOB_LISTENER_QUERY, this.tablePrefix);
             try {
-                final JobListenerConfiguration jobListenerConfiguration = jdbcTemplate.queryForObject(sql,
+                final JobListenerConfiguration jobListenerConfiguration = this.jdbcTemplate.queryForObject(sql,
                         new JobListenerConfigurationRowMapper(), jobConfiguration.getJobConfigurationId());
                 jobConfiguration.setJobListenerConfiguration(jobListenerConfiguration);
             } catch (final DataAccessException e) {
@@ -440,14 +440,14 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
         public Long add(final JobConfiguration jobConfiguration) {
             final Map<String, ?> keyValues = map(jobConfiguration);
-            final Number key = simpleJdbcInsert.executeAndReturnKey(keyValues);
+            final Number key = this.simpleJdbcInsert.executeAndReturnKey(keyValues);
             return key.longValue();
         }
 
         void attachJobSchedulerConfiguration(final JobConfiguration jobConfiguration) {
-            final String sql = String.format(GET_JOB_SCHEDULER_QUERY, tablePrefix);
+            final String sql = String.format(GET_JOB_SCHEDULER_QUERY, this.tablePrefix);
             try {
-                final JobSchedulerConfiguration jobSchedulerConfiguration = jdbcTemplate.queryForObject(sql,
+                final JobSchedulerConfiguration jobSchedulerConfiguration = this.jdbcTemplate.queryForObject(sql,
                         new JobSchedulerConfigurationRowMapper(), jobConfiguration.getJobConfigurationId());
                 jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
             } catch (final DataAccessException e) {
@@ -457,7 +457,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
         public void update(final JobConfiguration jobConfiguration) {
             final JobSchedulerConfiguration jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
-            final String sql = String.format(UPDATE_STATEMENT, tablePrefix);
+            final String sql = String.format(UPDATE_STATEMENT, this.tablePrefix);
             final Object[] parameters = {
                     jobSchedulerConfiguration.getCronExpression(),
                     jobSchedulerConfiguration.getFixedDelay(),
@@ -476,12 +476,12 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
                     Types.VARCHAR,
                     Types.VARCHAR,
                     Types.NUMERIC};
-            jdbcTemplate.update(sql, parameters, types);
+            this.jdbcTemplate.update(sql, parameters, types);
         }
 
         public void delete(final Long jobConfigurationId) {
-            final String sql = String.format(DELETE_STATEMENT, tablePrefix);
-            jdbcTemplate.update(sql, new Object[]{jobConfigurationId}, new int[]{Types.NUMERIC});
+            final String sql = String.format(DELETE_STATEMENT, this.tablePrefix);
+            this.jdbcTemplate.update(sql, new Object[]{jobConfigurationId}, new int[]{Types.NUMERIC});
         }
 
         private Map<String, Object> map(final JobConfiguration jobConfiguration) {
@@ -547,7 +547,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
                     parameters.put(JobConfigurationParameterDomain.PARAMETER_NAME, key);
                     parameters.put(JobConfigurationParameterDomain.PARAMETER_TYPE, clazzType);
                     parameters.put(JobConfigurationParameterDomain.PARAMETER_VALUE, value);
-                    simpleJdbcInsert.executeAndReturnKey(parameters);
+                    this.simpleJdbcInsert.executeAndReturnKey(parameters);
                 }
             } else {
                 log.info("JobParameters null, nothing to map!");
@@ -556,8 +556,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
         void attachParameters(final JobConfiguration jobConfiguration) {
             final Long jobConfigurationId = jobConfiguration.getJobConfigurationId();
-            final String sql = String.format(GET_JOB_PARAMETERS_QUERY, tablePrefix);
-            final List<JobConfigurationParameter> jobConfigurationParameters = jdbcTemplate.query(sql,
+            final String sql = String.format(GET_JOB_PARAMETERS_QUERY, this.tablePrefix);
+            final List<JobConfigurationParameter> jobConfigurationParameters = this.jdbcTemplate.query(sql,
                     new JobConfigurationParameterRowMapper(), jobConfigurationId);
             final Map<String, Object> jobParameters = new HashMap<>();
             for (final JobConfigurationParameter jobConfigurationParameter : jobConfigurationParameters) {
@@ -572,8 +572,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         }
 
         public void delete(final Long jobConfigurationId) {
-            final String sql = String.format(DELETE_STATEMENT, tablePrefix);
-            jdbcTemplate.update(sql, new Object[]{jobConfigurationId}, new int[]{Types.NUMERIC});
+            final String sql = String.format(DELETE_STATEMENT, this.tablePrefix);
+            this.jdbcTemplate.update(sql, new Object[]{jobConfigurationId}, new int[]{Types.NUMERIC});
         }
 
         private Object createValue(final String value, final ParameterType parameterType) {
@@ -604,7 +604,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
                 jobConfigurationParameter.setParameterValue(value.toString());
                 jobConfigurationParameter.setParameterType(ParameterType.STRING.getId());
             } else if (value instanceof Date) {
-                jobConfigurationParameter.setParameterValue(dateFormat
+                jobConfigurationParameter.setParameterValue(this.dateFormat
                         .format(ParameterParser.DATE_FORMAT_WITH_TIMESTAMP));
                 jobConfigurationParameter.setParameterType(ParameterType.DATE.getId());
             } else if (value instanceof Double) {
