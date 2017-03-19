@@ -1,7 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.repository.server.configuration;
 
 import lombok.Data;
-import org.springframework.batch.core.repository.dao.AbstractJdbcBatchMetadataDao;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.configuration.LightminRepositoryType;
 
@@ -14,7 +13,10 @@ import org.tuxdevelop.spring.batch.lightmin.configuration.LightminRepositoryType
 public class SpringBatchLightminRemoteRepositoryConfigurationProperties {
 
     private LightminRepositoryType lightminRepositoryType = LightminRepositoryType.JDBC;
-    private String jdbcTablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
+    //Lightmin Tables
+    private String jobConfigurationTableName = "BATCH_JOB_CONFIGURATION";
+    private String jobConfigurationValueTableName = "BATCH_JOB_CONFIGURATION_VALUE";
+    private String jobConfigurationParameterTableName = "BATCH_JOB_CONFIGURATION_PARAMETERS";
     private String dataSourceName = "dataSource";
     private String databaseSchema;
 

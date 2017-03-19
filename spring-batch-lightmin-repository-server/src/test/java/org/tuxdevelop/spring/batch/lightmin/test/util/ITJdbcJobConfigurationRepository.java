@@ -10,26 +10,23 @@ import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminCon
 public class ITJdbcJobConfigurationRepository extends JdbcJobConfigurationRepository implements ITJobConfigurationRepository {
 
     private static final String DELETE_FROM_JOB_PARAMETERS =
-            "DELETE FROM %sJOB_CONFIGURATION_PARAMETERS WHERE id >= 0";
-    private static final String DELETE_FROM_JOB_SCHEDULER =
-            "DELETE FROM %sJOB_SCHEDULER_CONFIGURATION WHERE id >= 0";
-    private static final String DELETE_FROM_JOB_LISTENERS =
-            "DELETE FROM %sJOB_LISTENER_CONFIGURATION WHERE id >= 0";
+            "DELETE FROM %s WHERE id >= 0";
+    private static final String DELETE_FROM_JOB_VALUES =
+            "DELETE FROM %s WHERE id >= 0";
     private static final String DELETE_FROM_JOB_CONFIGURATION =
-            "DELETE FROM %sJOB_CONFIGURATION WHERE job_configuration_id >= 0";
+            "DELETE FROM %s WHERE job_configuration_id >= 0";
 
 
     private final JdbcTemplate jdbcTemplate;
-    private final String tablePrefix;
     private final TransactionTemplate transactionTemplate;
     private final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
 
     public ITJdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate, final String tablePrefix,
                                             final PlatformTransactionManager platformTransactionManager,
                                             final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
-        super(jdbcTemplate, tablePrefix, springBatchLightminConfigurationProperties.getConfigurationDatabaseSchema());
+        super(jdbcTemplate, springBatchLightminConfigurationProperties);
         this.jdbcTemplate = jdbcTemplate;
-        this.tablePrefix = tablePrefix;
+
         this.transactionTemplate = new TransactionTemplate(platformTransactionManager);
         this.springBatchLightminConfigurationProperties = springBatchLightminConfigurationProperties;
         this.transactionTemplate.setReadOnly(Boolean.FALSE);
@@ -38,10 +35,12 @@ public class ITJdbcJobConfigurationRepository extends JdbcJobConfigurationReposi
     @Override
     public void clean(final String applicationName) {
         this.transactionTemplate.execute(status -> {
-            this.jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_PARAMETERS, this.tablePrefix));
-            this.jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_SCHEDULER, this.tablePrefix));
-            this.jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_LISTENERS, this.tablePrefix));
-            this.jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_CONFIGURATION, this.tablePrefix));
+            this.jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_PARAMETERS,
+                    this.springBatchLightminConfigurationProperties.getJobConfigurationParameterTableName()));
+            this.jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_VALUES,
+                    this.springBatchLightminConfigurationProperties.getJobConfigurationValueTableName()));
+            this.jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_CONFIGURATION,
+                    this.springBatchLightminConfigurationProperties.getJobConfigurationTableName()));
             return 1;
         });
     }

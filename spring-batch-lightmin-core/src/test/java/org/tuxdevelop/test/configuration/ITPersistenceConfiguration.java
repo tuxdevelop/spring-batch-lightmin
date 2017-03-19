@@ -28,7 +28,10 @@ public class ITPersistenceConfiguration {
     public DataSource dataSource() {
         final EmbeddedDatabaseBuilder embeddedDatabaseBuilder = new EmbeddedDatabaseBuilder();
         return embeddedDatabaseBuilder.addScript("classpath:create.sql")
-                .addScript("classpath:schema_h2.sql").setType(EmbeddedDatabaseType.H2).build();
+                .addScript("classpath:org/tuxdevelop/spring/batch/lightmin/drop_schema_h2.sql")
+                .addScript("classpath:org/tuxdevelop/spring/batch/lightmin/schema_h2.sql")
+                .setType(EmbeddedDatabaseType.H2)
+                .build();
     }
 
     @Bean

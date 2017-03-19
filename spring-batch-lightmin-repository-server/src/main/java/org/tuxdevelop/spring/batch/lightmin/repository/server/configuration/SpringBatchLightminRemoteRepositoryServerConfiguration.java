@@ -57,7 +57,11 @@ public class SpringBatchLightminRemoteRepositoryServerConfiguration {
     private JobConfigurationRepository createJdbcRepository(final SpringBatchLightminRemoteRepositoryConfigurationProperties springBatchLightminRemoteRepositoryConfigurationProperties,
                                                             final ApplicationContext applicationContext) {
         final JdbcTemplate jdbcTemplate = createJdbcTemplate(springBatchLightminRemoteRepositoryConfigurationProperties, applicationContext);
-        return new JdbcJobConfigurationRepository(jdbcTemplate, springBatchLightminRemoteRepositoryConfigurationProperties.getJdbcTablePrefix(), springBatchLightminRemoteRepositoryConfigurationProperties.getDatabaseSchema());
+        return new JdbcJobConfigurationRepository(jdbcTemplate,
+                springBatchLightminRemoteRepositoryConfigurationProperties.getJobConfigurationTableName(),
+                springBatchLightminRemoteRepositoryConfigurationProperties.getJobConfigurationValueTableName(),
+                springBatchLightminRemoteRepositoryConfigurationProperties.getJobConfigurationParameterTableName(),
+                springBatchLightminRemoteRepositoryConfigurationProperties.getDatabaseSchema());
     }
 
     private JobConfigurationRepository createMapRepository() {

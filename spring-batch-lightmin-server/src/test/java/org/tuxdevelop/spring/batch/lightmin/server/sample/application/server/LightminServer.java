@@ -35,7 +35,8 @@ public class LightminServer {
     public DataSource dataSource() {
         final EmbeddedDatabaseBuilder embeddedDatabaseBuilder = new EmbeddedDatabaseBuilder();
         return embeddedDatabaseBuilder
-                .addScript("classpath:properties/sample/server/sql/schema_h2.sql")
+                .addScript("classpath:org/tuxdevelop/spring/batch/lightmin/drop_schema_h2.sql")
+                .addScript("classpath:org/tuxdevelop/spring/batch/lightmin/schema_h2.sql")
                 .addScript("classpath:properties/sample/server/sql/inserts.sql")
                 .setType(EmbeddedDatabaseType.H2).build();
     }

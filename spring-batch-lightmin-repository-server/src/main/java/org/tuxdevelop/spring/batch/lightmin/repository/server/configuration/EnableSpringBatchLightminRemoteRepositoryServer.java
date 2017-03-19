@@ -6,7 +6,7 @@ import java.lang.annotation.*;
 
 /**
  * @author Marcel Becker
- * @version 0.1
+ * @version 0.4
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

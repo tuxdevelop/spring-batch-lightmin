@@ -1,37 +1,20 @@
 CREATE TABLE BATCH_JOB_CONFIGURATION (
-  job_configuration_id NUMERIC IDENTITY PRIMARY KEY NOT NULL,
-  application_name     UNIVARCHAR(255) NOT NULL,
-  job_name             UNIVARCHAR(255),
-  job_incrementer      UNIVARCHAR(255)
+  job_configuration_id   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
+  application_name       UNIVARCHAR(255)              NOT NULL,
+  job_name               UNIVARCHAR(255),
+  job_incrementer        UNIVARCHAR(255),
+  job_configuration_type INT                          NOT NULL
 )
 GO
 
-CREATE TABLE BATCH_JOB_SCHEDULER_CONFIGURATION (
+CREATE TABLE BATCH_JOB_CONFIGURATION_VALUE (
   id                   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
   job_configuration_id NUMERIC                      NOT NULL,
-  scheduler_type       INT                          NOT NULL,
-  cron_expression      UNIVARCHAR(255)              NULL,
-  initial_delay        NUMERIC                      NULL,
-  fixed_delay          NUMERIC                      NULL,
-  task_executor_type   INT                          NOT NULL,
-  bean_name            UNIVARCHAR(255)              NOT NULL,
-  status               UNIVARCHAR(255)              NOT NULL,
+  value_key            VARCHAR(255)                 NOT NULL,
+  configuration_value  VARCHAR(255),
   FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION (job_configuration_id)
 )
 GO
-
-CREATE TABLE BATCH_JOB_LISTENER_CONFIGURATION (
-  id                   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
-  job_configuration_id NUMERIC                      NOT NULL,
-  listener_type        INT                          NOT NULL,
-  source_folder        UNIVARCHAR(255)              NULL,
-  file_pattern         UNIVARCHAR(255)              NULL,
-  poller_period        NUMERIC                      NOT NULL,
-  task_executor_type   INT                          NOT NULL,
-  bean_name            UNIVARCHAR(255)              NOT NULL,
-  status               UNIVARCHAR(255)              NOT NULL,
-  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION (job_configuration_id)
-);
 
 CREATE TABLE BATCH_JOB_CONFIGURATION_PARAMETERS (
   id                   NUMERIC IDENTITY PRIMARY KEY NOT NULL,

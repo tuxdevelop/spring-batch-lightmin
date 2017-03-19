@@ -21,7 +21,10 @@ public class SpringBatchLightminConfigurationProperties {
 
     //Table Prefix
     private String repositoryTablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
-    private String configurationTablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
+    //Lightmin Tables
+    private String jobConfigurationTableName = "BATCH_JOB_CONFIGURATION";
+    private String jobConfigurationValueTableName = "BATCH_JOB_CONFIGURATION_VALUE";
+    private String jobConfigurationParameterTableName = "BATCH_JOB_CONFIGURATION_PARAMETERS";
     //Repository
     private LightminRepositoryType lightminRepositoryType = LightminRepositoryType.JDBC;
     private BatchRepositoryType batchRepositoryType = BatchRepositoryType.JDBC;
@@ -29,7 +32,7 @@ public class SpringBatchLightminConfigurationProperties {
     private String remoteRepositoryServerUrl;
     private String remoteRepositoryUsername;
     private String remoteRepositoryPassword;
-    
+
     private String batchDataSourceName = DEFAULT_DATA_SOURCE_NAME;
     private String dataSourceName = DEFAULT_DATA_SOURCE_NAME;
     private String configurationDatabaseSchema;

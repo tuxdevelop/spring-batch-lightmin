@@ -14,5 +14,6 @@ final class JobConfigurationDomain {
     static final String APLLICATION_NAME = "application_name";
     static final String JOB_NAME = "job_name";
     static final String JOB_INCREMENTER = "job_incrementer";
+    static final String JOB_CONFIGURATION_TYPE = "job_configuration_type";
 
 }

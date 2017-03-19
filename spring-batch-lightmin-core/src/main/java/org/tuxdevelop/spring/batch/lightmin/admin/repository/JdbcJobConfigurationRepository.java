@@ -1,19 +1,21 @@
 package org.tuxdevelop.spring.batch.lightmin.admin.repository;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.repository.dao.AbstractJdbcBatchMetadataDao;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
+import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 import org.tuxdevelop.spring.batch.lightmin.util.ParameterParser;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -30,32 +32,39 @@ import java.util.*;
 public class JdbcJobConfigurationRepository implements JobConfigurationRepository, InitializingBean {
 
     private final JdbcTemplate jdbcTemplate;
-    private final String tablePrefix;
     private final JobConfigurationDAO jobConfigurationDAO;
-    private final JobSchedulerConfigurationDAO jobSchedulerConfigurationDAO;
     private final JobConfigurationParameterDAO jobConfigurationParameterDAO;
-    private final JobListenerConfigurationDAO jobListenerConfigurationDAO;
+    private final JobConfigurationValueDAO jobConfigurationValueDAO;
 
-    public JdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate, final String tablePrefix, final String schema) {
+    public JdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate,
+                                          final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
+        this(jdbcTemplate,
+                springBatchLightminConfigurationProperties.getJobConfigurationTableName(),
+                springBatchLightminConfigurationProperties.getJobConfigurationValueTableName(),
+                springBatchLightminConfigurationProperties.getJobConfigurationParameterTableName(),
+                springBatchLightminConfigurationProperties.getConfigurationDatabaseSchema());
+
+    }
+
+    public JdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate,
+                                          final String jobConfigurationTableName,
+                                          final String jobConfigurationValueTableName,
+                                          final String jobConfigurationParameterTableName,
+                                          final String schema) {
+        log.debug("Initializing JdbcJobConfigurationRepository with tables names: {} , {} , {}", jobConfigurationTableName, jobConfigurationValueTableName, jobConfigurationParameterTableName);
         this.jdbcTemplate = jdbcTemplate;
-        if (tablePrefix != null && !tablePrefix.isEmpty()) {
-            this.tablePrefix = tablePrefix;
-        } else {
-            this.tablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
-        }
-        this.jobSchedulerConfigurationDAO = new JobSchedulerConfigurationDAO(jdbcTemplate, tablePrefix, schema);
-        this.jobConfigurationDAO = new JobConfigurationDAO(jdbcTemplate, tablePrefix, schema);
-        this.jobConfigurationParameterDAO = new JobConfigurationParameterDAO(jdbcTemplate, tablePrefix, schema);
-        this.jobListenerConfigurationDAO = new JobListenerConfigurationDAO(jdbcTemplate, tablePrefix, schema);
+        this.jobConfigurationDAO = new JobConfigurationDAO(jdbcTemplate, jobConfigurationTableName, schema);
+        this.jobConfigurationParameterDAO = new JobConfigurationParameterDAO(jdbcTemplate, jobConfigurationParameterTableName, schema);
+        this.jobConfigurationValueDAO = new JobConfigurationValueDAO(jdbcTemplate, jobConfigurationValueTableName);
     }
 
     @Override
     public JobConfiguration getJobConfiguration(final Long jobConfigurationId, final String applicationName) throws
             NoSuchJobConfigurationException {
         if (checkJobConfigurationExists(jobConfigurationId, applicationName)) {
-            final JobConfiguration jobConfiguration = this.jobConfigurationDAO.getById(jobConfigurationId, applicationName);
-            this.jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
-            this.jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
+            final JobConfigurationDAO.JobConfigurationJdbcWrapper jobConfigurationJdbcWrapper = this.jobConfigurationDAO.getById(jobConfigurationId, applicationName);
+            final JobConfiguration jobConfiguration = jobConfigurationJdbcWrapper.getJobConfiguration();
+            this.jobConfigurationValueDAO.attachConfigurationValues(jobConfiguration, jobConfigurationJdbcWrapper.jobConfigurationType);
             this.jobConfigurationParameterDAO.attachParameters(jobConfiguration);
             return jobConfiguration;
         } else {
@@ -68,12 +77,9 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     @Override
     public Collection<JobConfiguration> getJobConfigurations(final String jobName, final String applicationName) throws NoSuchJobException {
         if (checkJobConfigurationExists(jobName, applicationName)) {
-            final List<JobConfiguration> jobConfigurations = this.jobConfigurationDAO.getByJobName(jobName, applicationName);
-            for (final JobConfiguration jobConfiguration : jobConfigurations) {
-                this.jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
-                this.jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
-                this.jobConfigurationParameterDAO.attachParameters(jobConfiguration);
-            }
+            final List<JobConfigurationDAO.JobConfigurationJdbcWrapper> jobConfigurationJdbcWrappers = this.jobConfigurationDAO.getByJobName(jobName, applicationName);
+            final List<JobConfiguration> jobConfigurations = new ArrayList<>();
+            mapJobConfigurations(jobConfigurationJdbcWrappers, jobConfigurations);
             return jobConfigurations;
         } else {
             final String message = "No jobConfiguration could be found for jobName:" + jobName;
@@ -86,12 +92,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     public JobConfiguration add(final JobConfiguration jobConfiguration, final String applicationName) {
         final Long jobConfigurationId = this.jobConfigurationDAO.add(jobConfiguration, applicationName);
         jobConfiguration.setJobConfigurationId(jobConfigurationId);
-        if (jobConfiguration.getJobSchedulerConfiguration() != null) {
-            this.jobSchedulerConfigurationDAO.add(jobConfiguration);
-        }
-        if (jobConfiguration.getJobListenerConfiguration() != null) {
-            this.jobListenerConfigurationDAO.add(jobConfiguration);
-        }
+        this.jobConfigurationValueDAO.addConfigurationValues(jobConfiguration);
         this.jobConfigurationParameterDAO.add(jobConfiguration);
         return jobConfiguration;
     }
@@ -101,12 +102,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         final Long jobConfigurationId = jobConfiguration.getJobConfigurationId();
         if (checkJobConfigurationExists(jobConfigurationId, applicationName)) {
             this.jobConfigurationDAO.update(jobConfiguration, applicationName);
-            if (jobConfiguration.getJobSchedulerConfiguration() != null) {
-                this.jobSchedulerConfigurationDAO.update(jobConfiguration);
-            }
-            if (jobConfiguration.getJobListenerConfiguration() != null) {
-                this.jobListenerConfigurationDAO.update(jobConfiguration);
-            }
+            this.jobConfigurationValueDAO.update(jobConfiguration);
             this.jobConfigurationParameterDAO.delete(jobConfigurationId);
             this.jobConfigurationParameterDAO.add(jobConfiguration);
             return jobConfiguration;
@@ -122,8 +118,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         final Long jobConfigurationId = jobConfiguration.getJobConfigurationId();
         if (checkJobConfigurationExists(jobConfigurationId, applicationName)) {
             this.jobConfigurationParameterDAO.delete(jobConfigurationId);
-            this.jobSchedulerConfigurationDAO.delete(jobConfigurationId);
-            this.jobListenerConfigurationDAO.delete(jobConfigurationId);
+            this.jobConfigurationValueDAO.delete(jobConfigurationId);
             this.jobConfigurationDAO.delete(jobConfigurationId, applicationName);
         } else {
             final String message = "No jobConfiguration could be found for id:" + jobConfiguration;
@@ -134,30 +129,23 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
     @Override
     public Collection<JobConfiguration> getAllJobConfigurations(final String applicationName) {
-        final List<JobConfiguration> jobConfigurations = this.jobConfigurationDAO.getAll(applicationName);
-        for (final JobConfiguration jobConfiguration : jobConfigurations) {
-            this.jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
-            this.jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
-            this.jobConfigurationParameterDAO.attachParameters(jobConfiguration);
-        }
+        final List<JobConfigurationDAO.JobConfigurationJdbcWrapper> jobConfigurationJdbcWrappers = this.jobConfigurationDAO.getAll(applicationName);
+        final List<JobConfiguration> jobConfigurations = new ArrayList<>();
+        mapJobConfigurations(jobConfigurationJdbcWrappers, jobConfigurations);
         return jobConfigurations;
     }
 
     @Override
     public Collection<JobConfiguration> getAllJobConfigurationsByJobNames(final Collection<String> jobNames, final String applicationName) {
-        final List<JobConfiguration> jobConfigurations = this.jobConfigurationDAO.getAllByJobNames(jobNames, applicationName);
-        for (final JobConfiguration jobConfiguration : jobConfigurations) {
-            this.jobSchedulerConfigurationDAO.attachJobSchedulerConfiguration(jobConfiguration);
-            this.jobListenerConfigurationDAO.attachJobListenerConfiguration(jobConfiguration);
-            this.jobConfigurationParameterDAO.attachParameters(jobConfiguration);
-        }
+        final List<JobConfigurationDAO.JobConfigurationJdbcWrapper> jobConfigurationJdbcWrappers = this.jobConfigurationDAO.getAllByJobNames(jobNames, applicationName);
+        final List<JobConfiguration> jobConfigurations = new ArrayList<>();
+        mapJobConfigurations(jobConfigurationJdbcWrappers, jobConfigurations);
         return jobConfigurations;
     }
 
     @Override
     public void afterPropertiesSet() {
         assert this.jdbcTemplate != null;
-        assert this.tablePrefix != null;
     }
 
 	/*
@@ -172,12 +160,47 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         return this.jobConfigurationDAO.getJobNameCount(jobName, applicationName) > 0;
     }
 
+    private void mapJobConfigurations(final List<JobConfigurationDAO.JobConfigurationJdbcWrapper> jobConfigurationJdbcWrappers, final List<JobConfiguration> jobConfigurations) {
+        for (final JobConfigurationDAO.JobConfigurationJdbcWrapper jobConfigurationJdbcWrapper : jobConfigurationJdbcWrappers) {
+            final JobConfiguration jobConfiguration = jobConfigurationJdbcWrapper.getJobConfiguration();
+            this.jobConfigurationValueDAO.attachConfigurationValues(jobConfiguration, jobConfigurationJdbcWrapper.jobConfigurationType);
+            this.jobConfigurationParameterDAO.attachParameters(jobConfiguration);
+            jobConfigurations.add(jobConfiguration);
+        }
+    }
+
+    private static final class JobConfigurationType {
+        private JobConfigurationType() {
+        }
+
+        static final Integer SCHEDULER = 1;
+        static final Integer LISTENER = 2;
+
+        static Integer determineJobConfigurationType(final JobConfiguration jobConfiguration) {
+            final Integer jobConfigurationType;
+            if (jobConfiguration.getJobSchedulerConfiguration() != null) {
+                jobConfigurationType = JobConfigurationType.SCHEDULER;
+            } else if (jobConfiguration.getJobListenerConfiguration() != null) {
+                jobConfigurationType = JobConfigurationType.LISTENER;
+            } else {
+                throw new SpringBatchLightminApplicationException("Could not determine JobConfigurationType");
+            }
+            return jobConfigurationType;
+        }
+    }
+
+
+    /*
+     * ------------------------- DAOs ---------------------
+     */
+
+
     /**
      *
      */
     private static class JobConfigurationDAO {
 
-        private static final String TABLE_NAME = "%sJOB_CONFIGURATION";
+        private static final String TABLE_NAME = "%s";
 
         private static final String GET_JOB_CONFIGURATION_QUERY = "SELECT * FROM " + TABLE_NAME + " WHERE "
                 + JobConfigurationDomain.JOB_CONFIGURATION_ID + " = ? AND " + JobConfigurationDomain.APLLICATION_NAME + " = ?";
@@ -207,6 +230,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         private final JdbcTemplate jdbcTemplate;
         private final SimpleJdbcInsert simpleJdbcInsert;
         private final String tablePrefix;
+        private final JobConfigurationRowMapper jobConfigurationRowMapper;
+        private final JobConfigurationJdbcWrapperRowMapper jobConfigurationJdbcWrapperRowMapper;
 
         JobConfigurationDAO(final JdbcTemplate jdbcTemplate, final String tablePrefix, final String schema) {
             this.jdbcTemplate = jdbcTemplate;
@@ -215,6 +240,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
                     .withSchemaName(schema)
                     .withTableName(String.format(TABLE_NAME, tablePrefix)).usingGeneratedKeyColumns(
                             JobConfigurationDomain.JOB_CONFIGURATION_ID);
+            this.jobConfigurationRowMapper = new JobConfigurationRowMapper();
+            this.jobConfigurationJdbcWrapperRowMapper = new JobConfigurationJdbcWrapperRowMapper(this.jobConfigurationRowMapper);
         }
 
         public Long add(final JobConfiguration jobConfiguration, final String applicationName) {
@@ -223,14 +250,14 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             return key.longValue();
         }
 
-        JobConfiguration getById(final Long jobConfigurationId, final String applicationName) {
+        JobConfigurationJdbcWrapper getById(final Long jobConfigurationId, final String applicationName) {
             final String sql = String.format(GET_JOB_CONFIGURATION_QUERY, this.tablePrefix);
-            return this.jdbcTemplate.queryForObject(sql, new JobConfigurationRowMapper(), jobConfigurationId, applicationName);
+            return this.jdbcTemplate.queryForObject(sql, this.jobConfigurationJdbcWrapperRowMapper, jobConfigurationId, applicationName);
         }
 
-        List<JobConfiguration> getByJobName(final String jobName, final String applicationName) {
+        List<JobConfigurationJdbcWrapper> getByJobName(final String jobName, final String applicationName) {
             final String sql = String.format(GET_JOB_CONFIGURATIONS_BY_JOB_NAME_QUERY, this.tablePrefix);
-            return this.jdbcTemplate.query(sql, new JobConfigurationRowMapper(), jobName, applicationName);
+            return this.jdbcTemplate.query(sql, this.jobConfigurationJdbcWrapperRowMapper, jobName, applicationName);
         }
 
         public void update(final JobConfiguration jobConfiguration, final String applicationName) {
@@ -258,12 +285,12 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             return this.jdbcTemplate.queryForObject(sql, new Object[]{jobName, applicationName}, new int[]{Types.VARCHAR, Types.VARCHAR}, Long.class);
         }
 
-        List<JobConfiguration> getAll(final String applicationName) {
+        List<JobConfigurationJdbcWrapper> getAll(final String applicationName) {
             final String sql = String.format(GET_ALL_JOB_CONFIGURATION_QUERY, this.tablePrefix);
-            return this.jdbcTemplate.query(sql, new JobConfigurationRowMapper(), applicationName);
+            return this.jdbcTemplate.query(sql, this.jobConfigurationJdbcWrapperRowMapper, applicationName);
         }
 
-        List<JobConfiguration> getAllByJobNames(final Collection<String> jobNames, final String applicationName) {
+        List<JobConfigurationJdbcWrapper> getAllByJobNames(final Collection<String> jobNames, final String applicationName) {
             final String inParameters = parseInCollection(jobNames);
             final String sql = String.format(GET_ALL_JOB_CONFIGURATION_BY_JOB_NAMES_QUERY, this.tablePrefix, inParameters);
             final Object[] parameters = new Object[jobNames.size() + 1];
@@ -271,7 +298,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             final Object[] jobNamesArray = jobNames.toArray();
             System.arraycopy(jobNamesArray, 0, parameters, 1, jobNamesArray.length);
             return this.jdbcTemplate
-                    .query(sql, new JobConfigurationRowMapper(), parameters);
+                    .query(sql, this.jobConfigurationJdbcWrapperRowMapper, parameters);
         }
 
         private Map<String, Object> map(final JobConfiguration jobConfiguration, final String applicationName) {
@@ -283,6 +310,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             if (jobConfiguration.getJobConfigurationId() != null) {
                 keyValues.put(JobConfigurationDomain.JOB_CONFIGURATION_ID, jobConfiguration.getJobConfigurationId());
             }
+            final Integer jobConfigurationType = JobConfigurationType.determineJobConfigurationType(jobConfiguration);
+            keyValues.put(JobConfigurationDomain.JOB_CONFIGURATION_TYPE, jobConfigurationType);
             return keyValues;
         }
 
@@ -298,221 +327,379 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             }
             return stringBuilder.toString();
         }
-    }
 
-    /**
-     *
-     */
-    private static class JobListenerConfigurationDAO {
+        private class JobConfigurationJdbcWrapperRowMapper implements RowMapper<JobConfigurationJdbcWrapper> {
 
-        private static final String TABLE_NAME = "%sJOB_LISTENER_CONFIGURATION";
+            private final JobConfigurationRowMapper jobConfigurationRowMapper;
 
-        private static final String GET_JOB_LISTENER_QUERY = "SELECT * FROM " + TABLE_NAME + " WHERE "
-                + JobListenerConfigurationDomain.JOB_CONFIGURATION_ID + " = ?";
+            private JobConfigurationJdbcWrapperRowMapper(final JobConfigurationRowMapper jobConfigurationRowMapper) {
+                this.jobConfigurationRowMapper = jobConfigurationRowMapper;
+            }
 
-        private static final String DELETE_STATEMENT = "DELETE FROM " + TABLE_NAME + " WHERE "
-                + JobListenerConfigurationDomain.JOB_CONFIGURATION_ID + " = ?";
+            @Override
+            public JobConfigurationJdbcWrapper mapRow(final ResultSet resultSet, final int i) throws SQLException {
+                final JobConfiguration jobConfiguration = this.jobConfigurationRowMapper.mapRow(resultSet, i);
+                final Integer jobConfigurationType = resultSet.getInt(JobConfigurationDomain.JOB_CONFIGURATION_TYPE);
+                return new JobConfigurationJdbcWrapper(jobConfiguration, jobConfigurationType);
+            }
 
-        private static final String UPDATE_STATEMENT = "UPDATE " + TABLE_NAME + " SET "
-                + JobListenerConfigurationDomain.LISTENER_TYPE + " = ? , "
-                + JobListenerConfigurationDomain.FILE_PATTERN + " = ? , "
-                + JobListenerConfigurationDomain.SOURCE_FOLDER + " = ? , "
-                + JobListenerConfigurationDomain.TASK_EXECUTOR_TYPE + " = ? , "
-                + JobListenerConfigurationDomain.POLLER_PERIOD + " = ? , "
-                + JobListenerConfigurationDomain.BEAN_NAME + " = ? , "
-                + JobListenerConfigurationDomain.STATUS + " = ? WHERE "
-                + JobListenerConfigurationDomain.JOB_CONFIGURATION_ID + " = ? ";
-
-
-        private final JdbcTemplate jdbcTemplate;
-        private final SimpleJdbcInsert simpleJdbcInsert;
-        private final String tablePrefix;
-
-        JobListenerConfigurationDAO(final JdbcTemplate jdbcTemplate, final String tablePrefix, final String schema) {
-            this.jdbcTemplate = jdbcTemplate;
-            this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                    .withSchemaName(schema)
-                    .withTableName(String.format(TABLE_NAME, tablePrefix))
-                    .usingGeneratedKeyColumns(JobListenerConfigurationDomain.ID);
-            this.tablePrefix = tablePrefix;
         }
 
-        public Long add(final JobConfiguration jobConfiguration) {
-            final Map<String, ?> keyValues = map(jobConfiguration);
-            final Number key = this.simpleJdbcInsert.executeAndReturnKey(keyValues);
-            return key.longValue();
-        }
+        private static class JobConfigurationRowMapper implements RowMapper<JobConfiguration> {
 
-        public void update(final JobConfiguration jobConfiguration) {
-            final JobListenerConfiguration jobListenerConfiguration = jobConfiguration.getJobListenerConfiguration();
-            final String sql = String.format(UPDATE_STATEMENT, this.tablePrefix);
-            final Object[] objects = {
-                    jobListenerConfiguration.getJobListenerType().getId(),
-                    jobListenerConfiguration.getFilePattern(),
-                    jobListenerConfiguration.getSourceFolder(),
-                    jobListenerConfiguration.getTaskExecutorType().getId(),
-                    jobListenerConfiguration.getPollerPeriod(),
-                    jobListenerConfiguration.getBeanName(),
-                    jobListenerConfiguration.getListenerStatus().getValue(),
-                    jobConfiguration.getJobConfigurationId()
-            };
-            final int[] types = {
-                    Types.INTEGER,
-                    Types.VARCHAR,
-                    Types.VARCHAR,
-                    Types.INTEGER,
-                    Types.NUMERIC,
-                    Types.VARCHAR,
-                    Types.VARCHAR,
-                    Types.NUMERIC
-            };
-            this.jdbcTemplate.update(sql, objects, types);
-        }
-
-        public void delete(final Long jobConfigurationId) {
-            final String sql = String.format(DELETE_STATEMENT, this.tablePrefix);
-            this.jdbcTemplate.update(sql, new Object[]{jobConfigurationId}, new int[]{Types.NUMERIC});
-        }
-
-        void attachJobListenerConfiguration(final JobConfiguration jobConfiguration) {
-            final String sql = String.format(GET_JOB_LISTENER_QUERY, this.tablePrefix);
-            try {
-                final JobListenerConfiguration jobListenerConfiguration = this.jdbcTemplate.queryForObject(sql,
-                        new JobListenerConfigurationRowMapper(), jobConfiguration.getJobConfigurationId());
-                jobConfiguration.setJobListenerConfiguration(jobListenerConfiguration);
-            } catch (final DataAccessException e) {
-                log.debug("Could not get JobListenerConfiguration for jobConfigurationId {}", jobConfiguration.getJobConfigurationId());
+            @Override
+            public JobConfiguration mapRow(final ResultSet resultSet, final int rowNum) throws SQLException {
+                final JobConfiguration jobConfiguration = new JobConfiguration();
+                jobConfiguration.setJobConfigurationId(resultSet.getLong(JobConfigurationDomain.JOB_CONFIGURATION_ID));
+                jobConfiguration.setJobName(resultSet.getString(JobConfigurationDomain.JOB_NAME));
+                final JobIncrementer jobIncrementer = JobIncrementer.getByIdentifier(resultSet
+                        .getString(JobConfigurationDomain.JOB_INCREMENTER));
+                jobConfiguration.setJobIncrementer(jobIncrementer);
+                return jobConfiguration;
             }
         }
 
-        private Map<String, Object> map(final JobConfiguration jobConfiguration) {
-            final JobListenerConfiguration jobListenerConfiguration = jobConfiguration.getJobListenerConfiguration();
-            final Map<String, Object> keyValues = new HashMap<>();
-            keyValues.put(JobListenerConfigurationDomain.LISTENER_TYPE, jobListenerConfiguration.getJobListenerType().getId());
-            keyValues.put(JobListenerConfigurationDomain.SOURCE_FOLDER, jobListenerConfiguration.getSourceFolder());
-            keyValues.put(JobListenerConfigurationDomain.FILE_PATTERN, jobListenerConfiguration.getFilePattern());
-            keyValues.put(JobListenerConfigurationDomain.STATUS, jobListenerConfiguration.getListenerStatus().getValue());
-            keyValues.put(JobListenerConfigurationDomain.JOB_CONFIGURATION_ID, jobConfiguration.getJobConfigurationId());
-            keyValues.put(JobListenerConfigurationDomain.BEAN_NAME, jobListenerConfiguration.getBeanName());
-            keyValues.put(JobListenerConfigurationDomain.TASK_EXECUTOR_TYPE, jobListenerConfiguration.getTaskExecutorType().getId());
-            keyValues.put(JobListenerConfigurationDomain.POLLER_PERIOD, jobListenerConfiguration.getPollerPeriod());
-            return keyValues;
+
+        @Data
+        class JobConfigurationJdbcWrapper {
+            private final JobConfiguration jobConfiguration;
+            private final Integer jobConfigurationType;
         }
-
     }
-
 
     /**
      *
      */
-    private static class JobSchedulerConfigurationDAO {
+    private static class JobConfigurationValueDAO {
 
-        private static final String TABLE_NAME = "%sJOB_SCHEDULER_CONFIGURATION";
+        private static final String SELECT_VALUES_BY_JOB_CONFIGURATION_ID
+                = "SELECT * FROM %s "
+                + "WHERE " + ValueRecordDomain.JOB_CONFIGURATION_ID + " = ?";
 
-        private static final String GET_JOB_SCHEDULER_QUERY = "SELECT * FROM " + TABLE_NAME + " WHERE "
-                + JobSchedulerConfigurationDomain.JOB_CONFIGURATION_ID + " = ?";
+        private static final String INSERT_VALUES
+                = "INSERT INTO %s (" + ValueRecordDomain.JOB_CONFIGURATION_ID + "," + ValueRecordDomain.KEY + ", " + ValueRecordDomain.VALUE + ")"
+                + " VALUES (?,?,?)";
 
-        private static final String UPDATE_STATEMENT = "UPDATE " + TABLE_NAME + " SET "
-                + JobSchedulerConfigurationDomain.CRON_EXPRESSION + " = ? , "
-                + JobSchedulerConfigurationDomain.FIXED_DELAY + " = ? , "
-                + JobSchedulerConfigurationDomain.INITIAL_DELAY + " = ? , "
-                + JobSchedulerConfigurationDomain.SCHEDULER_TYPE + " = ?, "
-                + JobSchedulerConfigurationDomain.TASK_EXECUTOR_TYPE + " = ?, "
-                + JobSchedulerConfigurationDomain.BEAN_NAME + " = ?, "
-                + JobSchedulerConfigurationDomain.STATUS + " = ? WHERE "
-                + JobSchedulerConfigurationDomain.JOB_CONFIGURATION_ID + " = ? ";
+        private static final String UPDATE_VALUES
+                = "UPDATE %s SET "
+                + ValueRecordDomain.VALUE + " = ? "
+                + "WHERE " + ValueRecordDomain.JOB_CONFIGURATION_ID + " = ? "
+                + " AND " + ValueRecordDomain.KEY + " = ?";
 
-        private static final String DELETE_STATEMENT = "DELETE FROM " + TABLE_NAME + " WHERE "
-                + JobSchedulerConfigurationDomain.JOB_CONFIGURATION_ID + " = ?";
+        private static final String DELETE_VALUES
+                = "DELETE FROM %s "
+                + "WHERE " + ValueRecordDomain.JOB_CONFIGURATION_ID + " = ?";
 
         private final JdbcTemplate jdbcTemplate;
-        private final SimpleJdbcInsert simpleJdbcInsert;
-        private final String tablePrefix;
+        private final String tableName;
+        private final ValueRecordRowMapper valueRecordRowMapper;
 
-        JobSchedulerConfigurationDAO(final JdbcTemplate jdbcTemplate, final String tablePrefix, final String schema) {
+        JobConfigurationValueDAO(final JdbcTemplate jdbcTemplate, final String tableName) {
             this.jdbcTemplate = jdbcTemplate;
-            this.tablePrefix = tablePrefix;
-            this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                    .withSchemaName(schema)
-                    .withTableName(String.format(TABLE_NAME, tablePrefix))
-                    .usingGeneratedKeyColumns(JobSchedulerConfigurationDomain.ID);
+            this.tableName = tableName;
+            this.valueRecordRowMapper = new ValueRecordRowMapper();
         }
 
-        public Long add(final JobConfiguration jobConfiguration) {
-            final Map<String, ?> keyValues = map(jobConfiguration);
-            final Number key = this.simpleJdbcInsert.executeAndReturnKey(keyValues);
-            return key.longValue();
+        void attachConfigurationValues(final JobConfiguration jobConfiguration, final Integer configurationType) {
+            final String sql = String.format(SELECT_VALUES_BY_JOB_CONFIGURATION_ID, this.tableName);
+            final List<ValueRecord> valueRecords = this.jdbcTemplate.query(
+                    sql,
+                    new Object[]{jobConfiguration.getJobConfigurationId()},
+                    new int[]{Types.NUMERIC},
+                    this.valueRecordRowMapper);
+            attachByConfigurationType(jobConfiguration, configurationType, valueRecords);
         }
 
-        void attachJobSchedulerConfiguration(final JobConfiguration jobConfiguration) {
-            final String sql = String.format(GET_JOB_SCHEDULER_QUERY, this.tablePrefix);
-            try {
-                final JobSchedulerConfiguration jobSchedulerConfiguration = this.jdbcTemplate.queryForObject(sql,
-                        new JobSchedulerConfigurationRowMapper(), jobConfiguration.getJobConfigurationId());
+        void addConfigurationValues(final JobConfiguration jobConfiguration) {
+            final List<ValueRecord> valueRecords = getValueRecords(jobConfiguration);
+            final String sql = String.format(INSERT_VALUES, this.tableName);
+            this.jdbcTemplate.batchUpdate(
+                    sql,
+                    new BatchPreparedStatementSetter() {
+                        @Override
+                        public void setValues(final PreparedStatement preparedStatement, final int i) throws SQLException {
+                            final ValueRecord valueRecord = valueRecords.get(i);
+                            final String value = valueRecord.getValue() != null ? valueRecord.getValue().toString() : null;
+                            preparedStatement.setLong(1, valueRecord.getJobConfigurationId());
+                            preparedStatement.setString(2, valueRecord.getKey());
+                            preparedStatement.setString(3, value);
+                        }
+
+                        @Override
+                        public int getBatchSize() {
+                            return valueRecords.size();
+                        }
+                    }
+            );
+        }
+
+
+        void update(final JobConfiguration jobConfiguration) {
+            final List<ValueRecord> valueRecords = getValueRecords(jobConfiguration);
+            final String sql = String.format(UPDATE_VALUES, this.tableName);
+            this.jdbcTemplate.batchUpdate(
+                    sql,
+                    new BatchPreparedStatementSetter() {
+                        @Override
+                        public void setValues(final PreparedStatement preparedStatement, final int i) throws SQLException {
+                            final ValueRecord valueRecord = valueRecords.get(i);
+                            final String value = valueRecord.getValue() != null ? valueRecord.getValue().toString() : null;
+                            preparedStatement.setString(1, value);
+                            preparedStatement.setLong(2, valueRecord.getJobConfigurationId());
+                            preparedStatement.setString(3, valueRecord.getKey());
+                        }
+
+                        @Override
+                        public int getBatchSize() {
+                            return valueRecords.size();
+                        }
+                    }
+            );
+        }
+
+        void delete(final Long jobConfigurationId) {
+            final String sql = String.format(DELETE_VALUES, this.tableName);
+            this.jdbcTemplate.update(
+                    sql,
+                    new Object[]{
+                            jobConfigurationId
+                    },
+                    new int[]{
+                            Types.NUMERIC
+                    }
+            );
+        }
+
+        private List<ValueRecord> getValueRecords(final JobConfiguration jobConfiguration) {
+            final Integer jobConfigurationType = JobConfigurationType.determineJobConfigurationType(jobConfiguration);
+            final List<ValueRecord> valueRecords;
+            if (JobConfigurationType.SCHEDULER.equals(jobConfigurationType)) {
+                valueRecords = JobSchedulerConfigurationMapper.map(jobConfiguration.getJobSchedulerConfiguration(), jobConfiguration.getJobConfigurationId());
+            } else if (JobConfigurationType.LISTENER.equals(jobConfigurationType)) {
+                valueRecords = JobListenerConfigurationMapper.map(jobConfiguration.getJobListenerConfiguration(), jobConfiguration.getJobConfigurationId());
+            } else {
+                throw new SpringBatchLightminApplicationException("Unknown JobConfigurationType : " + jobConfigurationType);
+            }
+            return valueRecords;
+        }
+
+        private void attachByConfigurationType(final JobConfiguration jobConfiguration, final Integer
+                configurationType, final List<ValueRecord> valueRecords) {
+            final Map<String, Object> values = this.valueRecordRowMapper.map(valueRecords);
+            if (JobConfigurationType.SCHEDULER.equals(configurationType)) {
+                final JobSchedulerConfiguration jobSchedulerConfiguration = JobSchedulerConfigurationMapper.map(values);
                 jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
-            } catch (final DataAccessException e) {
-                log.debug("Clound not get JobSchedulerConfiguration for jobConfigurationId {}", jobConfiguration.getJobConfigurationId());
+            } else if (JobConfigurationType.LISTENER.equals(configurationType)) {
+                final JobListenerConfiguration jobListenerConfiguration = JobListenerConfigurationMapper.map(values);
+                jobConfiguration.setJobListenerConfiguration(jobListenerConfiguration);
+            } else {
+                throw new SpringBatchLightminApplicationException("Unknown jobConfigurationType :" + configurationType);
             }
         }
 
-        public void update(final JobConfiguration jobConfiguration) {
-            final JobSchedulerConfiguration jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
-            final String sql = String.format(UPDATE_STATEMENT, this.tablePrefix);
-            final Object[] parameters = {
-                    jobSchedulerConfiguration.getCronExpression(),
-                    jobSchedulerConfiguration.getFixedDelay(),
-                    jobSchedulerConfiguration.getInitialDelay(),
-                    jobSchedulerConfiguration.getJobSchedulerType().getId(),
-                    jobSchedulerConfiguration.getTaskExecutorType().getId(),
-                    jobSchedulerConfiguration.getBeanName(),
-                    jobSchedulerConfiguration.getSchedulerStatus().getValue(),
-                    jobConfiguration.getJobConfigurationId()};
-            final int[] types = {
-                    Types.VARCHAR,
-                    Types.NUMERIC,
-                    Types.NUMERIC,
-                    Types.NUMERIC,
-                    Types.NUMERIC,
-                    Types.VARCHAR,
-                    Types.VARCHAR,
-                    Types.NUMERIC};
-            this.jdbcTemplate.update(sql, parameters, types);
+        private static final class ValueRecordDomain {
+            private ValueRecordDomain() {
+            }
+
+            static final String ID = "id";
+            static final String JOB_CONFIGURATION_ID = "job_configuration_id";
+            static final String KEY = "value_key";
+            static final String VALUE = "configuration_value";
         }
 
-        public void delete(final Long jobConfigurationId) {
-            final String sql = String.format(DELETE_STATEMENT, this.tablePrefix);
-            this.jdbcTemplate.update(sql, new Object[]{jobConfigurationId}, new int[]{Types.NUMERIC});
+        private static class ValueRecordRowMapper implements RowMapper<ValueRecord> {
+
+            @Override
+            public ValueRecord mapRow(final ResultSet resultSet, final int i) throws SQLException {
+                final ValueRecord valueRecord = new ValueRecord();
+                valueRecord.setId(resultSet.getLong(ValueRecordDomain.ID));
+                valueRecord.setJobConfigurationId(resultSet.getLong(ValueRecordDomain.JOB_CONFIGURATION_ID));
+                valueRecord.setKey(resultSet.getString(ValueRecordDomain.KEY));
+                valueRecord.setValue(resultSet.getString(ValueRecordDomain.VALUE));
+                return valueRecord;
+            }
+
+            public Map<String, Object> map(final List<ValueRecord> valueRecords) {
+                final Map<String, Object> valueRecordMap = new HashMap<>();
+                if (valueRecords != null) {
+                    for (final ValueRecord valueRecord : valueRecords) {
+                        valueRecordMap.put(valueRecord.getKey(), valueRecord.getValue());
+                    }
+                }
+                return valueRecordMap;
+            }
         }
 
-        private Map<String, Object> map(final JobConfiguration jobConfiguration) {
-            final JobSchedulerConfiguration jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
-            final Map<String, Object> keyValues = new HashMap<>();
-            keyValues.put(JobSchedulerConfigurationDomain.JOB_CONFIGURATION_ID,
-                    jobConfiguration.getJobConfigurationId());
-            keyValues.put(JobSchedulerConfigurationDomain.CRON_EXPRESSION,
-                    jobSchedulerConfiguration.getCronExpression());
-            keyValues.put(JobSchedulerConfigurationDomain.INITIAL_DELAY, jobSchedulerConfiguration.getInitialDelay());
-            keyValues.put(JobSchedulerConfigurationDomain.FIXED_DELAY, jobSchedulerConfiguration.getFixedDelay());
-            keyValues.put(JobSchedulerConfigurationDomain.SCHEDULER_TYPE, jobSchedulerConfiguration
-                    .getJobSchedulerType().getId());
-            keyValues.put(JobSchedulerConfigurationDomain.TASK_EXECUTOR_TYPE, jobSchedulerConfiguration
-                    .getTaskExecutorType().getId());
-            keyValues.put(JobSchedulerConfigurationDomain.BEAN_NAME, jobSchedulerConfiguration.getBeanName());
-            keyValues.put(JobSchedulerConfigurationDomain.STATUS,
-                    jobSchedulerConfiguration.getSchedulerStatus().getValue());
-            return keyValues;
+        private static final class JobSchedulerConfigurationMapper {
+
+            private JobSchedulerConfigurationMapper() {
+            }
+
+            public static JobSchedulerConfiguration map(final Map<String, Object> values) {
+                final JobSchedulerConfiguration jobSchedulerConfiguration = new JobSchedulerConfiguration();
+                jobSchedulerConfiguration.setBeanName(getValueOrNull(values, JobSchedulerConfigurationDomain.BEAN_NAME, String.class));
+                jobSchedulerConfiguration.setCronExpression(getValueOrNull(values, JobSchedulerConfigurationDomain.CRON_EXPRESSION, String.class));
+                jobSchedulerConfiguration.setFixedDelay(getValueOrNull(values, JobSchedulerConfigurationDomain.FIXED_DELAY, Long.class));
+                jobSchedulerConfiguration.setInitialDelay(getValueOrNull(values, JobSchedulerConfigurationDomain.INITIAL_DELAY, Long.class));
+                final JobSchedulerType jobSchedulerType = JobSchedulerType.getById(getValueOrNull(values, JobSchedulerConfigurationDomain.SCHEDULER_TYPE, Long.class));
+                jobSchedulerConfiguration.setJobSchedulerType(jobSchedulerType);
+                final SchedulerStatus schedulerStatus = SchedulerStatus.getByValue(getValueOrNull(values, JobSchedulerConfigurationDomain.STATUS, String.class));
+                jobSchedulerConfiguration.setSchedulerStatus(schedulerStatus);
+                final TaskExecutorType taskExecutorType = TaskExecutorType.getById(getValueOrNull(values, JobSchedulerConfigurationDomain.TASK_EXECUTOR_TYPE, Long.class));
+                jobSchedulerConfiguration.setTaskExecutorType(taskExecutorType);
+                return jobSchedulerConfiguration;
+            }
+
+            public static List<ValueRecord> map(final JobSchedulerConfiguration jobSchedulerConfiguration,
+                                                final Long jobConfigurationId) {
+                final List<ValueRecord> valueRecords = new ArrayList<>();
+                final ValueRecord beanName = new ValueRecord(jobConfigurationId, JobSchedulerConfigurationDomain.BEAN_NAME, jobSchedulerConfiguration.getBeanName());
+                final ValueRecord cronExpression = new ValueRecord(jobConfigurationId, JobSchedulerConfigurationDomain.CRON_EXPRESSION, jobSchedulerConfiguration.getCronExpression());
+                final ValueRecord fixedDelay = new ValueRecord(jobConfigurationId, JobSchedulerConfigurationDomain.FIXED_DELAY, jobSchedulerConfiguration.getFixedDelay());
+                final ValueRecord initialDelay = new ValueRecord(jobConfigurationId, JobSchedulerConfigurationDomain.INITIAL_DELAY, jobSchedulerConfiguration.getInitialDelay());
+                final ValueRecord schedulerStatus = new ValueRecord(jobConfigurationId, JobSchedulerConfigurationDomain.STATUS, jobSchedulerConfiguration.getSchedulerStatus().getValue());
+                final ValueRecord schedulerType = new ValueRecord(jobConfigurationId, JobSchedulerConfigurationDomain.SCHEDULER_TYPE, jobSchedulerConfiguration.getJobSchedulerType().getId());
+                final ValueRecord executorType = new ValueRecord(jobConfigurationId, JobSchedulerConfigurationDomain.TASK_EXECUTOR_TYPE, jobSchedulerConfiguration.getTaskExecutorType().getId());
+                valueRecords.add(beanName);
+                valueRecords.add(cronExpression);
+                valueRecords.add(fixedDelay);
+                valueRecords.add(initialDelay);
+                valueRecords.add(schedulerStatus);
+                valueRecords.add(schedulerType);
+                valueRecords.add(executorType);
+                return valueRecords;
+            }
         }
+
+        private static final class JobListenerConfigurationMapper {
+            private JobListenerConfigurationMapper() {
+            }
+
+            public static JobListenerConfiguration map(final Map<String, Object> values) {
+                final JobListenerConfiguration jobListenerConfiguration = new JobListenerConfiguration();
+                jobListenerConfiguration.setBeanName(getValueOrNull(values, JobListenerConfigurationDomain.BEAN_NAME, String.class));
+                jobListenerConfiguration.setFilePattern(getValueOrNull(values, JobListenerConfigurationDomain.FILE_PATTERN, String.class));
+                jobListenerConfiguration.setPollerPeriod(getValueOrNull(values, JobListenerConfigurationDomain.POLLER_PERIOD, Long.class));
+                jobListenerConfiguration.setSourceFolder(getValueOrNull(values, JobListenerConfigurationDomain.SOURCE_FOLDER, String.class));
+                final ListenerStatus listenerStatus = ListenerStatus.getByValue(getValueOrNull(values, JobListenerConfigurationDomain.STATUS, String.class));
+                jobListenerConfiguration.setListenerStatus(listenerStatus);
+                final JobListenerType jobListenerType = JobListenerType.getById(getValueOrNull(values, JobListenerConfigurationDomain.LISTENER_TYPE, Long.class));
+                jobListenerConfiguration.setJobListenerType(jobListenerType);
+                final TaskExecutorType taskExecutorType = TaskExecutorType.getById(getValueOrNull(values, JobSchedulerConfigurationDomain.TASK_EXECUTOR_TYPE, Long.class));
+                jobListenerConfiguration.setTaskExecutorType(taskExecutorType);
+                return jobListenerConfiguration;
+            }
+
+            public static List<ValueRecord> map(final JobListenerConfiguration jobListenerConfiguration,
+                                                final Long jobConfigurationId) {
+                final List<ValueRecord> valueRecords = new ArrayList<>();
+                final ValueRecord beanName = new ValueRecord(jobConfigurationId, JobListenerConfigurationDomain.BEAN_NAME, jobListenerConfiguration.getBeanName());
+                final ValueRecord filePattern = new ValueRecord(jobConfigurationId, JobListenerConfigurationDomain.FILE_PATTERN, jobListenerConfiguration.getFilePattern());
+                final ValueRecord pollerPeriod = new ValueRecord(jobConfigurationId, JobListenerConfigurationDomain.POLLER_PERIOD, jobListenerConfiguration.getPollerPeriod());
+                final ValueRecord sourceFolder = new ValueRecord(jobConfigurationId, JobListenerConfigurationDomain.SOURCE_FOLDER, jobListenerConfiguration.getSourceFolder());
+                final ValueRecord listenerStatus = new ValueRecord(jobConfigurationId, JobListenerConfigurationDomain.STATUS, jobListenerConfiguration.getListenerStatus().getValue());
+                final ValueRecord listenerType = new ValueRecord(jobConfigurationId, JobListenerConfigurationDomain.LISTENER_TYPE, jobListenerConfiguration.getJobListenerType().getId());
+                final ValueRecord executorType = new ValueRecord(jobConfigurationId, JobListenerConfigurationDomain.TASK_EXECUTOR_TYPE, jobListenerConfiguration.getTaskExecutorType().getId());
+                valueRecords.add(beanName);
+                valueRecords.add(filePattern);
+                valueRecords.add(pollerPeriod);
+                valueRecords.add(sourceFolder);
+                valueRecords.add(listenerStatus);
+                valueRecords.add(listenerType);
+                valueRecords.add(executorType);
+                return valueRecords;
+            }
+        }
+
+
+        @SuppressWarnings("unchecked")
+        private static <T> T getValueOrNull(final Map<String, Object> map, final String key, final Class<T> clazz) {
+            final T value;
+            if (map.containsKey(key)) {
+                final String mapValue = (String) map.get(key);
+                if (clazz.isAssignableFrom(Long.class)) {
+                    value = (T) new Long(Long.parseLong(mapValue));
+                } else if (clazz.isAssignableFrom(String.class)) {
+                    value = (T) mapValue;
+                } else if (clazz.isAssignableFrom(Integer.class)) {
+                    value = (T) new Integer(Integer.parseInt(mapValue));
+                } else if (clazz.isAssignableFrom(Date.class)) {
+                    value = (T) ParameterParser.parseDate(mapValue);
+                } else if (clazz.isAssignableFrom(Double.class)) {
+                    value = (T) new Double(Double.parseDouble(mapValue));
+                } else {
+                    value = (T) mapValue;
+                }
+            } else {
+                value = null;
+            }
+            return value;
+        }
+
+        @Data
+        @NoArgsConstructor
+        private static class ValueRecord {
+            private Long id;
+            private Long jobConfigurationId;
+            private String key;
+            private Object value;
+
+            ValueRecord(final Long jobConfigurationId,
+                        final String key,
+                        final Object value) {
+                this.jobConfigurationId = jobConfigurationId;
+                this.key = key;
+                this.value = value;
+            }
+        }
+
+        /**
+         * TODO: include me in ValueDAO
+         */
+        private final class JobSchedulerConfigurationDomain {
+
+            private JobSchedulerConfigurationDomain() {
+            }
+
+            static final String SCHEDULER_TYPE = "scheduler_type";
+            static final String CRON_EXPRESSION = "cron_expression";
+            static final String INITIAL_DELAY = "initial_delay";
+            static final String FIXED_DELAY = "fixed_delay";
+            static final String TASK_EXECUTOR_TYPE = "task_executor_type";
+            static final String BEAN_NAME = "bean_name";
+            static final String STATUS = "status";
+
+        }
+
+        /**
+         * TODO: include me in ValueDAO
+         */
+        private final class JobListenerConfigurationDomain {
+
+            private JobListenerConfigurationDomain() {
+            }
+
+            static final String LISTENER_TYPE = "listener_type";
+            static final String SOURCE_FOLDER = "source_folder";
+            static final String FILE_PATTERN = "file_pattern";
+            static final String POLLER_PERIOD = "poller_period";
+            static final String BEAN_NAME = "bean_name";
+            static final String TASK_EXECUTOR_TYPE = "task_executor_type";
+            static final String STATUS = "status";
+        }
+
     }
+
 
     /**
      *
      */
     private static class JobConfigurationParameterDAO {
 
-        private static final String TABLE_NAME = "%sJOB_CONFIGURATION_PARAMETERS";
+        private static final String TABLE_NAME = "%s";
 
         private static final String GET_JOB_PARAMETERS_QUERY = "SELECT * FROM " + TABLE_NAME + " WHERE "
-                + JobSchedulerConfigurationDomain.JOB_CONFIGURATION_ID + " = ?";
+                + JobConfigurationDomain.JOB_CONFIGURATION_ID + " = ?";
 
         private static final String DELETE_STATEMENT = "DELETE FROM " + TABLE_NAME + " WHERE "
                 + JobConfigurationParameterDomain.JOB_CONFIGURATION_ID + " = ? ";
@@ -617,93 +804,28 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             jobConfigurationParameter.setParameterName(key);
             return jobConfigurationParameter;
         }
-    }
 
-    /**
-     *
-     */
-    private static class JobSchedulerConfigurationRowMapper implements RowMapper<JobSchedulerConfiguration> {
+        private static class JobConfigurationParameterRowMapper implements RowMapper<JobConfigurationParameter> {
 
-        @Override
-        public JobSchedulerConfiguration mapRow(final ResultSet resultSet, final int rowNum) throws SQLException {
-            final JobSchedulerConfiguration jobSchedulerConfiguration = new JobSchedulerConfiguration();
-            jobSchedulerConfiguration.setBeanName(resultSet.getString(JobSchedulerConfigurationDomain.BEAN_NAME));
-            jobSchedulerConfiguration.setCronExpression(resultSet
-                    .getString(JobSchedulerConfigurationDomain.CRON_EXPRESSION));
-            jobSchedulerConfiguration.setFixedDelay(resultSet.getLong(JobSchedulerConfigurationDomain.FIXED_DELAY));
-            jobSchedulerConfiguration.setInitialDelay(resultSet.getLong(JobSchedulerConfigurationDomain.INITIAL_DELAY));
-            final JobSchedulerType jobSchedulerType = JobSchedulerType.getById(resultSet
-                    .getLong(JobSchedulerConfigurationDomain.SCHEDULER_TYPE));
-            jobSchedulerConfiguration.setJobSchedulerType(jobSchedulerType);
-            final TaskExecutorType taskExecutorType = TaskExecutorType.getById(resultSet
-                    .getLong(JobSchedulerConfigurationDomain.TASK_EXECUTOR_TYPE));
-            jobSchedulerConfiguration.setTaskExecutorType(taskExecutorType);
-            final SchedulerStatus schedulerStatus = SchedulerStatus.getByValue(resultSet.getString
-                    (JobSchedulerConfigurationDomain.STATUS));
-            jobSchedulerConfiguration.setSchedulerStatus(schedulerStatus);
-            return jobSchedulerConfiguration;
+            @Override
+            public JobConfigurationParameter mapRow(final ResultSet resultSet, final int rowNum) throws SQLException {
+                final JobConfigurationParameter jobConfigurationParameter = new JobConfigurationParameter();
+                jobConfigurationParameter.setParameterName(resultSet
+                        .getString(JobConfigurationParameterDomain.PARAMETER_NAME));
+                jobConfigurationParameter.setParameterValue(resultSet
+                        .getString(JobConfigurationParameterDomain.PARAMETER_VALUE));
+                jobConfigurationParameter.setParameterType(resultSet
+                        .getLong(JobConfigurationParameterDomain.PARAMETER_TYPE));
+                return jobConfigurationParameter;
+            }
         }
-    }
 
-    /**
-     *
-     */
-    private static class JobConfigurationRowMapper implements RowMapper<JobConfiguration> {
+        @Data
+        private static class JobConfigurationParameter {
+            private String parameterName;
+            private String parameterValue;
+            private Long parameterType;
 
-        @Override
-        public JobConfiguration mapRow(final ResultSet resultSet, final int rowNum) throws SQLException {
-            final JobConfiguration jobConfiguration = new JobConfiguration();
-            jobConfiguration.setJobConfigurationId(resultSet.getLong(JobConfigurationDomain.JOB_CONFIGURATION_ID));
-            jobConfiguration.setJobName(resultSet.getString(JobConfigurationDomain.JOB_NAME));
-            final JobIncrementer jobIncrementer = JobIncrementer.getByIdentifier(resultSet
-                    .getString(JobConfigurationDomain.JOB_INCREMENTER));
-            jobConfiguration.setJobIncrementer(jobIncrementer);
-            return jobConfiguration;
         }
-    }
-
-    /**
-     *
-     */
-    private static class JobConfigurationParameterRowMapper implements RowMapper<JobConfigurationParameter> {
-
-        @Override
-        public JobConfigurationParameter mapRow(final ResultSet resultSet, final int rowNum) throws SQLException {
-            final JobConfigurationParameter jobConfigurationParameter = new JobConfigurationParameter();
-            jobConfigurationParameter.setParameterName(resultSet
-                    .getString(JobConfigurationParameterDomain.PARAMETER_NAME));
-            jobConfigurationParameter.setParameterValue(resultSet
-                    .getString(JobConfigurationParameterDomain.PARAMETER_VALUE));
-            jobConfigurationParameter.setParameterType(resultSet
-                    .getLong(JobConfigurationParameterDomain.PARAMETER_TYPE));
-            return jobConfigurationParameter;
-        }
-    }
-
-    private static class JobListenerConfigurationRowMapper implements RowMapper<JobListenerConfiguration> {
-
-        @Override
-        public JobListenerConfiguration mapRow(final ResultSet result, final int rowNum) throws SQLException {
-            final JobListenerConfiguration jobListenerConfiguration = new JobListenerConfiguration();
-            jobListenerConfiguration.setFilePattern(result.getString(JobListenerConfigurationDomain.FILE_PATTERN));
-            jobListenerConfiguration.setSourceFolder(result.getString(JobListenerConfigurationDomain.SOURCE_FOLDER));
-            jobListenerConfiguration.setBeanName(result.getString(JobListenerConfigurationDomain.BEAN_NAME));
-            final JobListenerType jobListenerType = JobListenerType.getById(result.getLong(JobListenerConfigurationDomain.LISTENER_TYPE));
-            jobListenerConfiguration.setJobListenerType(jobListenerType);
-            final ListenerStatus listenerStatus = ListenerStatus.getByValue(result.getString(JobListenerConfigurationDomain.STATUS));
-            jobListenerConfiguration.setListenerStatus(listenerStatus);
-            final TaskExecutorType taskExecutorType = TaskExecutorType.getById(result.getLong(JobListenerConfigurationDomain.TASK_EXECUTOR_TYPE));
-            jobListenerConfiguration.setTaskExecutorType(taskExecutorType);
-            jobListenerConfiguration.setPollerPeriod(result.getLong(JobListenerConfigurationDomain.POLLER_PERIOD));
-            return jobListenerConfiguration;
-        }
-    }
-
-    @Data
-    private static class JobConfigurationParameter {
-        private String parameterName;
-        private String parameterValue;
-        private Long parameterType;
-
     }
 }

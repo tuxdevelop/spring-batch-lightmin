@@ -220,3 +220,7 @@ include::{snippets}/jobconfigurationcontroller/test-stop-job-configuration/http-
 ====== HTTP Response
 
 include::{snippets}/jobconfigurationcontroller/test-stop-job-configuration/http-response.adoc[]
+
+
+=== Remote Repository
+
