@@ -200,27 +200,26 @@ public enum TaskExecutorType {
 === JobConfiguration Repository
 
 The _JobConfigurationRepository_ describes an interface, to manage _JobConfigurations_.
-The current version provides two Implementations, the _JdbcJobConfigurationRepository_ and the _MapJobConfigurationRepository_.
+The current version provides three implementations, the _JdbcJobConfigurationRepository_, _RemoteJobConfigurationRepository_ and the _MapJobConfigurationRepository_.
 
 [source, java]
 ----
 
 public interface JobConfigurationRepository {
 
-    JobConfiguration getJobConfiguration(Long jobConfigurationId) throws NoSuchJobConfigurationException;
+    JobConfiguration getJobConfiguration(Long jobConfigurationId, String applicationName) throws NoSuchJobConfigurationException;
 
-    Collection<JobConfiguration> getJobConfigurations(String jobName) throws NoSuchJobException;
+    Collection<JobConfiguration> getJobConfigurations(String jobName, String applicationName) throws NoSuchJobException, NoSuchJobConfigurationException;
 
-    JobConfiguration add(JobConfiguration jobConfiguration);
+    JobConfiguration add(JobConfiguration jobConfiguration, String applicationName);
 
-    JobConfiguration update(JobConfiguration jobConfiguration) throws NoSuchJobConfigurationException;
+    JobConfiguration update(JobConfiguration jobConfiguration, String applicationName) throws NoSuchJobConfigurationException;
 
-    void delete(JobConfiguration jobConfiguration) throws NoSuchJobConfigurationException;
+    void delete(JobConfiguration jobConfiguration, String applicationName) throws NoSuchJobConfigurationException;
 
-    Collection<JobConfiguration> getAllJobConfigurations();
+    Collection<JobConfiguration> getAllJobConfigurations(String applicationName);
 
-    Collection<JobConfiguration> getAllJobConfigurationsByJobNames(Collection<String> jobNames);
-}
+    Collection<JobConfiguration> getAllJobConfigurationsByJobNames(Collection<String> jobNames, String applicationName);
 
 ----
 
@@ -235,35 +234,21 @@ Schemas for various providers are locate within the core jar.
 [source, sql]
 ----
 CREATE TABLE BATCH_JOB_CONFIGURATION (
-  job_configuration_id NUMERIC IDENTITY PRIMARY KEY NOT NULL,
-  job_name             VARCHAR(255),
-  job_incrementer      VARCHAR(255)
+  job_configuration_id   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
+  application_name       VARCHAR(255)                 NOT NULL,
+  job_name               VARCHAR(255)                 NOT NULL,
+  job_incrementer        VARCHAR(255),
+  job_configuration_type INT                          NOT NULL
 );
 
-CREATE TABLE BATCH_JOB_SCHEDULER_CONFIGURATION (
+CREATE TABLE BATCH_JOB_CONFIGURATION_VALUE (
   id                   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
   job_configuration_id NUMERIC                      NOT NULL,
-  scheduler_type       INT                          NOT NULL,
-  cron_expression      VARCHAR(255),
-  initial_delay        NUMERIC,
-  fixed_delay          NUMERIC,
-  task_executor_type   INT                          NOT NULL,
-  bean_name            VARCHAR(255)                 NOT NULL,
-  status               VARCHAR(255)                 NOT NULL,
+  value_key            VARCHAR(255)                 NOT NULL,
+  configuration_value  VARCHAR(255),
   FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION (job_configuration_id)
 );
 
-CREATE TABLE BATCH_JOB_LISTENER_CONFIGURATION (
-  id                   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
-  job_configuration_id NUMERIC                      NOT NULL,
-  listener_type        INT                          NOT NULL,
-  source_folder        VARCHAR(255)                 NULL,
-  file_pattern         VARCHAR(255)                 NULL,
-  poller_period        NUMERIC                      NOT NULL,
-  status               VARCHAR(255)                 NOT NULL,
-  task_executor_type   INT                          NOT NULL,
-  FOREIGN KEY (job_configuration_id) REFERENCES BATCH_JOB_CONFIGURATION (job_configuration_id)
-);
 
 CREATE TABLE BATCH_JOB_CONFIGURATION_PARAMETERS (
   id                   NUMERIC IDENTITY PRIMARY KEY NOT NULL,
@@ -275,6 +260,10 @@ CREATE TABLE BATCH_JOB_CONFIGURATION_PARAMETERS (
 );
 
 ----
+
+==== RemoteJobConfigurationRepository
+
+The _RemoteJobConfigurationRepository_ communicates with an external _repository server_ via _REST API_.
 
 ==== MapJobConfigurationRepository
 

@@ -6,8 +6,7 @@ For production environments, the _Spring Batch Lightmin_ also provides jdbc comp
 
 ==== Properties
 
-If you have to use a different table prefix for the Spring Batch database schema and the job configuration database
-schema, you have to set the _*-table-prefix_ properties in your application.properties. The default value is _BATCH__.
+In order to set the table prefix for the _Spring Batch_ database schema, the _spring.batch.lightmin.repository-table-prefix_-property has to placed into your application.properties. The default value is _BATCH__. The tables of the _Spring Batch Lightmin_ configuration are fully cofigurable via properties.
 The _Spring Batch Lightmin_ configuration tries to create _Jdbc_-components, if a bean of type _DataSource_ is
 available within the _Spring Context_. If an other _DataSource_ than the default one, with the name _dataSource_,
 the properties _*.data-source-name_ for _Lightmin_ and _*.batch-data-source-name_ for
@@ -17,8 +16,12 @@ _Spring Batch_ will override the defaults.
 ----
 #Set the table prefix for Spring Batch tables, default BATCH_
 spring.batch.lightmin.repository-table-prefix=MY_BATCH_PREFIX
-#Set the table prefix for Spring Batch Lightmin configuration tables, default BATCH__
-spring.batch.lightmin.configuration-table-prefix=MY_BATCH_PREFIX_
+#Table name of the Spring Batch Lightmin Configuration, default BATCH_JOB_CONFIGURATION
+spring.batch.lightmin.job-configuration-table-name=BATCH_JOB_CONFIGURATION
+#Table name of the Spring Batch Lightmin Configuration values, default = BATCH_JOB_CONFIGURATION_VALUE
+spring.batch.lightmin.job-configuration-value-table-name=BATCH_JOB_CONFIGURATION_VALUE
+#Table name of the Spring Batch Lightmin Configuration Job Parameters, default = BATCH_JOB_CONFIGURATION_PARAMETERS
+spring.batch.lightmin.job-configuration-parameter-table-name=BATCH_JOB_CONFIGURATION_PARAMETERS
 #default jdbc
 spring.batch.lightmin.batch-repository-type=jdbc
 #default jdbc
@@ -27,4 +30,6 @@ spring.batch.lightmin.lightmin-repository-type=jdbc
 spring.batch.lightmin.data-source-name=dataSource
 #default dataSource
 spring.batch.lightmin.batch-data-source-name=dataSource
+#The value for a database schema, e.g. for postgres, default value=null
+spring.batch.lightmin.database-schema=my_schema
 ----

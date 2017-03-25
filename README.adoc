@@ -141,6 +141,38 @@ public class LightminEmbeddedServer {
 The code above will boostrap the _SpringBatchLightminClient_ and the
 _SpringBatchLightminServer_ in an embedded mode.
 
+
+==== Remote Repository Server
+
+The third repository tpye is the _remote repository_. The _Job Configurations_ are located on an external
+
+===== Maven
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-repository-server</artifactId>
+    <version>{spring-batch-lightmin.version}</version>
+</dependency>
+----
+
+===== Enable the Remote Repository Server
+
+[source, java]
+----
+@SpringBootApplication
+@EnableSpringBatchLightminRemoteRepositoryServer
+public class LightminRepositoryServer {
+
+
+    public static void main(final String[] args) {
+        SpringApplication.run(LightminRepositoryServer.class, args);
+    }
+}
+----
+
+
 === Getting the lastest SNAPSHOTS
 
 In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapshot repository.

@@ -546,14 +546,20 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_properties_2">Properties</a></li>
 </ul>
 </li>
-<li><a href="#_server_configuration">Server Configuration</a>
+<li><a href="#_remote_repository_support">Remote Repository Support</a>
+<ul class="sectlevel3">
+<li><a href="#_remote_repository_server">Remote Repository Server</a></li>
+<li><a href="#_client_configuration">Client Configuration</a></li>
+</ul>
+</li>
+<li><a href="#_server_configuration_2">Server Configuration</a>
 <ul class="sectlevel3">
 <li><a href="#_context_path">Context Path</a></li>
 <li><a href="#_heartbeat_period">Heartbeat period</a></li>
 <li><a href="#_credentials">Credentials</a></li>
 </ul>
 </li>
-<li><a href="#_client_configuration">Client Configuration</a>
+<li><a href="#_client_configuration_2">Client Configuration</a>
 <ul class="sectlevel3">
 <li><a href="#_lightmin_server">Lightmin Server</a></li>
 <li><a href="#_api">API</a></li>
@@ -581,6 +587,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_jobconfiguration_repository">JobConfiguration Repository</a>
 <ul class="sectlevel3">
 <li><a href="#_jdbcjobconfigurationrepository">JdbcJobConfigurationRepository</a></li>
+<li><a href="#_remotejobconfigurationrepository">RemoteJobConfigurationRepository</a></li>
 <li><a href="#_mapjobconfigurationrepository">MapJobConfigurationRepository</a></li>
 </ul>
 </li>
@@ -830,8 +837,7 @@ embedded server mode is provided.</p>
 <div class="sect3">
 <h4 id="_properties">Properties</h4>
 <div class="paragraph">
-<p>If you have to use a different table prefix for the Spring Batch database schema and the job configuration database
-schema, you have to set the <em>*-table-prefix</em> properties in your application.properties. The default value is <em>BATCH_</em>.
+<p>In order to set the table prefix for the <em>Spring Batch</em> database schema, the <em>spring.batch.lightmin.repository-table-prefix</em>-property has to placed into your application.properties. The default value is <em>BATCH_</em>. The tables of the <em>Spring Batch Lightmin</em> configuration are fully cofigurable via properties.
 The <em>Spring Batch Lightmin</em> configuration tries to create <em>Jdbc</em>-components, if a bean of type <em>DataSource</em> is
 available within the <em>Spring Context</em>. If an other <em>DataSource</em> than the default one, with the name <em>dataSource</em>,
 the properties <em>*.data-source-name</em> for <em>Lightmin</em> and <em>*.batch-data-source-name</em> for
@@ -841,8 +847,12 @@ the properties <em>*.data-source-name</em> for <em>Lightmin</em> and <em>*.batch
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="predefined-type">Set</span> the table prefix <span class="keyword">for</span> <span class="predefined-type">Spring</span> Batch tables, <span class="keyword">default</span> BATCH_
 spring.batch.lightmin.repository-table-prefix=MY_BATCH_PREFIX
-<span class="error">#</span><span class="predefined-type">Set</span> the table prefix <span class="keyword">for</span> <span class="predefined-type">Spring</span> Batch Lightmin configuration tables, <span class="keyword">default</span> BATCH__
-spring.batch.lightmin.configuration-table-prefix=MY_BATCH_PREFIX_
+<span class="error">#</span>Table name of the <span class="predefined-type">Spring</span> Batch Lightmin <span class="predefined-type">Configuration</span>, <span class="keyword">default</span> BATCH_JOB_CONFIGURATION
+spring.batch.lightmin.job-configuration-table-name=BATCH_JOB_CONFIGURATION
+<span class="error">#</span>Table name of the <span class="predefined-type">Spring</span> Batch Lightmin <span class="predefined-type">Configuration</span> values, <span class="keyword">default</span> = BATCH_JOB_CONFIGURATION_VALUE
+spring.batch.lightmin.job-configuration-value-table-name=BATCH_JOB_CONFIGURATION_VALUE
+<span class="error">#</span>Table name of the <span class="predefined-type">Spring</span> Batch Lightmin <span class="predefined-type">Configuration</span> Job Parameters, <span class="keyword">default</span> = BATCH_JOB_CONFIGURATION_PARAMETERS
+spring.batch.lightmin.job-configuration-parameter-table-name=BATCH_JOB_CONFIGURATION_PARAMETERS
 <span class="error">#</span><span class="keyword">default</span> jdbc
 spring.batch.lightmin.batch-repository-type=jdbc
 <span class="error">#</span><span class="keyword">default</span> jdbc
@@ -850,7 +860,9 @@ spring.batch.lightmin.lightmin-repository-type=jdbc
 <span class="error">#</span><span class="keyword">default</span> dataSource
 spring.batch.lightmin.data-source-name=dataSource
 <span class="error">#</span><span class="keyword">default</span> dataSource
-spring.batch.lightmin.batch-data-source-name=dataSource</code></pre>
+spring.batch.lightmin.batch-data-source-name=dataSource
+<span class="error">#</span>The value <span class="keyword">for</span> a database schema, e.g. for postgres, <span class="keyword">default</span> value=<span class="predefined-constant">null</span>
+spring.batch.lightmin.database-schema=my_schema</code></pre>
 </div>
 </div>
 </div>
@@ -877,7 +889,71 @@ spring.batch.lightmin.lightmin-repository-type=map</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_server_configuration">Server Configuration</h3>
+<h3 id="_remote_repository_support">Remote Repository Support</h3>
+<div class="paragraph">
+<p>The third repository tpye is the <em>remote repository</em>. The <em>Job Configurations</em> are located on an external</p>
+</div>
+<div class="sect3">
+<h4 id="_remote_repository_server">Remote Repository Server</h4>
+<div class="sect4">
+<h5 id="_maven">Maven</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.tuxdevelop<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>spring-batch-lightmin-repository-server<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>{spring-batch-lightmin.version}<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_enable_the_server_3">Enable the server</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@SpringBootApplication</span>
+<span class="annotation">@EnableSpringBatchLightminRemoteRepositoryServer</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">LightminRepositoryServer</span> {
+
+
+    <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="directive">final</span> <span class="predefined-type">String</span><span class="type">[]</span> args) {
+        SpringApplication.run(LightminRepositoryServer.class, args);
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_server_configuration">Server Configuration</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span>repository server repository type, jdbc or map
+spring.batch.lightmin.remote.repository.server.lightmin-repository-type=jdbc
+<span class="error">#</span>Table name of the <span class="predefined-type">Spring</span> Batch Lightmin <span class="predefined-type">Configuration</span>, <span class="keyword">default</span> BATCH_JOB_CONFIGURATION
+spring.batch.lightmin.remote.repository.server.job-configuration-table-name=BATCH_JOB_CONFIGURATION
+<span class="error">#</span>Table name of the <span class="predefined-type">Spring</span> Batch Lightmin <span class="predefined-type">Configuration</span> values, <span class="keyword">default</span> = BATCH_JOB_CONFIGURATION_VALUE
+spring.batch.lightmin.remote.repository.server.job-configuration-value-table-name=BATCH_JOB_CONFIGURATION_VALUE
+<span class="error">#</span>Table name of the <span class="predefined-type">Spring</span> Batch Lightmin <span class="predefined-type">Configuration</span> Job Parameters, <span class="keyword">default</span> = BATCH_JOB_CONFIGURATION_PARAMETERS
+spring.batch.lightmin.remote.repository.server.job-configuration-parameter-table-name=BATCH_JOB_CONFIGURATION_PARAMETERS
+<span class="error">#</span>The value <span class="keyword">for</span> a database schema, e.g. for postgres, <span class="keyword">default</span> value=<span class="predefined-constant">null</span>
+spring.batch.lightmin.remote.repository.server.database-schema=my_schema</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_client_configuration">Client Configuration</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.application-name=my-application-name
+spring.batch.lightmin.lightmin-repository-type=remote
+spring.batch.lightmin.remote-repository-server-url=http:<span class="comment">//localhost:8080</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_server_configuration_2">Server Configuration</h3>
 <div class="paragraph">
 <p>The <em>SpringBatchLightmin-Server</em> provides defaults configurations.
 These configurations can be overridden via properties.</p>
@@ -926,7 +1002,7 @@ configured via properties.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_client_configuration">Client Configuration</h3>
+<h3 id="_client_configuration_2">Client Configuration</h3>
 <div class="paragraph">
 <p>The <em>SpringBatchLightmin-Client</em> tries to configure all client side properties
 by using the <em>Spring Boot</em> auto configured <em>Server-</em>, <em>ManagementServer-</em> and <em>Actuator-Properties</em>,
@@ -1343,26 +1419,25 @@ finished. On <em>ASYNCHRONOUS</em> mode, the job will be launched, if a new even
 <h3 id="_jobconfiguration_repository">JobConfiguration Repository</h3>
 <div class="paragraph">
 <p>The <em>JobConfigurationRepository</em> describes an interface, to manage <em>JobConfigurations</em>.
-The current version provides two Implementations, the <em>JdbcJobConfigurationRepository</em> and the <em>MapJobConfigurationRepository</em>.</p>
+The current version provides three implementations, the <em>JdbcJobConfigurationRepository</em>, <em>RemoteJobConfigurationRepository</em> and the <em>MapJobConfigurationRepository</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">interface</span> <span class="class">JobConfigurationRepository</span> {
 
-    JobConfiguration getJobConfiguration(<span class="predefined-type">Long</span> jobConfigurationId) <span class="directive">throws</span> NoSuchJobConfigurationException;
+    JobConfiguration getJobConfiguration(<span class="predefined-type">Long</span> jobConfigurationId, <span class="predefined-type">String</span> applicationName) <span class="directive">throws</span> NoSuchJobConfigurationException;
 
-    <span class="predefined-type">Collection</span>&lt;JobConfiguration&gt; getJobConfigurations(<span class="predefined-type">String</span> jobName) <span class="directive">throws</span> NoSuchJobException;
+    <span class="predefined-type">Collection</span>&lt;JobConfiguration&gt; getJobConfigurations(<span class="predefined-type">String</span> jobName, <span class="predefined-type">String</span> applicationName) <span class="directive">throws</span> NoSuchJobException, NoSuchJobConfigurationException;
 
-    JobConfiguration add(JobConfiguration jobConfiguration);
+    JobConfiguration add(JobConfiguration jobConfiguration, <span class="predefined-type">String</span> applicationName);
 
-    JobConfiguration update(JobConfiguration jobConfiguration) <span class="directive">throws</span> NoSuchJobConfigurationException;
+    JobConfiguration update(JobConfiguration jobConfiguration, <span class="predefined-type">String</span> applicationName) <span class="directive">throws</span> NoSuchJobConfigurationException;
 
-    <span class="type">void</span> delete(JobConfiguration jobConfiguration) <span class="directive">throws</span> NoSuchJobConfigurationException;
+    <span class="type">void</span> delete(JobConfiguration jobConfiguration, <span class="predefined-type">String</span> applicationName) <span class="directive">throws</span> NoSuchJobConfigurationException;
 
-    <span class="predefined-type">Collection</span>&lt;JobConfiguration&gt; getAllJobConfigurations();
+    <span class="predefined-type">Collection</span>&lt;JobConfiguration&gt; getAllJobConfigurations(<span class="predefined-type">String</span> applicationName);
 
-    <span class="predefined-type">Collection</span>&lt;JobConfiguration&gt; getAllJobConfigurationsByJobNames(<span class="predefined-type">Collection</span>&lt;<span class="predefined-type">String</span>&gt; jobNames);
-}</code></pre>
+    <span class="predefined-type">Collection</span>&lt;JobConfiguration&gt; getAllJobConfigurationsByJobNames(<span class="predefined-type">Collection</span>&lt;<span class="predefined-type">String</span>&gt; jobNames, <span class="predefined-type">String</span> applicationName);</code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -1377,35 +1452,21 @@ Schemas for various providers are locate within the core jar.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="sql"><span class="class">CREATE</span> <span class="type">TABLE</span> BATCH_JOB_CONFIGURATION (
-  job_configuration_id NUMERIC IDENTITY <span class="directive">PRIMARY</span> <span class="type">KEY</span> <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
-  job_name             <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>),
-  job_incrementer      <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>)
+  job_configuration_id   NUMERIC IDENTITY <span class="directive">PRIMARY</span> <span class="type">KEY</span> <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  application_name       <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>)                 <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  job_name               <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>)                 <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  job_incrementer        <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>),
+  job_configuration_type <span class="predefined-type">INT</span>                          <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>
 );
 
-<span class="class">CREATE</span> <span class="type">TABLE</span> BATCH_JOB_SCHEDULER_CONFIGURATION (
+<span class="class">CREATE</span> <span class="type">TABLE</span> BATCH_JOB_CONFIGURATION_VALUE (
   id                   NUMERIC IDENTITY <span class="directive">PRIMARY</span> <span class="type">KEY</span> <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
   job_configuration_id NUMERIC                      <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
-  scheduler_type       <span class="predefined-type">INT</span>                          <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
-  cron_expression      <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>),
-  initial_delay        NUMERIC,
-  fixed_delay          NUMERIC,
-  task_executor_type   <span class="predefined-type">INT</span>                          <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
-  bean_name            <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>)                 <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
-  status               <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>)                 <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  value_key            <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>)                 <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  configuration_value  <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>),
   <span class="directive">FOREIGN</span> <span class="type">KEY</span> (job_configuration_id) <span class="keyword">REFERENCES</span> BATCH_JOB_CONFIGURATION (job_configuration_id)
 );
 
-<span class="class">CREATE</span> <span class="type">TABLE</span> BATCH_JOB_LISTENER_CONFIGURATION (
-  id                   NUMERIC IDENTITY <span class="directive">PRIMARY</span> <span class="type">KEY</span> <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
-  job_configuration_id NUMERIC                      <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
-  listener_type        <span class="predefined-type">INT</span>                          <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
-  source_folder        <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>)                 <span class="predefined-constant">NULL</span>,
-  file_pattern         <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>)                 <span class="predefined-constant">NULL</span>,
-  poller_period        NUMERIC                      <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
-  status               <span class="predefined-type">VARCHAR</span>(<span class="integer">255</span>)                 <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
-  task_executor_type   <span class="predefined-type">INT</span>                          <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
-  <span class="directive">FOREIGN</span> <span class="type">KEY</span> (job_configuration_id) <span class="keyword">REFERENCES</span> BATCH_JOB_CONFIGURATION (job_configuration_id)
-);
 
 <span class="class">CREATE</span> <span class="type">TABLE</span> BATCH_JOB_CONFIGURATION_PARAMETERS (
   id                   NUMERIC IDENTITY <span class="directive">PRIMARY</span> <span class="type">KEY</span> <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
@@ -1417,6 +1478,12 @@ Schemas for various providers are locate within the core jar.</p>
 );</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_remotejobconfigurationrepository">RemoteJobConfigurationRepository</h4>
+<div class="paragraph">
+<p>The <em>RemoteJobConfigurationRepository</em> communicates with an external <em>repository server</em> via <em>REST API</em>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1500,18 +1567,18 @@ Content-Length: 708
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 19 Mar 2017 14:00:41 GMT
+Date: Sat, 25 Mar 2017 17:41:10 GMT
 Content-Length: 788
 
 {
-  &quot;id&quot; : &quot;9f55506d&quot;,
+  &quot;id&quot; : &quot;9353e55d&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:63556&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:63556/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:63556&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:63501&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:63501/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:63501&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1489932041948
+    &quot;timeInMills&quot; : 1490463670570
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1534,7 +1601,7 @@ Content-Length: 788
 <h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/9f55506d' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/9353e55d' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -1542,7 +1609,7 @@ Content-Length: 788
 <h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/9f55506d HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/9353e55d HTTP/1.1
 Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
 Host: localhost</code></pre>
@@ -1557,18 +1624,18 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 19 Mar 2017 14:00:42 GMT
+Date: Sat, 25 Mar 2017 17:41:10 GMT
 Content-Length: 788
 
 {
-  &quot;id&quot; : &quot;9f55506d&quot;,
+  &quot;id&quot; : &quot;9353e55d&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:63556&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:63556/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:63556&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:63501&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:63501/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:63501&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1489932041948
+    &quot;timeInMills&quot; : 1490463670570
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1614,18 +1681,18 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 19 Mar 2017 14:00:41 GMT
+Date: Sat, 25 Mar 2017 17:41:10 GMT
 Content-Length: 1590
 
 [ {
-  &quot;id&quot; : &quot;9f55506d&quot;,
+  &quot;id&quot; : &quot;9353e55d&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:63556&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:63556/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:63556&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:63501&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:63501/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:63501&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1489932041948
+    &quot;timeInMills&quot; : 1490463670570
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1645,7 +1712,7 @@ Content-Length: 1590
   &quot;serviceUrl&quot; : &quot;http://executor.fritz.box:0&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;OFFLINE&quot;,
-    &quot;timeInMills&quot; : 1489932036962
+    &quot;timeInMills&quot; : 1490463665252
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1695,7 +1762,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 19 Mar 2017 14:00:41 GMT
+Date: Sat, 25 Mar 2017 17:41:09 GMT
 Content-Length: 1405
 
 {
@@ -1710,7 +1777,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1489932041614,
+          &quot;parameter&quot; : 1490463670157,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -1733,9 +1800,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1489932041620,
-      &quot;endTime&quot; : 1489932041623,
-      &quot;lastUpdated&quot; : 1489932041623,
+      &quot;startTime&quot; : 1490463670163,
+      &quot;endTime&quot; : 1490463670166,
+      &quot;lastUpdated&quot; : 1490463670166,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -1745,10 +1812,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1489932041615,
-    &quot;createTime&quot; : 1489932041614,
-    &quot;endTime&quot; : 1489932041624,
-    &quot;lastUpdated&quot; : 1489932041624,
+    &quot;startTime&quot; : 1490463670159,
+    &quot;createTime&quot; : 1490463670158,
+    &quot;endTime&quot; : 1490463670167,
+    &quot;lastUpdated&quot; : 1490463670167,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1789,7 +1856,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 19 Mar 2017 14:00:41 GMT
+Date: Sat, 25 Mar 2017 17:41:09 GMT
 Content-Length: 1405
 
 {
@@ -1804,7 +1871,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1489932041533,
+          &quot;parameter&quot; : 1490463670069,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -1827,9 +1894,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1489932041539,
-      &quot;endTime&quot; : 1489932041542,
-      &quot;lastUpdated&quot; : 1489932041542,
+      &quot;startTime&quot; : 1490463670077,
+      &quot;endTime&quot; : 1490463670080,
+      &quot;lastUpdated&quot; : 1490463670080,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -1839,10 +1906,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1489932041535,
-    &quot;createTime&quot; : 1489932041534,
-    &quot;endTime&quot; : 1489932041543,
-    &quot;lastUpdated&quot; : 1489932041543,
+    &quot;startTime&quot; : 1490463670072,
+    &quot;createTime&quot; : 1490463670070,
+    &quot;endTime&quot; : 1490463670083,
+    &quot;lastUpdated&quot; : 1490463670083,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1883,7 +1950,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 19 Mar 2017 14:00:41 GMT
+Date: Sat, 25 Mar 2017 17:41:09 GMT
 Content-Length: 1154
 
 {
@@ -1892,7 +1959,7 @@ Content-Length: 1154
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1489932041774,
+        &quot;parameter&quot; : 1490463670380,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -1915,9 +1982,9 @@ Content-Length: 1154
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1489932041782,
-    &quot;endTime&quot; : 1489932041785,
-    &quot;lastUpdated&quot; : 1489932041785,
+    &quot;startTime&quot; : 1490463670387,
+    &quot;endTime&quot; : 1490463670399,
+    &quot;lastUpdated&quot; : 1490463670399,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1927,10 +1994,10 @@ Content-Length: 1154
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1489932041777,
-  &quot;createTime&quot; : 1489932041775,
-  &quot;endTime&quot; : 1489932041787,
-  &quot;lastUpdated&quot; : 1489932041787,
+  &quot;startTime&quot; : 1490463670382,
+  &quot;createTime&quot; : 1490463670380,
+  &quot;endTime&quot; : 1490463670400,
+  &quot;lastUpdated&quot; : 1490463670400,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -1995,7 +2062,7 @@ Content-Length: 205
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 X-Application-Context: it-application:0
-Date: Sun, 19 Mar 2017 14:00:39 GMT</code></pre>
+Date: Sat, 25 Mar 2017 17:41:08 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2031,7 +2098,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 19 Mar 2017 14:00:39 GMT
+Date: Sat, 25 Mar 2017 17:41:08 GMT
 Content-Length: 411
 
 {
@@ -2083,7 +2150,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 19 Mar 2017 14:00:39 GMT
+Date: Sat, 25 Mar 2017 17:41:08 GMT
 Content-Length: 7394
 
 {
@@ -2377,7 +2444,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 19 Mar 2017 14:00:39 GMT
+Date: Sat, 25 Mar 2017 17:41:08 GMT
 Content-Length: 5072
 
 {
@@ -2621,7 +2688,7 @@ Content-Length: 424
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 X-Application-Context: it-application:0
-Date: Sun, 19 Mar 2017 14:00:39 GMT</code></pre>
+Date: Sat, 25 Mar 2017 17:41:08 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2688,7 +2755,7 @@ Content-Length: 440
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Sun, 19 Mar 2017 14:00:38 GMT</code></pre>
+Date: Sat, 25 Mar 2017 17:41:07 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2719,7 +2786,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Sun, 19 Mar 2017 14:00:38 GMT</code></pre>
+Date: Sat, 25 Mar 2017 17:41:07 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2750,7 +2817,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Sun, 19 Mar 2017 14:00:39 GMT</code></pre>
+Date: Sat, 25 Mar 2017 17:41:08 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2781,7 +2848,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Sun, 19 Mar 2017 14:00:38 GMT</code></pre>
+Date: Sat, 25 Mar 2017 17:41:07 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -3227,7 +3294,7 @@ already beeb launched, the <em>JobParameters</em> of the last run will be shown.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-11-15 23:31:48 +01:00
+Last updated 2017-03-20 19:57:01 +01:00
 </div>
 </div>
 </body>

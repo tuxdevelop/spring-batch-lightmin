@@ -1,0 +1,57 @@
+=== Remote Repository Support
+
+The third repository tpye is the _remote repository_. The _Job Configurations_ are located on an external
+
+==== Remote Repository Server
+
+===== Maven
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-repository-server</artifactId>
+    <version>{spring-batch-lightmin.version}</version>
+</dependency>
+----
+
+===== Enable the server
+
+[source, java]
+----
+@SpringBootApplication
+@EnableSpringBatchLightminRemoteRepositoryServer
+public class LightminRepositoryServer {
+
+
+    public static void main(final String[] args) {
+        SpringApplication.run(LightminRepositoryServer.class, args);
+    }
+}
+----
+
+===== Server Configuration
+
+[source, java]
+----
+#repository server repository type, jdbc or map
+spring.batch.lightmin.remote.repository.server.lightmin-repository-type=jdbc
+#Table name of the Spring Batch Lightmin Configuration, default BATCH_JOB_CONFIGURATION
+spring.batch.lightmin.remote.repository.server.job-configuration-table-name=BATCH_JOB_CONFIGURATION
+#Table name of the Spring Batch Lightmin Configuration values, default = BATCH_JOB_CONFIGURATION_VALUE
+spring.batch.lightmin.remote.repository.server.job-configuration-value-table-name=BATCH_JOB_CONFIGURATION_VALUE
+#Table name of the Spring Batch Lightmin Configuration Job Parameters, default = BATCH_JOB_CONFIGURATION_PARAMETERS
+spring.batch.lightmin.remote.repository.server.job-configuration-parameter-table-name=BATCH_JOB_CONFIGURATION_PARAMETERS
+#The value for a database schema, e.g. for postgres, default value=null
+spring.batch.lightmin.remote.repository.server.database-schema=my_schema
+
+----
+
+==== Client Configuration
+
+[source,java]
+----
+spring.batch.lightmin.application-name=my-application-name
+spring.batch.lightmin.lightmin-repository-type=remote
+spring.batch.lightmin.remote-repository-server-url=http://localhost:8080
+----
