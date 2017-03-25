@@ -142,11 +142,11 @@ The code above will boostrap the _SpringBatchLightminClient_ and the
 _SpringBatchLightminServer_ in an embedded mode.
 
 
-==== Remote Repository Server
+=== Remote Repository Server
 
 The third repository tpye is the _remote repository_. The _Job Configurations_ are located on an external
 
-===== Maven
+==== Maven
 
 [source,xml]
 ----
@@ -157,7 +157,7 @@ The third repository tpye is the _remote repository_. The _Job Configurations_ a
 </dependency>
 ----
 
-===== Enable the Remote Repository Server
+==== Enable the Remote Repository Server
 
 [source, java]
 ----
