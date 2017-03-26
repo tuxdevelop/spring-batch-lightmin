@@ -891,7 +891,7 @@ spring.batch.lightmin.lightmin-repository-type=map</code></pre>
 <div class="sect2">
 <h3 id="_remote_repository_support">Remote Repository Support</h3>
 <div class="paragraph">
-<p>The third repository tpye is the <em>remote repository</em>. The <em>Job Configurations</em> are located on an external</p>
+<p>The third repository type is the <em>remote repository</em>. The <em>Job Configurations</em> are located on an external</p>
 </div>
 <div class="sect3">
 <h4 id="_remote_repository_server">Remote Repository Server</h4>
@@ -1567,18 +1567,18 @@ Content-Length: 708
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sat, 25 Mar 2017 17:41:10 GMT
+Date: Sun, 26 Mar 2017 12:35:55 GMT
 Content-Length: 788
 
 {
-  &quot;id&quot; : &quot;9353e55d&quot;,
+  &quot;id&quot; : &quot;2acdc587&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:63501&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:63501/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:63501&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:50476&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:50476/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:50476&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1490463670570
+    &quot;timeInMills&quot; : 1490531756547
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1601,7 +1601,7 @@ Content-Length: 788
 <h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/9353e55d' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/2acdc587' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -1609,7 +1609,7 @@ Content-Length: 788
 <h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/9353e55d HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/2acdc587 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
 Host: localhost</code></pre>
@@ -1624,18 +1624,18 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sat, 25 Mar 2017 17:41:10 GMT
+Date: Sun, 26 Mar 2017 12:35:55 GMT
 Content-Length: 788
 
 {
-  &quot;id&quot; : &quot;9353e55d&quot;,
+  &quot;id&quot; : &quot;2acdc587&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:63501&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:63501/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:63501&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:50476&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:50476/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:50476&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1490463670570
+    &quot;timeInMills&quot; : 1490531756547
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1681,18 +1681,18 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sat, 25 Mar 2017 17:41:10 GMT
+Date: Sun, 26 Mar 2017 12:35:55 GMT
 Content-Length: 1590
 
 [ {
-  &quot;id&quot; : &quot;9353e55d&quot;,
+  &quot;id&quot; : &quot;2acdc587&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:63501&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:63501/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:63501&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:50476&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:50476/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:50476&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1490463670570
+    &quot;timeInMills&quot; : 1490531756547
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1712,7 +1712,7 @@ Content-Length: 1590
   &quot;serviceUrl&quot; : &quot;http://executor.fritz.box:0&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;OFFLINE&quot;,
-    &quot;timeInMills&quot; : 1490463665252
+    &quot;timeInMills&quot; : 1490531752004
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1762,7 +1762,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sat, 25 Mar 2017 17:41:09 GMT
+Date: Sun, 26 Mar 2017 12:35:55 GMT
 Content-Length: 1405
 
 {
@@ -1777,7 +1777,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1490463670157,
+          &quot;parameter&quot; : 1490531756241,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -1800,9 +1800,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1490463670163,
-      &quot;endTime&quot; : 1490463670166,
-      &quot;lastUpdated&quot; : 1490463670166,
+      &quot;startTime&quot; : 1490531756247,
+      &quot;endTime&quot; : 1490531756249,
+      &quot;lastUpdated&quot; : 1490531756249,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -1812,10 +1812,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1490463670159,
-    &quot;createTime&quot; : 1490463670158,
-    &quot;endTime&quot; : 1490463670167,
-    &quot;lastUpdated&quot; : 1490463670167,
+    &quot;startTime&quot; : 1490531756243,
+    &quot;createTime&quot; : 1490531756242,
+    &quot;endTime&quot; : 1490531756250,
+    &quot;lastUpdated&quot; : 1490531756250,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1856,7 +1856,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sat, 25 Mar 2017 17:41:09 GMT
+Date: Sun, 26 Mar 2017 12:35:55 GMT
 Content-Length: 1405
 
 {
@@ -1871,7 +1871,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1490463670069,
+          &quot;parameter&quot; : 1490531756164,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -1894,9 +1894,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1490463670077,
-      &quot;endTime&quot; : 1490463670080,
-      &quot;lastUpdated&quot; : 1490463670080,
+      &quot;startTime&quot; : 1490531756169,
+      &quot;endTime&quot; : 1490531756171,
+      &quot;lastUpdated&quot; : 1490531756171,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -1906,10 +1906,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1490463670072,
-    &quot;createTime&quot; : 1490463670070,
-    &quot;endTime&quot; : 1490463670083,
-    &quot;lastUpdated&quot; : 1490463670083,
+    &quot;startTime&quot; : 1490531756165,
+    &quot;createTime&quot; : 1490531756164,
+    &quot;endTime&quot; : 1490531756172,
+    &quot;lastUpdated&quot; : 1490531756172,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1950,7 +1950,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sat, 25 Mar 2017 17:41:09 GMT
+Date: Sun, 26 Mar 2017 12:35:55 GMT
 Content-Length: 1154
 
 {
@@ -1959,7 +1959,7 @@ Content-Length: 1154
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1490463670380,
+        &quot;parameter&quot; : 1490531756410,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -1982,9 +1982,9 @@ Content-Length: 1154
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1490463670387,
-    &quot;endTime&quot; : 1490463670399,
-    &quot;lastUpdated&quot; : 1490463670399,
+    &quot;startTime&quot; : 1490531756415,
+    &quot;endTime&quot; : 1490531756417,
+    &quot;lastUpdated&quot; : 1490531756417,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1994,10 +1994,10 @@ Content-Length: 1154
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1490463670382,
-  &quot;createTime&quot; : 1490463670380,
-  &quot;endTime&quot; : 1490463670400,
-  &quot;lastUpdated&quot; : 1490463670400,
+  &quot;startTime&quot; : 1490531756412,
+  &quot;createTime&quot; : 1490531756411,
+  &quot;endTime&quot; : 1490531756418,
+  &quot;lastUpdated&quot; : 1490531756418,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2062,7 +2062,7 @@ Content-Length: 205
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 X-Application-Context: it-application:0
-Date: Sat, 25 Mar 2017 17:41:08 GMT</code></pre>
+Date: Sun, 26 Mar 2017 12:35:54 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2098,7 +2098,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sat, 25 Mar 2017 17:41:08 GMT
+Date: Sun, 26 Mar 2017 12:35:54 GMT
 Content-Length: 411
 
 {
@@ -2150,7 +2150,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sat, 25 Mar 2017 17:41:08 GMT
+Date: Sun, 26 Mar 2017 12:35:54 GMT
 Content-Length: 7394
 
 {
@@ -2444,7 +2444,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sat, 25 Mar 2017 17:41:08 GMT
+Date: Sun, 26 Mar 2017 12:35:54 GMT
 Content-Length: 5072
 
 {
@@ -2688,7 +2688,7 @@ Content-Length: 424
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 X-Application-Context: it-application:0
-Date: Sat, 25 Mar 2017 17:41:08 GMT</code></pre>
+Date: Sun, 26 Mar 2017 12:35:54 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2755,7 +2755,7 @@ Content-Length: 440
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Sat, 25 Mar 2017 17:41:07 GMT</code></pre>
+Date: Sun, 26 Mar 2017 12:35:53 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2786,7 +2786,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Sat, 25 Mar 2017 17:41:07 GMT</code></pre>
+Date: Sun, 26 Mar 2017 12:35:53 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2817,7 +2817,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Sat, 25 Mar 2017 17:41:08 GMT</code></pre>
+Date: Sun, 26 Mar 2017 12:35:54 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2848,7 +2848,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Sat, 25 Mar 2017 17:41:07 GMT</code></pre>
+Date: Sun, 26 Mar 2017 12:35:53 GMT</code></pre>
 </div>
 </div>
 </div>
