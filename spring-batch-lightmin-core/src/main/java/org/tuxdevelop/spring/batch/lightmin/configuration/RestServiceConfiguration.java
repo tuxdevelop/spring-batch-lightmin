@@ -8,6 +8,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.controller.JobConfigurationRestC
 import org.tuxdevelop.spring.batch.lightmin.api.controller.JobLauncherRestController;
 import org.tuxdevelop.spring.batch.lightmin.api.controller.JobRestController;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
+import org.tuxdevelop.spring.batch.lightmin.service.JobExecutionQueryService;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 import org.tuxdevelop.spring.batch.lightmin.support.ControllerServiceEntryBean;
@@ -25,8 +26,9 @@ public class RestServiceConfiguration {
     public ServiceEntry serviceEntry(final AdminService adminService,
                                      final JobService jobService,
                                      final StepService stepService,
+                                     final JobExecutionQueryService jobExecutionQueryService,
                                      final JobLauncherBean jobLauncherBean) {
-        return new ControllerServiceEntryBean(adminService, jobService, stepService, jobLauncherBean);
+        return new ControllerServiceEntryBean(adminService, jobService, stepService, jobExecutionQueryService, jobLauncherBean);
     }
 
     @Bean

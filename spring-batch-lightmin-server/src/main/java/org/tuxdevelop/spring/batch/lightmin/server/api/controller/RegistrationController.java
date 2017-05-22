@@ -25,12 +25,11 @@ public class RegistrationController {
         this.registrationBean = registrationBean;
     }
 
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LightminClientApplication> register(
             @RequestBody final LightminClientApplication lightminClientApplication) {
         log.debug("Register LightminClientApplication {}", lightminClientApplication);
-        final LightminClientApplication registeredLightminClientApplication = registrationBean
+        final LightminClientApplication registeredLightminClientApplication = this.registrationBean
                 .register(lightminClientApplication);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredLightminClientApplication);
     }
@@ -38,7 +37,7 @@ public class RegistrationController {
     @RequestMapping(value = "{applicationid}", method = RequestMethod.DELETE)
     public ResponseEntity<?> unregister(@PathVariable(value = "applicationid") final String applicationId) {
         log.debug("Unregister LightminClientApplication with id {}", applicationId);
-        final LightminClientApplication lightminClientApplication = registrationBean.deleteRegistration(applicationId);
+        final LightminClientApplication lightminClientApplication = this.registrationBean.deleteRegistration(applicationId);
         if (lightminClientApplication != null) {
             return ResponseEntity.ok(lightminClientApplication);
         } else {
@@ -48,7 +47,7 @@ public class RegistrationController {
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LightminClientApplication[]> getAll() {
-        final Collection<LightminClientApplication> lightminClientApplications = registrationBean.getAll();
+        final Collection<LightminClientApplication> lightminClientApplications = this.registrationBean.getAll();
         return ResponseEntity.ok(
                 lightminClientApplications.toArray(new LightminClientApplication[lightminClientApplications.size()]));
     }

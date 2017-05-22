@@ -2,10 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.dao;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
-import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +11,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.test.configuration.ITPersistenceConfiguration;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -106,6 +106,84 @@ public class JdbcLightminJobExecutionDaoIT {
         assertThat(jobExecutions).isNotNull();
         assertThat(jobExecutions).isEmpty();
     }
+
+    @Test
+    public void testFindJobExecutionsAllQueryParameter() {
+        init();
+        final String jobName = "simpleJob";
+        final Integer size = 4;
+        final Date startDate = new Date(System.currentTimeMillis() - 100000);
+        final Date endDate = new Date(System.currentTimeMillis() + 100000);
+        final String exitStatus = ExitStatus.COMPLETED.getExitCode();
+        final Map<String, Object> queryParameters = new HashMap<>();
+        queryParameters.put(QueryParameterKey.EXIT_STATUS, exitStatus);
+        queryParameters.put(QueryParameterKey.START_DATE, startDate);
+        queryParameters.put(QueryParameterKey.END_DATE, endDate);
+        final List<JobExecution> result = this.jdbcLightminJobExecutionDao.findJobExecutions(jobName, queryParameters, size);
+        assertThat(result).isNotNull();
+        assertThat(result).isNotEmpty();
+        assertThat(result).hasSize(size);
+    }
+
+    @Test
+    public void testFindJobExecutionsAllQueryParameterWithoutJobName() {
+        init();
+        final Integer size = 4;
+        final Date startDate = new Date(System.currentTimeMillis() - 100000);
+        final Date endDate = new Date(System.currentTimeMillis() + 100000);
+        final String exitStatus = ExitStatus.COMPLETED.getExitCode();
+        final Map<String, Object> queryParameters = new HashMap<>();
+        queryParameters.put(QueryParameterKey.EXIT_STATUS, exitStatus);
+        queryParameters.put(QueryParameterKey.START_DATE, startDate);
+        queryParameters.put(QueryParameterKey.END_DATE, endDate);
+        final List<JobExecution> result = this.jdbcLightminJobExecutionDao.findJobExecutions(null, queryParameters, size);
+        assertThat(result).isNotNull();
+        assertThat(result).isNotEmpty();
+        assertThat(result).hasSize(size);
+    }
+
+    @Test
+    public void testFindJobExecutionsExitStatus() {
+        init();
+        final String jobName = "simpleJob";
+        final Integer size = 4;
+        final String exitStatus = ExitStatus.COMPLETED.getExitCode();
+        final Map<String, Object> queryParameters = new HashMap<>();
+        queryParameters.put(QueryParameterKey.EXIT_STATUS, exitStatus);
+        final List<JobExecution> result = this.jdbcLightminJobExecutionDao.findJobExecutions(jobName, queryParameters, size);
+        assertThat(result).isNotNull();
+        assertThat(result).isNotEmpty();
+        assertThat(result).hasSize(size);
+    }
+
+    @Test
+    public void testFindJobExecutionsStartDate() {
+        init();
+        final String jobName = "simpleJob";
+        final Integer size = 4;
+        final Date startDate = new Date(System.currentTimeMillis() - 100000);
+        final Map<String, Object> queryParameters = new HashMap<>();
+        queryParameters.put(QueryParameterKey.START_DATE, startDate);
+        final List<JobExecution> result = this.jdbcLightminJobExecutionDao.findJobExecutions(jobName, queryParameters, size);
+        assertThat(result).isNotNull();
+        assertThat(result).isNotEmpty();
+        assertThat(result).hasSize(size);
+    }
+
+    @Test
+    public void testFindJobExecutionsEndDate() {
+        init();
+        final String jobName = "simpleJob";
+        final Integer size = 4;
+        final Date endDate = new Date(System.currentTimeMillis() + 100000);
+        final Map<String, Object> queryParameters = new HashMap<>();
+        queryParameters.put(QueryParameterKey.END_DATE, endDate);
+        final List<JobExecution> result = this.jdbcLightminJobExecutionDao.findJobExecutions(jobName, queryParameters, size);
+        assertThat(result).isNotNull();
+        assertThat(result).isNotEmpty();
+        assertThat(result).hasSize(size);
+    }
+
 
     private void init() {
         try {

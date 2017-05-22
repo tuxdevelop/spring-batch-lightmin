@@ -3,8 +3,14 @@ package org.tuxdevelop.spring.batch.lightmin.documentation.api.client;
 
 import com.jayway.restassured.http.ContentType;
 import org.junit.Test;
+import org.springframework.batch.core.ExitStatus;
 import org.tuxdevelop.spring.batch.lightmin.api.controller.AbstractRestController;
+import org.tuxdevelop.spring.batch.lightmin.dao.QueryParameterKey;
 import org.tuxdevelop.spring.batch.lightmin.documentation.api.AbstractServiceDocumentation;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
@@ -31,7 +37,7 @@ public class JobRestControllerDocumentation extends AbstractServiceDocumentation
                                 parameterWithName("jobexecutionid").description("The job execution id"))))
                 .when()
                 .port(getServerPort())
-                .get(AbstractRestController.JobRestControllerAPI.JOB_EXECUTIONS_JOB_EXECUTION_ID, launchedJobExecutionId)
+                .get(AbstractRestController.JobRestControllerAPI.JOB_EXECUTIONS_JOB_EXECUTION_ID, this.launchedJobExecutionId)
                 .then()
                 .assertThat().statusCode(is(200));
 
@@ -55,7 +61,7 @@ public class JobRestControllerDocumentation extends AbstractServiceDocumentation
                 .when()
                 .port(getServerPort())
                 .get(AbstractRestController.JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID
-                        + "?jobinstanceid=" + launchedJobInstanceId
+                        + "?jobinstanceid=" + this.launchedJobInstanceId
                         + "&startindex=0"
                         + "&pagesize=5")
                 .then()
@@ -78,7 +84,7 @@ public class JobRestControllerDocumentation extends AbstractServiceDocumentation
                 .when()
                 .port(getServerPort())
                 .get(AbstractRestController.JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID_ALL
-                        + "?jobinstanceid=" + launchedJobInstanceId)
+                        + "?jobinstanceid=" + this.launchedJobInstanceId)
                 .then()
                 .assertThat().statusCode(is(200));
     }
@@ -158,7 +164,7 @@ public class JobRestControllerDocumentation extends AbstractServiceDocumentation
                                 parameterWithName("jobexecutionid").description("The id of the Job Execution"))))
                 .when()
                 .port(getServerPort())
-                .get(AbstractRestController.JobRestControllerAPI.JOB_EXECUTIONS_RESTART, launchedJobExecutionId)
+                .get(AbstractRestController.JobRestControllerAPI.JOB_EXECUTIONS_RESTART, this.launchedJobExecutionId)
                 .then()
                 .assertThat().statusCode(is(200));
     }
@@ -179,10 +185,10 @@ public class JobRestControllerDocumentation extends AbstractServiceDocumentation
                                 parameterWithName("jobexecutionid").description("The id of the Job Execution"))))
                 .when()
                 .port(getServerPort())
-                .get(AbstractRestController.JobRestControllerAPI.JOB_EXECUTIONS_STOP, launchedJobExecutionId)
+                .get(AbstractRestController.JobRestControllerAPI.JOB_EXECUTIONS_STOP, this.launchedJobExecutionId)
                 .then()
                 .assertThat().statusCode(is(200));
-        myThread.stop();
+        this.myThread.stop();
     }
 
     @Test
@@ -202,7 +208,7 @@ public class JobRestControllerDocumentation extends AbstractServiceDocumentation
                                         "Step Excution belongs to"))))
                 .when()
                 .port(getServerPort())
-                .get(AbstractRestController.JobRestControllerAPI.STEP_EXECUTIONS, launchedStepExecutionId, launchedJobExecutionId)
+                .get(AbstractRestController.JobRestControllerAPI.STEP_EXECUTIONS, this.launchedStepExecutionId, this.launchedJobExecutionId)
                 .then()
                 .assertThat().statusCode(is(200));
     }
@@ -223,6 +229,37 @@ public class JobRestControllerDocumentation extends AbstractServiceDocumentation
                 .when()
                 .port(getServerPort())
                 .get(AbstractRestController.JobRestControllerAPI.JOB_PARAMETERS + "?jobname=simpleJob")
+                .then()
+                .assertThat().statusCode(is(200));
+    }
+
+    @Test
+    public void testQueryJobExecutions() {
+        final Date startDate = new Date(System.currentTimeMillis() - 100000);
+        final Date endDate = new Date(System.currentTimeMillis() + 100000);
+        final String exitStatus = ExitStatus.COMPLETED.getExitCode();
+        final Map<String, Object> queryParameters = new HashMap<>();
+        queryParameters.put(QueryParameterKey.EXIT_STATUS, exitStatus);
+        queryParameters.put(QueryParameterKey.START_DATE, startDate);
+        queryParameters.put(QueryParameterKey.END_DATE, endDate);
+        given(this.documentationSpec)
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .filter(document("jobcontroller/{method-name}",
+                        preprocessRequest(modifyUris()
+                                        .scheme("http")
+                                        .host("localhost")
+                                        .removePort(),
+                                prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("jobname").description("The name of the Spring Batch Job"),
+                                parameterWithName("resultsize").description("The maximum size of the result"))))
+                .when()
+                .port(getServerPort())
+                .body(queryParameters)
+                .post(AbstractRestController.JobRestControllerAPI.QUERY_JOB_EXECUTIONS +
+                        "?jobname=simpleJob&resultsize=4")
                 .then()
                 .assertThat().statusCode(is(200));
     }

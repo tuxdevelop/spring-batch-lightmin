@@ -28,6 +28,7 @@ public abstract class AbstractRestController {
         public static final String JOB_EXECUTIONS_STOP = JOB_EXECUTIONS_JOB_EXECUTION_ID + "/stop";
         public static final String STEP_EXECUTIONS = ROOT_URI + "/stepexecutions/{stepexecutionid}/jobexecutions/{jobexecutionid}";
         public static final String JOB_PARAMETERS = ROOT_URI + "/jobparameters";
+        public static final String QUERY_JOB_EXECUTIONS = ROOT_URI + "/jobExecutions/query";
     }
 
     public final class JobConfigurationRestControllerAPI {

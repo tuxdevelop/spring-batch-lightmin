@@ -1,19 +1,8 @@
 package org.tuxdevelop.spring.batch.lightmin.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
-import org.springframework.batch.core.BatchStatus;
-import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
-import org.springframework.batch.core.JobParameters;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.repository.dao.JdbcJobExecutionDao;
 import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.PagingQueryProvider;
@@ -21,17 +10,25 @@ import org.springframework.batch.item.database.support.SqlPagingQueryProviderFac
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.StringUtils;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
-public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao
-        implements LightminJobExecutionDao, InitializingBean {
+import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.*;
+
+@Slf4j
+public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements LightminJobExecutionDao, InitializingBean {
 
     private static final String FIELDS = "E.JOB_EXECUTION_ID, E.START_TIME, E.END_TIME, E.STATUS, E.EXIT_CODE, E.EXIT_MESSAGE, "
             + "E.CREATE_TIME, E.LAST_UPDATED, E.VERSION, I.JOB_INSTANCE_ID, I.JOB_NAME";
 
-    private final String GET_EXECUTION_COUNT = "SELECT " +
-            "COUNT(*) " +
-            "FROM %PREFIX%JOB_EXECUTION" +
-            " WHERE JOB_INSTANCE_ID = ?";
+    private final String GET_EXECUTION_COUNT =
+            "SELECT COUNT(*) "
+                    + "FROM %PREFIX%JOB_EXECUTION "
+                    + "WHERE JOB_INSTANCE_ID = ?";
 
     private PagingQueryProvider byJobNamePagingQueryProvider;
     private PagingQueryProvider byJobInstanceIdExecutionsPagingQueryProvider;
@@ -45,15 +42,15 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao
     @Override
     public List<JobExecution> findJobExecutions(final JobInstance jobInstance, final int start, final int count) {
         if (start <= 0) {
-            return getJdbcTemplate().query(byJobInstanceIdExecutionsPagingQueryProvider.generateFirstPageQuery(count),
+            return getJdbcTemplate().query(this.byJobInstanceIdExecutionsPagingQueryProvider.generateFirstPageQuery(count),
                     new JobExecutionRowMapper(jobInstance), jobInstance.getInstanceId());
         }
         try {
             final Long startAfterValue = getJdbcTemplate().queryForObject(
-                    byJobInstanceIdExecutionsPagingQueryProvider.generateJumpToItemQuery(start, count), Long.class,
+                    this.byJobInstanceIdExecutionsPagingQueryProvider.generateJumpToItemQuery(start, count), Long.class,
                     jobInstance.getInstanceId());
             return getJdbcTemplate().query(
-                    byJobInstanceIdExecutionsPagingQueryProvider.generateRemainingPagesQuery(count),
+                    this.byJobInstanceIdExecutionsPagingQueryProvider.generateRemainingPagesQuery(count),
                     new JobExecutionRowMapper(jobInstance), jobInstance.getInstanceId(), startAfterValue);
         } catch (final IncorrectResultSizeDataAccessException e) {
             return Collections.emptyList();
@@ -62,23 +59,39 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao
 
     @Override
     public int getJobExecutionCount(final JobInstance jobInstance) {
-        return getJdbcTemplate().queryForObject(getQuery(GET_EXECUTION_COUNT), Integer.class,
-                new Object[] { jobInstance.getInstanceId() });
+        return getJdbcTemplate().queryForObject(getQuery(this.GET_EXECUTION_COUNT), Integer.class, jobInstance.getInstanceId());
     }
 
     @Override
     public List<JobExecution> getJobExecutions(final String jobName, final int start, final int count) {
         if (start <= 0) {
-            return getJdbcTemplate().query(byJobNamePagingQueryProvider.generateFirstPageQuery(count),
+            return getJdbcTemplate().query(this.byJobNamePagingQueryProvider.generateFirstPageQuery(count),
                     new JobExecutionRowMapper(), jobName);
         }
         try {
             final Long startAfterValue = getJdbcTemplate().queryForObject(
-                    byJobNamePagingQueryProvider.generateJumpToItemQuery(start, count), Long.class, jobName);
-            return getJdbcTemplate().query(byJobNamePagingQueryProvider.generateRemainingPagesQuery(count),
+                    this.byJobNamePagingQueryProvider.generateJumpToItemQuery(start, count), Long.class, jobName);
+            return getJdbcTemplate().query(this.byJobNamePagingQueryProvider.generateRemainingPagesQuery(count),
                     new JobExecutionRowMapper(), jobName, startAfterValue);
         } catch (final IncorrectResultSizeDataAccessException e) {
             return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<JobExecution> findJobExecutions(final String jobName, final Map<String, Object> queryParameter, final Integer size) {
+        final Boolean withJobName = StringUtils.hasText(jobName) ? Boolean.TRUE : Boolean.FALSE;
+        final QueryParameterWrapper queryParameterWrapper = prepapreQueryParameterWrapper(queryParameter, withJobName, jobName);
+        try {
+            final PagingQueryProvider queryProvider = getPagingQueryProviderForQueryService(null, queryParameterWrapper.getQuery(), withJobName);
+            return getJdbcTemplate().query(
+                    queryProvider.generateFirstPageQuery(size),
+                    queryParameterWrapper.getValues(),
+                    queryParameterWrapper.getTypes(),
+                    new JobExecutionRowMapper()
+            );
+        } catch (final Exception e) {
+            throw new SpringBatchLightminApplicationException(e, "Could not execute Query, cause: " + e.getCause());
         }
     }
 
@@ -91,27 +104,27 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao
         private final JobInstance jobInstance;
         private JobParameters jobParameters;
 
-        public JobExecutionRowMapper() {
+        JobExecutionRowMapper() {
             this(null);
         }
 
-        public JobExecutionRowMapper(final JobInstance jobInstance) {
+        JobExecutionRowMapper(final JobInstance jobInstance) {
             this.jobInstance = jobInstance;
         }
 
         @Override
         public JobExecution mapRow(final ResultSet resultSet, final int rowNumber) throws SQLException {
-            final Long id = Long.valueOf(resultSet.getLong(1));
+            final Long id = resultSet.getLong(1);
             final String jobConfigurationLocation = resultSet.getString(10);
-            if (jobParameters == null) {
-                jobParameters = getJobParameters(id);
+            if (this.jobParameters == null) {
+                this.jobParameters = getJobParameters(id);
             }
 
             final JobExecution jobExecution;
-            if (jobInstance == null) {
-                jobExecution = new JobExecution(id, jobParameters, jobConfigurationLocation);
+            if (this.jobInstance == null) {
+                jobExecution = new JobExecution(id, this.jobParameters, jobConfigurationLocation);
             } else {
-                jobExecution = new JobExecution(jobInstance, id, jobParameters, jobConfigurationLocation);
+                jobExecution = new JobExecution(this.jobInstance, id, this.jobParameters, jobConfigurationLocation);
             }
 
             jobExecution.setStartTime(resultSet.getTimestamp(2));
@@ -120,7 +133,7 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao
             jobExecution.setExitStatus(new ExitStatus(resultSet.getString(5), resultSet.getString(6)));
             jobExecution.setCreateTime(resultSet.getTimestamp(7));
             jobExecution.setLastUpdated(resultSet.getTimestamp(8));
-            jobExecution.setVersion(Integer.valueOf(resultSet.getInt(9)));
+            jobExecution.setVersion(resultSet.getInt(9));
             return jobExecution;
         }
     }
@@ -131,7 +144,7 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao
 
     /**
      * @return a {@link PagingQueryProvider} for all job executions with the
-     *         provided where clause
+     * provided where clause
      * @throws Exception
      */
     private PagingQueryProvider getPagingQueryProvider(final String whereClause) throws Exception {
@@ -140,12 +153,12 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao
 
     /**
      * @return a {@link PagingQueryProvider} with a where clause to narrow the
-     *         query
+     * query
      * @throws Exception
      */
     private PagingQueryProvider getPagingQueryProvider(String fromClause, String whereClause) throws Exception {
         final SqlPagingQueryProviderFactoryBean factory = new SqlPagingQueryProviderFactoryBean();
-        factory.setDataSource(dataSource);
+        factory.setDataSource(this.dataSource);
         fromClause = "%PREFIX%JOB_EXECUTION E, %PREFIX%JOB_INSTANCE I" + (fromClause == null ? "" : ", " + fromClause);
         factory.setFromClause(getQuery(fromClause));
         factory.setSelectClause(FIELDS);
@@ -158,10 +171,74 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao
         return factory.getObject();
     }
 
+    private PagingQueryProvider getPagingQueryProviderForQueryService(String fromClause, String whereClause, final Boolean withJobName) throws Exception {
+        final SqlPagingQueryProviderFactoryBean factory = new SqlPagingQueryProviderFactoryBean();
+        factory.setDataSource(this.dataSource);
+        fromClause = "%PREFIX%JOB_EXECUTION E, %PREFIX%JOB_INSTANCE I" + (fromClause == null ? "" : ", " + fromClause);
+        factory.setFromClause(getQuery(fromClause));
+        factory.setSelectClause(FIELDS);
+        final Map<String, Order> sortKeys = new HashMap<>();
+        sortKeys.put("JOB_EXECUTION_ID", Order.DESCENDING);
+        factory.setSortKeys(sortKeys);
+        whereClause = "%s E.JOB_INSTANCE_ID=I.JOB_INSTANCE_ID" + (whereClause == null ? "" : whereClause);
+        if (withJobName) {
+            whereClause = String.format(whereClause, " I.JOB_NAME=? AND ");
+        } else {
+            whereClause = String.format(whereClause, "");
+        }
+        factory.setWhereClause(whereClause);
+        return factory.getObject();
+    }
+
+    private QueryParameterWrapper prepapreQueryParameterWrapper(final Map<String, Object> queryParameters, final Boolean withJobName, final String jobNName) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        final QueryParameterWrapper queryParameterWrapper = new QueryParameterWrapper();
+        final List<Object> parameterValues = new ArrayList<>();
+        final List<Integer> parameterTypes = new ArrayList<>();
+        if (withJobName) {
+            parameterValues.add(jobNName);
+            parameterTypes.add(Types.VARCHAR);
+        } else {
+            log.debug("Querying for all job names");
+        }
+        if (queryParameters.containsKey(QueryParameterKey.EXIT_STATUS)) {
+            stringBuilder.append(" AND E.STATUS = ?");
+            parameterValues.add(queryParameters.get(QueryParameterKey.EXIT_STATUS));
+            parameterTypes.add(Types.VARCHAR);
+        }
+        if (queryParameters.containsKey(QueryParameterKey.START_DATE)) {
+            stringBuilder.append(" AND E.START_TIME > ?");
+            parameterValues.add(DaoUtil.castDate(queryParameters.get(QueryParameterKey.START_DATE)));
+            parameterTypes.add(Types.TIMESTAMP);
+        }
+        if (queryParameters.containsKey(QueryParameterKey.END_DATE)) {
+            stringBuilder.append(" AND E.END_TIME < ?");
+            parameterValues.add(DaoUtil.castDate(queryParameters.get(QueryParameterKey.END_DATE)));
+            parameterTypes.add(Types.TIMESTAMP);
+        }
+        final Object[] values = parameterValues.toArray();
+        final Integer[] types = parameterTypes.toArray(new Integer[parameterTypes.size()]);
+        final int[] typesPrimitiv = new int[types.length];
+        for (int i = 0; i < types.length; i++) {
+            typesPrimitiv[i] = types[i];
+        }
+        queryParameterWrapper.setQuery(stringBuilder.toString());
+        queryParameterWrapper.setValues(values);
+        queryParameterWrapper.setTypes(typesPrimitiv);
+        return queryParameterWrapper;
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
-        byJobNamePagingQueryProvider = getPagingQueryProvider("I.JOB_NAME=?");
-        byJobInstanceIdExecutionsPagingQueryProvider = getPagingQueryProvider("I.JOB_INSTANCE_ID=?");
+        this.byJobNamePagingQueryProvider = getPagingQueryProvider("I.JOB_NAME=?");
+        this.byJobInstanceIdExecutionsPagingQueryProvider = getPagingQueryProvider("I.JOB_INSTANCE_ID=?");
+    }
+
+    @Data
+    private final class QueryParameterWrapper {
+        private String query;
+        private Object[] values;
+        private int[] types;
     }
 }

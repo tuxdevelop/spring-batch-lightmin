@@ -31,42 +31,45 @@ public abstract class AbstractListener implements Listener {
     protected ConfigurableApplicationContext applicationContext;
     protected ListenerStatus listenerStatus;
 
+    @Override
     public void start() {
-        applicationContext = new AnnotationConfigApplicationContext(FlowConfiguration.class);
-        applicationContext.getBeanFactory().registerSingleton("integrationFflow", integrationFlow);
-        applicationContext.getBeanFactory().initializeBean(integrationFlow, "integrationFlow");
-        applicationContext.start();
-        listenerStatus = ListenerStatus.ACTIVE;
+        this.applicationContext = new AnnotationConfigApplicationContext(FlowConfiguration.class);
+        this.applicationContext.getBeanFactory().registerSingleton("integrationFlow", this.integrationFlow);
+        this.applicationContext.getBeanFactory().initializeBean(this.integrationFlow, "integrationFlow");
+        this.applicationContext.start();
+        this.listenerStatus = ListenerStatus.ACTIVE;
     }
 
+    @Override
     public void stop() {
-        if (applicationContext != null) {
-            applicationContext.stop();
+        if (this.applicationContext != null) {
+            this.applicationContext.stop();
         }
-        listenerStatus = ListenerStatus.STOPPED;
+        this.listenerStatus = ListenerStatus.STOPPED;
     }
 
+    @Override
     public ListenerStatus getListenerStatus() {
-        return listenerStatus;
+        return this.listenerStatus;
     }
 
 
     protected void attachJobIncrementer() {
-        if (jobParameters == null) {
-            jobParameters = new JobParametersBuilder().toJobParameters();
+        if (this.jobParameters == null) {
+            this.jobParameters = new JobParametersBuilder().toJobParameters();
         }
-        if (JobIncrementer.DATE.equals(jobIncrementer)) {
-            final JobParametersBuilder jobParametersBuilder = new JobParametersBuilder(jobParameters);
-            jobParameters = jobParametersBuilder.addLong(JobIncrementer.DATE.getIncrementerIdentifier(), System.currentTimeMillis()).toJobParameters();
+        if (JobIncrementer.DATE.equals(this.jobIncrementer)) {
+            final JobParametersBuilder jobParametersBuilder = new JobParametersBuilder(this.jobParameters);
+            this.jobParameters = jobParametersBuilder.addLong(JobIncrementer.DATE.getIncrementerIdentifier(), System.currentTimeMillis()).toJobParameters();
         }
     }
 
     protected void assertConstructor() {
-        assert jobConfiguration != null : "jobConfiguration must not be null";
-        assert jobListenerConfiguration != null : "jobListenerConfiguration must not be null";
-        assert jobIncrementer != null : "jobIncremeter must not be null";
-        assert job != null : "job must not be null";
-        assert jobLauncher != null : "jobLauncher must not be null";
+        assert this.jobConfiguration != null : "jobConfiguration must not be null";
+        assert this.jobListenerConfiguration != null : "jobListenerConfiguration must not be null";
+        assert this.jobIncrementer != null : "jobIncremeter must not be null";
+        assert this.job != null : "job must not be null";
+        assert this.jobLauncher != null : "jobLauncher must not be null";
     }
 
     @Configuration

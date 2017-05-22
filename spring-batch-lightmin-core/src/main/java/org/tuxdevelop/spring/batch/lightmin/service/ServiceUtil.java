@@ -16,10 +16,13 @@ import java.util.Date;
 import java.util.Map;
 
 @Slf4j
-public abstract class ServiceUtil {
+final class ServiceUtil {
 
-    public static JobLauncher createJobLauncher(final TaskExecutorType taskExecutorType,
-                                                final JobRepository jobRepository) {
+    private ServiceUtil() {
+    }
+
+    static JobLauncher createJobLauncher(final TaskExecutorType taskExecutorType,
+                                         final JobRepository jobRepository) {
         final SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
         jobLauncher.setJobRepository(jobRepository);
         if (TaskExecutorType.ASYNCHRONOUS.equals(taskExecutorType)) {
@@ -32,7 +35,7 @@ public abstract class ServiceUtil {
         return jobLauncher;
     }
 
-    public static JobParameters mapToJobParameters(final Map<String, Object> parameters) {
+    static JobParameters mapToJobParameters(final Map<String, Object> parameters) {
         final JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
         if (parameters != null) {
             for (final Map.Entry<String, Object> parameter : parameters.entrySet()) {
@@ -44,8 +47,8 @@ public abstract class ServiceUtil {
         return jobParametersBuilder.toJobParameters();
     }
 
-    public static void attachJobParameter(final JobParametersBuilder jobParametersBuilder, final String parameterName,
-                                          final Object parameterValue) {
+    private static void attachJobParameter(final JobParametersBuilder jobParametersBuilder, final String parameterName,
+                                           final Object parameterValue) {
         if (parameterValue instanceof Long) {
             jobParametersBuilder.addLong(parameterName, (Long) parameterValue);
         } else if (parameterValue instanceof Date) {

@@ -99,6 +99,11 @@ public class CommonSpringBatchLightminConfiguration {
     }
 
     @Bean
+    public JobExecutionQueryService jobExecutionQueryService(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
+        return new DefaultJobExecutionQueryService(defaultSpringBatchLightminConfigurator.getLightminJobExecutionDao());
+    }
+
+    @Bean
     public StepBuilderFactory stepBuilderFactory(final BatchConfigurer batchConfigurer) throws Exception {
         return new StepBuilderFactory(batchConfigurer.getJobRepository(), batchConfigurer.getTransactionManager());
     }

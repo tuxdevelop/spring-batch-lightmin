@@ -91,6 +91,21 @@ include::{snippets}/jobcontroller/test-get-job-execution-by-id/http-request.adoc
 
 include::{snippets}/jobcontroller/test-get-job-execution-by-id/http-response.adoc[]
 
+===== Query Job Executions
+
+====== Curl
+
+include::{snippets}/jobcontroller/test-query-job-executions/curl-request.adoc[]
+
+====== HTTP Request
+
+include::{snippets}/jobcontroller/test-query-job-executions/http-request.adoc[]
+
+====== HTTP Response
+
+include::{snippets}/jobcontroller/test-query-job-executions/http-response.adoc[]
+
+
 ==== Job Launcher
 
 ===== Launch Job

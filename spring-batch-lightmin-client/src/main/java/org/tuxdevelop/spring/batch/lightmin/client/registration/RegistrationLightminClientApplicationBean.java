@@ -60,24 +60,19 @@ public class RegistrationLightminClientApplicationBean {
     }
 
     public void startRegisterTask() {
-        if (autoRegister) {
-            if (scheduledTask != null && !scheduledTask.isDone()) {
+        if (this.autoRegister) {
+            if (this.scheduledTask != null && !this.scheduledTask.isDone()) {
                 return;
             }
-            scheduledTask = taskScheduler.scheduleAtFixedRate(new Runnable() {
-                @Override
-                public void run() {
-                    lightminClientRegistrator.register();
-                }
-            }, registerPeriod);
-            log.debug("Scheduled registration task for every {}ms", registerPeriod);
+            this.scheduledTask = this.taskScheduler.scheduleAtFixedRate(() -> this.lightminClientRegistrator.register(), this.registerPeriod);
+            log.debug("Scheduled registration task for every {}ms", this.registerPeriod);
         }
     }
 
     public void stopRegisterTask() {
-        if (autoDeregister) {
-            if (scheduledTask != null && !scheduledTask.isDone()) {
-                scheduledTask.cancel(Boolean.TRUE);
+        if (this.autoDeregister) {
+            if (this.scheduledTask != null && !this.scheduledTask.isDone()) {
+                this.scheduledTask.cancel(Boolean.TRUE);
                 log.debug("Canceled registration task");
             }
         }

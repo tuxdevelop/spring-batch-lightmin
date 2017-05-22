@@ -9,11 +9,13 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.*;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
+import org.tuxdevelop.spring.batch.lightmin.service.JobExecutionQueryService;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
 import org.tuxdevelop.spring.batch.lightmin.service.StepService;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,43 +29,45 @@ public class ControllerServiceEntryBean implements ServiceEntry {
     private final AdminService adminService;
     private final JobService jobService;
     private final StepService stepService;
+    private final JobExecutionQueryService jobExecutionQueryService;
     private final JobLauncherBean jobLauncherBean;
 
     public ControllerServiceEntryBean(final AdminService adminService,
                                       final JobService jobService,
                                       final StepService stepService,
-                                      final JobLauncherBean jobLauncherBean) {
+                                      final JobExecutionQueryService jobExecutionQueryService, final JobLauncherBean jobLauncherBean) {
         this.adminService = adminService;
         this.jobService = jobService;
         this.stepService = stepService;
+        this.jobExecutionQueryService = jobExecutionQueryService;
         this.jobLauncherBean = jobLauncherBean;
     }
 
 
     @Override
     public void saveJobConfiguration(final JobConfiguration jobConfiguration) {
-        adminService.saveJobConfiguration(ResourceToAdminMapper.map(jobConfiguration));
+        this.adminService.saveJobConfiguration(ResourceToAdminMapper.map(jobConfiguration));
     }
 
     @Override
     public void updateJobConfiguration(final JobConfiguration jobConfiguration) {
-        adminService.updateJobConfiguration(ResourceToAdminMapper.map(jobConfiguration));
+        this.adminService.updateJobConfiguration(ResourceToAdminMapper.map(jobConfiguration));
     }
 
     @Override
     public void deleteJobConfiguration(final Long jobConfigurationId) {
-        adminService.deleteJobConfiguration(jobConfigurationId);
+        this.adminService.deleteJobConfiguration(jobConfigurationId);
     }
 
     @Override
     public JobConfigurations getJobConfigurationsByJobName(final String jobName) {
-        final Collection<org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration> jobConfigurations = adminService.getJobConfigurationsByJobName(jobName);
+        final Collection<org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration> jobConfigurations = this.adminService.getJobConfigurationsByJobName(jobName);
         return AdminToResourceMapper.map(jobConfigurations);
     }
 
     @Override
     public Map<String, JobConfigurations> getJobConfigurationMap(final Collection<String> jobNames) {
-        final Map<String, Collection<org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration>> jobConfigurationMap = adminService.getJobConfigurationMap(jobNames);
+        final Map<String, Collection<org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration>> jobConfigurationMap = this.adminService.getJobConfigurationMap(jobNames);
         final Map<String, JobConfigurations> response = new HashMap<>();
         for (final Map.Entry<String, Collection<org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration>> entry : jobConfigurationMap.entrySet()) {
             final JobConfigurations jobConfigurations = AdminToResourceMapper.map(entry.getValue());
@@ -74,29 +78,29 @@ public class ControllerServiceEntryBean implements ServiceEntry {
 
     @Override
     public JobConfigurations getJobConfigurations(final Collection<String> jobNames) {
-        return AdminToResourceMapper.map(adminService.getJobConfigurations(jobNames));
+        return AdminToResourceMapper.map(this.adminService.getJobConfigurations(jobNames));
     }
 
     @Override
     public JobConfiguration getJobConfigurationById(final Long jobConfigurationId) {
-        return AdminToResourceMapper.map(adminService.getJobConfigurationById(jobConfigurationId));
+        return AdminToResourceMapper.map(this.adminService.getJobConfigurationById(jobConfigurationId));
     }
 
     @Override
     public void stopJobConfiguration(final Long jobConfigurationId) {
-        adminService.stopJobConfiguration(jobConfigurationId);
+        this.adminService.stopJobConfiguration(jobConfigurationId);
     }
 
     @Override
     public void startJobConfiguration(final Long jobConfigurationId) {
-        adminService.startJobConfiguration(jobConfigurationId);
+        this.adminService.startJobConfiguration(jobConfigurationId);
     }
 
     @Override
     public JobExecution getByJobExecutionId(final Long jobExecutionId) {
-        final org.springframework.batch.core.JobExecution jobExecution = jobService.getJobExecution(jobExecutionId);
-        jobService.attachJobInstance(jobExecution);
-        stepService.attachStepExecutions(jobExecution);
+        final org.springframework.batch.core.JobExecution jobExecution = this.jobService.getJobExecution(jobExecutionId);
+        this.jobService.attachJobInstance(jobExecution);
+        this.stepService.attachStepExecutions(jobExecution);
         return BatchToResourceMapper.map(jobExecution);
 
     }
@@ -105,9 +109,9 @@ public class ControllerServiceEntryBean implements ServiceEntry {
     public JobExecutionPage getJobExecutionPage(final Long jobInstanceId,
                                                 final Integer startIndex,
                                                 final Integer pageSize) {
-        final JobInstance jobInstance = jobService.getJobInstance(jobInstanceId);
-        final Collection<org.springframework.batch.core.JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance, startIndex, pageSize);
-        final Integer totalJobExecutionCount = jobService.getJobExecutionCount(jobInstance);
+        final JobInstance jobInstance = this.jobService.getJobInstance(jobInstanceId);
+        final Collection<org.springframework.batch.core.JobExecution> jobExecutions = this.jobService.getJobExecutions(jobInstance, startIndex, pageSize);
+        final Integer totalJobExecutionCount = this.jobService.getJobExecutionCount(jobInstance);
         final JobExecutionPage jobExecutionPage = new JobExecutionPage();
         jobExecutionPage.setJobName(jobInstance.getJobName());
         jobExecutionPage.setJobInstanceId(jobInstanceId);
@@ -120,9 +124,9 @@ public class ControllerServiceEntryBean implements ServiceEntry {
 
     @Override
     public JobExecutionPage getJobExecutionPage(final Long jobInstanceId) {
-        final JobInstance jobInstance = jobService.getJobInstance(jobInstanceId);
-        final Collection<org.springframework.batch.core.JobExecution> jobExecutions = jobService.getJobExecutions(jobInstance);
-        final Integer totalJobExecutionCount = jobService.getJobExecutionCount(jobInstance);
+        final JobInstance jobInstance = this.jobService.getJobInstance(jobInstanceId);
+        final Collection<org.springframework.batch.core.JobExecution> jobExecutions = this.jobService.getJobExecutions(jobInstance);
+        final Integer totalJobExecutionCount = this.jobService.getJobExecutionCount(jobInstance);
         final JobExecutionPage jobExecutionPage = new JobExecutionPage();
         jobExecutionPage.setJobName(jobInstance.getJobName());
         jobExecutionPage.setJobInstanceId(jobInstanceId);
@@ -135,8 +139,8 @@ public class ControllerServiceEntryBean implements ServiceEntry {
 
     @Override
     public JobInstancePage getJobInstancesByJobName(final String jobName, final int startIndex, final int pageSize) {
-        final Collection<JobInstance> jobInstanceCollection = jobService.getJobInstances(jobName, startIndex, pageSize);
-        final Integer jobInstanceCount = jobService.getJobInstanceCount(jobName);
+        final Collection<JobInstance> jobInstanceCollection = this.jobService.getJobInstances(jobName, startIndex, pageSize);
+        final Integer jobInstanceCount = this.jobService.getJobInstanceCount(jobName);
         final JobInstancePage jobInstancePage = new JobInstancePage();
         jobInstancePage.setJobName(jobName);
         jobInstancePage.setJobInstances(BatchToResourceMapper.mapInstances(jobInstanceCollection));
@@ -149,11 +153,11 @@ public class ControllerServiceEntryBean implements ServiceEntry {
     @Override
     public ApplicationJobInfo getApplicationJobInfo() {
         final ApplicationJobInfo applicationJobInfo = new ApplicationJobInfo();
-        final Collection<String> jobNames = jobService.getJobNames();
+        final Collection<String> jobNames = this.jobService.getJobNames();
         for (final String jobName : jobNames) {
             final JobInfo jobInfo = new JobInfo();
             jobInfo.setJobName(jobName);
-            final int instanceCount = jobService.getJobInstanceCount(jobName);
+            final int instanceCount = this.jobService.getJobInstanceCount(jobName);
             jobInfo.setJobInstanceCount(instanceCount);
             applicationJobInfo.getJobInfos().add(jobInfo);
         }
@@ -162,7 +166,7 @@ public class ControllerServiceEntryBean implements ServiceEntry {
 
     @Override
     public JobInfo getJobInfo(final String jobName) {
-        final Integer jobInstanceCount = jobService.getJobInstanceCount(jobName);
+        final Integer jobInstanceCount = this.jobService.getJobInstanceCount(jobName);
         final JobInfo jobInfo = new JobInfo();
         jobInfo.setJobName(jobName);
         jobInfo.setJobInstanceCount(jobInstanceCount);
@@ -171,28 +175,34 @@ public class ControllerServiceEntryBean implements ServiceEntry {
 
     @Override
     public void restartJobExecution(final Long jobExecutionId) {
-        jobService.restartJobExecution(jobExecutionId);
+        this.jobService.restartJobExecution(jobExecutionId);
     }
 
     @Override
     public void stopJobExecution(final Long jobExecutionId) {
-        jobService.stopJobExecution(jobExecutionId);
+        this.jobService.stopJobExecution(jobExecutionId);
     }
 
     @Override
     public StepExecution getStepExecution(final Long jobExecutionId, final Long stepExecutionId) {
-        final org.springframework.batch.core.JobExecution jobExecution = jobService.getJobExecution(jobExecutionId);
-        return BatchToResourceMapper.map(stepService.getStepExecution(jobExecution, stepExecutionId));
+        final org.springframework.batch.core.JobExecution jobExecution = this.jobService.getJobExecution(jobExecutionId);
+        return BatchToResourceMapper.map(this.stepService.getStepExecution(jobExecution, stepExecutionId));
     }
 
     @Override
     public void launchJob(final JobLaunch jobLaunch) {
-        jobLauncherBean.launchJob(jobLaunch);
+        this.jobLauncherBean.launchJob(jobLaunch);
     }
 
     @Override
     public JobParameters getLastJobParameters(final String jobName) {
-        final org.springframework.batch.core.JobParameters jobParameters = jobService.getLastJobParameters(jobName);
+        final org.springframework.batch.core.JobParameters jobParameters = this.jobService.getLastJobParameters(jobName);
         return BatchToResourceMapper.map(jobParameters);
+    }
+
+    @Override
+    public List<JobExecution> findJobExecutions(final String jobName, final Map<String, Object> queryParameter, final Integer resultSize) {
+        final List<org.springframework.batch.core.JobExecution> jobExecutions = this.jobExecutionQueryService.findJobExecutions(jobName, queryParameter, resultSize);
+        return BatchToResourceMapper.mapExecutions(jobExecutions);
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 
 import java.util.List;
+import java.util.Map;
 
 public interface LightminJobExecutionDao {
 
@@ -28,4 +29,12 @@ public interface LightminJobExecutionDao {
      * @return a Page of {@link org.springframework.batch.core.JobExecution}s
      */
     List<JobExecution> getJobExecutions(String jobName, int start, int count);
+
+    /**
+     * @param jobName
+     * @param queryParameter
+     * @param size
+     * @return
+     */
+    List<JobExecution> findJobExecutions(final String jobName, final Map<String, Object> queryParameter, final Integer size);
 }
