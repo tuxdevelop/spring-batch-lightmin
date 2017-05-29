@@ -15,6 +15,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
 import org.tuxdevelop.spring.batch.lightmin.service.ListenerService;
 import org.tuxdevelop.spring.batch.lightmin.service.SchedulerService;
+import org.tuxdevelop.spring.batch.lightmin.support.JobExecutionListenerRegisterBean;
 import org.tuxdevelop.spring.batch.lightmin.util.CommonJobFactory;
 
 import java.util.Collection;
@@ -32,43 +33,50 @@ public class JobCreationListener implements ApplicationListener<ContextRefreshed
     private final AdminService adminService;
     private final SchedulerService schedulerService;
     private final ListenerService listenerService;
+    private final JobExecutionListenerRegisterBean jobExecutionListenerRegisterBean;
 
-    public JobCreationListener(final ApplicationContext applicationContext, final JobRegistry jobRegistry,
-                               final AdminService adminService, final SchedulerService schedulerService, final ListenerService listenerService) {
+    public JobCreationListener(final ApplicationContext applicationContext,
+                               final JobRegistry jobRegistry,
+                               final AdminService adminService,
+                               final SchedulerService schedulerService,
+                               final ListenerService listenerService,
+                               final JobExecutionListenerRegisterBean jobExecutionListenerRegisterBean) {
         this.applicationContext = applicationContext;
         this.jobRegistry = jobRegistry;
         this.adminService = adminService;
         this.schedulerService = schedulerService;
         this.listenerService = listenerService;
+        this.jobExecutionListenerRegisterBean = jobExecutionListenerRegisterBean;
     }
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent applicationEvent) {
         // register jobs of the current application context
-        final Map<String, Job> jobs = applicationContext.getBeansOfType(Job.class);
+        final Map<String, Job> jobs = this.applicationContext.getBeansOfType(Job.class);
         if (jobs != null) {
             for (final Map.Entry<String, Job> jobEntry : jobs.entrySet()) {
                 final Job job = jobEntry.getValue();
                 final String jobName = job.getName();
                 final CommonJobFactory commonJobFactory = new CommonJobFactory(job, jobName);
                 try {
-                    jobRegistry.register(commonJobFactory);
+                    this.jobRegistry.register(commonJobFactory);
                 } catch (final DuplicateJobException e) {
                     log.error("Job with name: " + jobName + " is already registered!");
                 }
+                this.jobExecutionListenerRegisterBean.registerListener(job);
             }
         }
 
         // register all stored jobConfigurations
-        final Collection<JobConfiguration> jobConfigurations = adminService.getJobConfigurations(jobRegistry.getJobNames());
+        final Collection<JobConfiguration> jobConfigurations = this.adminService.getJobConfigurations(this.jobRegistry.getJobNames());
         if (jobConfigurations != null) {
             for (final JobConfiguration jobConfiguration : jobConfigurations) {
                 final String jobName = jobConfiguration.getJobName();
-                if (jobRegistry.getJobNames().contains(jobName)) {
+                if (this.jobRegistry.getJobNames().contains(jobName)) {
                     if (jobConfiguration.getJobSchedulerConfiguration() != null) {
-                        schedulerService.registerSchedulerForJob(jobConfiguration);
+                        this.schedulerService.registerSchedulerForJob(jobConfiguration);
                     } else if (jobConfiguration.getJobListenerConfiguration() != null) {
-                        listenerService.registerListenerForJob(jobConfiguration);
+                        this.listenerService.registerListenerForJob(jobConfiguration);
                     }
                 } else {
                     log.debug("No Job with jobName " + jobName + " is present. Registration canceled");
@@ -76,7 +84,7 @@ public class JobCreationListener implements ApplicationListener<ContextRefreshed
             }
         }
         // Schedule all registered schedulers
-        final Map<String, Scheduler> schedulerMap = applicationContext.getBeansOfType(Scheduler.class);
+        final Map<String, Scheduler> schedulerMap = this.applicationContext.getBeansOfType(Scheduler.class);
         if (schedulerMap != null) {
             for (final Map.Entry<String, Scheduler> schedulerEntry : schedulerMap.entrySet()) {
                 final Scheduler scheduler = schedulerEntry.getValue();
@@ -87,8 +95,8 @@ public class JobCreationListener implements ApplicationListener<ContextRefreshed
                 }
             }
         }
-
-        final Map<String, Listener> listenerMap = applicationContext.getBeansOfType(Listener.class);
+        // Schedule all registered listeners
+        final Map<String, Listener> listenerMap = this.applicationContext.getBeansOfType(Listener.class);
         if (listenerMap != null) {
             for (final Map.Entry<String, Listener> listenerEntry : listenerMap.entrySet()) {
                 final Listener listener = listenerEntry.getValue();

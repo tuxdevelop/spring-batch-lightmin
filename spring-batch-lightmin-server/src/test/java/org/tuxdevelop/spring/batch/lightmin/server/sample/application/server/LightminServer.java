@@ -11,7 +11,6 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.tuxdevelop.spring.batch.lightmin.client.configuration.EnableSpringBatchLightminClient;
 import org.tuxdevelop.spring.batch.lightmin.repository.server.configuration.EnableSpringBatchLightminRemoteRepositoryServer;
 import org.tuxdevelop.spring.batch.lightmin.server.configuration.EnableSpringBatchLightminServer;
 
@@ -20,7 +19,6 @@ import javax.sql.DataSource;
 @Configuration
 @SpringBootApplication
 @EnableSpringBatchLightminServer
-@EnableSpringBatchLightminClient
 @EnableSpringBatchLightminRemoteRepositoryServer
 @PropertySource(value = "classpath:properties/sample/server/server.properties")
 @ComponentScan(basePackages = "org.tuxdevelop.spring.batch.lightmin.server.sample.application.server")

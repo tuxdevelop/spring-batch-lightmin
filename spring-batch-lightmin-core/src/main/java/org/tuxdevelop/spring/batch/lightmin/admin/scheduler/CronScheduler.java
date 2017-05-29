@@ -31,19 +31,21 @@ public class CronScheduler extends AbstractScheduler {
 
     public CronScheduler(final SchedulerConstructorWrapper schedulerConstructorWrapper) {
         this.jobConfiguration = schedulerConstructorWrapper.getJobConfiguration();
-        threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(1);
-        threadPoolTaskScheduler.afterPropertiesSet();
-        jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
-        timeZone = TimeZone.getDefault();
-        trigger = new CronTrigger(jobSchedulerConfiguration.getCronExpression(), timeZone);
+        this.threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        this.threadPoolTaskScheduler.setPoolSize(1);
+        this.threadPoolTaskScheduler.afterPropertiesSet();
+        this.jobSchedulerConfiguration = this.jobConfiguration.getJobSchedulerConfiguration();
+        this.timeZone = TimeZone.getDefault();
+        this.trigger = new CronTrigger(this.jobSchedulerConfiguration.getCronExpression(), this.timeZone);
         this.job = schedulerConstructorWrapper.getJob();
-        jobRunner = new JobRunner(job, schedulerConstructorWrapper.getJobLauncher(),
+
+        this.jobRunner = new JobRunner(this.job,
+                schedulerConstructorWrapper.getJobLauncher(),
                 schedulerConstructorWrapper.getJobParameters(),
                 schedulerConstructorWrapper.getJobIncrementer());
         final SchedulerStatus schedulerStatus;
-        if (jobSchedulerConfiguration.getSchedulerStatus() != null) {
-            schedulerStatus = jobSchedulerConfiguration.getSchedulerStatus();
+        if (this.jobSchedulerConfiguration.getSchedulerStatus() != null) {
+            schedulerStatus = this.jobSchedulerConfiguration.getSchedulerStatus();
         } else {
             schedulerStatus = SchedulerStatus.INITIALIZED;
         }
@@ -52,31 +54,31 @@ public class CronScheduler extends AbstractScheduler {
 
     @Override
     public void schedule() {
-        log.info("Scheduling: " + jobRunner.getJob().getName() +
-                " with Parameters: " + jobRunner.getJobParameters().toProperties());
-        threadPoolTaskScheduler.schedule(jobRunner, trigger);
+        log.info("Scheduling: " + this.jobRunner.getJob().getName() +
+                " with Parameters: " + this.jobRunner.getJobParameters().toProperties());
+        this.threadPoolTaskScheduler.schedule(this.jobRunner, this.trigger);
         setStatus(SchedulerStatus.RUNNING);
     }
 
     @Override
     public void terminate() {
-        threadPoolTaskScheduler.shutdown();
-        while (threadPoolTaskScheduler.getActiveCount() > 0) {
+        this.threadPoolTaskScheduler.shutdown();
+        while (this.threadPoolTaskScheduler.getActiveCount() > 0) {
             setStatus(SchedulerStatus.IN_TERMINATION);
         }
-        threadPoolTaskScheduler.initialize();
+        this.threadPoolTaskScheduler.initialize();
         setStatus(SchedulerStatus.STOPPED);
     }
 
     @Override
     public void afterPropertiesSet() {
-        assert (jobConfiguration != null);
-        assert (threadPoolTaskScheduler != null);
-        assert (jobSchedulerConfiguration != null);
-        assert (job != null);
-        assert (jobRunner != null);
-        assert (timeZone != null);
-        assert (trigger != null);
+        assert (this.jobConfiguration != null);
+        assert (this.threadPoolTaskScheduler != null);
+        assert (this.jobSchedulerConfiguration != null);
+        assert (this.job != null);
+        assert (this.jobRunner != null);
+        assert (this.timeZone != null);
+        assert (this.trigger != null);
     }
 
 }

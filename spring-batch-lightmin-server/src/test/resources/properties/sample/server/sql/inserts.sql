@@ -28,7 +28,7 @@ VALUES (
 INSERT INTO BATCH_JOB_CONFIGURATION
 (job_name, application_name, job_incrementer, job_configuration_type)
 VALUES (
-  'addressMigrationJob',
+  'addressImportJob',
   'address-migrator',
   'DATE_INCREMENTER',
   2

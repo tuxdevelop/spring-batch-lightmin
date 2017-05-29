@@ -9,7 +9,7 @@ public class JobExecutionFailedEvent extends JobExecutionEvent implements Serial
 
     private static final long serialVersionUID = 1L;
 
-    public JobExecutionFailedEvent(final JobExecution jobExecution) {
-        super(jobExecution);
+    public JobExecutionFailedEvent(final JobExecution jobExecution, final String applicationName) {
+        super(jobExecution, applicationName);
     }
 }

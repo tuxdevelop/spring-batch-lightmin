@@ -33,7 +33,8 @@ public class DefaultSchedulerService implements SchedulerService {
     private final JobRepository jobRepository;
     private final JobRegistry jobRegistry;
 
-    public DefaultSchedulerService(final BeanRegistrar beanRegistrar, final JobRepository jobRepository,
+    public DefaultSchedulerService(final BeanRegistrar beanRegistrar,
+                                   final JobRepository jobRepository,
                                    final JobRegistry jobRegistry) {
         this.beanRegistrar = beanRegistrar;
         this.jobRepository = jobRepository;
@@ -64,7 +65,7 @@ public class DefaultSchedulerService implements SchedulerService {
 
     @Override
     public void unregisterSchedulerForJob(final String beanName) {
-        beanRegistrar.unregisterBean(beanName);
+        this.beanRegistrar.unregisterBean(beanName);
     }
 
     @Override
@@ -76,8 +77,8 @@ public class DefaultSchedulerService implements SchedulerService {
 
     @Override
     public void schedule(final String beanName, final Boolean forceScheduling) {
-        if (applicationContext.containsBean(beanName)) {
-            final Scheduler scheduler = applicationContext.getBean(beanName, Scheduler.class);
+        if (this.applicationContext.containsBean(beanName)) {
+            final Scheduler scheduler = this.applicationContext.getBean(beanName, Scheduler.class);
             if (scheduler.getSchedulerStatus().equals(SchedulerStatus.RUNNING)
                     && Boolean.FALSE.equals(forceScheduling)) {
                 log.info("Scheduler: " + beanName + " already running");
@@ -91,8 +92,8 @@ public class DefaultSchedulerService implements SchedulerService {
 
     @Override
     public void terminate(final String beanName) {
-        if (applicationContext.containsBean(beanName)) {
-            final Scheduler scheduler = applicationContext.getBean(beanName, Scheduler.class);
+        if (this.applicationContext.containsBean(beanName)) {
+            final Scheduler scheduler = this.applicationContext.getBean(beanName, Scheduler.class);
             if (scheduler.getSchedulerStatus().equals(SchedulerStatus.STOPPED)) {
                 log.info("Scheduler: " + beanName + " already terminated");
             } else {
@@ -106,8 +107,8 @@ public class DefaultSchedulerService implements SchedulerService {
     @Override
     public SchedulerStatus getSchedulerStatus(final String beanName) {
         final SchedulerStatus status;
-        if (applicationContext.containsBean(beanName)) {
-            final Scheduler scheduler = applicationContext.getBean(beanName, Scheduler.class);
+        if (this.applicationContext.containsBean(beanName)) {
+            final Scheduler scheduler = this.applicationContext.getBean(beanName, Scheduler.class);
             status = scheduler.getSchedulerStatus();
         } else {
             throw new SpringBatchLightminConfigurationException("Could not get status for bean with name: " + beanName);
@@ -117,17 +118,17 @@ public class DefaultSchedulerService implements SchedulerService {
 
     @Override
     public void afterPropertiesSet() {
-        assert beanRegistrar != null;
-        assert jobRepository != null;
-        assert jobRegistry != null;
+        assert this.beanRegistrar != null;
+        assert this.jobRepository != null;
+        assert this.jobRegistry != null;
     }
 
     private String registerScheduler(final JobConfiguration jobConfiguration, final Class<?> schedulerClass) {
         try {
             final Set<Object> constructorValues = new HashSet<>();
             final JobLauncher jobLauncher = ServiceUtil.createJobLauncher(jobConfiguration.getJobSchedulerConfiguration().getTaskExecutorType(),
-                    jobRepository);
-            final Job job = jobRegistry.getJob(jobConfiguration.getJobName());
+                    this.jobRepository);
+            final Job job = this.jobRegistry.getJob(jobConfiguration.getJobName());
             final JobParameters jobParameters = ServiceUtil.mapToJobParameters(jobConfiguration.getJobParameters());
             final JobSchedulerConfiguration jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
             final String beanName;
@@ -145,7 +146,7 @@ public class DefaultSchedulerService implements SchedulerService {
             schedulerConstructorWrapper.setJobIncrementer(jobConfiguration.getJobIncrementer());
             schedulerConstructorWrapper.setJobConfiguration(jobConfiguration);
             constructorValues.add(schedulerConstructorWrapper);
-            beanRegistrar.registerBean(schedulerClass, beanName, constructorValues, null, null, null, null);
+            this.beanRegistrar.registerBean(schedulerClass, beanName, constructorValues, null, null, null, null);
             return beanName;
         } catch (final Exception e) {
             throw new SpringBatchLightminConfigurationException(e, e.getMessage());

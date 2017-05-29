@@ -3,6 +3,8 @@ package org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring;
 import lombok.Data;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.ExitStatus;
 
+import java.util.Date;
+
 /**
  * @author Marcel Becker
  * @since 0.5
@@ -14,5 +16,7 @@ public class JobExecutionEventInfo {
     private String jobName;
     private Long jobExecutionId;
     private ExitStatus exitStatus;
+    private Date startDate;
+    private Date endDate;
 
 }

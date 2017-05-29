@@ -62,14 +62,14 @@ public class DefaultListenerService implements ListenerService, InitializingBean
 
     @Override
     public void unregisterListenerForJob(final String beanName) {
-        beanRegistrar.unregisterBean(beanName);
+        this.beanRegistrar.unregisterBean(beanName);
     }
 
     @Override
     public void refreshListenerForJob(final JobConfiguration jobConfiguration) {
         unregisterListenerForJob(jobConfiguration.getJobListenerConfiguration().getBeanName());
         final String beanName = registerListenerForJob(jobConfiguration);
-        final Listener listener = applicationContext.getBean(beanName, Listener.class);
+        final Listener listener = this.applicationContext.getBean(beanName, Listener.class);
         if (ListenerStatus.ACTIVE.equals(listener.getListenerStatus())) {
             listener.start();
         }
@@ -78,8 +78,8 @@ public class DefaultListenerService implements ListenerService, InitializingBean
 
     @Override
     public void activateListener(final String beanName, final Boolean forceActivation) {
-        if (applicationContext.containsBean(beanName)) {
-            final Listener listener = applicationContext.getBean(beanName, Listener.class);
+        if (this.applicationContext.containsBean(beanName)) {
+            final Listener listener = this.applicationContext.getBean(beanName, Listener.class);
             if (ListenerStatus.ACTIVE.equals(listener.getListenerStatus()) && Boolean.FALSE.equals(forceActivation)) {
                 log.info("Listener: {} already running", beanName);
             } else {
@@ -90,8 +90,8 @@ public class DefaultListenerService implements ListenerService, InitializingBean
 
     @Override
     public void terminateListener(final String beanName) {
-        if (applicationContext.containsBean(beanName)) {
-            final Listener listener = applicationContext.getBean(beanName, Listener.class);
+        if (this.applicationContext.containsBean(beanName)) {
+            final Listener listener = this.applicationContext.getBean(beanName, Listener.class);
             listener.stop();
         } else {
             throw new SpringBatchLightminConfigurationException("Could not terminate bean with name: " + beanName);
@@ -103,9 +103,9 @@ public class DefaultListenerService implements ListenerService, InitializingBean
         try {
             final ListenerConstructorWrapper listenerConstructorWrapper = new ListenerConstructorWrapper();
             final JobListenerConfiguration jobListenerConfiguration = jobConfiguration.getJobListenerConfiguration();
-            final JobLauncher jobLauncher = ServiceUtil.createJobLauncher(jobListenerConfiguration.getTaskExecutorType(), jobRepository);
+            final JobLauncher jobLauncher = ServiceUtil.createJobLauncher(jobListenerConfiguration.getTaskExecutorType(), this.jobRepository);
             final JobParameters jobParameters = ServiceUtil.mapToJobParameters(jobConfiguration.getJobParameters());
-            final Job job = jobRegistry.getJob(jobConfiguration.getJobName());
+            final Job job = this.jobRegistry.getJob(jobConfiguration.getJobName());
             listenerConstructorWrapper.setJob(job);
             listenerConstructorWrapper.setJobParameters(jobParameters);
             listenerConstructorWrapper.setJobLauncher(jobLauncher);
@@ -119,7 +119,7 @@ public class DefaultListenerService implements ListenerService, InitializingBean
             }
             final Set<Object> constructorValues = new HashSet<>();
             constructorValues.add(listenerConstructorWrapper);
-            beanRegistrar.registerBean(FolderListener.class, beanName, constructorValues, null, null, null, null);
+            this.beanRegistrar.registerBean(FolderListener.class, beanName, constructorValues, null, null, null, null);
         } catch (final Exception e) {
             throw new SpringBatchLightminConfigurationException(e, e.getMessage());
         }
@@ -134,6 +134,6 @@ public class DefaultListenerService implements ListenerService, InitializingBean
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        assert beanRegistrar != null : "BeanRegistrar must not be null";
+        assert this.beanRegistrar != null : "BeanRegistrar must not be null";
     }
 }

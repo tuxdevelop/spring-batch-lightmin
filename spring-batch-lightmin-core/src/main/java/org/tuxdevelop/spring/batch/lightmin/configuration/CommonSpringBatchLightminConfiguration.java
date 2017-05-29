@@ -1,5 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -9,6 +10,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -17,9 +19,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.tuxdevelop.spring.batch.lightmin.admin.event.listener.JobExecutionFinishedJobExecutionListener;
+import org.tuxdevelop.spring.batch.lightmin.admin.event.listener.OnJobExecutionFinishedEventListener;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.service.*;
+import org.tuxdevelop.spring.batch.lightmin.support.JobExecutionListenerRegisterBean;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 
 /**
@@ -118,8 +123,9 @@ public class CommonSpringBatchLightminConfiguration {
                                                    final JobRegistry jobRegistry,
                                                    final AdminService adminService,
                                                    final SchedulerService schedulerService,
-                                                   final ListenerService listenerService) throws Exception {
-        return new JobCreationListener(applicationContext, jobRegistry, adminService, schedulerService, listenerService);
+                                                   final ListenerService listenerService,
+                                                   final JobExecutionListenerRegisterBean jobExecutionListenerRegisterBean) throws Exception {
+        return new JobCreationListener(applicationContext, jobRegistry, adminService, schedulerService, listenerService, jobExecutionListenerRegisterBean);
     }
 
     @Bean
@@ -134,5 +140,21 @@ public class CommonSpringBatchLightminConfiguration {
         jobLauncher.setJobRepository(jobRepository);
         jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
         return jobLauncher;
+    }
+
+    @Bean
+    @Qualifier("jobExecutionFinishedJobExecutionListener")
+    public JobExecutionListener jobExecutionFinishedJobExecutionListener(final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
+        return new JobExecutionFinishedJobExecutionListener(springBatchLightminConfigurationProperties);
+    }
+
+    @Bean
+    public JobExecutionListenerRegisterBean jobExecutionListenerRegisterBean(@Qualifier("jobExecutionFinishedJobExecutionListener") final JobExecutionListener jobExecutionFinishedJobExecutionListener) {
+        return new JobExecutionListenerRegisterBean(jobExecutionFinishedJobExecutionListener);
+    }
+
+    @Bean
+    public OnJobExecutionFinishedEventListener onJobExecutionFinishedEventListener(final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
+        return new OnJobExecutionFinishedEventListener(springBatchLightminConfigurationProperties);
     }
 }

@@ -6,12 +6,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.tuxdevelop.spring.batch.lightmin.server.admin.AdminServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.admin.RemoteAdminServerService;
+import org.tuxdevelop.spring.batch.lightmin.server.api.controller.JobExecutionEventController;
 import org.tuxdevelop.spring.batch.lightmin.server.api.controller.RegistrationController;
 import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnApplicationReadyEventListener;
 import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnLightminClientApplicationRegisteredEventListener;
 import org.tuxdevelop.spring.batch.lightmin.server.job.JobServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.job.RemoteJobServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.service.EventService;
 import org.tuxdevelop.spring.batch.lightmin.server.support.ClientApplicationStatusUpdater;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 
@@ -20,12 +22,17 @@ import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
  * @since 0.3
  */
 @Configuration
-@Import(value = {CommonServerConfiguration.class, LightminServerProperties.class})
+@Import(value = {CommonServerConfiguration.class})
 public class ServerConfiguration {
 
     @Bean
     public RegistrationController registrationController(final RegistrationBean registrationBean) {
         return new RegistrationController(registrationBean);
+    }
+
+    @Bean
+    public JobExecutionEventController jobExecutionEventController(final EventService eventService) {
+        return new JobExecutionEventController(eventService);
     }
 
     @Bean

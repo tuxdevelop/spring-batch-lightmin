@@ -38,16 +38,15 @@ public class AddressFileWriter {
             writer.write("zip_code;city;street;house_number");
             for (int i = 0; i < FILE_ROWS; i++) {
                 final BatchTaskAddress batchTaskAddress = createBatchTaskAddress();
-                final StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(batchTaskAddress.getZipCode());
-                stringBuilder.append(";");
-                stringBuilder.append(batchTaskAddress.getCity());
-                stringBuilder.append(";");
-                stringBuilder.append(batchTaskAddress.getStreet());
-                stringBuilder.append(";");
-                stringBuilder.append(batchTaskAddress.getHouseNumber());
+                final String stringBuilder = batchTaskAddress.getZipCode() +
+                        ";" +
+                        batchTaskAddress.getCity() +
+                        ";" +
+                        batchTaskAddress.getStreet() +
+                        ";" +
+                        batchTaskAddress.getHouseNumber();
                 writer.write("\n");
-                writer.write(stringBuilder.toString());
+                writer.write(stringBuilder);
             }
             writer.flush();
             log.info("Created File: {} ", file.getAbsolutePath());

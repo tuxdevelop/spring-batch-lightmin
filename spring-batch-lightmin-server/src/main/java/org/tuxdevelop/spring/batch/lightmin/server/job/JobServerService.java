@@ -4,6 +4,9 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.*;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Marcel Becker
  * @since 0.3
@@ -125,4 +128,19 @@ public interface JobServerService {
      * @return the JobParameters
      */
     JobParameters getLastJobParameters(final String jobName, final LightminClientApplication lightminClientApplication);
+
+    /**
+     * Retrieves {@link JobExecution}s for a given Job Name and query parameters
+     *
+     * @param jobName                   name of the job, if null or empty, all known job names will be queried
+     * @param lightminClientApplication the LightminClientApplication
+     * @param queryParameter            query parameters
+     *                                  EXIT_STATUS - String value of the Spring Batch {@link ExitStatus}
+     *                                  START_TIME - Start time of the JobExecution {@link java.util.Date}
+     *                                  END_TIME - End time of the JobExecution {@link java.util.Date}
+     * @param resultSize                maximum size of the result set
+     * @return all found {@link JobExecution}s depending on the query Parameters
+     */
+    List<JobExecution> findJobExecutions(final String jobName, final LightminClientApplication lightminClientApplication, final Map<String, Object> queryParameter, final Integer resultSize);
+
 }

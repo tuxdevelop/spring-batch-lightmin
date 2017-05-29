@@ -16,7 +16,7 @@ public class LightminServerProperties {
 
     @Getter
     @Setter
-    private Long heartbeatPeriod = 100000L;
+    private Long heartbeatPeriod = 10000L;
 
     @Getter
     @Setter
@@ -24,6 +24,9 @@ public class LightminServerProperties {
     @Getter
     @Setter
     private String clientPassword;
+    @Getter
+    @Setter
+    private Integer errorEventRepositorySize = 200;
 
     public void setContextPath(final String pathPrefix) {
         if (!pathPrefix.startsWith("/") || pathPrefix.endsWith("/")) {

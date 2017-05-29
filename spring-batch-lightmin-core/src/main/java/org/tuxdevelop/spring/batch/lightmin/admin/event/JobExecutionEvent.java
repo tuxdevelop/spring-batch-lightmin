@@ -13,9 +13,12 @@ public class JobExecutionEvent extends ApplicationEvent implements Serializable 
 
     @Getter
     private final JobExecution jobExecution;
+    @Getter
+    private final String applicationName;
 
-    public JobExecutionEvent(final JobExecution jobExecution) {
+    public JobExecutionEvent(final JobExecution jobExecution, final String applicationName) {
         super(jobExecution);
         this.jobExecution = jobExecution;
+        this.applicationName = applicationName;
     }
 }

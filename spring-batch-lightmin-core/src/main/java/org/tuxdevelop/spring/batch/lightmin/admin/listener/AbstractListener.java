@@ -4,6 +4,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.ListenerStatus;
+import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
 
 /**
  * @author Marcel Becker
@@ -28,6 +30,8 @@ public abstract class AbstractListener implements Listener {
     protected Job job;
     protected JobParameters jobParameters;
     protected JobLauncher jobLauncher;
+    protected ApplicationEventPublisher applicationEventPublisher;
+    protected SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
     protected ConfigurableApplicationContext applicationContext;
     protected ListenerStatus listenerStatus;
 

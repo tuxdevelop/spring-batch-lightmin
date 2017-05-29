@@ -30,8 +30,7 @@ public class SpringBatchLightminConfiguration {
     }
 
     @Autowired
-    public void setSpringBatchLightminConfigurationProperties(final SpringBatchLightminConfigurationProperties
-                                                                      springBatchLightminConfigurationProperties) {
+    public void setSpringBatchLightminConfigurationProperties(final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
         this.springBatchLightminConfigurationProperties = springBatchLightminConfigurationProperties;
     }
 
@@ -39,12 +38,12 @@ public class SpringBatchLightminConfiguration {
     @ConditionalOnMissingBean(BatchConfigurer.class)
     public BatchConfigurer batchConfigurer() {
         final DefaultSpringBatchLightminBatchConfigurer batchConfigurer;
-        final BatchRepositoryType batchRepositoryType = springBatchLightminConfigurationProperties.getBatchRepositoryType();
+        final BatchRepositoryType batchRepositoryType = this.springBatchLightminConfigurationProperties.getBatchRepositoryType();
         switch (batchRepositoryType) {
             case JDBC:
-                final DataSource dataSource = applicationContext.getBean(
-                        springBatchLightminConfigurationProperties.getBatchDataSourceName(), DataSource.class);
-                final String tablePrefix = springBatchLightminConfigurationProperties.getRepositoryTablePrefix();
+                final DataSource dataSource = this.applicationContext.getBean(
+                        this.springBatchLightminConfigurationProperties.getBatchDataSourceName(), DataSource.class);
+                final String tablePrefix = this.springBatchLightminConfigurationProperties.getRepositoryTablePrefix();
                 batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource, tablePrefix);
                 break;
             case MAP:
@@ -61,7 +60,7 @@ public class SpringBatchLightminConfiguration {
     @Bean
     @ConditionalOnMissingBean(SpringBatchLightminConfigurator.class)
     public SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator(final BatchConfigurer batchConfigurer) {
-        final DefaultSpringBatchLightminConfigurator configuration = new DefaultSpringBatchLightminConfigurator(springBatchLightminConfigurationProperties, applicationContext);
+        final DefaultSpringBatchLightminConfigurator configuration = new DefaultSpringBatchLightminConfigurator(this.springBatchLightminConfigurationProperties, this.applicationContext);
         configuration.setBatchConfigurer(batchConfigurer);
         return configuration;
     }

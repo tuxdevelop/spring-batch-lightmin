@@ -2,31 +2,25 @@ package org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.co
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
-import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.validation.BindException;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.BatchTaskAddress;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.ProcessingState;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDao;
 
 import java.io.File;
-import java.util.List;
 
 @Configuration
 public class AddressImportJobConfiguration {
@@ -79,12 +73,9 @@ public class AddressImportJobConfiguration {
 
     @Bean
     public ItemWriter<BatchTaskAddress> addressDatabaseWriter(final BatchTaskAddressDao batchTaskAddressDAO) {
-        return new ItemWriter<BatchTaskAddress>() {
-            @Override
-            public void write(final List<? extends BatchTaskAddress> items) throws Exception {
-                for (final BatchTaskAddress item : items) {
-                    batchTaskAddressDAO.add(item);
-                }
+        return items -> {
+            for (final BatchTaskAddress item : items) {
+                batchTaskAddressDAO.add(item);
             }
         };
     }
@@ -96,17 +87,14 @@ public class AddressImportJobConfiguration {
         tokenizer.setDelimiter(";");
         tokenizer.setNames(new String[]{"city", "zip_code", "street", "house_number"});
         lineMapper.setLineTokenizer(tokenizer);
-        lineMapper.setFieldSetMapper(new FieldSetMapper<BatchTaskAddress>() {
-            @Override
-            public BatchTaskAddress mapFieldSet(final FieldSet fieldSet) throws BindException {
-                final BatchTaskAddress batchTaskAddress = new BatchTaskAddress();
-                batchTaskAddress.setCity(fieldSet.readString("city"));
-                batchTaskAddress.setZipCode(fieldSet.readString("zip_code"));
-                batchTaskAddress.setStreet(fieldSet.readString("street"));
-                batchTaskAddress.setHouseNumber(fieldSet.readString("house_number"));
-                batchTaskAddress.setProcessingState(ProcessingState.INIT);
-                return batchTaskAddress;
-            }
+        lineMapper.setFieldSetMapper(fieldSet -> {
+            final BatchTaskAddress batchTaskAddress = new BatchTaskAddress();
+            batchTaskAddress.setCity(fieldSet.readString("city"));
+            batchTaskAddress.setZipCode(fieldSet.readString("zip_code"));
+            batchTaskAddress.setStreet(fieldSet.readString("street"));
+            batchTaskAddress.setHouseNumber(fieldSet.readString("house_number"));
+            batchTaskAddress.setProcessingState(ProcessingState.INIT);
+            return batchTaskAddress;
         });
         lineMapper.afterPropertiesSet();
         return lineMapper;
@@ -115,19 +103,16 @@ public class AddressImportJobConfiguration {
     @Bean
     @JobScope
     public Tasklet deleteFileTasklet(@Value("#{jobParameters['fileSource']}") final String pathToFile) {
-        return new Tasklet() {
-            @Override
-            public RepeatStatus execute(final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
-                final File file = new File(pathToFile);
-                final boolean deleted = file.delete();
-                final RepeatStatus repeatStatus;
-                if (deleted) {
-                    repeatStatus = RepeatStatus.FINISHED;
-                } else {
-                    repeatStatus = RepeatStatus.CONTINUABLE;
-                }
-                return repeatStatus;
+        return (contribution, chunkContext) -> {
+            final File file = new File(pathToFile);
+            final boolean deleted = file.delete();
+            final RepeatStatus repeatStatus;
+            if (deleted) {
+                repeatStatus = RepeatStatus.FINISHED;
+            } else {
+                repeatStatus = RepeatStatus.CONTINUABLE;
             }
+            return repeatStatus;
         };
     }
 

@@ -9,7 +9,6 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemStreamReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.ItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +16,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.Address;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.ProcessingState;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.AddressDao;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDao;
 
 import javax.sql.DataSource;
-import java.util.List;
 
 @Slf4j
 @Configuration
@@ -95,20 +92,17 @@ public class AddressPrinterJobConfiguration {
 
             @Override
             public Address process(final Long id) throws Exception {
-                batchTaskAddressDAO.updateProcessingState(id, ProcessingState.PRINTED);
-                return addressDAO.getAddressById(id);
+                this.batchTaskAddressDAO.updateProcessingState(id, ProcessingState.PRINTED);
+                return this.addressDAO.getAddressById(id);
             }
         };
     }
 
     @Bean
     public ItemWriter<Address> addressPrinterWriter() {
-        return new ItemWriter<Address>() {
-            @Override
-            public void write(final List<? extends Address> addresses) throws Exception {
-                for (final Address address : addresses) {
-                    log.info("Migrated Address: <<<" + address + ">>>");
-                }
+        return addresses -> {
+            for (final Address address : addresses) {
+                log.info("Migrated Address: <<<" + address + ">>>");
             }
         };
     }
@@ -118,13 +112,10 @@ public class AddressPrinterJobConfiguration {
         final JdbcBatchItemWriter<Long> writer = new JdbcBatchItemWriter<>();
         writer.setDataSource(dataSource);
         writer.setSql(DELETE_BATCH_TASK_ADDRESS_STATEMENT);
-        writer.setItemSqlParameterSourceProvider(new ItemSqlParameterSourceProvider<Long>() {
-            @Override
-            public SqlParameterSource createSqlParameterSource(final Long batchTaskId) {
-                final MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-                mapSqlParameterSource.addValue("batch_task_id", batchTaskId);
-                return mapSqlParameterSource;
-            }
+        writer.setItemSqlParameterSourceProvider(batchTaskId -> {
+            final MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+            mapSqlParameterSource.addValue("batch_task_id", batchTaskId);
+            return mapSqlParameterSource;
         });
         return writer;
     }

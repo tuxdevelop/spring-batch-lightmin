@@ -263,7 +263,6 @@
                     <includes>
                         <include>**/*IT.java</include>
                     </includes>
-                    <forkMode>pertest</forkMode>
                 </configuration>
             </plugin>
             <plugin>

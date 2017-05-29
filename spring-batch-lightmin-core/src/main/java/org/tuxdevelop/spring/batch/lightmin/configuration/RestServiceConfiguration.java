@@ -49,7 +49,8 @@ public class RestServiceConfiguration {
 
     @Bean
     public JobLauncherBean jobLauncherBean(final JobLauncher defaultAsyncJobLauncher,
-                                           final JobRegistry jobRegistry) {
-        return new JobLauncherBean(defaultAsyncJobLauncher, jobRegistry);
+                                           final JobRegistry jobRegistry,
+                                           final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
+        return new JobLauncherBean(defaultAsyncJobLauncher, jobRegistry, springBatchLightminConfigurationProperties);
     }
 }

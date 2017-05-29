@@ -31,7 +31,8 @@ abstract class AbstractScheduler implements Scheduler, InitializingBean {
         private JobParameters jobParameters;
         private final JobIncrementer jobIncrementer;
 
-        JobRunner(final Job job, final JobLauncher jobLauncher, final JobParameters jobParameters,
+        JobRunner(final Job job, final JobLauncher jobLauncher,
+                  final JobParameters jobParameters,
                   final JobIncrementer jobIncrementer) {
             this.job = job;
             this.jobLauncher = jobLauncher;
@@ -44,24 +45,25 @@ abstract class AbstractScheduler implements Scheduler, InitializingBean {
         public void run() {
             try {
                 attachJobIncrementer();
-                jobLauncher.run(job, jobParameters);
+                this.jobLauncher.run(this.job, this.jobParameters);
             } catch (final Exception e) {
                 throw new SpringBatchLightminApplicationException(e, e.getMessage());
             }
         }
 
         private void attachJobIncrementer() {
-            if (jobParameters == null) {
-                jobParameters = new JobParametersBuilder().toJobParameters();
+            if (this.jobParameters == null) {
+                this.jobParameters = new JobParametersBuilder().toJobParameters();
             }
-            if (JobIncrementer.DATE.equals(jobIncrementer)) {
-                final JobParametersBuilder jobParametersBuilder = new JobParametersBuilder(jobParameters);
-                jobParameters = jobParametersBuilder.addLong(JobIncrementer.DATE.getIncrementerIdentifier(), System.currentTimeMillis()).toJobParameters();
+            if (JobIncrementer.DATE.equals(this.jobIncrementer)) {
+                final JobParametersBuilder jobParametersBuilder = new JobParametersBuilder(this.jobParameters);
+                this.jobParameters = jobParametersBuilder.addLong(JobIncrementer.DATE.getIncrementerIdentifier(), System.currentTimeMillis()).toJobParameters();
             }
         }
 
     }
 
+    @Override
     public SchedulerStatus getSchedulerStatus() {
         return this.status;
     }

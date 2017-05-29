@@ -13,6 +13,8 @@ import org.tuxdevelop.spring.batch.lightmin.server.admin.EmbeddedAdminServerServ
 import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnApplicationReadyEventEmbeddedListener;
 import org.tuxdevelop.spring.batch.lightmin.server.job.EmbeddedJobServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.job.JobServerService;
+import org.tuxdevelop.spring.batch.lightmin.server.service.EventService;
+import org.tuxdevelop.spring.batch.lightmin.server.service.embedded.EmbeddedJobExecutionFailedEventListener;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 import org.tuxdevelop.spring.batch.lightmin.support.ServiceEntry;
 
@@ -40,6 +42,11 @@ public class EmbeddedServerConfiguration {
                                                                                            final JobRegistry jobRegistry,
                                                                                            final LightminClientProperties lightminClientProperties) {
         return new OnApplicationReadyEventEmbeddedListener(registrationBean, jobRegistry, lightminClientProperties);
+    }
+
+    @Bean
+    public EmbeddedJobExecutionFailedEventListener embeddedJobExecutionFailedEventListener(final EventService eventService) {
+        return new EmbeddedJobExecutionFailedEventListener(eventService);
     }
 
 }

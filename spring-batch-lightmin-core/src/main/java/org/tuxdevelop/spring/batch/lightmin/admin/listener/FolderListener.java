@@ -1,7 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.admin.listener;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.integration.launch.JobLaunchRequest;
 import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
@@ -65,10 +64,7 @@ public class FolderListener extends AbstractListener implements Listener {
                         e -> e.autoStartup(Boolean.TRUE))
                 .handle(this.jobLaunchingMessageHandler)
                 .channel(MessageChannels.direct())
-                .handle(message -> {
-                    final JobExecution jobExecution = (JobExecution) message.getPayload();
-                    log.info("Executed: {} ", jobExecution);
-                })
+                .handle(new JobExecutionFinishedMessageHandler())
                 .get();
 
     }

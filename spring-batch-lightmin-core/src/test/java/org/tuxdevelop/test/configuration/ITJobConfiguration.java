@@ -27,7 +27,7 @@ public class ITJobConfiguration {
 
     @Bean
     public Job simpleJob() {
-        return jobBuilderFactory
+        return this.jobBuilderFactory
                 .get("simpleJob")
                 .start(simpleStep())
                 .build();
@@ -35,7 +35,7 @@ public class ITJobConfiguration {
 
     @Bean
     public Step simpleStep() {
-        return stepBuilderFactory
+        return this.stepBuilderFactory
                 .get("simpleStep")
                 .<Long, Long>chunk(1)
                 .reader(new SimpleReader())
@@ -51,8 +51,8 @@ public class ITJobConfiguration {
 
         @Override
         public Long read() throws Exception {
-            final Long value = index >= values.length ? null : values[index];
-            index++;
+            final Long value = this.index >= values.length ? null : values[this.index];
+            this.index++;
             return value;
         }
 
