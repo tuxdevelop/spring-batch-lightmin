@@ -551,10 +551,13 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             public static JobSchedulerConfiguration map(final Map<String, Object> values) {
                 final JobSchedulerConfiguration jobSchedulerConfiguration = new JobSchedulerConfiguration();
                 jobSchedulerConfiguration.setBeanName(getValueOrNull(values, JobSchedulerConfigurationKey.BEAN_NAME, String.class));
-                jobSchedulerConfiguration.setCronExpression(getValueOrNull(values, JobSchedulerConfigurationKey.CRON_EXPRESSION, String.class));
-                jobSchedulerConfiguration.setFixedDelay(getValueOrNull(values, JobSchedulerConfigurationKey.FIXED_DELAY, Long.class));
-                jobSchedulerConfiguration.setInitialDelay(getValueOrNull(values, JobSchedulerConfigurationKey.INITIAL_DELAY, Long.class));
                 final JobSchedulerType jobSchedulerType = JobSchedulerType.getById(getValueOrNull(values, JobSchedulerConfigurationKey.SCHEDULER_TYPE, Long.class));
+                if (JobSchedulerType.CRON == jobSchedulerType) {
+                    jobSchedulerConfiguration.setCronExpression(getValueOrNull(values, JobSchedulerConfigurationKey.CRON_EXPRESSION, String.class));
+                } else if (JobSchedulerType.PERIOD == jobSchedulerType) {
+                    jobSchedulerConfiguration.setFixedDelay(getValueOrNull(values, JobSchedulerConfigurationKey.FIXED_DELAY, Long.class));
+                    jobSchedulerConfiguration.setInitialDelay(getValueOrNull(values, JobSchedulerConfigurationKey.INITIAL_DELAY, Long.class));
+                }
                 jobSchedulerConfiguration.setJobSchedulerType(jobSchedulerType);
                 final SchedulerStatus schedulerStatus = SchedulerStatus.getByValue(getValueOrNull(values, JobSchedulerConfigurationKey.STATUS, String.class));
                 jobSchedulerConfiguration.setSchedulerStatus(schedulerStatus);
