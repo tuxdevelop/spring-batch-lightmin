@@ -21,7 +21,7 @@ public class JobExecutionListenerRegisterBean {
             final JobExecutionListener[] jobExecutionListeners = new JobExecutionListener[]{this.jobExecutionFinishedJobExecutionListener};
             simpleJob.setJobExecutionListeners(jobExecutionListeners);
         } catch (final Exception e) {
-            log.error("Could not cast {} to rg.springframework.batch.core.job.SimpleJob ", job);
+            log.error("Could not cast {} to org.springframework.batch.core.job.SimpleJob ", job);
         }
     }
 }

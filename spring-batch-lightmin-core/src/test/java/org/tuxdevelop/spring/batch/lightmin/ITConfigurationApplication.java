@@ -7,11 +7,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.client.RestTemplate;
-import org.tuxdevelop.test.configuration.ITPersistenceConfiguration;
 
 import javax.sql.DataSource;
 
-@SpringBootApplication(exclude = ITPersistenceConfiguration.class)
+@SpringBootApplication
 public class ITConfigurationApplication {
 
     public static void main(final String[] args) {

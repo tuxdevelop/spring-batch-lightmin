@@ -44,7 +44,6 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
     private LightminJobExecutionDao lightminJobExecutionDao;
     private JobConfigurationRepository jobConfigurationRepository;
     private final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
-    private DataSource dataSource;
     private DataSource batchDataSource;
     private JdbcTemplate jdbcTemplate;
     private JdbcTemplate batchJdbcTemplate;
@@ -70,7 +69,6 @@ public class DefaultSpringBatchLightminConfigurator implements SpringBatchLightm
     }
 
     private void setDataSource(final DataSource dataSource) {
-        this.dataSource = dataSource;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 

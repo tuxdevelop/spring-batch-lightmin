@@ -14,10 +14,14 @@ import javax.annotation.PostConstruct;
 @ConfigurationProperties(prefix = "spring.batch.lightmin")
 public class SpringBatchLightminConfigurationProperties {
 
-    @Autowired
-    private Environment environment;
-
     private static final String DEFAULT_DATA_SOURCE_NAME = "dataSource";
+
+    private final Environment environment;
+
+    @Autowired
+    public SpringBatchLightminConfigurationProperties(final Environment environment) {
+        this.environment = environment;
+    }
 
     //Table Prefix
     private String repositoryTablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
@@ -38,7 +42,6 @@ public class SpringBatchLightminConfigurationProperties {
     private String configurationDatabaseSchema;
     //Lightmin Application name
     private String applicationName;
-
 
     public void setConfigurationDatabaseSchema(final String configurationDatabaseSchema) {
         if (configurationDatabaseSchema != null) {

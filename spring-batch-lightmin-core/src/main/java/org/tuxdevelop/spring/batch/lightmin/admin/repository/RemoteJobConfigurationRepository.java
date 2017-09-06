@@ -112,8 +112,8 @@ public class RemoteJobConfigurationRepository implements JobConfigurationReposit
         if (StringUtils.hasText(userName)) {
             restTemplate.setInterceptors(
                     Collections.singletonList(
-                            new BasicAuthHttpRequestInterceptor(userName,
-                                    password))
+                            new BasicAuthHttpRequestInterceptor(userName, password)
+                    )
             );
         }
         return restTemplate;
