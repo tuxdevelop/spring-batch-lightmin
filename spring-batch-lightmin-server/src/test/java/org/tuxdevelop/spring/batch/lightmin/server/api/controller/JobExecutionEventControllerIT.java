@@ -44,9 +44,9 @@ public class JobExecutionEventControllerIT {
         jobExecutionEventInfo.setStartDate(new Date());
         jobExecutionEventInfo.setExitStatus(new ExitStatus(org.springframework.batch.core.ExitStatus.COMPLETED.getExitCode()));
         final ResponseEntity<Void> response = this.restTemplate.postForEntity(
-                LOCALHOST + ":" + getServerPort() + "/api/events/jobexecutions/failed", jobExecutionEventInfo, Void.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        final List<JobExecutionEventInfo> events = this.eventService.getAllFailedEvents();
+                LOCALHOST + ":" + getServerPort() + "/api/events/jobexecutions", jobExecutionEventInfo, Void.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        final List<JobExecutionEventInfo> events = this.eventService.getAllEvents();
         assertThat(events).isNotEmpty();
     }
 

@@ -1,5 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.server.service;
 
+import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.ExitStatus;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.JobExecutionEventInfo;
 
 import java.util.List;
@@ -10,7 +11,9 @@ import java.util.List;
  */
 public interface EventService {
 
-    void handleJobExecutionFailedEvent(final JobExecutionEventInfo jobExecutionEventInfo);
+    void handleJobExecutionEvent(final JobExecutionEventInfo jobExecutionEventInfo);
 
-    List<JobExecutionEventInfo> getAllFailedEvents();
+    List<JobExecutionEventInfo> getAllEvents();
+
+    List<JobExecutionEventInfo> getAllEventsByExitStatus(final ExitStatus exitStatus);
 }

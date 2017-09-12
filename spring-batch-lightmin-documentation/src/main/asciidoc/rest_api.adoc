@@ -44,6 +44,21 @@ include::{snippets}/registrationcontroller/testget-all/http-request.adoc[]
 
 include::{snippets}/registrationcontroller/testget-all/http-response.adoc[]
 
+==== Consume Failed Job Executions
+
+===== Curl
+
+include::{snippets}/obexecutioncontroller/test-consume-job-execution-failed-event/curl-request.adoc[]
+
+===== HTTP Request
+
+include::{snippets}/obexecutioncontroller/test-consume-job-execution-failed-event/http-request.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/obexecutioncontroller/test-consume-job-execution-failed-event/http-response.adoc[]
+
+
 === Client
 
 ==== Jobs

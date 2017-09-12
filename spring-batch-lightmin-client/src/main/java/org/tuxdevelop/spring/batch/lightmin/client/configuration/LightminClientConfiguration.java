@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.client.event.JobExecutionEventPublisher;
-import org.tuxdevelop.spring.batch.lightmin.client.event.listener.OnJobExecutionFailedEventListener;
+import org.tuxdevelop.spring.batch.lightmin.client.event.listener.OnJobExecutionFinishedEventListener;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.LightminClientRegistrator;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.RegistrationLightminClientApplicationBean;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnClientApplicationReadyEventListener;
@@ -69,8 +69,8 @@ public class LightminClientConfiguration {
     }
 
     @Bean
-    public OnJobExecutionFailedEventListener onJobExecutionFailedEventListener(final JobExecutionEventPublisher jobExecutionEventPublisher) {
-        return new OnJobExecutionFailedEventListener(jobExecutionEventPublisher);
+    public OnJobExecutionFinishedEventListener onJobExecutionFinishedEventListener(final JobExecutionEventPublisher jobExecutionEventPublisher) {
+        return new OnJobExecutionFinishedEventListener(jobExecutionEventPublisher);
     }
 
     static class LightminServerRestTemplateFactory {

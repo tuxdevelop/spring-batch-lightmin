@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.tuxdevelop.spring.batch.lightmin.admin.event.listener.JobExecutionFinishedJobExecutionListener;
-import org.tuxdevelop.spring.batch.lightmin.admin.event.listener.OnJobExecutionFinishedEventListener;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.service.*;
@@ -153,8 +152,4 @@ public class CommonSpringBatchLightminConfiguration {
         return new JobExecutionListenerRegisterBean(jobExecutionFinishedJobExecutionListener);
     }
 
-    @Bean
-    public OnJobExecutionFinishedEventListener onJobExecutionFinishedEventListener(final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
-        return new OnJobExecutionFinishedEventListener(springBatchLightminConfigurationProperties);
-    }
 }

@@ -22,12 +22,12 @@ public class JobExecutionEventPublisher {
         this.lightminProperties = lightminProperties;
     }
 
-    public void publishJobExecutionFailedEvent(final JobExecutionEventInfo jobExecutionEventInfo) {
+    public void publishJobExecutionEvent(final JobExecutionEventInfo jobExecutionEventInfo) {
         for (final String lightminUrl : this.lightminProperties.getLightminUrl()) {
             try {
-                final String url = lightminUrl + "/api/events/jobexecutions/failed";
+                final String url = lightminUrl + "/api/events/jobexecutions";
                 final ResponseEntity<Void> response = this.restTemplate.postForEntity(url, jobExecutionEventInfo, Void.class);
-                if (HttpStatus.OK.equals(response.getStatusCode())) {
+                if (HttpStatus.CREATED.equals(response.getStatusCode())) {
                     log.debug("Send JobExecutionEventInfo > {} to server > {}", jobExecutionEventInfo, lightminUrl);
                 }
             } catch (final Exception e) {

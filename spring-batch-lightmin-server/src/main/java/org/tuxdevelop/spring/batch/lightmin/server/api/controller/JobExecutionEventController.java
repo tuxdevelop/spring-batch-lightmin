@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.server.api.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,10 +26,10 @@ public class JobExecutionEventController {
         this.eventService = eventService;
     }
 
-    @PostMapping(value = "/failed", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> consumeJobExecutionFailedEvent(@RequestBody final JobExecutionEventInfo jobExecutionEventInfo) {
-        this.eventService.handleJobExecutionFailedEvent(jobExecutionEventInfo);
-        return ResponseEntity.ok().build();
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> consumeJobExecutionEvent(@RequestBody final JobExecutionEventInfo jobExecutionEventInfo) {
+        this.eventService.handleJobExecutionEvent(jobExecutionEventInfo);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }

@@ -45,8 +45,7 @@ public class CommonServerConfiguration {
     }
 
     @Bean
-    @Qualifier("jobExecutionFailedEventRepository")
-    @ConditionalOnMissingBean(value = JobExecutionEventRepository.class, name = "jobExecutionFailedEventRepository")
+    @ConditionalOnMissingBean(value = JobExecutionEventRepository.class)
     public JobExecutionEventRepository jobExecutionFailedEventRepository(final LightminServerProperties lightminServerProperties) {
         return new MapJobExecutionEventRepository(lightminServerProperties.getErrorEventRepositorySize());
     }
