@@ -24,7 +24,7 @@ import java.util.Collections;
  */
 @Configuration
 @EnableConfigurationProperties(value = {LightminClientProperties.class, LightminProperties.class})
-@Import(value = {CommonSpringBatchLightminConfiguration.class})
+@Import(value = {CommonSpringBatchLightminConfiguration.class, LightminClientDiscoveryConfiguration.class})
 public class LightminClientConfiguration {
 
     @Bean

@@ -64,7 +64,7 @@ public class RegistrationLightminClientApplicationBean {
             if (this.scheduledTask != null && !this.scheduledTask.isDone()) {
                 return;
             }
-            this.scheduledTask = this.taskScheduler.scheduleAtFixedRate(() -> this.lightminClientRegistrator.register(), this.registerPeriod);
+            this.scheduledTask = this.taskScheduler.scheduleAtFixedRate(this.lightminClientRegistrator::register, this.registerPeriod);
             log.debug("Scheduled registration task for every {}ms", this.registerPeriod);
         }
     }

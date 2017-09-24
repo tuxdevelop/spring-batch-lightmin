@@ -45,7 +45,8 @@
     </modules>
 
     <properties>
-        <platform-bom.version>Athens-SR5</platform-bom.version>
+        <platform-bom.version>Brussels-SR5</platform-bom.version>
+        <spring-cloud-dependencies.version>Dalston.SR3</spring-cloud-dependencies.version>
         <assertj.version>1.7.1</assertj.version>
         <openpojo.version>0.8.0</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
@@ -75,6 +76,13 @@
                 <scope>import</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!-- assertj -->
             <dependency>
                 <groupId>org.assertj</groupId>
