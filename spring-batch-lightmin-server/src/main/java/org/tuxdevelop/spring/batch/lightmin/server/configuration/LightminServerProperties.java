@@ -21,12 +21,18 @@ public class LightminServerProperties {
     @Getter
     @Setter
     private String clientUserName;
+
     @Getter
     @Setter
     private String clientPassword;
+
     @Getter
     @Setter
     private Integer errorEventRepositorySize = 200;
+
+    @Getter
+    @Setter
+    private Boolean discoveryEnabled = Boolean.TRUE;
 
     public void setContextPath(final String pathPrefix) {
         if (!pathPrefix.startsWith("/") || pathPrefix.endsWith("/")) {

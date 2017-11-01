@@ -17,12 +17,12 @@ import java.util.Collection;
  */
 @RestController
 @RequestMapping("api/repository/jobconfigurations")
-public class RepositoryController implements JobConfigurationRepository, InitializingBean {
+public class JobConfigurationRepositoryController implements JobConfigurationRepository, InitializingBean {
 
 
     private final JobConfigurationRepository localJobConfigurationRepository;
 
-    public RepositoryController(final JobConfigurationRepository localJobConfigurationRepository) {
+    public JobConfigurationRepositoryController(final JobConfigurationRepository localJobConfigurationRepository) {
         this.localJobConfigurationRepository = localJobConfigurationRepository;
     }
 

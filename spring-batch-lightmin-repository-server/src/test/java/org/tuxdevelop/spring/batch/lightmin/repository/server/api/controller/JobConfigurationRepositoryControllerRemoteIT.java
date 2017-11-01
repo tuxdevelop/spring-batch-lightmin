@@ -16,7 +16,7 @@ import org.tuxdevelop.test.configuration.RemoteIntegrationTestConfiguration;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {RemoteIntegrationTestConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @PropertySource(value = {"classpath:application.properties"})
-public class RepositoryControllerRemoteIT extends RepositoryControllerIT {
+public class JobConfigurationRepositoryControllerRemoteIT extends JobConfigurationRepositoryControllerIT {
 
     @Autowired
     private SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;

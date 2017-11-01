@@ -34,7 +34,7 @@ public class LightminClientProperties {
     private Integer managementPort;
     @Getter
     @Setter
-    private Boolean discoveryEnabled = Boolean.TRUE;
+    private Boolean discoveryEnabled = Boolean.FALSE;
     @Getter
     @Setter
     private Map<String, String> externalLinks = new HashMap<>();

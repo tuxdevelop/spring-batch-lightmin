@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
 
 
-public abstract class RepositoryControllerIT {
+public abstract class JobConfigurationRepositoryControllerIT {
 
     private static final String APPLICATION_NAME = "sample_application";
 

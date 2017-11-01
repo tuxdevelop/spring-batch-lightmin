@@ -6,9 +6,15 @@ import java.util.Map;
 
 public class EurekaMetaDataExtender implements MetaDataExtender {
 
+    private final ApplicationInfoManager applicationInfoManager;
+
+    public EurekaMetaDataExtender(final ApplicationInfoManager applicationInfoManager) {
+        this.applicationInfoManager = applicationInfoManager;
+    }
+
     @Override
     public void extendMetaData() {
-        final Map<String, String> map = ApplicationInfoManager.getInstance().getInfo().getMetadata();
+        final Map<String, String> map = this.applicationInfoManager.getInfo().getMetadata();
         map.put(LIGHTMIN_CLIENT_META_DATA_KEY, LIGHTMIN_CLIENT_META_DATA_VALUE);
     }
 }

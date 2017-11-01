@@ -11,7 +11,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRep
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.MapJobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.configuration.LightminRepositoryType;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
-import org.tuxdevelop.spring.batch.lightmin.repository.server.api.controller.RepositoryController;
+import org.tuxdevelop.spring.batch.lightmin.repository.server.api.controller.JobConfigurationRepositoryController;
 
 import javax.sql.DataSource;
 
@@ -26,8 +26,8 @@ public class SpringBatchLightminRemoteRepositoryServerConfiguration {
 
 
     @Bean
-    public RepositoryController repositoryController(@Qualifier("localJobConfigurationRepository") final JobConfigurationRepository localJobConfigurationRepository) {
-        return new RepositoryController(localJobConfigurationRepository);
+    public JobConfigurationRepositoryController repositoryController(@Qualifier("localJobConfigurationRepository") final JobConfigurationRepository localJobConfigurationRepository) {
+        return new JobConfigurationRepositoryController(localJobConfigurationRepository);
     }
 
 

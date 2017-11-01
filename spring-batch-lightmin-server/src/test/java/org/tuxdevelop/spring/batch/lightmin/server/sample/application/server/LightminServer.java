@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.server.sample.application.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.configuration.EnableSpringBat
 import javax.sql.DataSource;
 
 @Configuration
+@EnableDiscoveryClient
 @SpringBootApplication
 @EnableSpringBatchLightminServer
 @EnableSpringBatchLightminRemoteRepositoryServer

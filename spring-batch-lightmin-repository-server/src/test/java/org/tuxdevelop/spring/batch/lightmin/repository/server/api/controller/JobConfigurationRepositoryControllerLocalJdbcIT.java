@@ -6,14 +6,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.test.util.ITJobConfigurationRepository;
-import org.tuxdevelop.test.configuration.IntegrationTestConfiguration;
+import org.tuxdevelop.test.configuration.JdbcIntegrationTestConfiguration;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {IntegrationTestConfiguration.class})
-public class RepositoryControllerLocalIT extends RepositoryControllerIT {
+@ContextConfiguration(classes = {JdbcIntegrationTestConfiguration.class})
+public class JobConfigurationRepositoryControllerLocalJdbcIT extends JobConfigurationRepositoryControllerIT {
 
     @Autowired
-    private RepositoryController repositoryController;
+    private JobConfigurationRepositoryController jobConfigurationRepositoryController;
     @Autowired
     private ITJobConfigurationRepository itJobConfigurationRepository;
 
@@ -24,6 +24,6 @@ public class RepositoryControllerLocalIT extends RepositoryControllerIT {
 
     @Override
     public JobConfigurationRepository getJobConfigurationRepository() {
-        return this.repositoryController;
+        return this.jobConfigurationRepositoryController;
     }
 }

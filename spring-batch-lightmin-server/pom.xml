@@ -46,6 +46,13 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- spring cloud -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- assertj -->
         <dependency>
             <groupId>org.assertj</groupId>
