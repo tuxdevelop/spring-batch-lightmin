@@ -4,7 +4,6 @@ import com.netflix.appinfo.ApplicationInfoManager;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.EurekaClientConfig;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -32,7 +31,8 @@ import javax.servlet.ServletContext;
 public class LightminClientDiscoveryConfiguration {
 
     @Configuration
-    @ConditionalOnBean(value = {EurekaClient.class})
+    @ConditionalOnClass(EurekaClient.class)
+    @ConditionalOnProperty(value = "eureka.client.enabled", matchIfMissing = true)
     public static class EurekaLightminClientDiscoveryConfiguration {
         @Bean
         public MetaDataExtender metaDataExtender(final ApplicationInfoManager applicationInfoManager) {
