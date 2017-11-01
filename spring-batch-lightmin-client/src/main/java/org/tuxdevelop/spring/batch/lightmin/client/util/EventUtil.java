@@ -3,6 +3,10 @@ package org.tuxdevelop.spring.batch.lightmin.client.util;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 
+/**
+ * @author Marcel Becker
+ * @since 0.5
+ */
 public final class EventUtil {
 
     private static final int SERVER_PORT_DEFAULT = 8080;

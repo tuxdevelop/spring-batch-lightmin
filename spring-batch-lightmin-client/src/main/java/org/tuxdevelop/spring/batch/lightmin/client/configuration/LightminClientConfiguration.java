@@ -57,9 +57,10 @@ public class LightminClientConfiguration {
     }
 
     @Bean
-    public JobExecutionEventPublisher jobExecutionEventPublisher(final LightminProperties lightminProperties) {
+    public JobExecutionEventPublisher jobExecutionEventPublisher(final LightminProperties lightminProperties,
+                                                                 final LightminClientProperties lightminClientProperties) {
         final RestTemplate restTemplate = LightminServerRestTemplateFactory.getRestTemplate(lightminProperties);
-        return new JobExecutionEventPublisher(restTemplate, lightminProperties);
+        return new JobExecutionEventPublisher(restTemplate, lightminProperties, lightminClientProperties);
     }
 
     @Bean

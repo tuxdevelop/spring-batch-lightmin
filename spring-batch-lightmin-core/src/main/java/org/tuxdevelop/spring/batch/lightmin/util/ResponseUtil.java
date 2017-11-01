@@ -5,6 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
+/**
+ * @author Marcel Becker
+ * @since 0.5
+ */
 @Slf4j
 public final class ResponseUtil {
 

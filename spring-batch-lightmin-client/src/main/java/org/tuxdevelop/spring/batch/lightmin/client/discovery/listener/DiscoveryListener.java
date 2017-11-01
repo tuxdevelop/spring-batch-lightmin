@@ -5,6 +5,10 @@ import org.springframework.context.event.EventListener;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.util.EventUtil;
 
+/**
+ * @author Marcel Becker
+ * @since 0.5
+ */
 public class DiscoveryListener {
 
     private final LightminClientProperties lightminClientProperties;

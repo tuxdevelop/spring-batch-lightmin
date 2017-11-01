@@ -37,6 +37,12 @@ public class LightminClientProperties {
     private Boolean discoveryEnabled = Boolean.FALSE;
     @Getter
     @Setter
+    private Boolean discoverServer = Boolean.FALSE;
+    @Getter
+    @Setter
+    private String serverDiscoveryName = "lightmin-server";
+    @Getter
+    @Setter
     private Map<String, String> externalLinks = new HashMap<>();
 
     @Getter

@@ -4,6 +4,10 @@ import com.netflix.appinfo.ApplicationInfoManager;
 
 import java.util.Map;
 
+/**
+ * @author Marcel Becker
+ * @since 0.5
+ */
 public class EurekaMetaDataExtender implements MetaDataExtender {
 
     private final ApplicationInfoManager applicationInfoManager;

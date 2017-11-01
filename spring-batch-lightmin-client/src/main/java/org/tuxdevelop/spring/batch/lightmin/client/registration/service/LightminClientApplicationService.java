@@ -6,6 +6,10 @@ import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientP
 
 import java.util.LinkedList;
 
+/**
+ * @author Marcel Becker
+ * @since 0.5
+ */
 public class LightminClientApplicationService {
 
     private final JobRegistry jobRegistry;

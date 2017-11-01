@@ -2,6 +2,10 @@ package org.tuxdevelop.spring.batch.lightmin.client.discovery.metadata;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @author Marcel Becker
+ * @since 0.5
+ */
 @Slf4j
 public class NoOperationMetaDataExtender implements MetaDataExtender {
 

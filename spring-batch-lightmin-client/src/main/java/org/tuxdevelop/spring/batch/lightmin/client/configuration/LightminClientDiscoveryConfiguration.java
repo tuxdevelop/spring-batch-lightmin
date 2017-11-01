@@ -25,6 +25,10 @@ import org.tuxdevelop.spring.batch.lightmin.client.discovery.metadata.NoOperatio
 
 import javax.servlet.ServletContext;
 
+/**
+ * @author Marcel Becker
+ * @since 0.5
+ */
 @Configuration
 @ConditionalOnProperty(prefix = "spring.batch.lightmin.client", value = "discovery-enabled", havingValue = "true")
 @AutoConfigureAfter({SimpleDiscoveryClientAutoConfiguration.class})
@@ -34,6 +38,7 @@ public class LightminClientDiscoveryConfiguration {
     @ConditionalOnClass(EurekaClient.class)
     @ConditionalOnProperty(value = "eureka.client.enabled", matchIfMissing = true)
     public static class EurekaLightminClientDiscoveryConfiguration {
+
         @Bean
         public MetaDataExtender metaDataExtender(final ApplicationInfoManager applicationInfoManager) {
             return new EurekaMetaDataExtender(applicationInfoManager);
@@ -49,6 +54,7 @@ public class LightminClientDiscoveryConfiguration {
     @ConditionalOnConsulEnabled
     @ConditionalOnClass(ConsulDiscoveryClient.class)
     public static class ConsulLightminClientDiscoveryConfiguration {
+
         @Bean
         public MetaDataExtender metaDataExtender(final ConsulDiscoveryProperties consulDiscoveryProperties) {
             return new ConsulMetaDataExtender(consulDiscoveryProperties);

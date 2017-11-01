@@ -6,6 +6,10 @@ import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Marcel Becker
+ * @since 0.5
+ */
 @Slf4j
 public class ConsulMetaDataExtender implements MetaDataExtender {
 

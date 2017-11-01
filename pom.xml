@@ -46,7 +46,7 @@
 
     <properties>
         <platform-bom.version>Brussels-SR5</platform-bom.version>
-        <spring-cloud-dependencies.version>Dalston.SR3</spring-cloud-dependencies.version>
+        <spring-cloud-dependencies.version>Dalston.SR4</spring-cloud-dependencies.version>
         <assertj.version>1.7.1</assertj.version>
         <openpojo.version>0.8.0</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
