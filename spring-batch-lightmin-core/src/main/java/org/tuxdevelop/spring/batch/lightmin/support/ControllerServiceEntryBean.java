@@ -35,7 +35,8 @@ public class ControllerServiceEntryBean implements ServiceEntry {
     public ControllerServiceEntryBean(final AdminService adminService,
                                       final JobService jobService,
                                       final StepService stepService,
-                                      final JobExecutionQueryService jobExecutionQueryService, final JobLauncherBean jobLauncherBean) {
+                                      final JobExecutionQueryService jobExecutionQueryService,
+                                      final JobLauncherBean jobLauncherBean) {
         this.adminService = adminService;
         this.jobService = jobService;
         this.stepService = stepService;
