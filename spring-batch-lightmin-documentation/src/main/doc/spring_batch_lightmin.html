@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
-<meta name="author" content="Version 0.4.1">
+<meta name="author" content="Version 0.4.2-SNAPSHOT">
 <title>Spring Batch Lightmin</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
@@ -505,7 +505,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="header">
 <h1>Spring Batch Lightmin</h1>
 <div class="details">
-<span id="author" class="author">Version 0.4.1</span><br>
+<span id="author" class="author">Version 0.4.2-SNAPSHOT</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1567,18 +1567,18 @@ Content-Length: 708
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 06 Sep 2017 18:12:52 GMT
+Date: Wed, 22 Nov 2017 18:50:03 GMT
 Content-Length: 788
 
 {
-  &quot;id&quot; : &quot;f9e025ca&quot;,
+  &quot;id&quot; : &quot;40f9b653&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:49817&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:49817/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:49817&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:53001&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:53001/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:53001&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1504721572194
+    &quot;timeInMills&quot; : 1511376603056
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1601,7 +1601,7 @@ Content-Length: 788
 <h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/f9e025ca' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/40f9b653' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -1609,7 +1609,7 @@ Content-Length: 788
 <h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/f9e025ca HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/40f9b653 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
 Host: localhost</code></pre>
@@ -1624,18 +1624,18 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 06 Sep 2017 18:12:52 GMT
+Date: Wed, 22 Nov 2017 18:50:03 GMT
 Content-Length: 788
 
 {
-  &quot;id&quot; : &quot;f9e025ca&quot;,
+  &quot;id&quot; : &quot;40f9b653&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:49817&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:49817/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:49817&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:53001&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:53001/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:53001&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1504721572194
+    &quot;timeInMills&quot; : 1511376603056
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1681,38 +1681,18 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 06 Sep 2017 18:12:51 GMT
+Date: Wed, 22 Nov 2017 18:50:03 GMT
 Content-Length: 1590
 
 [ {
-  &quot;id&quot; : &quot;882459d6&quot;,
+  &quot;id&quot; : &quot;40f9b653&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://executor.fritz.box:0&quot;,
-  &quot;healthUrl&quot; : &quot;http://executor.fritz.box:0/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://executor.fritz.box:0&quot;,
-  &quot;lightminClientApplicationStatus&quot; : {
-    &quot;status&quot; : &quot;OFFLINE&quot;,
-    &quot;timeInMills&quot; : 1504721566903
-  },
-  &quot;lightminClientInformation&quot; : {
-    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
-    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
-    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
-    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
-    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
-    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
-    &quot;registeredJobs&quot; : [ ],
-    &quot;externalLinks&quot; : { }
-  }
-}, {
-  &quot;id&quot; : &quot;f9e025ca&quot;,
-  &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:49817&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:49817/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:49817&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:53001&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:53001/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:53001&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1504721572194
+    &quot;timeInMills&quot; : 1511376603056
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1722,6 +1702,26 @@ Content-Length: 1590
     &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
     &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
     &quot;registeredJobs&quot; : [ &quot;simpleJob&quot; ],
+    &quot;externalLinks&quot; : { }
+  }
+}, {
+  &quot;id&quot; : &quot;882459d6&quot;,
+  &quot;name&quot; : &quot;it-application&quot;,
+  &quot;managementUrl&quot; : &quot;http://executor.fritz.box:0&quot;,
+  &quot;healthUrl&quot; : &quot;http://executor.fritz.box:0/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://executor.fritz.box:0&quot;,
+  &quot;lightminClientApplicationStatus&quot; : {
+    &quot;status&quot; : &quot;OFFLINE&quot;,
+    &quot;timeInMills&quot; : 1511376597078
+  },
+  &quot;lightminClientInformation&quot; : {
+    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
+    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
+    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
+    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
+    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
+    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
+    &quot;registeredJobs&quot; : [ ],
     &quot;externalLinks&quot; : { }
   }
 } ]</code></pre>
@@ -1762,7 +1762,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 06 Sep 2017 18:12:51 GMT
+Date: Wed, 22 Nov 2017 18:50:01 GMT
 Content-Length: 1405
 
 {
@@ -1777,7 +1777,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1504721571781,
+          &quot;parameter&quot; : 1511376602571,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -1800,9 +1800,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1504721571788,
-      &quot;endTime&quot; : 1504721571791,
-      &quot;lastUpdated&quot; : 1504721571791,
+      &quot;startTime&quot; : 1511376602588,
+      &quot;endTime&quot; : 1511376602594,
+      &quot;lastUpdated&quot; : 1511376602594,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -1812,10 +1812,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1504721571783,
-    &quot;createTime&quot; : 1504721571782,
-    &quot;endTime&quot; : 1504721571793,
-    &quot;lastUpdated&quot; : 1504721571793,
+    &quot;startTime&quot; : 1511376602573,
+    &quot;createTime&quot; : 1511376602571,
+    &quot;endTime&quot; : 1511376602595,
+    &quot;lastUpdated&quot; : 1511376602595,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1856,7 +1856,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 06 Sep 2017 18:12:51 GMT
+Date: Wed, 22 Nov 2017 18:50:01 GMT
 Content-Length: 1405
 
 {
@@ -1871,7 +1871,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1504721571690,
+          &quot;parameter&quot; : 1511376602361,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -1894,9 +1894,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1504721571697,
-      &quot;endTime&quot; : 1504721571700,
-      &quot;lastUpdated&quot; : 1504721571700,
+      &quot;startTime&quot; : 1511376602372,
+      &quot;endTime&quot; : 1511376602375,
+      &quot;lastUpdated&quot; : 1511376602375,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -1906,10 +1906,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1504721571692,
-    &quot;createTime&quot; : 1504721571691,
-    &quot;endTime&quot; : 1504721571701,
-    &quot;lastUpdated&quot; : 1504721571701,
+    &quot;startTime&quot; : 1511376602366,
+    &quot;createTime&quot; : 1511376602362,
+    &quot;endTime&quot; : 1511376602376,
+    &quot;lastUpdated&quot; : 1511376602376,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1950,7 +1950,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 06 Sep 2017 18:12:51 GMT
+Date: Wed, 22 Nov 2017 18:50:01 GMT
 Content-Length: 1154
 
 {
@@ -1959,7 +1959,7 @@ Content-Length: 1154
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1504721571945,
+        &quot;parameter&quot; : 1511376602748,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -1982,9 +1982,9 @@ Content-Length: 1154
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1504721571952,
-    &quot;endTime&quot; : 1504721571955,
-    &quot;lastUpdated&quot; : 1504721571955,
+    &quot;startTime&quot; : 1511376602757,
+    &quot;endTime&quot; : 1511376602760,
+    &quot;lastUpdated&quot; : 1511376602760,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1994,10 +1994,10 @@ Content-Length: 1154
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1504721571947,
-  &quot;createTime&quot; : 1504721571946,
-  &quot;endTime&quot; : 1504721571957,
-  &quot;lastUpdated&quot; : 1504721571957,
+  &quot;startTime&quot; : 1511376602749,
+  &quot;createTime&quot; : 1511376602748,
+  &quot;endTime&quot; : 1511376602761,
+  &quot;lastUpdated&quot; : 1511376602761,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2062,7 +2062,7 @@ Content-Length: 205
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 X-Application-Context: it-application:0
-Date: Wed, 06 Sep 2017 18:12:50 GMT</code></pre>
+Date: Wed, 22 Nov 2017 18:50:00 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2098,7 +2098,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 06 Sep 2017 18:12:50 GMT
+Date: Wed, 22 Nov 2017 18:50:00 GMT
 Content-Length: 411
 
 {
@@ -2150,7 +2150,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 06 Sep 2017 18:12:50 GMT
+Date: Wed, 22 Nov 2017 18:50:00 GMT
 Content-Length: 7394
 
 {
@@ -2444,7 +2444,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 06 Sep 2017 18:12:50 GMT
+Date: Wed, 22 Nov 2017 18:50:00 GMT
 Content-Length: 5072
 
 {
@@ -2688,7 +2688,7 @@ Content-Length: 424
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 X-Application-Context: it-application:0
-Date: Wed, 06 Sep 2017 18:12:50 GMT</code></pre>
+Date: Wed, 22 Nov 2017 18:50:00 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2755,7 +2755,7 @@ Content-Length: 440
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Wed, 06 Sep 2017 18:12:48 GMT</code></pre>
+Date: Wed, 22 Nov 2017 18:49:59 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2786,7 +2786,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Wed, 06 Sep 2017 18:12:48 GMT</code></pre>
+Date: Wed, 22 Nov 2017 18:49:59 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2817,7 +2817,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Wed, 06 Sep 2017 18:12:50 GMT</code></pre>
+Date: Wed, 22 Nov 2017 18:50:00 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2848,7 +2848,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Wed, 06 Sep 2017 18:12:48 GMT</code></pre>
+Date: Wed, 22 Nov 2017 18:49:59 GMT</code></pre>
 </div>
 </div>
 </div>

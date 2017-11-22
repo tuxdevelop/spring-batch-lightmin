@@ -4,9 +4,7 @@ import org.springframework.batch.core.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class TestHelper {
 
@@ -84,7 +82,9 @@ public class TestHelper {
         final JobConfiguration jobConfiguration = new JobConfiguration();
         jobConfiguration.setJobName("sampleJob");
         jobConfiguration.setJobIncrementer(JobIncrementer.DATE);
-        jobConfiguration.setJobParameters(new HashMap<>());
+        final Map<String, Object> jobParameters = new HashMap<>();
+        jobParameters.put("some_date", new Date());
+        jobConfiguration.setJobParameters(jobParameters);
         return jobConfiguration;
     }
 
