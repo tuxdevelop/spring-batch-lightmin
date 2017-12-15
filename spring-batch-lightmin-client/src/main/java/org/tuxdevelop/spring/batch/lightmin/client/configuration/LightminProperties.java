@@ -17,9 +17,14 @@ public class LightminProperties {
     private boolean registerOnce = true;
 
     public String[] getLightminUrl() {
-        final String[] adminUrls = url.clone();
-        for (int i = 0; i < adminUrls.length; i++) {
-            adminUrls[i] += "/" + apiPath;
+        final String[] adminUrls;
+        if (url != null) {
+            adminUrls = url.clone();
+            for (int i = 0; i < adminUrls.length; i++) {
+                adminUrls[i] += "/" + apiPath;
+            }
+        } else {
+            adminUrls = new String[]{};
         }
         return adminUrls;
     }

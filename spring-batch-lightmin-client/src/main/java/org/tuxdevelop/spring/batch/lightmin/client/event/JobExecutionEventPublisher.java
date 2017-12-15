@@ -67,7 +67,7 @@ public class JobExecutionEventPublisher implements ApplicationContextAware {
             if (this.lightminProperties.getLightminUrl() != null && this.lightminProperties.getLightminUrl().length > 0) {
                 Collections.addAll(serverList, this.lightminProperties.getLightminUrl());
             } else {
-                log.debug("No Lighmin Server Urls Available");
+                log.debug("No Lightmin Server Urls are available");
             }
         }
         return serverList;

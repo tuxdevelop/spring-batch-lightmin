@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.client.ITConfigurationApplication;
+import org.tuxdevelop.spring.batch.lightmin.client.event.JobExecutionEventPublisher;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.LightminClientRegistrator;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.RegistrationLightminClientApplicationBean;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnClientApplicationReadyEventListener;
@@ -34,6 +35,8 @@ public class LightminClientConfigurationIT {
         final OnContextClosedEventListener onContextClosedEventListener = this.applicationContext.getBean
                 (OnContextClosedEventListener.class);
         assertThat(onContextClosedEventListener).isNotNull();
+        final JobExecutionEventPublisher jobExecutionEventPublisher = this.applicationContext.getBean(JobExecutionEventPublisher.class);
+        assertThat(jobExecutionEventPublisher).isNotNull();
 
     }
 

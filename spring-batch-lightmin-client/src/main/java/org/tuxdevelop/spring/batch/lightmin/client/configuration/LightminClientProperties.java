@@ -43,6 +43,9 @@ public class LightminClientProperties {
     private String serverDiscoveryName = "lightmin-server";
     @Getter
     @Setter
+    private Boolean publishJobEvents = Boolean.TRUE;
+    @Getter
+    @Setter
     private Map<String, String> externalLinks = new HashMap<>();
 
     @Getter

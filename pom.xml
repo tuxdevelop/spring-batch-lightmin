@@ -45,10 +45,10 @@
     </modules>
 
     <properties>
-        <platform-bom.version>Brussels-SR5</platform-bom.version>
-        <spring-cloud-dependencies.version>Dalston.SR4</spring-cloud-dependencies.version>
-        <assertj.version>1.7.1</assertj.version>
-        <openpojo.version>0.8.0</openpojo.version>
+        <platform-bom.version>Brussels-SR6</platform-bom.version>
+        <spring-cloud-dependencies.version>Edgware.RELEASE</spring-cloud-dependencies.version>
+        <assertj.version>3.8.0</assertj.version>
+        <openpojo.version>0.8.6</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
         <datafactory.version>0.8</datafactory.version>
         <!-- plugin versions -->

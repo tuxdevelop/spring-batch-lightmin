@@ -57,6 +57,7 @@ public class LightminClientConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = "spring.batch.lightmin.client", value = "publish-job-events", havingValue = "true", matchIfMissing = true)
     public JobExecutionEventPublisher jobExecutionEventPublisher(final LightminProperties lightminProperties,
                                                                  final LightminClientProperties lightminClientProperties) {
         final RestTemplate restTemplate = LightminServerRestTemplateFactory.getRestTemplate(lightminProperties);

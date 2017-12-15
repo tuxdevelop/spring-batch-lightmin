@@ -40,13 +40,13 @@ public class CommonServerConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(EventService.class)
-    public EventService eventService(@Qualifier("jobExecutionFailedEventRepository") final JobExecutionEventRepository jobExecutionFailedEventRepository) {
-        return new EventServiceBean(jobExecutionFailedEventRepository);
+    public EventService eventService(@Qualifier("jobExecutionEventRepository") final JobExecutionEventRepository jobExecutionEventRepository) {
+        return new EventServiceBean(jobExecutionEventRepository);
     }
 
     @Bean
     @ConditionalOnMissingBean(value = JobExecutionEventRepository.class)
-    public JobExecutionEventRepository jobExecutionFailedEventRepository(final LightminServerProperties lightminServerProperties) {
+    public JobExecutionEventRepository jobExecutionEventRepository(final LightminServerProperties lightminServerProperties) {
         return new MapJobExecutionEventRepository(lightminServerProperties.getErrorEventRepositorySize());
     }
 
