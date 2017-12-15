@@ -801,8 +801,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
                 jobConfigurationParameter.setParameterValue(value.toString());
                 jobConfigurationParameter.setParameterType(ParameterType.STRING.getId());
             } else if (value instanceof Date) {
-                jobConfigurationParameter.setParameterValue(this.dateFormat
-                        .format(ParameterParser.DATE_FORMAT_WITH_TIMESTAMP));
+                jobConfigurationParameter.setParameterValue(this.dateFormat.format(value));
                 jobConfigurationParameter.setParameterType(ParameterType.DATE.getId());
             } else if (value instanceof Double) {
                 jobConfigurationParameter.setParameterValue(value.toString());
