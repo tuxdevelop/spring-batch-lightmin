@@ -33,7 +33,7 @@ public abstract class AbstractListener implements Listener {
 
     public void start() {
         applicationContext = new AnnotationConfigApplicationContext(FlowConfiguration.class);
-        applicationContext.getBeanFactory().registerSingleton("integrationFflow", integrationFlow);
+        applicationContext.getBeanFactory().registerSingleton("integrationFlow", integrationFlow);
         applicationContext.getBeanFactory().initializeBean(integrationFlow, "integrationFlow");
         applicationContext.start();
         listenerStatus = ListenerStatus.ACTIVE;
