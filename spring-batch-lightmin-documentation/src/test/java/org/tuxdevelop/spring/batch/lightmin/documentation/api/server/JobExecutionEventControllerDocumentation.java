@@ -20,7 +20,7 @@ public class JobExecutionEventControllerDocumentation extends AbstractServiceDoc
 
 
     @Test
-    public void q() {
+    public void testConsumeJobExecutionFailedEvent() {
         final ExitStatus exitStatus = new ExitStatus("FAILED", "failed for test");
         final JobExecutionEventInfo jobExecutionEventInfo = createJobExecutionEventInfo("testApplication", exitStatus);
         given(this.documentationSpec)
