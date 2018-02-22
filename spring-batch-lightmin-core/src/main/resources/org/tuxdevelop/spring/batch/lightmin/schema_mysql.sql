@@ -9,7 +9,7 @@ CREATE TABLE BATCH_JOB_CONFIGURATION (
 
 CREATE TABLE BATCH_JOB_CONFIGURATION_VALUE (
   id                   BIGINT AUTO_INCREMENT NOT NULL,
-  job_configuration_id NUMERIC               NOT NULL,
+  job_configuration_id BIGINT                NOT NULL,
   value_key            VARCHAR(255)          NOT NULL,
   configuration_value  VARCHAR(255),
   PRIMARY KEY (id),
