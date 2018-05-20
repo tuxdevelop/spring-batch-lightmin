@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.client.discovery.simple.SimpleDiscoveryClientAutoConfiguration;
+import org.springframework.cloud.client.serviceregistry.AutoServiceRegistrationProperties;
 import org.springframework.cloud.consul.ConditionalOnConsulEnabled;
 import org.springframework.cloud.consul.discovery.ConsulDiscoveryClient;
 import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
@@ -64,13 +65,18 @@ public class LightminClientDiscoveryConfiguration {
         @Bean
         @ConditionalOnMissingBean(ConsulAutoRegistration.class)
         public ConsulAutoRegistration consulAutoRegistration(final MetaDataExtender metaDataExtender,
+                                                             final AutoServiceRegistrationProperties autoServiceRegistrationProperties,
                                                              final ConsulDiscoveryProperties consulDiscoveryProperties,
                                                              final ApplicationContext applicationContext,
                                                              final List<ConsulRegistrationCustomizer> consulRegistrationCustomizers,
                                                              final HeartbeatProperties heartbeatProperties) {
             metaDataExtender.extendMetaData();
             return ConsulAutoRegistration.registration(
-                    consulDiscoveryProperties, applicationContext, consulRegistrationCustomizers, heartbeatProperties);
+                    autoServiceRegistrationProperties,
+                    consulDiscoveryProperties,
+                    applicationContext,
+                    consulRegistrationCustomizers,
+                    heartbeatProperties);
         }
 
     }
