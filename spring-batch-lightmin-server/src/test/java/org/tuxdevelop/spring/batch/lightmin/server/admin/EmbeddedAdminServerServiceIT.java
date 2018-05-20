@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
@@ -16,6 +17,7 @@ import java.util.LinkedList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @SpringBootTest(classes = {ITConfigurationApplication.class, ITConfigurationEmbedded.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EmbeddedAdminServerServiceIT extends AdminServerServiceIT {
 

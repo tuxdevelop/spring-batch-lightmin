@@ -9,6 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.admin.repository.RemoteJobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.admin.repository.RemoteJobConfigurationRepositoryLocator;
 import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.test.util.ITJobConfigurationRepository;
 import org.tuxdevelop.test.configuration.RemoteIntegrationTestConfiguration;
@@ -22,6 +23,8 @@ public class JobConfigurationRepositoryControllerRemoteIT extends JobConfigurati
     private SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
     @Autowired
     private ITJobConfigurationRepository itJobConfigurationRepository;
+    @Autowired
+    private RemoteJobConfigurationRepositoryLocator remoteJobConfigurationRepositoryLocator;
     @LocalServerPort
     private Integer localPort;
     private JobConfigurationRepository jobConfigurationRepository;
@@ -36,7 +39,9 @@ public class JobConfigurationRepositoryControllerRemoteIT extends JobConfigurati
     public void init() {
         super.init();
         this.springBatchLightminConfigurationProperties.setRemoteRepositoryServerUrl("http://localhost:" + this.localPort);
-        this.jobConfigurationRepository = new RemoteJobConfigurationRepository(this.springBatchLightminConfigurationProperties);
+        this.jobConfigurationRepository = new RemoteJobConfigurationRepository(
+                this.springBatchLightminConfigurationProperties,
+                this.remoteJobConfigurationRepositoryLocator);
     }
 
     @Override

@@ -144,7 +144,7 @@ _SpringBatchLightminServer_ in an embedded mode.
 
 === Remote Repository Server
 
-The third repository type is the _remote repository_. The _Job Configurations_ are located on an external
+The third repository type is the _remote repository_. The _Job Configurations_ are located on an external service.
 
 ==== Maven
 

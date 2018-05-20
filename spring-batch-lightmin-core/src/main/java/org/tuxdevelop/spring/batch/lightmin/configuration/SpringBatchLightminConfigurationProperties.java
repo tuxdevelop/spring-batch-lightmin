@@ -36,7 +36,11 @@ public class SpringBatchLightminConfigurationProperties {
     private String remoteRepositoryServerUrl;
     private String remoteRepositoryUsername;
     private String remoteRepositoryPassword;
-
+    private Boolean discoverRemoteRepository = Boolean.FALSE;
+    private String remoteRepositoryServerDiscoveryName = "spring-batch-lightmin-repository-server";
+    private Integer remoteRepositoryServerStartupDiscoveryRetry = 30;
+    private Long remoteRepositoryServerStartupDiscoveryRetryWaitTime = 500L;
+    //Spring Batch Datasource
     private String batchDataSourceName = DEFAULT_DATA_SOURCE_NAME;
     private String dataSourceName = DEFAULT_DATA_SOURCE_NAME;
     private String configurationDatabaseSchema;
