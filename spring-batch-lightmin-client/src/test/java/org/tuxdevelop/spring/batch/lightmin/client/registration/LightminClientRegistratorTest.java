@@ -15,7 +15,9 @@ import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminProperties;
+import org.tuxdevelop.spring.batch.lightmin.client.server.LightminServerLocator;
 
+import java.util.Collections;
 import java.util.LinkedList;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,6 +37,8 @@ public class LightminClientRegistratorTest {
     private RestTemplate restTemplate;
     @Mock
     private JobRegistry jobRegistry;
+    @Mock
+    private LightminServerLocator lightminServerLocator;
 
     @InjectMocks
     private LightminClientRegistrator lightminClientRegistrator;
@@ -44,8 +48,7 @@ public class LightminClientRegistratorTest {
         final LightminClientApplication lightminClientApplication = new LightminClientApplication();
         lightminClientApplication.setId("12345");
         final ResponseEntity<LightminClientApplication> responseEntity = ResponseEntity.status(HttpStatus.CREATED).body(lightminClientApplication);
-        when(this.lightminClientProperties.getServiceUrl()).thenReturn("http://localhost:8080");
-        when(this.lightminProperties.getLightminUrl()).thenReturn(new String[]{"http://localhost:8080"});
+        when(this.lightminServerLocator.getRemoteUrls()).thenReturn(Collections.singletonList("http://localhost:8080"));
         when(this.jobRegistry.getJobNames()).thenReturn(new LinkedList<>());
         when(this.restTemplate.postForEntity(anyString(), any(LightminClientApplication.class), any(Class.class))).thenReturn(responseEntity);
 
@@ -58,8 +61,7 @@ public class LightminClientRegistratorTest {
         final LightminClientApplication lightminClientApplication = new LightminClientApplication();
         lightminClientApplication.setId("12345");
         final ResponseEntity<LightminClientApplication> responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(lightminClientApplication);
-        when(this.lightminClientProperties.getServiceUrl()).thenReturn("http://localhost:8080");
-        when(this.lightminProperties.getLightminUrl()).thenReturn(new String[]{"http://localhost:8080"});
+        when(this.lightminServerLocator.getRemoteUrls()).thenReturn(Collections.singletonList("http://localhost:8080"));
         when(this.jobRegistry.getJobNames()).thenReturn(new LinkedList<>());
         when(this.restTemplate.postForEntity(anyString(), any(HttpEntity.class), any(Class.class))).thenReturn(responseEntity);
 
@@ -71,7 +73,7 @@ public class LightminClientRegistratorTest {
     public void testDeregister() {
 
         try {
-            when(this.lightminProperties.getLightminUrl()).thenReturn(new String[]{"http://localhost:8080"});
+            when(this.lightminServerLocator.getRemoteUrls()).thenReturn(Collections.singletonList("http://localhost:8080"));
             this.lightminClientRegistrator.deregister();
         } catch (final Exception e) {
             fail(e.getMessage());
@@ -82,7 +84,13 @@ public class LightminClientRegistratorTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        this.lightminClientRegistrator = new LightminClientRegistrator(this.lightminClientProperties, this.lightminProperties, this.restTemplate, this.jobRegistry);
+        this.lightminClientRegistrator =
+                new LightminClientRegistrator(
+                        this.lightminClientProperties,
+                        this.lightminProperties,
+                        this.restTemplate,
+                        this.jobRegistry,
+                        this.lightminServerLocator);
     }
 
 }

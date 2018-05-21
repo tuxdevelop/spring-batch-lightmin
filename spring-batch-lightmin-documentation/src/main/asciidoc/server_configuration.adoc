@@ -8,20 +8,28 @@ These configurations can be overridden via properties.
 If the server has a concrete context path, which is different from the servlet path,
 the default value can be overridden by the following property.
 
-[source, java]
+[source, yaml]
 ----
-#default ""
-spring.batch.lightmin.server.context-path=/my-path
+spring:
+  batch:
+    lightmin:
+      server:
+        #default ""
+        context-path: /my-path
 ----
 
 ==== Heartbeat period
 
 The _Heartbeat period_ is the time in mills to check the health status of the clients.
 
-[source, java]
+[source, yaml]
 ----
-#default 100000
-spring.batch.lightmin.server.heartbeat-period=1000
+spring:
+  batch:
+    lightmin:
+      server:
+        #default 100000
+        heartbeat-period: 1000
 ----
 
 ==== Credentials
@@ -29,12 +37,25 @@ spring.batch.lightmin.server.heartbeat-period=1000
 If the server has to pass username and password to the clients, the values can be
 configured via properties.
 
-[source, java]
+[source, yaml]
 ----
-spring.batch.lightmin.server.client-user-name=username
+spring:
+  batch:
+    lightmin:
+      server:
+       client-user-name: username
+       client-password: password
 ----
 
-[source, java]
-----
-spring.batch.lightmin.server.client-password=password
-----
+==== Server Side auto discovery
+
+In order to detected lightmin client via service discovery, the following property has to be set to true
+
+[source, yaml]
+-----
+spring:
+  batch:
+    lightmin:
+      server:
+        discovery-enabled: true
+-----

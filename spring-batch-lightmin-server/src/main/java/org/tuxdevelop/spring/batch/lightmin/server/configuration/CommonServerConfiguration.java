@@ -47,7 +47,7 @@ public class CommonServerConfiguration {
     @Bean
     @ConditionalOnMissingBean(value = JobExecutionEventRepository.class)
     public JobExecutionEventRepository jobExecutionEventRepository(final LightminServerProperties lightminServerProperties) {
-        return new MapJobExecutionEventRepository(lightminServerProperties.getErrorEventRepositorySize());
+        return new MapJobExecutionEventRepository(lightminServerProperties.getEventRepositorySize());
     }
 
     static class RestTemplateFactory {

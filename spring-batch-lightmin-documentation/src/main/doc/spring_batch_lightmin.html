@@ -557,6 +557,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_context_path">Context Path</a></li>
 <li><a href="#_heartbeat_period">Heartbeat period</a></li>
 <li><a href="#_credentials">Credentials</a></li>
+<li><a href="#_server_side_auto_discovery">Server Side auto discovery</a></li>
 </ul>
 </li>
 <li><a href="#_client_configuration_2">Client Configuration</a>
@@ -718,7 +719,8 @@ By enabling the <em>Spring Batch Lightmin</em>, a <em>BatchConfigurer</em> will 
 <h5 id="_application_properties">application.properties</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">server.port=<span class="integer">8090</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">server</span>:
+  <span class="key">port</span>: <span class="string"><span class="content">8090</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -766,7 +768,110 @@ needs a configured <em>DataSource</em> with the bean name <em>dataSource</em>.</
 <h5 id="_application_properties_2">application.properties</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.server.url=http:<span class="comment">//localhost:8090</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="key">url</span>: <span class="string"><span class="content">http://localhost:8090</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_service_discovery">Service Discovery</h5>
+<div class="paragraph">
+<p>The client library also provides support for service discovery with <em>Consul</em> and <em>Eureka</em>.</p>
+</div>
+<div class="paragraph">
+<p>In order to use service discovery, one of the spring cloud starter has to be on the classpath</p>
+</div>
+<div class="paragraph">
+<p>The dependency below shows the consul integration</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.springframework.cloud<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>spring-cloud-starter-consul-discovery<span class="tag">&lt;/artifactId&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In order to use the discovery feature of s_Spring Cloud_ one configuration class has to have the <em>@EnableDiscoveryClient</em> annotation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@EnableScheduling</span>
+<span class="annotation">@EnableDiscoveryClient</span>
+<span class="annotation">@EnableSpringBatchLightminClient</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">AddressMigratorApp</span> {
+
+    <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="directive">final</span> <span class="predefined-type">String</span><span class="type">[]</span> args) {
+        SpringApplication.run(AddressMigratorApp.class, args);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_auto_registration_server_side">Auto registration server side</h6>
+<div class="paragraph">
+<p>The client has to set the following property to activate the client side adaption for the server side auto registration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">client</span>:
+        <span class="comment"># default value: false</span>
+        <span class="key">discovery-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the property is set to <em>true</em>. the discovery client configuration will be enriched by meta tags, which let the server detected the <em>Spring Batch Lightmin</em> clients.</p>
+</div>
+<div class="paragraph">
+<p>If the server should be also found via service discovery, e.g. for push notifications, the next section will give all the details for the configuration.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_client_side_server_discovery">Client side server discovery</h6>
+<div class="paragraph">
+<p>In order to find the server via service discovery, the following properties has to be set.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">client</span>:
+        <span class="comment"># default value: false</span>
+        <span class="key">discover-server</span>: <span class="string"><span class="content">true</span></span>
+        <span class="comment"># default value: lightmin-server</span>
+        <span class="key">server-discovery-name</span>: <span class="string"><span class="content">lightmin-server</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will enable the following behavior</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The lightmin client will use service discovery for push notification to the server.</p>
+</li>
+<li>
+<p>The lightmin client will use service discovery to register at the server, if the following property is set to <strong>false</strong> or not present.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">client</span>:
+        <span class="key">discovery-enabled</span>: <span class="string"><span class="content">false</span></span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -846,24 +951,27 @@ the properties <em>*.data-source-name</em> for <em>Lightmin</em> and <em>*.batch
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="predefined-type">Set</span> the table prefix <span class="keyword">for</span> <span class="predefined-type">Spring</span> Batch tables, <span class="keyword">default</span> BATCH_
-spring.batch.lightmin.repository-table-prefix=MY_BATCH_PREFIX
-<span class="error">#</span>Table name of the <span class="predefined-type">Spring</span> Batch Lightmin <span class="predefined-type">Configuration</span>, <span class="keyword">default</span> BATCH_JOB_CONFIGURATION
-spring.batch.lightmin.job-configuration-table-name=BATCH_JOB_CONFIGURATION
-<span class="error">#</span>Table name of the <span class="predefined-type">Spring</span> Batch Lightmin <span class="predefined-type">Configuration</span> values, <span class="keyword">default</span> = BATCH_JOB_CONFIGURATION_VALUE
-spring.batch.lightmin.job-configuration-value-table-name=BATCH_JOB_CONFIGURATION_VALUE
-<span class="error">#</span>Table name of the <span class="predefined-type">Spring</span> Batch Lightmin <span class="predefined-type">Configuration</span> Job Parameters, <span class="keyword">default</span> = BATCH_JOB_CONFIGURATION_PARAMETERS
-spring.batch.lightmin.job-configuration-parameter-table-name=BATCH_JOB_CONFIGURATION_PARAMETERS
-<span class="error">#</span><span class="keyword">default</span> jdbc
-spring.batch.lightmin.batch-repository-type=jdbc
-<span class="error">#</span><span class="keyword">default</span> jdbc
-spring.batch.lightmin.lightmin-repository-type=jdbc
-<span class="error">#</span><span class="keyword">default</span> dataSource
-spring.batch.lightmin.data-source-name=dataSource
-<span class="error">#</span><span class="keyword">default</span> dataSource
-spring.batch.lightmin.batch-data-source-name=dataSource
-<span class="error">#</span>The value <span class="keyword">for</span> a database schema, e.g. for postgres, <span class="keyword">default</span> value=<span class="predefined-constant">null</span>
-spring.batch.lightmin.database-schema=my_schema</code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="comment">#Set the table prefix for Spring Batch tables, default BATCH_</span>
+      <span class="key">repository-table-prefix</span>: <span class="string"><span class="content">MY_BATCH_PREFIX</span></span>
+      <span class="comment">#Table name of the Spring Batch Lightmin Configuration, default BATCH_JOB_CONFIGURATION</span>
+      <span class="key">job-configuration-table-name</span>: <span class="string"><span class="content">BATCH_JOB_CONFIGURATION</span></span>
+      <span class="comment">#Table name of the Spring Batch Lightmin Configuration values, default = BATCH_JOB_CONFIGURATION_VALUE</span>
+      <span class="key">job-configuration-value-table-name</span>: <span class="string"><span class="content">BATCH_JOB_CONFIGURATION_VALUE</span></span>
+      <span class="comment">#Table name of the Spring Batch Lightmin Configuration Job Parameters, default = BATCH_JOB_CONFIGURATION_PARAMETERS</span>
+      <span class="key">job-configuration-parameter-table-name</span>: <span class="string"><span class="content">BATCH_JOB_CONFIGURATION_PARAMETERS</span></span>
+      <span class="comment">#default jdbc</span>
+      <span class="key">batch-repository-type</span>: <span class="string"><span class="content">jdbc</span></span>
+      <span class="comment">#default jdbc</span>
+      <span class="key">lightmin-repository-type</span>: <span class="string"><span class="content">jdbc</span></span>
+      <span class="comment">#default dataSource</span>
+      <span class="key">data-source-name</span>: <span class="string"><span class="content">dataSource</span></span>
+      <span class="comment">#default dataSource</span>
+      <span class="key">batch-data-source-name</span>: <span class="string"><span class="content">dataSource</span></span>
+      <span class="comment">#The value for a database schema, e.g. for postgres, default value=null</span>
+      <span class="key">database-schema</span>: <span class="string"><span class="content">my_schema</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -881,10 +989,13 @@ the <em>SpringBatchLightmin</em> also provides <em>Map</em> - implementations fo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> jdbc
-spring.batch.lightmin.batch-repository-type=map
-<span class="error">#</span><span class="keyword">default</span> jdbc
-spring.batch.lightmin.lightmin-repository-type=map</code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="comment">#default jdbc</span>
+      <span class="key">batch-repository-type</span>: <span class="string"><span class="content">map</span></span>
+      <span class="comment">#default jdbc</span>
+      <span class="key">lightmin-repository-type</span>: <span class="string"><span class="content">map</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -892,7 +1003,7 @@ spring.batch.lightmin.lightmin-repository-type=map</code></pre>
 <div class="sect2">
 <h3 id="_remote_repository_support">Remote Repository Support</h3>
 <div class="paragraph">
-<p>The third repository type is the <em>remote repository</em>. The <em>Job Configurations</em> are located on an external</p>
+<p>The third repository type is the <em>remote repository</em>. The <em>Job Configurations</em> are located on an external server.</p>
 </div>
 <div class="sect3">
 <h4 id="_remote_repository_server">Remote Repository Server</h4>
@@ -928,16 +1039,22 @@ spring.batch.lightmin.lightmin-repository-type=map</code></pre>
 <h5 id="_server_configuration">Server Configuration</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span>repository server repository type, jdbc or map
-spring.batch.lightmin.remote.repository.server.lightmin-repository-type=jdbc
-<span class="error">#</span>Table name of the <span class="predefined-type">Spring</span> Batch Lightmin <span class="predefined-type">Configuration</span>, <span class="keyword">default</span> BATCH_JOB_CONFIGURATION
-spring.batch.lightmin.remote.repository.server.job-configuration-table-name=BATCH_JOB_CONFIGURATION
-<span class="error">#</span>Table name of the <span class="predefined-type">Spring</span> Batch Lightmin <span class="predefined-type">Configuration</span> values, <span class="keyword">default</span> = BATCH_JOB_CONFIGURATION_VALUE
-spring.batch.lightmin.remote.repository.server.job-configuration-value-table-name=BATCH_JOB_CONFIGURATION_VALUE
-<span class="error">#</span>Table name of the <span class="predefined-type">Spring</span> Batch Lightmin <span class="predefined-type">Configuration</span> Job Parameters, <span class="keyword">default</span> = BATCH_JOB_CONFIGURATION_PARAMETERS
-spring.batch.lightmin.remote.repository.server.job-configuration-parameter-table-name=BATCH_JOB_CONFIGURATION_PARAMETERS
-<span class="error">#</span>The value <span class="keyword">for</span> a database schema, e.g. for postgres, <span class="keyword">default</span> value=<span class="predefined-constant">null</span>
-spring.batch.lightmin.remote.repository.server.database-schema=my_schema</code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">remote</span>:
+        <span class="key">repository</span>:
+          <span class="key">server</span>:
+            <span class="comment">#repository server repository type, jdbc or map</span>
+            <span class="key">lightmin-repository-type</span>: <span class="string"><span class="content">jdbc</span></span>
+            <span class="comment">#Table name of the Spring Batch Lightmin Configuration, default BATCH_JOB_CONFIGURATION</span>
+            <span class="key">job-configuration-table-name</span>: <span class="string"><span class="content">BATCH_JOB_CONFIGURATION</span></span>
+            <span class="comment">#Table name of the Spring Batch Lightmin Configuration values, default = BATCH_JOB_CONFIGURATION_VALUE</span>
+            <span class="key">job-configuration-value-table-name</span>: <span class="string"><span class="content">BATCH_JOB_CONFIGURATION_VALUE</span></span>
+            <span class="comment">#Table name of the Spring Batch Lightmin Configuration Job Parameters, default = BATCH_JOB_CONFIGURATION_PARAMETERS</span>
+            <span class="key">job-configuration-parameter-table-name</span>: <span class="string"><span class="content">BATCH_JOB_CONFIGURATION_PARAMETERS</span></span>
+            <span class="comment">#The value for a database schema, e.g. for postgres, default value=null</span>
+            <span class="key">database-schema</span>: <span class="string"><span class="content">my_schema</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -946,9 +1063,49 @@ spring.batch.lightmin.remote.repository.server.database-schema=my_schema</code><
 <h4 id="_client_configuration">Client Configuration</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.application-name=my-application-name
-spring.batch.lightmin.lightmin-repository-type=remote
-spring.batch.lightmin.remote-repository-server-url=http:<span class="comment">//localhost:8080</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">application-name</span>: <span class="string"><span class="content">my-application-name</span></span>
+      <span class="key">lightmin-repository-type</span>: <span class="string"><span class="content">remote</span></span>
+      <span class="key">remote-repository-server-url</span>: <span class="string"><span class="content">http://localhost:8080</span></span></code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_service_discovery_for_remote_repository_server">Service Discovery for Remote Repository Server</h5>
+<div class="paragraph">
+<p>If the client has configured service discovery, the following properties will activate client side auto detection for the <em>Remote Repository Server</em>.
+The <em>Remote Repository Server</em> itself has to be a <em>DiscoveryClient</em> as well.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">application-name</span>: <span class="string"><span class="content">my-application-name</span></span>
+      <span class="key">lightmin-repository-type</span>: <span class="string"><span class="content">remote</span></span>
+      <span class="comment"># default value: false</span>
+      <span class="key">discover-remote-repository</span>: <span class="string"><span class="content">true</span></span>
+      <span class="comment"># default value: spring-batch-lightmin-repository-server</span>
+      <span class="key">remote-repository-server-discovery-name</span>: <span class="string"><span class="content">spring-batch-lightmin-repository-server</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In order get the job configurations by the remote repository server, the service instance of the server has to be present at the service catalog of the client at start up.</p>
+</div>
+<div class="paragraph">
+<p>The following properties are used for retries</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="comment"># default value: 30</span>
+      <span class="key">remote-repository-server-startup-discovery-retry</span>: <span class="string"><span class="content">30</span></span>
+      <span class="comment"># milliseconds between the current and the the next try. default value: 500</span>
+      <span class="key">remote-repository-server-startup-discovery-retry-wait-time</span>: <span class="string"><span class="content">500</span></span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -967,8 +1124,12 @@ the default value can be overridden by the following property.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
-spring.batch.lightmin.server.context-path=/my-path</code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="comment">#default &quot;&quot;</span>
+        <span class="key">context-path</span>: <span class="string"><span class="content">/my-path</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -979,8 +1140,12 @@ spring.batch.lightmin.server.context-path=/my-path</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> <span class="integer">100000</span>
-spring.batch.lightmin.server.heartbeat-period=<span class="integer">1000</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="comment">#default 100000</span>
+        <span class="key">heartbeat-period</span>: <span class="string"><span class="content">1000</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -992,12 +1157,27 @@ configured via properties.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.server.client-user-name=username</code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+       <span class="key">client-user-name</span>: <span class="string"><span class="content">username</span></span>
+       <span class="key">client-password</span>: <span class="string"><span class="content">password</span></span></code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_server_side_auto_discovery">Server Side auto discovery</h4>
+<div class="paragraph">
+<p>In order to detected lightmin client via service discovery, the following property has to be set to true</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.server.client-password=password</code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="key">discovery-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1016,7 +1196,11 @@ excepted the <em>url</em> of the <em>SpringBatchLightmin-Server</em>. All these 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.server.url=http:<span class="comment">//localhost:8090, http://localhost:9000</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="key">url</span>: <span class="string"><span class="content">http://localhost:8090, http://localhost:9000</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1029,8 +1213,12 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> api/applications
-spring.batch.lightmin.server.api=api/application</code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="comment">#default api/applications</span>
+        <span class="key">api</span>: <span class="string"><span class="content">api/application</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1041,8 +1229,12 @@ spring.batch.lightmin.server.api=api/application</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> <span class="integer">10000</span>
-spring.batch.lightmin.server.period=<span class="integer">100</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="comment">#default 10000</span>
+        <span class="key">period</span>: <span class="string"><span class="content">100</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1054,12 +1246,20 @@ spring.batch.lightmin.server.period=<span class="integer">100</span></code></pre
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.server.username=username</code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="key">username</span>: <span class="string"><span class="content">username</span></span></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.server.password=password</code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="key">password</span>: <span class="string"><span class="content">password</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1070,8 +1270,12 @@ spring.batch.lightmin.server.period=<span class="integer">100</span></code></pre
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> <span class="predefined-constant">true</span>
-spring.batch.lightmin.server.auto-registration=<span class="predefined-constant">true</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="comment">#default true</span>
+        <span class="key">auto-registration</span>: <span class="string"><span class="content">true</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1082,8 +1286,12 @@ spring.batch.lightmin.server.auto-registration=<span class="predefined-constant"
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> <span class="predefined-constant">false</span>
-spring.batch.lightmin.server.auto-deregistration=<span class="predefined-constant">false</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="comment">#default false</span>
+        <span class="key">auto-deregistration</span>: <span class="string"><span class="content">false</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1094,8 +1302,12 @@ spring.batch.lightmin.server.auto-deregistration=<span class="predefined-constan
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="error">#</span><span class="keyword">default</span> <span class="predefined-constant">true</span>
-spring.batch.lightmin.server.auto-register-once=<span class="predefined-constant">true</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="comment">#default true</span>
+        <span class="key">auto-register-once</span>: <span class="string"><span class="content">true</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1106,7 +1318,10 @@ spring.batch.lightmin.server.auto-register-once=<span class="predefined-constant
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.client.service-url=http:<span class="comment">//localhost:8080/my-app</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">client.service-url</span>: <span class="string"><span class="content">http://localhost:8080/my-app</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1117,7 +1332,11 @@ spring.batch.lightmin.server.auto-register-once=<span class="predefined-constant
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.client.management-url=http:<span class="comment">//localhost:8080/management</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">client</span>:
+        <span class="key">management-url</span>: <span class="string"><span class="content">http://localhost:8080/management</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1128,7 +1347,11 @@ spring.batch.lightmin.server.auto-register-once=<span class="predefined-constant
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.client.health-url=http:<span class="comment">//localhost:8080/management/health</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">client</span>:
+        <span class="key">health-url</span>: <span class="string"><span class="content">http://localhost:8080/management/health</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1139,7 +1362,11 @@ spring.batch.lightmin.server.auto-register-once=<span class="predefined-constant
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.client.server-port=<span class="integer">8080</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">client</span>:
+        <span class="key">server-port</span>: <span class="string"><span class="content">8080</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1150,7 +1377,11 @@ spring.batch.lightmin.server.auto-register-once=<span class="predefined-constant
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">spring.batch.lightmin.client.management-port=<span class="integer">8081</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">client</span>:
+        <span class="key">management-port</span>: <span class="string"><span class="content">8081</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1570,18 +1801,18 @@ Content-Length: 772
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 20 May 2018 20:11:12 GMT
+Date: Mon, 21 May 2018 15:31:46 GMT
 Content-Length: 852
 
 {
-  &quot;id&quot; : &quot;b7293020&quot;,
+  &quot;id&quot; : &quot;369868aa&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:35031&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:35031/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:35031&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:37449&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:37449/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:37449&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1526847071779
+    &quot;timeInMills&quot; : 1526916706425
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1605,7 +1836,7 @@ Content-Length: 852
 <h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/b7293020' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/369868aa' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -1613,7 +1844,7 @@ Content-Length: 852
 <h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/b7293020 HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/369868aa HTTP/1.1
 Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
 Host: localhost</code></pre>
@@ -1628,18 +1859,18 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 20 May 2018 20:11:12 GMT
+Date: Mon, 21 May 2018 15:31:47 GMT
 Content-Length: 852
 
 {
-  &quot;id&quot; : &quot;b7293020&quot;,
+  &quot;id&quot; : &quot;369868aa&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:35031&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:35031/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:35031&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:37449&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:37449/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:37449&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1526847071779
+    &quot;timeInMills&quot; : 1526916706425
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1686,31 +1917,10 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 20 May 2018 20:11:11 GMT
+Date: Mon, 21 May 2018 15:31:46 GMT
 Content-Length: 1694
 
 [ {
-  &quot;id&quot; : &quot;b7293020&quot;,
-  &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:35031&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:35031/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:35031&quot;,
-  &quot;lightminClientApplicationStatus&quot; : {
-    &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1526847071779
-  },
-  &quot;lightminClientInformation&quot; : {
-    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
-    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
-    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
-    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
-    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
-    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
-    &quot;supportedApiFeatures&quot; : [ &quot;JOB_EXECUTION_QUERY_SERVICE&quot; ],
-    &quot;registeredJobs&quot; : [ &quot;simpleJob&quot; ],
-    &quot;externalLinks&quot; : { }
-  }
-}, {
   &quot;id&quot; : &quot;aba53925&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
   &quot;managementUrl&quot; : &quot;http://ubuntu-box:0&quot;,
@@ -1718,7 +1928,7 @@ Content-Length: 1694
   &quot;serviceUrl&quot; : &quot;http://ubuntu-box:0&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;OFFLINE&quot;,
-    &quot;timeInMills&quot; : 1526847070652
+    &quot;timeInMills&quot; : 1526916705435
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1729,6 +1939,27 @@ Content-Length: 1694
     &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
     &quot;supportedApiFeatures&quot; : [ &quot;JOB_EXECUTION_QUERY_SERVICE&quot; ],
     &quot;registeredJobs&quot; : [ ],
+    &quot;externalLinks&quot; : { }
+  }
+}, {
+  &quot;id&quot; : &quot;369868aa&quot;,
+  &quot;name&quot; : &quot;it-application&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:37449&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:37449/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:37449&quot;,
+  &quot;lightminClientApplicationStatus&quot; : {
+    &quot;status&quot; : &quot;UP&quot;,
+    &quot;timeInMills&quot; : 1526916706425
+  },
+  &quot;lightminClientInformation&quot; : {
+    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
+    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
+    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
+    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
+    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
+    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
+    &quot;supportedApiFeatures&quot; : [ &quot;JOB_EXECUTION_QUERY_SERVICE&quot; ],
+    &quot;registeredJobs&quot; : [ &quot;simpleJob&quot; ],
     &quot;externalLinks&quot; : { }
   }
 } ]</code></pre>
@@ -1750,8 +1981,8 @@ Content-Length: 1694
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1526847073408,
-  &quot;endDate&quot; : 1526847083408
+  &quot;startDate&quot; : 1526916707582,
+  &quot;endDate&quot; : 1526916717582
 }'</code></pre>
 </div>
 </div>
@@ -1774,8 +2005,8 @@ Content-Length: 247
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1526847073408,
-  &quot;endDate&quot; : 1526847083408
+  &quot;startDate&quot; : 1526916707582,
+  &quot;endDate&quot; : 1526916717582
 }</code></pre>
 </div>
 </div>
@@ -1786,7 +2017,7 @@ Content-Length: 247
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 X-Application-Context: it-application:0
-Date: Sun, 20 May 2018 20:11:12 GMT</code></pre>
+Date: Mon, 21 May 2018 15:31:47 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -1824,7 +2055,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 20 May 2018 20:11:14 GMT
+Date: Mon, 21 May 2018 15:31:48 GMT
 Content-Length: 1405
 
 {
@@ -1839,7 +2070,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1526847074662,
+          &quot;parameter&quot; : 1526916709068,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -1862,9 +2093,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1526847074665,
-      &quot;endTime&quot; : 1526847074667,
-      &quot;lastUpdated&quot; : 1526847074667,
+      &quot;startTime&quot; : 1526916709072,
+      &quot;endTime&quot; : 1526916709074,
+      &quot;lastUpdated&quot; : 1526916709074,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -1874,10 +2105,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1526847074663,
-    &quot;createTime&quot; : 1526847074662,
-    &quot;endTime&quot; : 1526847074668,
-    &quot;lastUpdated&quot; : 1526847074675,
+    &quot;startTime&quot; : 1526916709069,
+    &quot;createTime&quot; : 1526916709068,
+    &quot;endTime&quot; : 1526916709075,
+    &quot;lastUpdated&quot; : 1526916709083,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -1918,7 +2149,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 20 May 2018 20:11:14 GMT
+Date: Mon, 21 May 2018 15:31:48 GMT
 Content-Length: 1405
 
 {
@@ -1933,7 +2164,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1526847074615,
+          &quot;parameter&quot; : 1526916708996,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -1956,9 +2187,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1526847074618,
-      &quot;endTime&quot; : 1526847074620,
-      &quot;lastUpdated&quot; : 1526847074620,
+      &quot;startTime&quot; : 1526916709014,
+      &quot;endTime&quot; : 1526916709016,
+      &quot;lastUpdated&quot; : 1526916709016,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -1968,10 +2199,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1526847074616,
-    &quot;createTime&quot; : 1526847074616,
-    &quot;endTime&quot; : 1526847074621,
-    &quot;lastUpdated&quot; : 1526847074628,
+    &quot;startTime&quot; : 1526916708998,
+    &quot;createTime&quot; : 1526916708996,
+    &quot;endTime&quot; : 1526916709018,
+    &quot;lastUpdated&quot; : 1526916709034,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2012,7 +2243,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 20 May 2018 20:11:14 GMT
+Date: Mon, 21 May 2018 15:31:48 GMT
 Content-Length: 1154
 
 {
@@ -2021,7 +2252,7 @@ Content-Length: 1154
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1526847074803,
+        &quot;parameter&quot; : 1526916709309,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2044,9 +2275,9 @@ Content-Length: 1154
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1526847074807,
-    &quot;endTime&quot; : 1526847074808,
-    &quot;lastUpdated&quot; : 1526847074808,
+    &quot;startTime&quot; : 1526916709314,
+    &quot;endTime&quot; : 1526916709316,
+    &quot;lastUpdated&quot; : 1526916709316,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2056,10 +2287,10 @@ Content-Length: 1154
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1526847074804,
-  &quot;createTime&quot; : 1526847074804,
-  &quot;endTime&quot; : 1526847074809,
-  &quot;lastUpdated&quot; : 1526847074821,
+  &quot;startTime&quot; : 1526916709311,
+  &quot;createTime&quot; : 1526916709310,
+  &quot;endTime&quot; : 1526916709316,
+  &quot;lastUpdated&quot; : 1526916709326,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2079,8 +2310,8 @@ Content-Length: 1154
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/query?jobname=simpleJob&amp;resultsize=4' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1526847174252,
-  &quot;START_DATE&quot; : 1526846974252
+  &quot;END_DATE&quot; : 1526916808446,
+  &quot;START_DATE&quot; : 1526916608446
 }'</code></pre>
 </div>
 </div>
@@ -2097,8 +2328,8 @@ Content-Length: 95
 
 {
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1526847174252,
-  &quot;START_DATE&quot; : 1526846974252
+  &quot;END_DATE&quot; : 1526916808446,
+  &quot;START_DATE&quot; : 1526916608446
 }</code></pre>
 </div>
 </div>
@@ -2111,7 +2342,7 @@ Content-Length: 95
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 20 May 2018 20:11:14 GMT
+Date: Mon, 21 May 2018 15:31:48 GMT
 Content-Length: 4610
 
 [ {
@@ -2120,7 +2351,7 @@ Content-Length: 4610
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1526847074218,
+        &quot;parameter&quot; : 1526916708390,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2143,9 +2374,9 @@ Content-Length: 4610
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1526847074229,
-    &quot;endTime&quot; : 1526847074236,
-    &quot;lastUpdated&quot; : 1526847074236,
+    &quot;startTime&quot; : 1526916708420,
+    &quot;endTime&quot; : 1526916708422,
+    &quot;lastUpdated&quot; : 1526916708422,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2155,10 +2386,10 @@ Content-Length: 4610
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1526847074223,
-  &quot;createTime&quot; : 1526847074219,
-  &quot;endTime&quot; : 1526847074237,
-  &quot;lastUpdated&quot; : 1526847074251,
+  &quot;startTime&quot; : 1526916708396,
+  &quot;createTime&quot; : 1526916708392,
+  &quot;endTime&quot; : 1526916708422,
+  &quot;lastUpdated&quot; : 1526916708444,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2171,7 +2402,7 @@ Content-Length: 4610
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1526847074103,
+        &quot;parameter&quot; : 1526916708272,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2194,9 +2425,9 @@ Content-Length: 4610
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1526847074113,
-    &quot;endTime&quot; : 1526847074116,
-    &quot;lastUpdated&quot; : 1526847074116,
+    &quot;startTime&quot; : 1526916708281,
+    &quot;endTime&quot; : 1526916708283,
+    &quot;lastUpdated&quot; : 1526916708283,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2206,10 +2437,10 @@ Content-Length: 4610
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1526847074106,
-  &quot;createTime&quot; : 1526847074105,
-  &quot;endTime&quot; : 1526847074116,
-  &quot;lastUpdated&quot; : 1526847074129,
+  &quot;startTime&quot; : 1526916708274,
+  &quot;createTime&quot; : 1526916708273,
+  &quot;endTime&quot; : 1526916708284,
+  &quot;lastUpdated&quot; : 1526916708296,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2222,7 +2453,7 @@ Content-Length: 4610
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1526847073479,
+        &quot;parameter&quot; : 1526916707643,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2245,9 +2476,9 @@ Content-Length: 4610
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1526847073484,
-    &quot;endTime&quot; : 1526847073487,
-    &quot;lastUpdated&quot; : 1526847073487,
+    &quot;startTime&quot; : 1526916707648,
+    &quot;endTime&quot; : 1526916707650,
+    &quot;lastUpdated&quot; : 1526916707650,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2257,10 +2488,10 @@ Content-Length: 4610
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1526847073481,
-  &quot;createTime&quot; : 1526847073479,
-  &quot;endTime&quot; : 1526847073488,
-  &quot;lastUpdated&quot; : 1526847073503,
+  &quot;startTime&quot; : 1526916707645,
+  &quot;createTime&quot; : 1526916707643,
+  &quot;endTime&quot; : 1526916707651,
+  &quot;lastUpdated&quot; : 1526916707660,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2273,7 +2504,7 @@ Content-Length: 4610
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1526847073365,
+        &quot;parameter&quot; : 1526916707556,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2296,9 +2527,9 @@ Content-Length: 4610
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1526847073381,
-    &quot;endTime&quot; : 1526847073388,
-    &quot;lastUpdated&quot; : 1526847073388,
+    &quot;startTime&quot; : 1526916707562,
+    &quot;endTime&quot; : 1526916707564,
+    &quot;lastUpdated&quot; : 1526916707565,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2308,10 +2539,10 @@ Content-Length: 4610
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1526847073374,
-  &quot;createTime&quot; : 1526847073372,
-  &quot;endTime&quot; : 1526847073390,
-  &quot;lastUpdated&quot; : 1526847073405,
+  &quot;startTime&quot; : 1526916707558,
+  &quot;createTime&quot; : 1526916707557,
+  &quot;endTime&quot; : 1526916707566,
+  &quot;lastUpdated&quot; : 1526916707580,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2376,7 +2607,7 @@ Content-Length: 205
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 X-Application-Context: it-application:0
-Date: Sun, 20 May 2018 20:11:14 GMT</code></pre>
+Date: Mon, 21 May 2018 15:31:49 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2412,7 +2643,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 20 May 2018 20:11:16 GMT
+Date: Mon, 21 May 2018 15:31:50 GMT
 Content-Length: 412
 
 {
@@ -2464,7 +2695,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 20 May 2018 20:11:16 GMT
+Date: Mon, 21 May 2018 15:31:50 GMT
 Content-Length: 22129
 
 {
@@ -3270,7 +3501,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Sun, 20 May 2018 20:11:16 GMT
+Date: Mon, 21 May 2018 15:31:50 GMT
 Content-Length: 19807
 
 {
@@ -4026,7 +4257,7 @@ Content-Length: 424
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 X-Application-Context: it-application:0
-Date: Sun, 20 May 2018 20:11:16 GMT</code></pre>
+Date: Mon, 21 May 2018 15:31:50 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4093,7 +4324,7 @@ Content-Length: 441
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Sun, 20 May 2018 20:11:15 GMT</code></pre>
+Date: Mon, 21 May 2018 15:31:49 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4124,7 +4355,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Sun, 20 May 2018 20:11:15 GMT</code></pre>
+Date: Mon, 21 May 2018 15:31:49 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4155,7 +4386,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Sun, 20 May 2018 20:11:16 GMT</code></pre>
+Date: Mon, 21 May 2018 15:31:50 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4186,7 +4417,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Sun, 20 May 2018 20:11:15 GMT</code></pre>
+Date: Mon, 21 May 2018 15:31:49 GMT</code></pre>
 </div>
 </div>
 </div>

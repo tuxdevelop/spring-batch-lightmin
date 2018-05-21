@@ -4,6 +4,7 @@ import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -16,6 +17,9 @@ import org.tuxdevelop.spring.batch.lightmin.client.registration.RegistrationLigh
 import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnClientApplicationReadyEventListener;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.listener.OnContextClosedEventListener;
 import org.tuxdevelop.spring.batch.lightmin.client.registration.service.LightminClientApplicationService;
+import org.tuxdevelop.spring.batch.lightmin.client.server.DiscoveryLightminServerLocator;
+import org.tuxdevelop.spring.batch.lightmin.client.server.LightminServerLocator;
+import org.tuxdevelop.spring.batch.lightmin.client.server.UrlLightminServerLocator;
 import org.tuxdevelop.spring.batch.lightmin.configuration.CommonSpringBatchLightminConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.util.BasicAuthHttpRequestInterceptor;
 
@@ -32,12 +36,17 @@ public class LightminClientConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(value = {LightminClientRegistrator.class})
-    @ConditionalOnProperty(prefix = "spring.batch.lightmin.client", value = "discovery-enabled", havingValue = "false", matchIfMissing = true)
+    @ConditionalOnProperty(
+            prefix = "spring.batch.lightmin.client",
+            value = "discovery-enabled",
+            havingValue = "false",
+            matchIfMissing = true)
     public LightminClientRegistrator lightminClientRegistrator(final LightminClientProperties lightminClientProperties,
                                                                final LightminProperties lightminProperties,
-                                                               final JobRegistry jobRegistry) {
+                                                               final JobRegistry jobRegistry,
+                                                               final LightminServerLocator lightminServerLocator) {
         final RestTemplate restTemplate = LightminServerRestTemplateFactory.getRestTemplate(lightminProperties);
-        return new LightminClientRegistrator(lightminClientProperties, lightminProperties, restTemplate, jobRegistry);
+        return new LightminClientRegistrator(lightminClientProperties, lightminProperties, restTemplate, jobRegistry, lightminServerLocator);
     }
 
     /**
@@ -45,7 +54,11 @@ public class LightminClientConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(value = {RegistrationLightminClientApplicationBean.class})
-    @ConditionalOnProperty(prefix = "spring.batch.lightmin.client", value = "discovery-enabled", havingValue = "false", matchIfMissing = true)
+    @ConditionalOnProperty(
+            prefix = "spring.batch.lightmin.client",
+            value = "discovery-enabled",
+            havingValue = "false",
+            matchIfMissing = true)
     public RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean(final LightminClientRegistrator lightminClientRegistrator,
                                                                                                final LightminProperties lightminProperties) {
         final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean =
@@ -57,11 +70,15 @@ public class LightminClientConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "spring.batch.lightmin.client", value = "publish-job-events", havingValue = "true", matchIfMissing = true)
-    public JobExecutionEventPublisher jobExecutionEventPublisher(final LightminProperties lightminProperties,
-                                                                 final LightminClientProperties lightminClientProperties) {
+    @ConditionalOnProperty(
+            prefix = "spring.batch.lightmin.client",
+            value = "publish-job-events",
+            havingValue = "true",
+            matchIfMissing = true)
+    public JobExecutionEventPublisher jobExecutionEventPublisher(final LightminServerLocator lightminServerLocator,
+                                                                 final LightminProperties lightminProperties) {
         final RestTemplate restTemplate = LightminServerRestTemplateFactory.getRestTemplate(lightminProperties);
-        return new JobExecutionEventPublisher(restTemplate, lightminProperties, lightminClientProperties);
+        return new JobExecutionEventPublisher(restTemplate, lightminServerLocator);
     }
 
     @Bean
@@ -111,5 +128,30 @@ public class LightminClientConfiguration {
             }
             return restTemplate;
         }
+    }
+
+    @Configuration
+    class LightminClientServerConfiguration {
+
+        @Bean
+        @ConditionalOnProperty(
+                prefix = "spring.batch.lightmin.client",
+                value = "discover-server",
+                havingValue = "false",
+                matchIfMissing = true)
+        public LightminServerLocator urlLightminServerLocator(final LightminProperties lightminProperties) {
+            return new UrlLightminServerLocator(lightminProperties);
+        }
+
+        @Bean
+        @ConditionalOnProperty(
+                prefix = "spring.batch.lightmin.client",
+                value = "discover-server",
+                havingValue = "true")
+        public LightminServerLocator discoveryLightminServerLocator(final LightminClientProperties lightminClientProperties,
+                                                                    final DiscoveryClient discoveryClient) {
+            return new DiscoveryLightminServerLocator(lightminClientProperties, discoveryClient);
+        }
+
     }
 }

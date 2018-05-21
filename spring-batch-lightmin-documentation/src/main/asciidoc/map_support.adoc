@@ -7,10 +7,13 @@ the _SpringBatchLightmin_ also provides _Map_ - implementations for the reposito
 
 In order to use the _Map_-implementations, the following properties have to be set. 
 
-[source, java]
+[source, yaml]
 ----
-#default jdbc
-spring.batch.lightmin.batch-repository-type=map
-#default jdbc
-spring.batch.lightmin.lightmin-repository-type=map
+spring:
+  batch:
+    lightmin:
+      #default jdbc
+      batch-repository-type: map
+      #default jdbc
+      lightmin-repository-type: map
 ----

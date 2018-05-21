@@ -8,9 +8,13 @@ excepted the _url_ of the _SpringBatchLightmin-Server_. All these properties can
 
 The _url_ is a mandatory property. The value is a comma separated list of server urls.
 
-[source, java]
+[source, yaml]
 ----
-spring.batch.lightmin.server.url=http://localhost:8090, http://localhost:9000
+spring:
+  batch:
+    lightmin:
+      server:
+        url: http://localhost:8090, http://localhost:9000
 ----
 
 ==== API
@@ -19,20 +23,28 @@ The _api_ property gives the relative path to the server side api.
 If the value is my/api and the _url_ value is http://server:8080, the client tries
 to register at http://server:8080/my/api
 
-[source, java]
+[source, yaml]
 ----
-#default api/applications
-spring.batch.lightmin.server.api=api/application
+spring:
+  batch:
+    lightmin:
+      server:
+        #default api/applications
+        api: api/application
 ----
 
 ==== Registration Period
 
 The _period_ is the time in millis, the client tries to register at the servers.
 
-[source, java]
+[source, yaml]
 ----
-#default 10000
-spring.batch.lightmin.server.period=100
+spring:
+  batch:
+    lightmin:
+      server:
+        #default 10000
+        period: 100
 ----
 
 ==== Credentials
@@ -40,87 +52,126 @@ spring.batch.lightmin.server.period=100
 If the client needs credentials to access the server, _username_ and _password_
  can be set via properties.
 
-[source, java]
+[source, yaml]
 ----
-spring.batch.lightmin.server.username=username
+spring:
+  batch:
+    lightmin:
+      server:
+        username: username
 ----
 
-[source, java]
+[source, yaml]
 ----
-spring.batch.lightmin.server.password=password
+spring:
+  batch:
+    lightmin:
+      server:
+        password: password
 ----
 
 ==== Auto Registration
 
 If _auto-registration_ is set to true, the client tries to register itself automatically.
 
-[source, java]
+[source, yaml]
 ----
-#default true
-spring.batch.lightmin.server.auto-registration=true
+spring:
+  batch:
+    lightmin:
+      server:
+        #default true
+        auto-registration: true
 ----
 
 ==== Auto De-Registration
 
 If _auto-deregistration_ is set to true, the client calls the server for de-registration before the shutdown.
 
-[source, java]
+[source, yaml]
 ----
-#default false
-spring.batch.lightmin.server.auto-deregistration=false
+spring:
+  batch:
+    lightmin:
+      server:
+        #default false
+        auto-deregistration: false
 ----
 
 ==== Register Once
 
 If _register-once_ is set to true, the client will register itself only at one server.
 
-[source, java]
+[source, yaml]
 ----
-#default true
-spring.batch.lightmin.server.auto-register-once=true
+spring:
+  batch:
+    lightmin:
+      server:
+        #default true
+        auto-register-once: true
 ----
 
 ==== Service Url
 
 The _service-url_ is the url of client.
 
-[source, java]
+[source, yaml]
 ----
-spring.batch.lightmin.client.service-url=http://localhost:8080/my-app
+spring:
+  batch:
+    lightmin:
+      client.service-url: http://localhost:8080/my-app
 ----
 
 ==== Management Url
 
 The _management-url_ is the management url of the client.
 
-[source, java]
+[source, yaml]
 ----
-spring.batch.lightmin.client.management-url=http://localhost:8080/management
+spring:
+  batch:
+    lightmin:
+      client:
+        management-url: http://localhost:8080/management
 ----
 
 ==== Health Url
 
 The _management-url_ is the health url of the client, it is used by the server to check the status.
 
-[source, java]
+[source, yaml]
 ----
-spring.batch.lightmin.client.health-url=http://localhost:8080/management/health
+spring:
+  batch:
+    lightmin:
+      client:
+        health-url: http://localhost:8080/management/health
 ----
 
 ==== Server Port
 
 The _server-port_ is the application port.
 
-[source, java]
+[source, yaml]
 ----
-spring.batch.lightmin.client.server-port=8080
+spring:
+  batch:
+    lightmin:
+      client:
+        server-port: 8080
 ----
 
 ==== Management Port
 
 The _server-port_ is the application management port.
 
-[source, java]
+[source, yaml]
 ----
-spring.batch.lightmin.client.management-port=8081
+spring:
+  batch:
+    lightmin:
+      client:
+        management-port: 8081
 ----

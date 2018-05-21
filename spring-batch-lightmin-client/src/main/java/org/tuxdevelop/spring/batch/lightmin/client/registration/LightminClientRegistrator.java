@@ -7,9 +7,11 @@ import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminProperties;
+import org.tuxdevelop.spring.batch.lightmin.client.server.LightminServerLocator;
 
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -19,30 +21,39 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class LightminClientRegistrator {
 
-    private static HttpHeaders HTTP_HEADERS = createHttpHeaders();
+    private static final HttpHeaders HTTP_HEADERS = createHttpHeaders();
 
     private final AtomicReference<String> registeredId = new AtomicReference<>();
 
-    private LightminClientProperties lightminClientProperties;
-    private LightminProperties lightminProperties;
-    private RestTemplate restTemplate;
-    private JobRegistry jobRegistry;
+    private final LightminClientProperties lightminClientProperties;
+    private final LightminProperties lightminProperties;
+    private final RestTemplate restTemplate;
+    private final JobRegistry jobRegistry;
+    private final LightminServerLocator lightminServerLocator;
 
     public LightminClientRegistrator(final LightminClientProperties lightminClientProperties,
                                      final LightminProperties lightminProperties,
                                      final RestTemplate restTemplate,
-                                     final JobRegistry jobRegistry) {
+                                     final JobRegistry jobRegistry, final LightminServerLocator lightminServerLocator) {
         this.lightminClientProperties = lightminClientProperties;
         this.lightminProperties = lightminProperties;
         this.restTemplate = restTemplate;
         this.jobRegistry = jobRegistry;
+        this.lightminServerLocator = lightminServerLocator;
     }
 
 
     public Boolean register() {
         Boolean isRegistrationSuccessful = Boolean.FALSE;
-        final LightminClientApplication lightminClientApplication = LightminClientApplication.createApplication(new LinkedList<>(this.jobRegistry.getJobNames()), this.lightminClientProperties);
-        for (final String lightminUrl : this.lightminProperties.getLightminUrl()) {
+
+        final LightminClientApplication lightminClientApplication =
+                LightminClientApplication
+                        .createApplication(
+                                new LinkedList<>(this.jobRegistry.getJobNames()),
+                                this.lightminClientProperties);
+
+        final List<String> serverUrls = this.lightminServerLocator.getRemoteUrls();
+        for (final String lightminUrl : serverUrls) {
             try {
                 final ResponseEntity<LightminClientApplication> response
                         = this.restTemplate.postForEntity(lightminUrl, new HttpEntity<>(lightminClientApplication, HTTP_HEADERS), LightminClientApplication.class);
@@ -71,7 +82,8 @@ public class LightminClientRegistrator {
     public void deregister() {
         final String id = this.registeredId.get();
         if (id != null) {
-            for (final String lightminUrl : this.lightminProperties.getLightminUrl()) {
+            final List<String> serverUrls = this.lightminServerLocator.getRemoteUrls();
+            for (final String lightminUrl : serverUrls) {
                 try {
                     this.restTemplate.delete(lightminUrl + "/" + id);
                     this.registeredId.compareAndSet(id, null);
