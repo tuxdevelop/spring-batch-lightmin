@@ -10,53 +10,39 @@ import java.util.*;
 @Slf4j
 public class MapJobExecutionEventRepository implements JobExecutionEventRepository {
 
-    private final Map<ExitStatus, Set<JobExecutionEventInfo>> store;
-    private final Integer limit;
+    private final Map<Long, JobExecutionEventInfo> store;
 
     public MapJobExecutionEventRepository(final Integer limit) {
-        this.store = new HashMap<>();
-        this.limit = limit;
+        this.store = Collections.synchronizedMap(new LimitedLinkedHashMap(limit));
     }
 
     @Override
     public void save(final JobExecutionEventInfo jobExecutionEventInfo) {
-        final ExitStatus exitStatus = jobExecutionEventInfo.getExitStatus();
-        if (this.store.containsKey(exitStatus)) {
-            log.debug("JobExecutionEventInfo set for exit status {} is already present", exitStatus);
-        } else {
-            final Set<JobExecutionEventInfo> jobExecutionEventInfos = this.createJobExecutionEventInfoSet();
-            this.store.put(exitStatus, jobExecutionEventInfos);
-        }
-        this.store.get(exitStatus).add(jobExecutionEventInfo);
+        this.store.put(jobExecutionEventInfo.getJobExecutionId(), jobExecutionEventInfo);
     }
 
     @Override
     public List<JobExecutionEventInfo> findAll(final int start, final int count) {
-        final List<JobExecutionEventInfo> result = new ArrayList<>();
-        for (final Set<JobExecutionEventInfo> jobExecutionEventInfos : this.store.values()) {
-            result.addAll(new ArrayList<>(jobExecutionEventInfos));
-        }
+        final List<JobExecutionEventInfo> result = new ArrayList<>(this.store.values());
         this.sortByStartDate(result);
         return this.subset(result, start, count);
     }
 
     @Override
     public List<JobExecutionEventInfo> finalByExitStatus(final ExitStatus exitStatus, final int start, final int count) {
-        final Set<JobExecutionEventInfo> jobExecutionEventInfos = this.store.getOrDefault(exitStatus, new HashSet<>());
-        final ArrayList<JobExecutionEventInfo> result = new ArrayList<>(jobExecutionEventInfos);
+        final List<JobExecutionEventInfo> result = this.filterByExitStatus(exitStatus);
         this.sortByStartDate(result);
         return this.subset(result, start, count);
     }
 
     @Override
     public int getTotalCount() {
-        int count = 0;
+        final int count;
         if (!this.store.values().isEmpty()) {
-            for (final Set<JobExecutionEventInfo> jobExecutionEventInfos : this.store.values()) {
-                count += jobExecutionEventInfos.size();
-            }
+            count = this.store.size();
         } else {
             log.debug("Empty JobExecutionEventInfo store, nothing todo");
+            count = 0;
         }
         return count;
     }
@@ -67,15 +53,6 @@ public class MapJobExecutionEventRepository implements JobExecutionEventReposito
                 .compareTo(jobExecutionEventInfo.getStartDate())));
     }
 
-    private Set<JobExecutionEventInfo> createJobExecutionEventInfoSet() {
-        return Collections.newSetFromMap(new LinkedHashMap<JobExecutionEventInfo, Boolean>() {
-            @Override
-            protected boolean removeEldestEntry(final Map.Entry<JobExecutionEventInfo, Boolean> eldest) {
-                return this.size() > MapJobExecutionEventRepository.this.limit;
-            }
-        });
-    }
-
     private List<JobExecutionEventInfo> subset(
             final List<JobExecutionEventInfo> jobExecutionEventInfos,
             final int start,
@@ -84,5 +61,31 @@ public class MapJobExecutionEventRepository implements JobExecutionEventReposito
         final int startIndex = Math.min(start, jobExecutionEventInfos.size());
         final int endIndex = Math.min(end, jobExecutionEventInfos.size());
         return jobExecutionEventInfos.subList(startIndex, endIndex);
+    }
+
+    private List<JobExecutionEventInfo> filterByExitStatus(final ExitStatus exitStatus) {
+        final List<JobExecutionEventInfo> jobExecutionEventInfos = new ArrayList<>();
+        for (final JobExecutionEventInfo jobExecutionEventInfo : this.store.values()) {
+            if (jobExecutionEventInfo.getExitStatus().getExitCode().equals(exitStatus.getExitCode())) {
+                jobExecutionEventInfos.add(jobExecutionEventInfo);
+            } else {
+                log.debug("skipping to add, ExitStatus does not match");
+            }
+        }
+        return jobExecutionEventInfos;
+    }
+
+    class LimitedLinkedHashMap extends LinkedHashMap<Long, JobExecutionEventInfo> {
+
+        private final Integer limit;
+
+        LimitedLinkedHashMap(final Integer limit) {
+            this.limit = limit;
+        }
+
+        @Override
+        public boolean removeEldestEntry(final Map.Entry eldest) {
+            return this.limit < this.size();
+        }
     }
 }
