@@ -32,8 +32,11 @@ public class JobExecutionEventController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<JobExecutionEventInfo>> getAll() {
-        final List<JobExecutionEventInfo> jobExecutionEventInfos = this.eventService.getAllEvents();
+    public ResponseEntity<List<JobExecutionEventInfo>> getAll(
+            @RequestParam("start-index") final int startIndex,
+            @RequestParam("count") final int count) {
+        final List<JobExecutionEventInfo> jobExecutionEventInfos =
+                this.eventService.getAllEvents(startIndex, count);
         return ResponseEntity.ok(jobExecutionEventInfos);
     }
 

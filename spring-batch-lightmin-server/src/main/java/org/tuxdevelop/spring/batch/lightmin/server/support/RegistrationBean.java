@@ -4,14 +4,17 @@ package org.tuxdevelop.spring.batch.lightmin.server.support;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.util.StringUtils;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplicationStatus;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 import org.tuxdevelop.spring.batch.lightmin.server.event.LightminClientApplicationDeleteRegistrationEvent;
 import org.tuxdevelop.spring.batch.lightmin.server.event.LightminClientApplicationRegisteredEvent;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.support.validator.LightminApplicationValidator;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * @author Marcel Becker
@@ -41,16 +44,16 @@ public class RegistrationBean implements ApplicationEventPublisherAware {
         if (lightminClientApplication.getLightminClientApplicationStatus() != null) {
             lightminClientApplicationStatus = lightminClientApplication.getLightminClientApplicationStatus();
         } else {
-            lightminClientApplicationStatus = getExistingStatusInfo(applicationId);
+            lightminClientApplicationStatus = this.getExistingStatusInfo(applicationId);
         }
         lightminClientApplication.setId(applicationId);
         lightminClientApplication.setLightminClientApplicationStatus(lightminClientApplicationStatus);
 
-        final LightminClientApplication savedLightminClientApplication = lightminApplicationRepository.save(lightminClientApplication);
+        final LightminClientApplication savedLightminClientApplication = this.lightminApplicationRepository.save(lightminClientApplication);
 
         if (savedLightminClientApplication == null) {
             log.info("New LightminClientApplication {} registered ", lightminClientApplication);
-            applicationEventPublisher.publishEvent(new LightminClientApplicationRegisteredEvent(lightminClientApplication));
+            this.applicationEventPublisher.publishEvent(new LightminClientApplicationRegisteredEvent(lightminClientApplication));
         } else {
             if (lightminClientApplication.getId().equals(savedLightminClientApplication.getId())) {
                 log.debug("LightminClientApplication {} refreshed", lightminClientApplication);
@@ -63,28 +66,52 @@ public class RegistrationBean implements ApplicationEventPublisherAware {
     }
 
     public LightminClientApplication deleteRegistration(final String applicationId) {
-        final LightminClientApplication deletedLightminClientApplication = lightminApplicationRepository.delete(applicationId);
+        final LightminClientApplication deletedLightminClientApplication = this.lightminApplicationRepository.delete(applicationId);
         if (deletedLightminClientApplication != null) {
             log.info("Deleted LightminClientApplication Registration {}", deletedLightminClientApplication);
-            applicationEventPublisher.publishEvent(new LightminClientApplicationDeleteRegistrationEvent(deletedLightminClientApplication));
+            this.applicationEventPublisher.publishEvent(new LightminClientApplicationDeleteRegistrationEvent(deletedLightminClientApplication));
         }
         return deletedLightminClientApplication;
     }
 
     public LightminClientApplication get(final String applicationId) {
-        return lightminApplicationRepository.find(applicationId);
+        return this.lightminApplicationRepository.find(applicationId);
     }
 
     public Collection<LightminClientApplication> getAll() {
-        return lightminApplicationRepository.findAll();
+        return this.lightminApplicationRepository.findAll();
+    }
+
+    public String getIdByApplicationName(final String applicationName) {
+        final Optional<LightminClientApplication> lightminClientApplication;
+        if (StringUtils.hasText(applicationName)) {
+            final Collection<LightminClientApplication> applications = this.getAll();
+            if (applications != null && !applicationName.isEmpty()) {
+                lightminClientApplication = applications
+                        .stream()
+                        .filter(a -> applicationName.equals(a.getName()))
+                        .findFirst();
+            } else {
+                lightminClientApplication = Optional.empty();
+            }
+        } else {
+            throw new SpringBatchLightminApplicationException("Could not find application id for null application name");
+        }
+        final String id;
+        if (lightminClientApplication.isPresent()) {
+            id = lightminClientApplication.get().getId();
+        } else {
+            throw new SpringBatchLightminApplicationException("Could not find application id for applicationName " + applicationName);
+        }
+        return id;
     }
 
     public void clear() {
-        lightminApplicationRepository.clear();
+        this.lightminApplicationRepository.clear();
     }
 
     private LightminClientApplicationStatus getExistingStatusInfo(final String applicationId) {
-        final LightminClientApplication lightminClientApplication = get(applicationId);
+        final LightminClientApplication lightminClientApplication = this.get(applicationId);
         if (lightminClientApplication != null) {
             return lightminClientApplication.getLightminClientApplicationStatus();
         }

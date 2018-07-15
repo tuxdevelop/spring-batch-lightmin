@@ -13,7 +13,9 @@ public interface JobExecutionEventRepository {
 
     void save(final JobExecutionEventInfo jobExecutionEventInfo);
 
-    List<JobExecutionEventInfo> findAll();
+    List<JobExecutionEventInfo> findAll(int start, int count);
 
-    List<JobExecutionEventInfo> finalByExitStatus(final ExitStatus exitStatus);
+    List<JobExecutionEventInfo> finalByExitStatus(final ExitStatus exitStatus, int start, int count);
+
+    int getTotalCount();
 }

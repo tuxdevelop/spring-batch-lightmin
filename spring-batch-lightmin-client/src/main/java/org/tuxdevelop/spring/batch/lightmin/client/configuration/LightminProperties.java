@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class LightminProperties {
 
     private String[] url;
-    private String apiPath = "api/applications";
+    private String apiApplicationsPath = "api/applications";
     private Long period = 10000L;
     private String username;
     private String password;
@@ -18,11 +18,8 @@ public class LightminProperties {
 
     public String[] getLightminUrl() {
         final String[] adminUrls;
-        if (url != null) {
-            adminUrls = url.clone();
-            for (int i = 0; i < adminUrls.length; i++) {
-                adminUrls[i] += "/" + apiPath;
-            }
+        if (this.url != null) {
+            adminUrls = this.url.clone();
         } else {
             adminUrls = new String[]{};
         }

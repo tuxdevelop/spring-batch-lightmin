@@ -12,8 +12,14 @@ import org.tuxdevelop.spring.batch.lightmin.server.web.*;
  * @since 0.1
  */
 @Configuration
-@Import(value = {IndexController.class, JobConfigurationController.class, JobController.class,
-        JobLauncherController.class, StepController.class, ApplicationController.class})
+@Import(value = {
+        IndexController.class,
+        JobConfigurationController.class,
+        JobController.class,
+        JobLauncherController.class,
+        StepController.class,
+        ApplicationController.class,
+        JobEventController.class})
 public class SpringBatchLightminWebConfiguration {
 
     @Bean
@@ -42,6 +48,7 @@ public class SpringBatchLightminWebConfiguration {
                 viewControllerRegistry.addViewController("/jobLauncher").setViewName("jobLauncher");
                 viewControllerRegistry.addViewController("/application").setViewName("application");
                 viewControllerRegistry.addViewController("/about").setViewName("about");
+                viewControllerRegistry.addViewController("/jobExecutionEvents").setViewName("jobExecutionEvents");
             }
         };
     }

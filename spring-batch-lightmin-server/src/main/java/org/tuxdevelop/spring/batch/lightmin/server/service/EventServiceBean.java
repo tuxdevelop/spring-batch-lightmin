@@ -24,12 +24,20 @@ public class EventServiceBean implements EventService {
     }
 
     @Override
-    public List<JobExecutionEventInfo> getAllEvents() {
-        return this.jobExecutionEventRepository.findAll();
+    public List<JobExecutionEventInfo> getAllEvents(final int start, final int count) {
+        return this.jobExecutionEventRepository.findAll(start, count);
     }
 
     @Override
-    public List<JobExecutionEventInfo> getAllEventsByExitStatus(final ExitStatus exitStatus) {
-        return this.jobExecutionEventRepository.finalByExitStatus(exitStatus);
+    public List<JobExecutionEventInfo> getAllEventsByExitStatus(
+            final ExitStatus exitStatus,
+            final int start,
+            final int count) {
+        return this.jobExecutionEventRepository.finalByExitStatus(exitStatus, start, count);
+    }
+
+    @Override
+    public int getJobExecutionEventInfoCount() {
+        return this.jobExecutionEventRepository.getTotalCount();
     }
 }

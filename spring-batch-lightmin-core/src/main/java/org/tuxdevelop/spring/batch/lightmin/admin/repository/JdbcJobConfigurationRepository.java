@@ -1,7 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.admin.repository;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -148,9 +147,9 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         assert this.jdbcTemplate != null;
     }
 
-	/*
+    /*
      * -------------------------- HELPER CLASSES AND METHODS -------------------
-	 */
+     */
 
     private Boolean checkJobConfigurationExists(final Long jobConfigurationId, final String applicationName) {
         return this.jobConfigurationDAO.getJobConfigurationIdCount(jobConfigurationId, applicationName) > 0;
@@ -653,12 +652,14 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         }
 
         @Data
-        @NoArgsConstructor
         private static class ValueRecord {
             private Long id;
             private Long jobConfigurationId;
             private String key;
             private Object value;
+
+            ValueRecord() {
+            }
 
             ValueRecord(final Long jobConfigurationId,
                         final String key,

@@ -21,43 +21,68 @@ public class MapJobExecutionEventRepository implements JobExecutionEventReposito
     @Override
     public void save(final JobExecutionEventInfo jobExecutionEventInfo) {
         final ExitStatus exitStatus = jobExecutionEventInfo.getExitStatus();
-        if (store.containsKey(exitStatus)) {
+        if (this.store.containsKey(exitStatus)) {
             log.debug("JobExecutionEventInfo set for exit status {} is already present", exitStatus);
         } else {
-            final Set<JobExecutionEventInfo> jobExecutionEventInfos = createJobExecutionEventInfoSet();
-            store.put(exitStatus, jobExecutionEventInfos);
+            final Set<JobExecutionEventInfo> jobExecutionEventInfos = this.createJobExecutionEventInfoSet();
+            this.store.put(exitStatus, jobExecutionEventInfos);
         }
-        store.get(exitStatus).add(jobExecutionEventInfo);
+        this.store.get(exitStatus).add(jobExecutionEventInfo);
     }
 
     @Override
-    public List<JobExecutionEventInfo> findAll() {
+    public List<JobExecutionEventInfo> findAll(final int start, final int count) {
         final List<JobExecutionEventInfo> result = new ArrayList<>();
-        for (final Set<JobExecutionEventInfo> jobExecutionEventInfos : store.values()) {
+        for (final Set<JobExecutionEventInfo> jobExecutionEventInfos : this.store.values()) {
             result.addAll(new ArrayList<>(jobExecutionEventInfos));
         }
-        sortByStartDate(result);
-        return result;
+        this.sortByStartDate(result);
+        return this.subset(result, start, count);
     }
 
     @Override
-    public List<JobExecutionEventInfo> finalByExitStatus(final ExitStatus exitStatus) {
-        final Set<JobExecutionEventInfo> jobExecutionEventInfos = store.getOrDefault(exitStatus, new HashSet<>());
-        return new ArrayList<>(jobExecutionEventInfos);
+    public List<JobExecutionEventInfo> finalByExitStatus(final ExitStatus exitStatus, final int start, final int count) {
+        final Set<JobExecutionEventInfo> jobExecutionEventInfos = this.store.getOrDefault(exitStatus, new HashSet<>());
+        final ArrayList<JobExecutionEventInfo> result = new ArrayList<>(jobExecutionEventInfos);
+        this.sortByStartDate(result);
+        return this.subset(result, start, count);
+    }
+
+    @Override
+    public int getTotalCount() {
+        int count = 0;
+        if (!this.store.values().isEmpty()) {
+            for (final Set<JobExecutionEventInfo> jobExecutionEventInfos : this.store.values()) {
+                count += jobExecutionEventInfos.size();
+            }
+        } else {
+            log.debug("Empty JobExecutionEventInfo store, nothing todo");
+        }
+        return count;
     }
 
     private void sortByStartDate(final List<JobExecutionEventInfo> jobExecutionEventInfos) {
         jobExecutionEventInfos.sort((jobExecutionEventInfo, jobExecutionEventInfoCompare)
-                -> (jobExecutionEventInfo.getStartDate()
-                .compareTo(jobExecutionEventInfoCompare.getStartDate())));
+                -> (jobExecutionEventInfoCompare.getStartDate()
+                .compareTo(jobExecutionEventInfo.getStartDate())));
     }
 
     private Set<JobExecutionEventInfo> createJobExecutionEventInfoSet() {
         return Collections.newSetFromMap(new LinkedHashMap<JobExecutionEventInfo, Boolean>() {
             @Override
             protected boolean removeEldestEntry(final Map.Entry<JobExecutionEventInfo, Boolean> eldest) {
-                return size() > limit;
+                return this.size() > MapJobExecutionEventRepository.this.limit;
             }
         });
+    }
+
+    private List<JobExecutionEventInfo> subset(
+            final List<JobExecutionEventInfo> jobExecutionEventInfos,
+            final int start,
+            final int count) {
+        final int end = count > 0 ? start + count : jobExecutionEventInfos.size();
+        final int startIndex = Math.min(start, jobExecutionEventInfos.size());
+        final int endIndex = Math.min(end, jobExecutionEventInfos.size());
+        return jobExecutionEventInfos.subList(startIndex, endIndex);
     }
 }

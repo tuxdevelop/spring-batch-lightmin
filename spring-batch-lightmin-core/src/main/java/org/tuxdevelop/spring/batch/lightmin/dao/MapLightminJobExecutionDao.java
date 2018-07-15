@@ -20,8 +20,8 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
     @Override
     public List<JobExecution> findJobExecutions(final JobInstance job, final int start, final int count) {
         final ArrayList<JobExecution> result = new ArrayList<>(this.jobExplorer.getJobExecutions(job));
-        sortDescending(result);
-        return subset(result, start, count);
+        this.sortDescending(result);
+        return this.subset(result, start, count);
     }
 
     @Override
@@ -45,8 +45,8 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
             final List<JobExecution> jobExecutionsByInstance = this.jobExplorer.getJobExecutions(jobInstance);
             jobExecutions.addAll(jobExecutionsByInstance);
         }
-        sortDescending(jobExecutions);
-        return subset(jobExecutions, start, count);
+        this.sortDescending(jobExecutions);
+        return this.subset(jobExecutions, start, count);
     }
 
     @Override
@@ -56,15 +56,15 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
             final List<String> jobNames = this.jobExplorer.getJobNames();
             allJobExecutions = new ArrayList<>();
             for (final String jobNameInner : jobNames) {
-                final List<JobExecution> jobExecutionsInner = getJobExecutions(jobNameInner, 0, -1);
+                final List<JobExecution> jobExecutionsInner = this.getJobExecutions(jobNameInner, 0, -1);
                 allJobExecutions.addAll(jobExecutionsInner);
             }
         } else {
-            allJobExecutions = getJobExecutions(jobName, 0, -1);
+            allJobExecutions = this.getJobExecutions(jobName, 0, -1);
         }
-        final List<JobExecution> filteredJobExecutions = applyQueryParameter(allJobExecutions, queryParameter);
-        sortDescending(filteredJobExecutions);
-        return subset(filteredJobExecutions, 0, size);
+        final List<JobExecution> filteredJobExecutions = this.applyQueryParameter(allJobExecutions, queryParameter);
+        this.sortDescending(filteredJobExecutions);
+        return this.subset(filteredJobExecutions, 0, size);
     }
 
     private void sortDescending(final List<JobExecution> result) {
@@ -72,16 +72,16 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
     }
 
     private List<JobExecution> subset(final List<JobExecution> jobExecutions, final int start, final int count) {
-        final int end = count > 0 ? count : jobExecutions.size();
+        final int end = count > 0 ? start + count : jobExecutions.size();
         final int startIndex = Math.min(start, jobExecutions.size());
         final int endIndex = Math.min(end, jobExecutions.size());
         return jobExecutions.subList(startIndex, endIndex);
     }
 
     private List<JobExecution> applyQueryParameter(final List<JobExecution> allJobExecution, final Map<String, Object> queryParameter) {
-        final List<JobExecution> filteredByExitStatus = applyExitStatusQueryParameter(allJobExecution, queryParameter);
-        final List<JobExecution> filteredByStartDate = applyStartDateQueryParameter(filteredByExitStatus, queryParameter);
-        return applyEndDateQueryParameter(filteredByStartDate, queryParameter);
+        final List<JobExecution> filteredByExitStatus = this.applyExitStatusQueryParameter(allJobExecution, queryParameter);
+        final List<JobExecution> filteredByStartDate = this.applyStartDateQueryParameter(filteredByExitStatus, queryParameter);
+        return this.applyEndDateQueryParameter(filteredByStartDate, queryParameter);
     }
 
     private List<JobExecution> applyExitStatusQueryParameter(final List<JobExecution> allJobExecutions, final Map<String, Object> queryParamater) {

@@ -13,7 +13,9 @@ public interface EventService {
 
     void handleJobExecutionEvent(final JobExecutionEventInfo jobExecutionEventInfo);
 
-    List<JobExecutionEventInfo> getAllEvents();
+    List<JobExecutionEventInfo> getAllEvents(int start, int count);
 
-    List<JobExecutionEventInfo> getAllEventsByExitStatus(final ExitStatus exitStatus);
+    List<JobExecutionEventInfo> getAllEventsByExitStatus(final ExitStatus exitStatus, int start, int count);
+
+    int getJobExecutionEventInfoCount();
 }

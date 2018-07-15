@@ -55,8 +55,11 @@ public class LightminClientRegistrator {
         final List<String> serverUrls = this.lightminServerLocator.getRemoteUrls();
         for (final String lightminUrl : serverUrls) {
             try {
-                final ResponseEntity<LightminClientApplication> response
-                        = this.restTemplate.postForEntity(lightminUrl, new HttpEntity<>(lightminClientApplication, HTTP_HEADERS), LightminClientApplication.class);
+                final String lightminAppplicationsUrl = lightminUrl + this.lightminProperties.getApiApplicationsPath();
+                final ResponseEntity<LightminClientApplication> response = this.restTemplate.postForEntity(
+                        lightminAppplicationsUrl,
+                        new HttpEntity<>(lightminClientApplication, HTTP_HEADERS),
+                        LightminClientApplication.class);
                 if (response.getStatusCode().equals(HttpStatus.CREATED)) {
                     if (this.registeredId.compareAndSet(null, response.getBody().getId())) {
                         log.info("Application registered itself as {}", response.getBody());
