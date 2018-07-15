@@ -47,6 +47,9 @@ public class LightminClientProperties {
     @Getter
     @Setter
     private Map<String, String> externalLinks = new HashMap<>();
+    @Getter
+    @Setter
+    private String hostname;
 
     @Getter
     private final String name;
@@ -84,15 +87,18 @@ public class LightminClientProperties {
         }
 
         if (this.preferIp) {
-            InetAddress address = this.managementServerProperties.getAddress();
+            final InetAddress address = this.serverProperties.getAddress();
+            final String hostAddress;
             if (address == null) {
-                address = getHostAddress();
+                hostAddress = determineHost();
+            } else {
+                hostAddress = address.getHostAddress();
             }
-            return append(append(createLocalUri(address.getHostAddress(), this.managementPort),
+            return append(append(createLocalUri(hostAddress, this.managementPort),
                     this.serverProperties.getContextPath()), this.managementServerProperties.getContextPath());
 
         }
-        return append(createLocalUri(getHostAddress().getCanonicalHostName(), this.managementPort),
+        return append(createLocalUri(determineHost(), this.managementPort),
                 this.managementServerProperties.getContextPath());
     }
 
@@ -116,15 +122,18 @@ public class LightminClientProperties {
         }
 
         if (this.preferIp) {
-            InetAddress address = this.serverProperties.getAddress();
+            final InetAddress address = this.serverProperties.getAddress();
+            final String hostAddress;
             if (address == null) {
-                address = getHostAddress();
+                hostAddress = determineHost();
+            } else {
+                hostAddress = address.getHostAddress();
             }
-            return append(append(createLocalUri(address.getHostAddress(), this.serverPort),
+            return append(append(createLocalUri(hostAddress, this.serverPort),
                     this.serverProperties.getServletPath()), this.serverProperties.getContextPath());
 
         }
-        return append(append(createLocalUri(getHostAddress().getCanonicalHostName(), this.serverPort),
+        return append(append(createLocalUri(determineHost(), this.serverPort),
                 this.serverProperties.getServletPath()), this.serverProperties.getContextPath());
     }
 
@@ -150,6 +159,17 @@ public class LightminClientProperties {
         } catch (final UnknownHostException ex) {
             throw new IllegalArgumentException(ex.getMessage(), ex);
         }
+    }
+
+    private String determineHost() {
+        final String host;
+        if (StringUtils.hasText(this.hostname)) {
+            host = this.hostname;
+        } else {
+            final InetAddress inetAddress = getHostAddress();
+            host = inetAddress.getCanonicalHostName();
+        }
+        return host;
     }
 
 }

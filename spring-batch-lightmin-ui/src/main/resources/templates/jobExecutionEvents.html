@@ -35,7 +35,6 @@
                     <td th:class="${jobExecutionEvent.exitStatus.exitCode} == 'COMPLETED' ? status-UP : status-DOWN"
                         th:text="${jobExecutionEvent.exitStatus.exitCode}"/>
                 </tr>
-                status-UP
                 </tbody>
             </table>
             <span class="text-left" th:if="${pageModel.hasPrevious}">
