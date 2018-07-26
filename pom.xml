@@ -60,6 +60,7 @@
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
         <maven-failsaife-plugin.version>2.19.1</maven-failsaife-plugin.version>
+        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
         <asciidoctor.version>1.5.2</asciidoctor.version>
         <!-- jacoco -->
         <jacoco.skip>false</jacoco.skip>
@@ -196,6 +197,11 @@
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven-deploy-plugin.version}</version>
             </plugin>
             <!-- surefire -->
             <plugin>
