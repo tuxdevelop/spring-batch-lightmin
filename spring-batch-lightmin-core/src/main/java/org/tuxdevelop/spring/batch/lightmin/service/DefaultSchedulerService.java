@@ -123,10 +123,16 @@ public class DefaultSchedulerService implements SchedulerService {
         assert this.jobRegistry != null;
     }
 
+    @Override
+    public JobLauncher createLobLauncher(TaskExecutorType taskExecutorType, JobRepository jobRepository) {
+        return ServiceUtil.createJobLauncher(taskExecutorType, this.jobRepository);
+    }
+
     private String registerScheduler(final JobConfiguration jobConfiguration, final Class<?> schedulerClass) {
         try {
             final Set<Object> constructorValues = new HashSet<>();
-            final JobLauncher jobLauncher = ServiceUtil.createJobLauncher(jobConfiguration.getJobSchedulerConfiguration().getTaskExecutorType(),
+            final JobLauncher jobLauncher = this.createLobLauncher(
+                    jobConfiguration.getJobSchedulerConfiguration().getTaskExecutorType(),
                     this.jobRepository);
             final Job job = this.jobRegistry.getJob(jobConfiguration.getJobName());
             final JobParameters jobParameters = ServiceUtil.mapToJobParameters(jobConfiguration.getJobParameters());
@@ -157,5 +163,4 @@ public class DefaultSchedulerService implements SchedulerService {
                                              final JobSchedulerType jobSchedulerType) {
         return jobName + jobSchedulerType.name() + id;
     }
-
 }

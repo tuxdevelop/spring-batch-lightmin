@@ -98,12 +98,23 @@ public class DefaultListenerService implements ListenerService, InitializingBean
         }
     }
 
+    @Override
+    public JobLauncher createLobLauncher(TaskExecutorType taskExecutorType, JobRepository jobRepository) {
+        return ServiceUtil.createJobLauncher(taskExecutorType, this.jobRepository);
+    }
+
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        assert this.beanRegistrar != null : "BeanRegistrar must not be null";
+    }
+
     private String registerFolderListener(final JobConfiguration jobConfiguration) {
         final String beanName;
         try {
             final ListenerConstructorWrapper listenerConstructorWrapper = new ListenerConstructorWrapper();
             final JobListenerConfiguration jobListenerConfiguration = jobConfiguration.getJobListenerConfiguration();
-            final JobLauncher jobLauncher = ServiceUtil.createJobLauncher(jobListenerConfiguration.getTaskExecutorType(), this.jobRepository);
+            final JobLauncher jobLauncher = this.createLobLauncher(jobListenerConfiguration.getTaskExecutorType(),jobRepository);
             final JobParameters jobParameters = ServiceUtil.mapToJobParameters(jobConfiguration.getJobParameters());
             final Job job = this.jobRegistry.getJob(jobConfiguration.getJobName());
             listenerConstructorWrapper.setJob(job);
@@ -132,8 +143,4 @@ public class DefaultListenerService implements ListenerService, InitializingBean
         return jobName + listenerType.name() + id;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        assert this.beanRegistrar != null : "BeanRegistrar must not be null";
-    }
 }

@@ -8,7 +8,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
  * @author Marcel Becker
  * @since 0.1
  */
-public interface SchedulerService extends InitializingBean {
+public interface SchedulerService extends JobLauncherService,InitializingBean {
 
     /**
      * Registers a {@link org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler} for a given

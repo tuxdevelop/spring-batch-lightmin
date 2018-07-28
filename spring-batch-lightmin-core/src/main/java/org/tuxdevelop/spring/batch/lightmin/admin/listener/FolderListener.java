@@ -25,7 +25,10 @@ import java.io.File;
 @Slf4j
 public class FolderListener extends AbstractListener implements Listener {
 
-    private static final String FILE_SOURCE_PARAMETER_NAME = "fileSource";
+    /**
+     * public for resusability in {@link org.springframework.batch.core.Job}
+     */
+    public static final String FILE_SOURCE_PARAMETER_NAME = "fileSource";
 
     private CompositeFileListFilter<File> fileFileListFilter;
     private JobLaunchingMessageHandler jobLaunchingMessageHandler;

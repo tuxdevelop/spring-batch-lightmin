@@ -81,13 +81,15 @@ public class CommonSpringBatchLightminConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(value = {SchedulerService.class})
     public SchedulerService schedulerService(final BeanRegistrar beanRegistrar,
                                              final JobRepository jobRepository,
-                                             final JobRegistry jobRegistry) throws Exception {
+                                             final JobRegistry jobRegistry) {
         return new DefaultSchedulerService(beanRegistrar, jobRepository, jobRegistry);
     }
 
     @Bean
+    @ConditionalOnMissingBean(value = {ListenerService.class})
     public ListenerService listenerService(final BeanRegistrar beanRegistrar,
                                            final JobRegistry jobRegistry,
                                            final JobRepository jobRepository) {
@@ -95,14 +97,16 @@ public class CommonSpringBatchLightminConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(value = {AdminService.class})
     public AdminService adminService(final JobConfigurationRepository jobConfigurationRepository,
                                      final SchedulerService schedulerService,
                                      final ListenerService listenerService,
-                                     final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) throws Exception {
+                                     final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
         return new DefaultAdminService(jobConfigurationRepository, schedulerService, listenerService, springBatchLightminConfigurationProperties);
     }
 
     @Bean
+    @ConditionalOnMissingBean(value = {JobExecutionQueryService.class})
     public JobExecutionQueryService jobExecutionQueryService(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
         return new DefaultJobExecutionQueryService(defaultSpringBatchLightminConfigurator.getLightminJobExecutionDao());
     }
@@ -113,7 +117,7 @@ public class CommonSpringBatchLightminConfiguration {
     }
 
     @Bean
-    public JobBuilderFactory jobBuilderFactory(final JobRepository jobRepository) throws Exception {
+    public JobBuilderFactory jobBuilderFactory(final JobRepository jobRepository) {
         return new JobBuilderFactory(jobRepository);
     }
 
@@ -123,7 +127,7 @@ public class CommonSpringBatchLightminConfiguration {
                                                    final AdminService adminService,
                                                    final SchedulerService schedulerService,
                                                    final ListenerService listenerService,
-                                                   final JobExecutionListenerRegisterBean jobExecutionListenerRegisterBean) throws Exception {
+                                                   final JobExecutionListenerRegisterBean jobExecutionListenerRegisterBean) {
         return new JobCreationListener(applicationContext, jobRegistry, adminService, schedulerService, listenerService, jobExecutionListenerRegisterBean);
     }
 
@@ -143,12 +147,14 @@ public class CommonSpringBatchLightminConfiguration {
 
     @Bean
     @Qualifier("jobExecutionFinishedJobExecutionListener")
-    public JobExecutionListener jobExecutionFinishedJobExecutionListener(final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
+    public JobExecutionListener jobExecutionFinishedJobExecutionListener(
+            final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
         return new JobExecutionFinishedJobExecutionListener(springBatchLightminConfigurationProperties);
     }
 
     @Bean
-    public JobExecutionListenerRegisterBean jobExecutionListenerRegisterBean(@Qualifier("jobExecutionFinishedJobExecutionListener") final JobExecutionListener jobExecutionFinishedJobExecutionListener) {
+    public JobExecutionListenerRegisterBean jobExecutionListenerRegisterBean(
+            @Qualifier("jobExecutionFinishedJobExecutionListener") final JobExecutionListener jobExecutionFinishedJobExecutionListener) {
         return new JobExecutionListenerRegisterBean(jobExecutionFinishedJobExecutionListener);
     }
 
