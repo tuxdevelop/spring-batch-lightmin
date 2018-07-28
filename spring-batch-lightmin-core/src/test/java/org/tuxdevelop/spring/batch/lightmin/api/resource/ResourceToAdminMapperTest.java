@@ -7,11 +7,11 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
+import org.tuxdevelop.spring.batch.lightmin.util.ParameterParser;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -72,6 +72,34 @@ public class ResourceToAdminMapperTest {
         jobConfigurationsToMap.setJobConfigurations(jobConfigurations);
         final Collection<JobConfiguration> result = ResourceToAdminMapper.map(jobConfigurationsToMap);
         assertJobConfigurations(result, jobConfigurationsToMap);
+    }
+
+    /**
+     * Test for issue #23
+     */
+    @Test
+    public void testMapDateComparedToParameterParser(){
+
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ParameterParser.DATE_FORMAT_WITH_TIMESTAMP);
+        final Date now = new Date();
+        final JobParameter jobParameter = new JobParameter();
+        jobParameter.setParameter(simpleDateFormat.format(now));
+        jobParameter.setParameterType(ParameterType.DATE);
+
+        final Map<String, JobParameter> parameterMap = new HashMap<>();
+        parameterMap.put("date_parameter",jobParameter);
+
+        final JobParameters jobParameters = new JobParameters();
+        jobParameters.setParameters(parameterMap);
+
+        org.springframework.batch.core.JobParameters result = ResourceToAdminMapper.map(jobParameters);
+        assertThat(result).isNotNull();
+        assertThat(result.getParameters()).hasSize(1);
+
+        final Date resultDate = result.getDate("date_parameter");
+        final Date parserResult = ParameterParser.parseDate(simpleDateFormat.format(now));
+
+        assertThat(resultDate).isEqualTo(parserResult);
     }
 
     private void assertJobConfigurations(final Collection<JobConfiguration> jobConfigurationCollection, final JobConfigurations jobConfigurations) {
@@ -138,7 +166,7 @@ public class ResourceToAdminMapperTest {
 
     private void assertJobParameters(final Map<String, Object> jobParameterMap, final JobParameters jobParameters) {
         for (final Map.Entry<String, JobParameter> entry : jobParameters.getParameters().entrySet()) {
-            assertThat(jobParameterMap.containsKey(entry.getKey()));
+            assertThat(jobParameterMap.containsKey(entry.getKey())).isTrue();
             final Object expected = jobParameterMap.get(entry.getKey());
             final JobParameter jobParameter = entry.getValue();
             assertThat(jobParameter.getParameter()).isEqualTo(expected);
