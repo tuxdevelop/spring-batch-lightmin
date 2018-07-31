@@ -13,12 +13,13 @@ public class OnLightminClientApplicationRegisteredEventListener implements Appli
 
     private final ClientApplicationStatusUpdater clientApplicationStatusUpdater;
 
-    public OnLightminClientApplicationRegisteredEventListener(final ClientApplicationStatusUpdater clientApplicationStatusUpdater) {
+    public OnLightminClientApplicationRegisteredEventListener(
+            final ClientApplicationStatusUpdater clientApplicationStatusUpdater) {
         this.clientApplicationStatusUpdater = clientApplicationStatusUpdater;
     }
 
     @Override
     public void onApplicationEvent(final LightminClientApplicationRegisteredEvent event) {
-        clientApplicationStatusUpdater.updateStatus((LightminClientApplication) event.getSource());
+        this.clientApplicationStatusUpdater.updateStatus((LightminClientApplication) event.getSource());
     }
 }

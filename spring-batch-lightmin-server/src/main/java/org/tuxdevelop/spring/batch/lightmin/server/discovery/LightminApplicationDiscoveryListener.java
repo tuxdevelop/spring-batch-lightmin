@@ -32,35 +32,35 @@ public class LightminApplicationDiscoveryListener {
 
     @EventListener
     public void onInstanceRegistered(final InstanceRegisteredEvent<?> event) {
-        discover();
+        this.discover();
     }
 
     @EventListener
     public void onApplicationReady(final ApplicationReadyEvent event) {
-        discover();
+        this.discover();
     }
 
     @EventListener
     public void onParentHeartbeat(final ParentHeartbeatEvent event) {
-        discoverIfNeeded(event.getValue());
+        this.discoverIfNeeded(event.getValue());
     }
 
     @EventListener
     public void onHeartbeat(final HeartbeatEvent event) {
-        discoverIfNeeded(event.getValue());
+        this.discoverIfNeeded(event.getValue());
     }
 
     public void discover() {
         final List<String> serviceIds = this.discoveryClient.getServices();
         for (final String serviceId : serviceIds) {
             final List<ServiceInstance> serviceInstances = this.discoveryClient.getInstances(serviceId);
-            register(serviceInstances);
+            this.register(serviceInstances);
         }
     }
 
     private void discoverIfNeeded(final Object value) {
         if (this.heartbeatMonitor.update(value)) {
-            discover();
+            this.discover();
         }
     }
 
@@ -73,7 +73,7 @@ public class LightminApplicationDiscoveryListener {
     }
 
     private void register(final ServiceInstance serviceInstance) {
-        if (checkIsLightminInstance(serviceInstance)) {
+        if (this.checkIsLightminInstance(serviceInstance)) {
             try {
                 this.discoveryRegistrationBean.register(serviceInstance);
             } catch (final SpringBatchLightminApplicationException ex) {
@@ -84,7 +84,7 @@ public class LightminApplicationDiscoveryListener {
         }
     }
 
-    Boolean checkIsLightminInstance(final ServiceInstance serviceInstance) {
+    private Boolean checkIsLightminInstance(final ServiceInstance serviceInstance) {
         final Boolean result;
         final Map<String, String> metaData = serviceInstance.getMetadata();
         if (metaData.containsKey(MetaDataExtender.LIGHTMIN_CLIENT_META_DATA_KEY)) {

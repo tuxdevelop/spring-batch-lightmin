@@ -2,14 +2,16 @@ package org.tuxdevelop.spring.batch.lightmin.client.registration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.server.LightminServerLocator;
+import org.tuxdevelop.spring.batch.lightmin.util.RequestUtil;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,8 +22,6 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Slf4j
 public class LightminClientRegistrator {
-
-    private static final HttpHeaders HTTP_HEADERS = createHttpHeaders();
 
     private final AtomicReference<String> registeredId = new AtomicReference<>();
 
@@ -52,13 +52,16 @@ public class LightminClientRegistrator {
                                 new LinkedList<>(this.jobRegistry.getJobNames()),
                                 this.lightminClientProperties);
 
+        final HttpEntity<LightminClientApplication> entity =
+                RequestUtil.createApplicationJsonEntity(lightminClientApplication);
+
         final List<String> serverUrls = this.lightminServerLocator.getRemoteUrls();
         for (final String lightminUrl : serverUrls) {
             try {
                 final String lightminAppplicationsUrl = lightminUrl + this.lightminProperties.getApiApplicationsPath();
                 final ResponseEntity<LightminClientApplication> response = this.restTemplate.postForEntity(
                         lightminAppplicationsUrl,
-                        new HttpEntity<>(lightminClientApplication, HTTP_HEADERS),
+                        entity,
                         LightminClientApplication.class);
                 if (response.getStatusCode().equals(HttpStatus.CREATED)) {
                     if (this.registeredId.compareAndSet(null, response.getBody().getId())) {
@@ -100,13 +103,5 @@ public class LightminClientRegistrator {
             }
         }
     }
-
-    private static HttpHeaders createHttpHeaders() {
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        return HttpHeaders.readOnlyHttpHeaders(headers);
-    }
-
 
 }

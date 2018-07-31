@@ -27,7 +27,9 @@ public class OnApplicationReadyEventListener implements ApplicationListener<Cont
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
-        this.serverScheduledTaskRegistrar.addFixedRateTask(this.clientApplicationStatusUpdater::updateStatusForAllApplications, this.lightminServerProperties.getHeartbeatPeriod());
+        this.serverScheduledTaskRegistrar.addFixedRateTask(
+                this.clientApplicationStatusUpdater::updateStatusForAllApplications,
+                this.lightminServerProperties.getHeartbeatPeriod());
         this.serverScheduledTaskRegistrar.afterPropertiesSet();
     }
 }

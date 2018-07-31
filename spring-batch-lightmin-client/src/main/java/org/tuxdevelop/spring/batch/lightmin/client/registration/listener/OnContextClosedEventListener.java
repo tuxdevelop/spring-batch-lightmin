@@ -9,12 +9,13 @@ public class OnContextClosedEventListener implements ApplicationListener<Context
 
     private final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean;
 
-    public OnContextClosedEventListener(final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean) {
+    public OnContextClosedEventListener(
+            final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean) {
         this.registrationLightminClientApplicationBean = registrationLightminClientApplicationBean;
     }
 
     @Override
     public void onApplicationEvent(final ContextClosedEvent event) {
-        registrationLightminClientApplicationBean.stopRegisterTask();
+        this.registrationLightminClientApplicationBean.stopRegisterTask();
     }
 }

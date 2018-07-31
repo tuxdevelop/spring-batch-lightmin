@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.server.admin;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -9,6 +10,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.util.RequestUtil;
 import org.tuxdevelop.spring.batch.lightmin.util.ResponseUtil;
 
 import java.util.HashMap;
@@ -30,8 +32,11 @@ public class RemoteAdminServerService implements AdminServerService {
     }
 
     @Override
-    public void saveJobConfiguration(final JobConfiguration jobConfiguration, final LightminClientApplication lightminClientApplication) {
-        final ResponseEntity<Void> response = this.restTemplate.postForEntity(getClientUri(lightminClientApplication), jobConfiguration, Void.class);
+    public void saveJobConfiguration(final JobConfiguration jobConfiguration,
+                                     final LightminClientApplication lightminClientApplication) {
+        final HttpEntity<JobConfiguration> entity = RequestUtil.createApplicationJsonEntity(jobConfiguration);
+        final ResponseEntity<Void> response =
+                this.restTemplate.postForEntity(getClientUri(lightminClientApplication), entity, Void.class);
         if (!HttpStatus.CREATED.equals(response.getStatusCode())) {
             final String errorMessage = "ERROR - HTTP STATUS: " + response.getStatusCode();
             throw new SpringBatchLightminApplicationException(errorMessage);
@@ -39,13 +44,16 @@ public class RemoteAdminServerService implements AdminServerService {
     }
 
     @Override
-    public void updateJobConfiguration(final JobConfiguration jobConfiguration, final LightminClientApplication lightminClientApplication) {
-        this.restTemplate.put(getClientUri(lightminClientApplication), jobConfiguration);
+    public void updateJobConfiguration(final JobConfiguration jobConfiguration,
+                                       final LightminClientApplication lightminClientApplication) {
+        final HttpEntity<JobConfiguration> entity = RequestUtil.createApplicationJsonEntity(jobConfiguration);
+        this.restTemplate.put(getClientUri(lightminClientApplication), entity);
     }
 
     @Override
     public JobConfigurations getJobConfigurations(final LightminClientApplication lightminClientApplication) {
-        final ResponseEntity<JobConfigurations> response = this.restTemplate.getForEntity(getClientUri(lightminClientApplication), JobConfigurations.class);
+        final ResponseEntity<JobConfigurations> response =
+                this.restTemplate.getForEntity(getClientUri(lightminClientApplication), JobConfigurations.class);
         ResponseUtil.checkHttpOk(response);
         return response.getBody();
     }
@@ -65,30 +73,39 @@ public class RemoteAdminServerService implements AdminServerService {
     }
 
     @Override
-    public void deleteJobConfiguration(final Long jobConfigurationId, final LightminClientApplication lightminClientApplication) {
+    public void deleteJobConfiguration(final Long jobConfigurationId,
+                                       final LightminClientApplication lightminClientApplication) {
         final String uri = getClientUri(lightminClientApplication) + "/jobconfiguration/{jobconfigurationid}";
         this.restTemplate.delete(uri, jobConfigurationId);
     }
 
     @Override
-    public JobConfiguration getJobConfiguration(final Long jobConfigurationId, final LightminClientApplication lightminClientApplication) {
+    public JobConfiguration getJobConfiguration(final Long jobConfigurationId,
+                                                final LightminClientApplication lightminClientApplication) {
         final String uri = getClientUri(lightminClientApplication);
-        final ResponseEntity<JobConfiguration> response = this.restTemplate.getForEntity(uri + "/jobconfiguration/" + jobConfigurationId, JobConfiguration.class);
+        final ResponseEntity<JobConfiguration> response =
+                this.restTemplate.getForEntity(
+                        uri + "/jobconfiguration/" + jobConfigurationId,
+                        JobConfiguration.class);
         ResponseUtil.checkHttpOk(response);
         return response.getBody();
     }
 
     @Override
-    public void startJobConfigurationScheduler(final Long jobConfigurationId, final LightminClientApplication lightminClientApplication) {
+    public void startJobConfigurationScheduler(final Long jobConfigurationId,
+                                               final LightminClientApplication lightminClientApplication) {
         final String uri = getClientUri(lightminClientApplication);
-        final ResponseEntity<Void> response = this.restTemplate.getForEntity(uri + "/" + jobConfigurationId + "/start", Void.class);
+        final ResponseEntity<Void> response =
+                this.restTemplate.getForEntity(uri + "/" + jobConfigurationId + "/start", Void.class);
         ResponseUtil.checkHttpOk(response);
     }
 
     @Override
-    public void stopJobConfigurationScheduler(final Long jobConfigurationId, final LightminClientApplication lightminClientApplication) {
+    public void stopJobConfigurationScheduler(final Long jobConfigurationId,
+                                              final LightminClientApplication lightminClientApplication) {
         final String uri = getClientUri(lightminClientApplication);
-        final ResponseEntity<Void> response = this.restTemplate.getForEntity(uri + "/" + jobConfigurationId + "/stop", Void.class);
+        final ResponseEntity<Void> response =
+                this.restTemplate.getForEntity(uri + "/" + jobConfigurationId + "/stop", Void.class);
         ResponseUtil.checkHttpOk(response);
     }
 

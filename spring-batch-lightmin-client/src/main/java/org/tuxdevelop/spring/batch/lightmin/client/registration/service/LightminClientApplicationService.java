@@ -15,12 +15,14 @@ public class LightminClientApplicationService {
     private final JobRegistry jobRegistry;
     private final LightminClientProperties lightminClientProperties;
 
-    public LightminClientApplicationService(final JobRegistry jobRegistry, final LightminClientProperties lightminClientProperties) {
+    public LightminClientApplicationService(final JobRegistry jobRegistry,
+                                            final LightminClientProperties lightminClientProperties) {
         this.jobRegistry = jobRegistry;
         this.lightminClientProperties = lightminClientProperties;
     }
 
     public LightminClientApplication getLightminClientApplication() {
-        return LightminClientApplication.createApplication(new LinkedList<>(this.jobRegistry.getJobNames()), this.lightminClientProperties);
+        return LightminClientApplication.
+                createApplication(new LinkedList<>(this.jobRegistry.getJobNames()), this.lightminClientProperties);
     }
 }

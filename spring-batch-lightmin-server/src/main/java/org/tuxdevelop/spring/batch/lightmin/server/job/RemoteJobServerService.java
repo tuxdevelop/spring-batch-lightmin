@@ -1,5 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.server.job;
 
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -8,6 +9,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.*;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.util.RequestUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,13 +32,17 @@ public class RemoteJobServerService implements JobServerService {
                                         final LightminClientApplication lightminClientApplication) {
 
         final String uri = getClientUri(lightminClientApplication) + "/jobexecutions/{jobexecutionid}";
-        final ResponseEntity<JobExecution> response = this.restTemplate.getForEntity(uri, JobExecution.class, jobExecutionId);
+        final ResponseEntity<JobExecution> response =
+                this.restTemplate.getForEntity(uri, JobExecution.class, jobExecutionId);
         checkHttpOk(response);
         return response.getBody();
     }
 
     @Override
-    public JobInstancePage getJobInstances(final String jobName, final Integer startIndex, final Integer pageSize, final LightminClientApplication lightminClientApplication) {
+    public JobInstancePage getJobInstances(final String jobName,
+                                           final Integer startIndex,
+                                           final Integer pageSize,
+                                           final LightminClientApplication lightminClientApplication) {
         final String uri = getClientUri(lightminClientApplication) + "/jobinstances";
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
         final Integer startIndexParam = startIndex != null ? startIndex : 0;
@@ -44,7 +50,8 @@ public class RemoteJobServerService implements JobServerService {
         uriComponentsBuilder.queryParam("jobname", jobName);
         uriComponentsBuilder.queryParam("startindex", startIndexParam);
         uriComponentsBuilder.queryParam("pagesize", pageSizeParam);
-        final ResponseEntity<JobInstancePage> response = this.restTemplate.getForEntity(uriComponentsBuilder.toUriString(), JobInstancePage.class, jobName);
+        final ResponseEntity<JobInstancePage> response =
+                this.restTemplate.getForEntity(uriComponentsBuilder.toUriString(), JobInstancePage.class, jobName);
         checkHttpOk(response);
         return response.getBody();
     }
@@ -69,13 +76,15 @@ public class RemoteJobServerService implements JobServerService {
         uriComponentsBuilder.queryParam("jobinstanceid", jobInstanceId);
         uriComponentsBuilder.queryParam("startindex", startIndexParam);
         uriComponentsBuilder.queryParam("pagesize", pageSizeParam);
-        final ResponseEntity<JobExecutionPage> response = this.restTemplate.getForEntity(uriComponentsBuilder.toUriString(), JobExecutionPage.class, jobInstanceId);
+        final ResponseEntity<JobExecutionPage> response =
+                this.restTemplate.getForEntity(uriComponentsBuilder.toUriString(), JobExecutionPage.class, jobInstanceId);
         checkHttpOk(response);
         return response.getBody();
     }
 
     @Override
-    public JobExecutionPage getJobExecutionPage(final Long jobInstanceId, final LightminClientApplication lightminClientApplication) {
+    public JobExecutionPage getJobExecutionPage(final Long jobInstanceId,
+                                                final LightminClientApplication lightminClientApplication) {
         final String uri = getClientUri(lightminClientApplication) + "/jobexecutionpages/all";
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
         uriComponentsBuilder.queryParam("jobinstanceid", jobInstanceId);
@@ -87,7 +96,8 @@ public class RemoteJobServerService implements JobServerService {
     }
 
     @Override
-    public void restartJobExecution(final Long jobExecutionId, final LightminClientApplication lightminClientApplication) {
+    public void restartJobExecution(final Long jobExecutionId,
+                                    final LightminClientApplication lightminClientApplication) {
         final String uri = getClientUri(lightminClientApplication) + "/jobexecutions/{jobexecutionid}/restart";
         final ResponseEntity<Void> response = this.restTemplate.getForEntity(uri, Void.class, jobExecutionId);
         checkHttpOk(response);
@@ -101,9 +111,13 @@ public class RemoteJobServerService implements JobServerService {
     }
 
     @Override
-    public StepExecution getStepExecution(final Long jobExecutionId, final Long stepExecutionId, final LightminClientApplication lightminClientApplication) {
-        final String uri = getClientUri(lightminClientApplication) + "/stepexecutions/{stepexecutionid}/jobexecutions/{jobexecutionid}";
-        final ResponseEntity<StepExecution> response = this.restTemplate.getForEntity(uri, StepExecution.class, stepExecutionId, jobExecutionId);
+    public StepExecution getStepExecution(final Long jobExecutionId,
+                                          final Long stepExecutionId,
+                                          final LightminClientApplication lightminClientApplication) {
+        final String uri = getClientUri(lightminClientApplication)
+                + "/stepexecutions/{stepexecutionid}/jobexecutions/{jobexecutionid}";
+        final ResponseEntity<StepExecution> response =
+                this.restTemplate.getForEntity(uri, StepExecution.class, stepExecutionId, jobExecutionId);
         checkHttpOk(response);
         return response.getBody();
     }
@@ -111,7 +125,9 @@ public class RemoteJobServerService implements JobServerService {
     @Override
     public void launchJob(final JobLaunch jobLaunch, final LightminClientApplication lightminClientApplication) {
         final String uri = getClientUri(lightminClientApplication) + "/joblaunches";
-        final ResponseEntity<Void> response = this.restTemplate.postForEntity(uri, jobLaunch, Void.class);
+        final HttpEntity<JobLaunch> entity = RequestUtil.createApplicationJsonEntity(jobLaunch);
+
+        final ResponseEntity<Void> response = this.restTemplate.postForEntity(uri, entity, Void.class);
         if (!HttpStatus.CREATED.equals(response.getStatusCode())) {
             final String errorMessage = "ERROR - HTTP STATUS: " + response.getStatusCode();
             throw new SpringBatchLightminApplicationException(errorMessage);
@@ -124,28 +140,31 @@ public class RemoteJobServerService implements JobServerService {
         final String uri = getClientUri(lightminClientApplication) + "/jobparameters";
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
         uriComponentsBuilder.queryParam("jobname", jobName);
-        final ResponseEntity<JobParameters> response = this.restTemplate.getForEntity(uriComponentsBuilder.toUriString(), JobParameters.class);
+        final ResponseEntity<JobParameters> response =
+                this.restTemplate.getForEntity(uriComponentsBuilder.toUriString(), JobParameters.class);
         checkHttpOk(response);
         return response.getBody();
     }
 
     @Override
-    public List<JobExecution> findJobExecutions(final String jobName, final LightminClientApplication lightminClientApplication, final Map<String, Object> queryParameter, final Integer resultSize) {
+    public List<JobExecution> findJobExecutions(final String jobName,
+                                                final LightminClientApplication lightminClientApplication,
+                                                final Map<String, Object> queryParameter,
+                                                final Integer resultSize) {
+        final HttpEntity<Map<String, Object>> entity = RequestUtil.createApplicationJsonEntity(queryParameter);
         final String uri = getClientUri(lightminClientApplication) + "/jobexecutions/query";
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
         uriComponentsBuilder.queryParam("jobname", jobName);
         uriComponentsBuilder.queryParam("resultsize", resultSize);
-        final ResponseEntity<JobExecution[]> response = this.restTemplate.postForEntity(uriComponentsBuilder.toUriString(), queryParameter, JobExecution[].class);
+        final ResponseEntity<JobExecution[]> response =
+                this.restTemplate.postForEntity(uriComponentsBuilder.toUriString(), entity, JobExecution[].class);
         checkHttpOk(response);
         return Arrays.asList(response.getBody());
     }
 
 
     private String getClientUri(final LightminClientApplication lightminClientApplication) {
-        final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(lightminClientApplication.getServiceUrl());
-        stringBuilder.append("/api");
-        return stringBuilder.toString();
+        return lightminClientApplication.getServiceUrl() + "/api";
     }
 
     private void checkHttpOk(final ResponseEntity<?> responseEntity) {

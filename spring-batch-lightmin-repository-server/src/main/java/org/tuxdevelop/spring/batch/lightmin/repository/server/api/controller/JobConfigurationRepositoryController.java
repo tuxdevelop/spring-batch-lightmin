@@ -41,7 +41,7 @@ public class JobConfigurationRepositoryController implements JobConfigurationRep
     @Override
     @PostMapping(value = "/{applicationname}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public JobConfiguration add(@RequestBody final JobConfiguration jobConfiguration, @PathVariable(name = "applicationname") final String applicationName) {
-        validateJobConfigurationBody(jobConfiguration);
+        this.validateJobConfigurationBody(jobConfiguration);
         jobConfiguration.validateForSave();
         return this.localJobConfigurationRepository.add(jobConfiguration, applicationName);
     }
@@ -49,7 +49,7 @@ public class JobConfigurationRepositoryController implements JobConfigurationRep
     @Override
     @PutMapping(value = "/{applicationname}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public JobConfiguration update(@RequestBody final JobConfiguration jobConfiguration, @PathVariable(name = "applicationname") final String applicationName) throws NoSuchJobConfigurationException {
-        validateJobConfigurationBody(jobConfiguration);
+        this.validateJobConfigurationBody(jobConfiguration);
         jobConfiguration.validateForUpdate();
         return this.localJobConfigurationRepository.update(jobConfiguration, applicationName);
     }
@@ -57,7 +57,7 @@ public class JobConfigurationRepositoryController implements JobConfigurationRep
     @Override
     @PostMapping(value = "/delete/{applicationname}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void delete(@RequestBody final JobConfiguration jobConfiguration, @PathVariable(name = "applicationname") final String applicationName) throws NoSuchJobConfigurationException {
-        validateJobConfigurationBody(jobConfiguration);
+        this.validateJobConfigurationBody(jobConfiguration);
         this.localJobConfigurationRepository.delete(jobConfiguration, applicationName);
     }
 
@@ -74,7 +74,7 @@ public class JobConfigurationRepositoryController implements JobConfigurationRep
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         assert this.localJobConfigurationRepository != null : "localJobConfigurationRepository must not be null org empty!";
     }
 

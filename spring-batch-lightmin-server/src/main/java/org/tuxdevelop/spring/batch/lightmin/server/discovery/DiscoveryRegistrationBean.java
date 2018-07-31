@@ -33,7 +33,8 @@ public class DiscoveryRegistrationBean {
                 .fromUri(uri)
                 .path("/api/lightminclientapplications");
         final String uriString = uriComponentsBuilder.toUriString();
-        final ResponseEntity<LightminClientApplication> response = this.restTemplate.getForEntity(uriString, LightminClientApplication.class);
+        final ResponseEntity<LightminClientApplication> response =
+                this.restTemplate.getForEntity(uriString, LightminClientApplication.class);
         ResponseUtil.checkHttpOk(response);
         return response.getBody();
     }
