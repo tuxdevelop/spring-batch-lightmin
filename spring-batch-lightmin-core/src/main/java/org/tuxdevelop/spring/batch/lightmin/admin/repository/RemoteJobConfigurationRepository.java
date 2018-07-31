@@ -12,6 +12,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 import org.tuxdevelop.spring.batch.lightmin.util.BasicAuthHttpRequestInterceptor;
+import org.tuxdevelop.spring.batch.lightmin.util.RequestUtil;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -59,11 +60,12 @@ public class RemoteJobConfigurationRepository implements JobConfigurationReposit
 
     @Override
     public JobConfiguration add(final JobConfiguration jobConfiguration, final String applicationName) {
+        final HttpEntity<JobConfiguration> entity = RequestUtil.createApplicationJsonEntity(jobConfiguration);
         final ResponseEntity<JobConfiguration> response =
                 this.restTemplate.postForEntity(
                         this.getServerBase(
                                 this.remoteJobConfigurationRepositoryLocator.getRemoteUrl()) + "/{applicationname}",
-                        jobConfiguration,
+                        entity,
                         JobConfiguration.class,
                         applicationName);
         this.evaluateReponse(response, HttpStatus.OK);
@@ -72,12 +74,12 @@ public class RemoteJobConfigurationRepository implements JobConfigurationReposit
 
     @Override
     public JobConfiguration update(final JobConfiguration jobConfiguration, final String applicationName) {
-        final HttpEntity<JobConfiguration> httpEntity = new HttpEntity<>(jobConfiguration);
+        final HttpEntity<JobConfiguration> entity = RequestUtil.createApplicationJsonEntity(jobConfiguration);
         final ResponseEntity<JobConfiguration> response =
                 this.restTemplate.exchange(
                         this.getServerBase(this.remoteJobConfigurationRepositoryLocator.getRemoteUrl()) + "/{applicationname}",
                         HttpMethod.PUT,
-                        httpEntity,
+                        entity,
                         JobConfiguration.class,
                         applicationName);
         this.evaluateReponse(response, HttpStatus.OK);
@@ -86,10 +88,11 @@ public class RemoteJobConfigurationRepository implements JobConfigurationReposit
 
     @Override
     public void delete(final JobConfiguration jobConfiguration, final String applicationName) {
+        final HttpEntity<JobConfiguration> entity = RequestUtil.createApplicationJsonEntity(jobConfiguration);
         final ResponseEntity<Void> response =
                 this.restTemplate.postForEntity(
                         this.getServerBase(this.remoteJobConfigurationRepositoryLocator.getRemoteUrl()) + "/delete/{applicationname}",
-                        jobConfiguration,
+                        entity,
                         Void.class,
                         applicationName);
         this.evaluateReponse(response, HttpStatus.OK);

@@ -17,8 +17,8 @@ public final class RequestUtil {
 
     public static <T> HttpEntity<T> createApplicationJsonEntity(final T body) {
         final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON_UTF8));
         return new HttpEntity<>(body, HttpHeaders.readOnlyHttpHeaders(headers));
     }
 }
