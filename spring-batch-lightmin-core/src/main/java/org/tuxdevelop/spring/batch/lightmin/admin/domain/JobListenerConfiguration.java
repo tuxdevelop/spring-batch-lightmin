@@ -1,9 +1,11 @@
 package org.tuxdevelop.spring.batch.lightmin.admin.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.util.StringUtils;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class JobListenerConfiguration extends AbstractConfiguration {
 
     private JobListenerType jobListenerType;

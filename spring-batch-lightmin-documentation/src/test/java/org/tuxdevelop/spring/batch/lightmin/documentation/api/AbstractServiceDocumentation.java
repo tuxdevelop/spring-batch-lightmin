@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.documentation.api;
 
-import com.jayway.restassured.builder.RequestSpecBuilder;
-import com.jayway.restassured.specification.RequestSpecification;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.specification.RequestSpecification;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
@@ -11,9 +11,8 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.ITConfigurationApplication;
@@ -34,7 +33,7 @@ import java.util.Date;
 import java.util.Set;
 
 import static org.junit.Assert.fail;
-import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {ITConfigurationApplication.class, ITJobConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -42,8 +41,6 @@ public abstract class AbstractServiceDocumentation {
 
     @Autowired
     private AdminService adminService;
-    @Autowired
-    private EmbeddedWebApplicationContext embeddedWebApplicationContext;
     @Autowired
     private Job simpleJob;
     @Autowired
@@ -192,7 +189,7 @@ public abstract class AbstractServiceDocumentation {
 
     @Before
     public void init() {
-        final int port = this.embeddedWebApplicationContext.getEmbeddedServletContainer().getPort();
+        final int port = serverPort;
         this.lightminClientProperties.setServiceUrl("http://localhost:" + port);
         this.lightminClientProperties.setServerPort(port);
         this.lightminClientProperties.setManagementPort(port);

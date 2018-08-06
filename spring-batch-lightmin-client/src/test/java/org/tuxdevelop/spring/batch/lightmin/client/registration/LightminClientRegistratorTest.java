@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -22,11 +22,9 @@ import java.util.LinkedList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class LightminClientRegistratorTest {
 
     @Mock
@@ -50,7 +48,9 @@ public class LightminClientRegistratorTest {
         final ResponseEntity<LightminClientApplication> responseEntity = ResponseEntity.status(HttpStatus.CREATED).body(lightminClientApplication);
         when(this.lightminServerLocator.getRemoteUrls()).thenReturn(Collections.singletonList("http://localhost:8080"));
         when(this.jobRegistry.getJobNames()).thenReturn(new LinkedList<>());
-        when(this.restTemplate.postForEntity(anyString(), any(LightminClientApplication.class), any(Class.class))).thenReturn(responseEntity);
+        when(this.restTemplate
+                .postForEntity(anyString(), any(HttpEntity.class), eq(LightminClientApplication.class)))
+                .thenReturn(responseEntity);
 
         final Boolean result = this.lightminClientRegistrator.register();
         assertThat(result).isTrue();
@@ -63,7 +63,8 @@ public class LightminClientRegistratorTest {
         final ResponseEntity<LightminClientApplication> responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(lightminClientApplication);
         when(this.lightminServerLocator.getRemoteUrls()).thenReturn(Collections.singletonList("http://localhost:8080"));
         when(this.jobRegistry.getJobNames()).thenReturn(new LinkedList<>());
-        when(this.restTemplate.postForEntity(anyString(), any(HttpEntity.class), any(Class.class))).thenReturn(responseEntity);
+        when(this.restTemplate.postForEntity(anyString(), any(HttpEntity.class), eq(LightminClientApplication.class)))
+                .thenReturn(responseEntity);
 
         final Boolean result = this.lightminClientRegistrator.register();
         assertThat(result).isFalse();

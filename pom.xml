@@ -45,10 +45,11 @@
     </modules>
 
     <properties>
-        <platform-bom.version>Brussels-SR11</platform-bom.version>
-        <spring-cloud-dependencies.version>Edgware.SR4</spring-cloud-dependencies.version>
+        <!-- Outdated <platform-bom.version>Brussels-SR11</platform-bom.version>-->
+        <spring-boot-dependencies.version>2.0.4.RELEASE</spring-boot-dependencies.version>
+        <spring-cloud-dependencies.version>Finchley.SR1</spring-cloud-dependencies.version>
         <assertj.version>3.10.0</assertj.version>
-        <openpojo.version>0.8.6</openpojo.version>
+        <openpojo.version>0.8.10</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
         <datafactory.version>0.8</datafactory.version>
         <!-- plugin versions -->
@@ -70,9 +71,9 @@
         <dependencies>
             <!-- spring.io plattform -->
             <dependency>
-                <groupId>io.spring.platform</groupId>
-                <artifactId>platform-bom</artifactId>
-                <version>${platform-bom.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
