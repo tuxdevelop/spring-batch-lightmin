@@ -121,7 +121,8 @@ The _service-url_ is the url of client.
 spring:
   batch:
     lightmin:
-      client.service-url: http://localhost:8080/my-app
+      client:
+        service-url: http://localhost:8080/my-app
 ----
 
 ==== Management Url
@@ -152,7 +153,7 @@ spring:
 
 ==== Server Port
 
-The _server-port_ is the application port.
+The _server-port_ is the application port or the external port, if the application is running inside a container e.g. docker.
 
 [source, yaml]
 ----
@@ -165,7 +166,8 @@ spring:
 
 ==== Management Port
 
-The _server-port_ is the application management port.
+The _server-port_ is the application management port or the external port, if the application is running inside a container e.g. docker.
+If the property is not set, the server-port will be taken.
 
 [source, yaml]
 ----
@@ -174,4 +176,18 @@ spring:
     lightmin:
       client:
         management-port: 8081
+----
+
+==== Hostname
+
+The _hostname_ property can be used to set the name which should be used for registration at the server.
+This can be helpful when running inside a container, e.g. docker.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+        hostname: my.fqdn
 ----
