@@ -94,7 +94,7 @@ spring:
   batch:
     lightmin:
       server:
-        #default false
+        #default true
         auto-deregistration: false
 ----
 
@@ -108,7 +108,7 @@ spring:
   batch:
     lightmin:
       server:
-        #default true
+        #default false
         auto-register-once: true
 ----
 
