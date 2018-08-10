@@ -2,6 +2,8 @@ package org.tuxdevelop.spring.batch.lightmin.client.registration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -85,22 +87,28 @@ public class LightminClientRegistrator {
         return isRegistrationSuccessful;
     }
 
-    public void deregister() {
-        final String id = this.registeredId.get();
-        if (id != null) {
-            final List<String> serverUrls = this.lightminServerLocator.getRemoteUrls();
-            for (final String lightminUrl : serverUrls) {
-                try {
-                    this.restTemplate.delete(lightminUrl + "/" + id);
-                    this.registeredId.compareAndSet(id, null);
-                    if (this.lightminProperties.isRegisterOnce()) {
-                        break;
+    @EventListener(ContextClosedEvent.class)
+    public void deregister(final ContextClosedEvent event) {
+        log.debug("Retrievied ContextClosedEvent for dereigistration: {}", event);
+        if (this.lightminProperties.isAutoDeregistration()) {
+            final String id = this.registeredId.get();
+            if (id != null) {
+                final List<String> serverUrls = this.lightminServerLocator.getRemoteUrls();
+                for (final String lightminUrl : serverUrls) {
+                    try {
+                        this.restTemplate.delete(lightminUrl + "/" + id);
+                        this.registeredId.compareAndSet(id, null);
+                        if (this.lightminProperties.isRegisterOnce()) {
+                            break;
+                        }
+                    } catch (final Exception ex) {
+                        log.warn(
+                                "Failed to deregister application (id={}) at spring-batch-lightmin ({}): {}", id, lightminUrl, ex.getMessage());
                     }
-                } catch (final Exception ex) {
-                    log.warn(
-                            "Failed to deregister application (id={}) at spring-boot-admin ({}): {}", id, lightminUrl, ex.getMessage());
                 }
             }
+        } else {
+            log.debug("No auto deregistration active, nothinhg to do");
         }
     }
 
