@@ -32,8 +32,11 @@ public class JobRestController extends AbstractRestController implements Initial
      * @param jobExecutionId the id of the jobExecution
      * @return the JobExecution
      */
-    @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTIONS_JOB_EXECUTION_ID, produces = PRODUCES, method = RequestMethod.GET)
-    public ResponseEntity<JobExecution> getJobExecutionById(@PathVariable(value = "jobexecutionid") final Long jobExecutionId) {
+    @GetMapping(
+            value = JobRestControllerAPI.JOB_EXECUTIONS_JOB_EXECUTION_ID,
+            produces = PRODUCES)
+    public ResponseEntity<JobExecution> getJobExecutionById(
+            @PathVariable(value = "jobexecutionid") final Long jobExecutionId) {
         final JobExecution jobExecution = this.serviceEntry.getByJobExecutionId(jobExecutionId);
         return ResponseEntity.ok(jobExecution);
     }
@@ -47,11 +50,16 @@ public class JobRestController extends AbstractRestController implements Initial
      * @param pageSize      the size of the page
      * @return the JobExecutionPage
      */
-    @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID, produces = PRODUCES, method = RequestMethod.GET)
-    public ResponseEntity<JobExecutionPage> getJobExecutionsByJobInstanceId(@RequestParam("jobinstanceid") final Long jobInstanceId,
-                                                                            @RequestParam(value = "startindex", defaultValue = "0") final int startIndex,
-                                                                            @RequestParam(value = "pagesize", defaultValue = "10") final int pageSize) {
-        final JobExecutionPage jobInstanceExecutions = this.serviceEntry.getJobExecutionPage(jobInstanceId, startIndex, pageSize);
+    @GetMapping(
+            value = JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID,
+            produces = PRODUCES)
+    public ResponseEntity<JobExecutionPage> getJobExecutionsByJobInstanceId(
+            @RequestParam("jobinstanceid") final Long jobInstanceId,
+            @RequestParam(value = "startindex", defaultValue = "0") final int startIndex,
+            @RequestParam(value = "pagesize", defaultValue = "10") final int pageSize) {
+
+        final JobExecutionPage jobInstanceExecutions =
+                this.serviceEntry.getJobExecutionPage(jobInstanceId, startIndex, pageSize);
         return ResponseEntity.ok(jobInstanceExecutions);
     }
 
@@ -62,9 +70,12 @@ public class JobRestController extends AbstractRestController implements Initial
      * @param jobInstanceId the id of the JobInstance
      * @return the JobExecutionPage
      */
-    @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID_ALL, produces = PRODUCES, method = RequestMethod.GET)
-    public ResponseEntity<JobExecutionPage> getAllJobExecutionsByJobInstanceId(@RequestParam("jobinstanceid") final Long
-                                                                                       jobInstanceId) {
+    @GetMapping(
+            value = JobRestControllerAPI.JOB_EXECUTION_PAGES_INSTANCE_ID_ALL,
+            produces = PRODUCES)
+    public ResponseEntity<JobExecutionPage> getAllJobExecutionsByJobInstanceId(
+            @RequestParam("jobinstanceid") final Long
+                    jobInstanceId) {
         final JobExecutionPage jobInstanceExecutions = this.serviceEntry.getJobExecutionPage(jobInstanceId);
         return ResponseEntity.ok(jobInstanceExecutions);
     }
@@ -78,11 +89,15 @@ public class JobRestController extends AbstractRestController implements Initial
      * @param pageSize   the size of the page
      * @return the JobInstancePage
      */
-    @RequestMapping(value = JobRestControllerAPI.JOB_INSTANCES_JOB_NAME, produces = PRODUCES, method = RequestMethod.GET)
-    public ResponseEntity<JobInstancePage> getJobInstancesByJobName(@RequestParam("jobname") final String jobName,
-                                                                    @RequestParam(value = "startindex", defaultValue = "0") final int startIndex,
-                                                                    @RequestParam(value = "pagesize", defaultValue = "10") final int pageSize) {
-        final JobInstancePage jobInstancePage = this.serviceEntry.getJobInstancesByJobName(jobName, startIndex, pageSize);
+    @GetMapping(
+            value = JobRestControllerAPI.JOB_INSTANCES_JOB_NAME,
+            produces = PRODUCES)
+    public ResponseEntity<JobInstancePage> getJobInstancesByJobName(
+            @RequestParam("jobname") final String jobName,
+            @RequestParam(value = "startindex", defaultValue = "0") final int startIndex,
+            @RequestParam(value = "pagesize", defaultValue = "10") final int pageSize) {
+        final JobInstancePage jobInstancePage =
+                this.serviceEntry.getJobInstancesByJobName(jobName, startIndex, pageSize);
         return ResponseEntity.ok(jobInstancePage);
     }
 
@@ -91,7 +106,9 @@ public class JobRestController extends AbstractRestController implements Initial
      *
      * @return the ApplicationJobInfo
      */
-    @RequestMapping(value = JobRestControllerAPI.APPLICATION_JOB_INFO, produces = PRODUCES, method = RequestMethod.GET)
+    @GetMapping(
+            value = JobRestControllerAPI.APPLICATION_JOB_INFO,
+            produces = PRODUCES)
     public ResponseEntity<ApplicationJobInfo> getApplicationJobInfo() {
         final ApplicationJobInfo applicationJobInfo = this.serviceEntry.getApplicationJobInfo();
         return ResponseEntity.ok(applicationJobInfo);
@@ -103,7 +120,9 @@ public class JobRestController extends AbstractRestController implements Initial
      * @param jobName the name of the Spring Batch Job
      * @return the JobInfo
      */
-    @RequestMapping(value = JobRestControllerAPI.JOB_INFO_JOB_NAME, produces = PRODUCES, method = RequestMethod.GET)
+    @GetMapping(
+            value = JobRestControllerAPI.JOB_INFO_JOB_NAME,
+            produces = PRODUCES)
     public ResponseEntity<JobInfo> getJobInfo(@PathVariable("jobname") final String jobName) {
         final JobInfo jobInfo = this.serviceEntry.getJobInfo(jobName);
         return ResponseEntity.ok(jobInfo);
@@ -115,7 +134,8 @@ public class JobRestController extends AbstractRestController implements Initial
      * @param jobExecutionId the id of the JobExecution
      * @return HTTP Status Code 200
      */
-    @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTIONS_RESTART, method = RequestMethod.GET)
+    @GetMapping(
+            value = JobRestControllerAPI.JOB_EXECUTIONS_RESTART)
     public ResponseEntity<Void> restartJobExecution(@PathVariable("jobexecutionid") final Long jobExecutionId) {
         this.serviceEntry.restartJobExecution(jobExecutionId);
         return ResponseEntity.ok().build();
@@ -127,7 +147,8 @@ public class JobRestController extends AbstractRestController implements Initial
      * @param jobExecutionId the id of the JobExecution
      * @return HTTP Status Code 200
      */
-    @RequestMapping(value = JobRestControllerAPI.JOB_EXECUTIONS_STOP, method = RequestMethod.GET)
+    @GetMapping(
+            value = JobRestControllerAPI.JOB_EXECUTIONS_STOP)
     public ResponseEntity<Void> stopJobExecution(@PathVariable("jobexecutionid") final Long jobExecutionId) {
         this.serviceEntry.stopJobExecution(jobExecutionId);
         return ResponseEntity.ok().build();
@@ -140,9 +161,12 @@ public class JobRestController extends AbstractRestController implements Initial
      * @param stepExecutionId the id of the {@link org.springframework.batch.core.StepExecution}
      * @return the StepExecution
      */
-    @RequestMapping(value = JobRestControllerAPI.STEP_EXECUTIONS, produces = PRODUCES, method = RequestMethod.GET)
-    public ResponseEntity<StepExecution> getStepExecution(@PathVariable("jobexecutionid") final Long jobExecutionId,
-                                                          @PathVariable("stepexecutionid") final Long stepExecutionId) {
+    @GetMapping(
+            value = JobRestControllerAPI.STEP_EXECUTIONS,
+            produces = PRODUCES)
+    public ResponseEntity<StepExecution> getStepExecution(
+            @PathVariable("jobexecutionid") final Long jobExecutionId,
+            @PathVariable("stepexecutionid") final Long stepExecutionId) {
         final StepExecution stepExecution = this.serviceEntry.getStepExecution(jobExecutionId, stepExecutionId);
         return ResponseEntity.ok(stepExecution);
     }
@@ -153,7 +177,9 @@ public class JobRestController extends AbstractRestController implements Initial
      * @param jobName the name of Spring Batch Job
      * @return the JobParamaters
      */
-    @RequestMapping(value = JobRestControllerAPI.JOB_PARAMETERS, produces = PRODUCES, method = RequestMethod.GET)
+    @GetMapping(
+            value = JobRestControllerAPI.JOB_PARAMETERS,
+            produces = PRODUCES)
     public ResponseEntity<JobParameters> getLastJobParameters(@RequestParam("jobname") final String jobName) {
         final JobParameters jobParameters = this.serviceEntry.getLastJobParameters(jobName);
         return ResponseEntity.ok(jobParameters);
@@ -171,17 +197,22 @@ public class JobRestController extends AbstractRestController implements Initial
      * @param resultSize     maximum size of the result set, Default value = 200
      * @return all found {@link JobExecution}s depending on the query Parameters
      */
-    @RequestMapping(value = JobRestControllerAPI.QUERY_JOB_EXECUTIONS, produces = PRODUCES, consumes = CONSUMES, method = RequestMethod.POST)
-    public ResponseEntity<List<JobExecution>> queryJobExecutions(@RequestParam(name = "jobname", required = false) final String jobName,
-                                                                 @RequestParam(name = "resultsize", defaultValue = "200") final Integer resultSize,
-                                                                 @RequestBody final Map<String, Object> queryParameter) {
+    @PostMapping(
+            value = JobRestControllerAPI.QUERY_JOB_EXECUTIONS,
+            produces = PRODUCES,
+            consumes = CONSUMES)
+    public ResponseEntity<List<JobExecution>> queryJobExecutions(
+            @RequestParam(name = "jobname", required = false) final String jobName,
+            @RequestParam(name = "resultsize", defaultValue = "200") final Integer resultSize,
+            @RequestBody final Map<String, Object> queryParameter) {
         final String jobNameQueryParameter = StringUtils.hasText(jobName) ? jobName : null;
-        final List<JobExecution> jobExecutions = this.serviceEntry.findJobExecutions(jobNameQueryParameter, queryParameter, resultSize);
+        final List<JobExecution> jobExecutions =
+                this.serviceEntry.findJobExecutions(jobNameQueryParameter, queryParameter, resultSize);
         return ResponseEntity.ok(jobExecutions);
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         assert this.serviceEntry != null;
     }
 }
