@@ -3,6 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.server.web;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -26,6 +27,13 @@ public abstract class CommonController {
                 .INTERNAL_SERVER_ERROR.name());
         modelAndView.setViewName("error");
         return modelAndView;
+    }
+
+
+    protected RedirectView createRedirectView(final String path, final HttpServletRequest request) {
+        final RedirectView redirectView = new RedirectView(path);
+        redirectView.setHosts(request.getHeader("X-FORWARDED-HOST"));
+        return redirectView;
     }
 
 }

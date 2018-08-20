@@ -7,12 +7,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.*;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.model.*;
 import org.tuxdevelop.spring.batch.lightmin.server.job.JobServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -80,7 +82,8 @@ public class JobController extends CommonController {
                                    @RequestParam(value = "pagesize", defaultValue = "10") final int pageSize,
                                    @RequestParam(value = "applicationid") final String applicationId) {
         final LightminClientApplication lightminClientApplication = this.registrationBean.get(applicationId);
-        final JobExecutionPage jobExecutionPage = this.jobServerService.getJobExecutionPage(jobInstanceId, startIndex, pageSize, lightminClientApplication);
+        final JobExecutionPage jobExecutionPage =
+                this.jobServerService.getJobExecutionPage(jobInstanceId, startIndex, pageSize, lightminClientApplication);
         final Collection<JobExecution> jobExecutions = jobExecutionPage.getJobExecutions();
         final Collection<JobExecutionModel> jobExecutionModels = new LinkedList<>();
         for (final JobExecution jobExecution : jobExecutions) {
@@ -111,7 +114,8 @@ public class JobController extends CommonController {
         } else {
             lightminClientApplication = this.registrationBean.get(applicationId);
         }
-        final JobExecution jobExecution = this.jobServerService.getJobExecution(jobExecutionId, lightminClientApplication);
+        final JobExecution jobExecution =
+                this.jobServerService.getJobExecution(jobExecutionId, lightminClientApplication);
         final JobExecutionModel jobExecutionModel = new JobExecutionModel();
         jobExecutionModel.setJobExecution(jobExecution);
         jobExecutionModel.setJobInstanceId(jobExecution.getJobInstance().getId());
@@ -123,21 +127,25 @@ public class JobController extends CommonController {
     }
 
     @RequestMapping(value = "/executionRestart", method = RequestMethod.POST)
-    public String restartJobExecution(@RequestParam(value = "jobExecutionId") final Long jobExecutionId,
-                                      @RequestParam(value = "jobInstanceId") final Long jobInstanceId,
-                                      @RequestParam(value = "applicationid") final String applicationId) {
+    public RedirectView restartJobExecution(@RequestParam(value = "jobExecutionId") final Long jobExecutionId,
+                                            @RequestParam(value = "jobInstanceId") final Long jobInstanceId,
+                                            @RequestParam(value = "applicationid") final String applicationId,
+                                            final HttpServletRequest request) {
         final LightminClientApplication lightminClientApplication = this.registrationBean.get(applicationId);
         this.jobServerService.restartJobExecution(jobExecutionId, lightminClientApplication);
-        return "redirect:executions?jobInstanceId=" + jobInstanceId + "&applicationid=" + applicationId;
+
+        return this.createRedirectView("executions?jobInstanceId=" + jobInstanceId + "&applicationid=" + applicationId, request);
     }
 
     @RequestMapping(value = "/executionStop", method = RequestMethod.POST)
-    public String stopJobExecution(@RequestParam(value = "jobExecutionId") final Long jobExecutionId,
-                                   @RequestParam(value = "jobInstanceId") final Long jobInstanceId,
-                                   @RequestParam(value = "applicationid") final String applicationId) {
+    public RedirectView stopJobExecution(@RequestParam(value = "jobExecutionId") final Long jobExecutionId,
+                                         @RequestParam(value = "jobInstanceId") final Long jobInstanceId,
+                                         @RequestParam(value = "applicationid") final String applicationId,
+                                         final HttpServletRequest request) {
         final LightminClientApplication lightminClientApplication = this.registrationBean.get(applicationId);
         this.jobServerService.stopJobExecution(jobExecutionId, lightminClientApplication);
-        return "redirect:executions?jobInstanceId=" + jobInstanceId + "&applicationid=" + applicationId;
+
+        return this.createRedirectView("executions?jobInstanceId=" + jobInstanceId + "&applicationid=" + applicationId, request);
     }
 
     void enrichJobExecution(final JobExecutionModel jobExecutionModel,

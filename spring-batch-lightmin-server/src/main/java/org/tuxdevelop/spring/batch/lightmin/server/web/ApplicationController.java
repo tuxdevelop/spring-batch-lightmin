@@ -6,8 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Marcel Becker
@@ -26,13 +29,14 @@ public class ApplicationController extends CommonController {
 
     @RequestMapping(method = RequestMethod.GET)
     public void initApplication(@RequestParam("applicationid") final String applicationId, final Model model) {
-        final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
+        final LightminClientApplication lightminClientApplication = this.registrationBean.get(applicationId);
         model.addAttribute("clientApplication", lightminClientApplication);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String removeApplication(@RequestParam("applicationid") final String applicationId) {
-        registrationBean.deleteRegistration(applicationId);
-        return "redirect:index";
+    public RedirectView removeApplication(@RequestParam("applicationid") final String applicationId,
+                                          final HttpServletRequest request) {
+        this.registrationBean.deleteRegistration(applicationId);
+        return this.createRedirectView("index", request);
     }
 }
