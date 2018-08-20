@@ -558,6 +558,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_heartbeat_period">Heartbeat period</a></li>
 <li><a href="#_credentials">Credentials</a></li>
 <li><a href="#_server_side_auto_discovery">Server Side auto discovery</a></li>
+<li><a href="#_server_behind_a_proxy">Server behind a Proxy</a></li>
 </ul>
 </li>
 <li><a href="#_client_configuration_2">Client Configuration</a>
@@ -1179,6 +1180,26 @@ configured via properties.</p>
     <span class="key">lightmin</span>:
       <span class="key">server</span>:
         <span class="key">discovery-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_server_behind_a_proxy">Server behind a Proxy</h4>
+<div class="paragraph">
+<p>The server ui uses redirects and the <em>HOST</em> header is taken to create the redirect urls. This is the default behavior of Spring MVC.
+If the server ui is running behind a proxy, the implementation of the server takes care, that the <em>X-FORWARD-PREFIX</em> header is used as well.</p>
+</div>
+<div class="paragraph">
+<p>If the proxy cannot pass the <em>HOST</em> header or you do not want to change the default, e.g. <em>Zuul</em>, the following property can force the server
+to use the <em>X-FORWARDED-HOST</em> header to build the redirect urls.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="key">use-x-forwarded-headers</span>: <span class="string"><span class="content">true</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1820,18 +1841,18 @@ Content-Length: 772
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 15 Aug 2018 08:17:10 GMT
+Date: Mon, 20 Aug 2018 16:08:44 GMT
 Content-Length: 852
 
 {
-  &quot;id&quot; : &quot;eb6e54af&quot;,
+  &quot;id&quot; : &quot;8cf6a7c1&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:58199&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:58199/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:58199&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:53179&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:53179/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:53179&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1534321029523
+    &quot;timeInMills&quot; : 1534781324366
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1855,7 +1876,7 @@ Content-Length: 852
 <h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/eb6e54af' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/8cf6a7c1' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -1863,7 +1884,7 @@ Content-Length: 852
 <h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/eb6e54af HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/8cf6a7c1 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
 Host: localhost</code></pre>
@@ -1878,18 +1899,18 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 15 Aug 2018 08:17:10 GMT
+Date: Mon, 20 Aug 2018 16:08:44 GMT
 Content-Length: 852
 
 {
-  &quot;id&quot; : &quot;eb6e54af&quot;,
+  &quot;id&quot; : &quot;8cf6a7c1&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:58199&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:58199/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:58199&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:53179&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:53179/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:53179&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1534321029523
+    &quot;timeInMills&quot; : 1534781324366
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1936,18 +1957,18 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 15 Aug 2018 08:17:10 GMT
+Date: Mon, 20 Aug 2018 16:08:44 GMT
 Content-Length: 1691
 
 [ {
-  &quot;id&quot; : &quot;eb6e54af&quot;,
+  &quot;id&quot; : &quot;8cf6a7c1&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:58199&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:58199/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:58199&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:53179&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:53179/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:53179&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1534321029523
+    &quot;timeInMills&quot; : 1534781324366
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1968,7 +1989,7 @@ Content-Length: 1691
   &quot;serviceUrl&quot; : &quot;http://localhost:0&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;OFFLINE&quot;,
-    &quot;timeInMills&quot; : 1534321028411
+    &quot;timeInMills&quot; : 1534781323608
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2000,8 +2021,8 @@ Content-Length: 1691
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1534321031669,
-  &quot;endDate&quot; : 1534321041669
+  &quot;startDate&quot; : 1534781325306,
+  &quot;endDate&quot; : 1534781335306
 }'</code></pre>
 </div>
 </div>
@@ -2024,8 +2045,8 @@ Content-Length: 247
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1534321031669,
-  &quot;endDate&quot; : 1534321041669
+  &quot;startDate&quot; : 1534781325306,
+  &quot;endDate&quot; : 1534781335306
 }</code></pre>
 </div>
 </div>
@@ -2036,7 +2057,7 @@ Content-Length: 247
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 X-Application-Context: it-application:0
-Date: Wed, 15 Aug 2018 08:17:10 GMT</code></pre>
+Date: Mon, 20 Aug 2018 16:08:45 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2074,7 +2095,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 15 Aug 2018 08:17:12 GMT
+Date: Mon, 20 Aug 2018 16:08:46 GMT
 Content-Length: 1405
 
 {
@@ -2089,7 +2110,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1534321033127,
+          &quot;parameter&quot; : 1534781326437,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -2112,9 +2133,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1534321033133,
-      &quot;endTime&quot; : 1534321033134,
-      &quot;lastUpdated&quot; : 1534321033134,
+      &quot;startTime&quot; : 1534781326442,
+      &quot;endTime&quot; : 1534781326443,
+      &quot;lastUpdated&quot; : 1534781326443,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -2124,10 +2145,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1534321033129,
-    &quot;createTime&quot; : 1534321033128,
-    &quot;endTime&quot; : 1534321033135,
-    &quot;lastUpdated&quot; : 1534321033140,
+    &quot;startTime&quot; : 1534781326439,
+    &quot;createTime&quot; : 1534781326439,
+    &quot;endTime&quot; : 1534781326444,
+    &quot;lastUpdated&quot; : 1534781326448,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2168,7 +2189,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 15 Aug 2018 08:17:12 GMT
+Date: Mon, 20 Aug 2018 16:08:46 GMT
 Content-Length: 1405
 
 {
@@ -2183,7 +2204,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1534321033042,
+          &quot;parameter&quot; : 1534781326384,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -2206,9 +2227,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1534321033048,
-      &quot;endTime&quot; : 1534321033050,
-      &quot;lastUpdated&quot; : 1534321033050,
+      &quot;startTime&quot; : 1534781326387,
+      &quot;endTime&quot; : 1534781326389,
+      &quot;lastUpdated&quot; : 1534781326389,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -2218,10 +2239,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1534321033044,
-    &quot;createTime&quot; : 1534321033042,
-    &quot;endTime&quot; : 1534321033051,
-    &quot;lastUpdated&quot; : 1534321033058,
+    &quot;startTime&quot; : 1534781326385,
+    &quot;createTime&quot; : 1534781326384,
+    &quot;endTime&quot; : 1534781326390,
+    &quot;lastUpdated&quot; : 1534781326395,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2262,7 +2283,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 15 Aug 2018 08:17:12 GMT
+Date: Mon, 20 Aug 2018 16:08:46 GMT
 Content-Length: 1154
 
 {
@@ -2271,7 +2292,7 @@ Content-Length: 1154
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1534321033308,
+        &quot;parameter&quot; : 1534781326562,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2294,9 +2315,9 @@ Content-Length: 1154
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1534321033313,
-    &quot;endTime&quot; : 1534321033314,
-    &quot;lastUpdated&quot; : 1534321033314,
+    &quot;startTime&quot; : 1534781326567,
+    &quot;endTime&quot; : 1534781326569,
+    &quot;lastUpdated&quot; : 1534781326569,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2306,10 +2327,10 @@ Content-Length: 1154
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1534321033310,
-  &quot;createTime&quot; : 1534321033309,
-  &quot;endTime&quot; : 1534321033315,
-  &quot;lastUpdated&quot; : 1534321033320,
+  &quot;startTime&quot; : 1534781326564,
+  &quot;createTime&quot; : 1534781326563,
+  &quot;endTime&quot; : 1534781326570,
+  &quot;lastUpdated&quot; : 1534781326574,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2329,8 +2350,8 @@ Content-Length: 1154
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/query?jobname=simpleJob&amp;resultsize=4' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1534321132560,
-  &quot;START_DATE&quot; : 1534320932560
+  &quot;END_DATE&quot; : 1534781426100,
+  &quot;START_DATE&quot; : 1534781226100
 }'</code></pre>
 </div>
 </div>
@@ -2347,8 +2368,8 @@ Content-Length: 95
 
 {
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1534321132560,
-  &quot;START_DATE&quot; : 1534320932560
+  &quot;END_DATE&quot; : 1534781426100,
+  &quot;START_DATE&quot; : 1534781226100
 }</code></pre>
 </div>
 </div>
@@ -2361,7 +2382,7 @@ Content-Length: 95
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 15 Aug 2018 08:17:11 GMT
+Date: Mon, 20 Aug 2018 16:08:45 GMT
 Content-Length: 4638
 
 [ {
@@ -2370,7 +2391,7 @@ Content-Length: 4638
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1534321032543,
+        &quot;parameter&quot; : 1534781326089,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2393,9 +2414,9 @@ Content-Length: 4638
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1534321032549,
-    &quot;endTime&quot; : 1534321032552,
-    &quot;lastUpdated&quot; : 1534321032552,
+    &quot;startTime&quot; : 1534781326092,
+    &quot;endTime&quot; : 1534781326094,
+    &quot;lastUpdated&quot; : 1534781326094,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2405,10 +2426,10 @@ Content-Length: 4638
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1534321032545,
-  &quot;createTime&quot; : 1534321032544,
-  &quot;endTime&quot; : 1534321032552,
-  &quot;lastUpdated&quot; : 1534321032558,
+  &quot;startTime&quot; : 1534781326090,
+  &quot;createTime&quot; : 1534781326089,
+  &quot;endTime&quot; : 1534781326094,
+  &quot;lastUpdated&quot; : 1534781326099,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2421,7 +2442,7 @@ Content-Length: 4638
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1534321032485,
+        &quot;parameter&quot; : 1534781326040,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2444,9 +2465,9 @@ Content-Length: 4638
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1534321032493,
-    &quot;endTime&quot; : 1534321032495,
-    &quot;lastUpdated&quot; : 1534321032495,
+    &quot;startTime&quot; : 1534781326044,
+    &quot;endTime&quot; : 1534781326045,
+    &quot;lastUpdated&quot; : 1534781326045,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2456,10 +2477,10 @@ Content-Length: 4638
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1534321032488,
-  &quot;createTime&quot; : 1534321032486,
-  &quot;endTime&quot; : 1534321032496,
-  &quot;lastUpdated&quot; : 1534321032501,
+  &quot;startTime&quot; : 1534781326041,
+  &quot;createTime&quot; : 1534781326041,
+  &quot;endTime&quot; : 1534781326046,
+  &quot;lastUpdated&quot; : 1534781326051,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2472,7 +2493,7 @@ Content-Length: 4638
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1534321031906,
+        &quot;parameter&quot; : 1534781325470,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2495,9 +2516,9 @@ Content-Length: 4638
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1534321031914,
-    &quot;endTime&quot; : 1534321031916,
-    &quot;lastUpdated&quot; : 1534321031916,
+    &quot;startTime&quot; : 1534781325476,
+    &quot;endTime&quot; : 1534781325479,
+    &quot;lastUpdated&quot; : 1534781325479,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2507,10 +2528,10 @@ Content-Length: 4638
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1534321031908,
-  &quot;createTime&quot; : 1534321031906,
-  &quot;endTime&quot; : 1534321031917,
-  &quot;lastUpdated&quot; : 1534321031922,
+  &quot;startTime&quot; : 1534781325472,
+  &quot;createTime&quot; : 1534781325471,
+  &quot;endTime&quot; : 1534781325480,
+  &quot;lastUpdated&quot; : 1534781325485,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2546,9 +2567,9 @@ Content-Length: 4638
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1534321031830,
-    &quot;endTime&quot; : 1534321031833,
-    &quot;lastUpdated&quot; : 1534321031833,
+    &quot;startTime&quot; : 1534781325423,
+    &quot;endTime&quot; : 1534781325426,
+    &quot;lastUpdated&quot; : 1534781325426,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2558,10 +2579,10 @@ Content-Length: 4638
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1534321031825,
-  &quot;createTime&quot; : 1534321031823,
-  &quot;endTime&quot; : 1534321031834,
-  &quot;lastUpdated&quot; : 1534321031840,
+  &quot;startTime&quot; : 1534781325418,
+  &quot;createTime&quot; : 1534781325416,
+  &quot;endTime&quot; : 1534781325427,
+  &quot;lastUpdated&quot; : 1534781325431,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2626,7 +2647,7 @@ Content-Length: 205
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 X-Application-Context: it-application:0
-Date: Wed, 15 Aug 2018 08:17:11 GMT</code></pre>
+Date: Mon, 20 Aug 2018 16:08:45 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2662,7 +2683,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 15 Aug 2018 08:17:15 GMT
+Date: Mon, 20 Aug 2018 16:08:47 GMT
 Content-Length: 412
 
 {
@@ -2714,7 +2735,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 15 Aug 2018 08:17:15 GMT
+Date: Mon, 20 Aug 2018 16:08:47 GMT
 Content-Length: 22129
 
 {
@@ -3520,7 +3541,7 @@ Host: localhost</code></pre>
 X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 15 Aug 2018 08:17:15 GMT
+Date: Mon, 20 Aug 2018 16:08:47 GMT
 Content-Length: 19807
 
 {
@@ -4276,7 +4297,7 @@ Content-Length: 424
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 X-Application-Context: it-application:0
-Date: Wed, 15 Aug 2018 08:17:15 GMT</code></pre>
+Date: Mon, 20 Aug 2018 16:08:47 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4343,7 +4364,7 @@ Content-Length: 441
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Wed, 15 Aug 2018 08:17:13 GMT</code></pre>
+Date: Mon, 20 Aug 2018 16:08:46 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4374,7 +4395,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Wed, 15 Aug 2018 08:17:13 GMT</code></pre>
+Date: Mon, 20 Aug 2018 16:08:46 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4405,7 +4426,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Wed, 15 Aug 2018 08:17:15 GMT</code></pre>
+Date: Mon, 20 Aug 2018 16:08:47 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4436,7 +4457,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 X-Application-Context: it-application:0
-Date: Wed, 15 Aug 2018 08:17:13 GMT</code></pre>
+Date: Mon, 20 Aug 2018 16:08:46 GMT</code></pre>
 </div>
 </div>
 </div>
