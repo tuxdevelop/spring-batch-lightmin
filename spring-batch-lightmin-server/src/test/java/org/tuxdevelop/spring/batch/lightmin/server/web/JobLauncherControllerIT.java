@@ -14,7 +14,7 @@ public class JobLauncherControllerIT extends CommonControllerIT {
     public void initJobLaunchersIT() {
         try {
             this.mockMvc.perform(get("/jobLaunchers")
-                    .param("applicationid", applicationId)
+                    .param("applicationid", this.applicationId)
             )
                     .andExpect(status().isOk())
                     .andExpect(view().name("jobLaunchers"));
@@ -28,10 +28,8 @@ public class JobLauncherControllerIT extends CommonControllerIT {
         try {
             this.mockMvc.perform(post("/jobLauncher")
                     .param("jobName", "simpleJob")
-                    .param("id", applicationId)
-            ).andExpect(status().isFound())
-                    .andExpect(view().name
-                            ("redirect:job?jobname=simpleJob&applicationid=" + applicationId));
+                    .param("id", this.applicationId)
+            ).andExpect(status().isFound());
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -42,7 +40,7 @@ public class JobLauncherControllerIT extends CommonControllerIT {
         try {
             this.mockMvc.perform(get("/jobLauncher")
                     .param("jobName", "simpleJob")
-                    .param("id", applicationId)
+                    .param("id", this.applicationId)
             ).andExpect(status().isOk()).andExpect(view().name("jobLauncher"));
         } catch (final Exception e) {
             fail(e.getMessage());

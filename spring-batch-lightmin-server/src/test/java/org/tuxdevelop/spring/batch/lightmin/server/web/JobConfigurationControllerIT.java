@@ -16,7 +16,7 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
     public void getJobConfigurationsIT() {
         try {
             this.mockMvc.perform(get("/jobSchedulerConfigurations")
-                    .param("applicationid", applicationId)
+                    .param("applicationid", this.applicationId)
             )
                     .andExpect(status().isOk())
                     .andExpect(view().name("jobSchedulerConfigurations"));
@@ -29,7 +29,7 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
     public void getJobListenerConfigurationssIT() {
         try {
             this.mockMvc.perform(get("/jobListenerConfigurations")
-                    .param("applicationid", applicationId)
+                    .param("applicationid", this.applicationId)
             )
                     .andExpect(status().isOk())
                     .andExpect(view().name("jobListenerConfigurations"));
@@ -42,7 +42,7 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
     public void initAddJobConfigurationIT() {
         try {
             this.mockMvc.perform(get("/jobSchedulerConfigurationAdd")
-                    .param("applicationid", applicationId)
+                    .param("applicationid", this.applicationId)
             ).andExpect(status().isOk()).andExpect(view().name
                     ("jobSchedulerConfigurationAdd"));
         } catch (final Exception e) {
@@ -54,7 +54,7 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
     public void initAddJobListenerConfigurationIT() {
         try {
             this.mockMvc.perform(get("/jobListenerConfigurationAdd")
-                    .param("applicationid", applicationId)
+                    .param("applicationid", this.applicationId)
             ).andExpect(status().isOk()).andExpect(view().name
                     ("jobListenerConfigurationAdd"));
         } catch (final Exception e) {
@@ -66,8 +66,8 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
     public void initEditJobSchedulerConfigurationIT() {
         try {
             this.mockMvc.perform(get("/jobSchedulerEdit")
-                    .param("jobConfigurationId", addedJobConfiguration.getJobConfigurationId().toString())
-                    .param("applicationid", applicationId)
+                    .param("jobConfigurationId", this.addedJobConfiguration.getJobConfigurationId().toString())
+                    .param("applicationid", this.applicationId)
             )
                     .andExpect
                             (status().isOk())
@@ -82,8 +82,8 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
     public void initEditJobListenerConfigurationIT() {
         try {
             this.mockMvc.perform(get("/jobListenerEdit")
-                    .param("jobConfigurationId", addedListenerJobConfiguration.getJobConfigurationId().toString())
-                    .param("applicationid", applicationId)
+                    .param("jobConfigurationId", this.addedListenerJobConfiguration.getJobConfigurationId().toString())
+                    .param("applicationid", this.applicationId)
             )
                     .andExpect
                             (status().isOk())
@@ -105,12 +105,10 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
                     .param("jobName", "simpleJob")
                     .param("jobSchedulerType", "PERIOD")
                     .param("taskExecutorType", "SYNCHRONOUS")
-                    .param("applicationId", applicationId)
+                    .param("applicationId", this.applicationId)
             )
                     .andExpect
-                            (status().isFound())
-                    .andExpect
-                            (view().name("redirect:jobSchedulerConfigurations?applicationid=" + applicationId));
+                            (status().isFound());
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -120,7 +118,7 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
     public void updateJobConfigurationIT() {
         try {
             this.mockMvc.perform(post("/jobConfigurationEdit")
-                    .param("jobConfigurationId", addedJobConfiguration.getJobConfigurationId().toString())
+                    .param("jobConfigurationId", this.addedJobConfiguration.getJobConfigurationId().toString())
                     .param("jobIncrementer", "NONE")
                     .param("schedulerStatus", "INITIALIZED")
                     .param("fixedDelay", "100")
@@ -128,12 +126,10 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
                     .param("jobName", "simpleJob")
                     .param("jobSchedulerType", "PERIOD")
                     .param("taskExecutorType", "SYNCHRONOUS")
-                    .param("applicationId", applicationId)
+                    .param("applicationId", this.applicationId)
             )
                     .andExpect
-                            (status().isFound())
-                    .andExpect
-                            (view().name("redirect:jobSchedulerConfigurations?applicationid=" + applicationId));
+                            (status().isFound());
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -145,13 +141,11 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
     public void deleteJobConfigurationIT() {
         try {
             this.mockMvc.perform(post("/jobConfigurations")
-                    .param("jobConfigurationId", addedJobConfiguration.getJobConfigurationId().toString())
-                    .param("applicationid", applicationId)
+                    .param("jobConfigurationId", this.addedJobConfiguration.getJobConfigurationId().toString())
+                    .param("applicationid", this.applicationId)
             )
                     .andExpect
-                            (status().isFound())
-                    .andExpect
-                            (view().name("redirect:jobSchedulerConfigurations?applicationid=" + applicationId));
+                            (status().isFound());
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -161,13 +155,11 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
     public void startJobConfigurationIT() {
         try {
             this.mockMvc.perform(post("/jobConfigurationStart")
-                    .param("jobConfigurationId", addedJobConfiguration.getJobConfigurationId().toString())
-                    .param("applicationid", applicationId)
+                    .param("jobConfigurationId", this.addedJobConfiguration.getJobConfigurationId().toString())
+                    .param("applicationid", this.applicationId)
                     .param("redirect", "jobSchedulerConfigurations"))
                     .andExpect
-                            (status().isFound())
-                    .andExpect
-                            (view().name("redirect:jobSchedulerConfigurations?applicationid=" + applicationId));
+                            (status().isFound());
         } catch (final Exception e) {
             fail(e.getMessage());
         }
@@ -177,13 +169,11 @@ public class JobConfigurationControllerIT extends CommonControllerIT {
     public void stopJobConfigurationSchedulerIT() {
         try {
             this.mockMvc.perform(post("/jobConfigurationStop")
-                    .param("jobConfigurationId", addedJobConfiguration.getJobConfigurationId().toString())
-                    .param("applicationid", applicationId)
+                    .param("jobConfigurationId", this.addedJobConfiguration.getJobConfigurationId().toString())
+                    .param("applicationid", this.applicationId)
                     .param("redirect", "jobSchedulerConfigurations"))
                     .andExpect
-                            (status().isFound())
-                    .andExpect
-                            (view().name("redirect:jobSchedulerConfigurations?applicationid=" + applicationId));
+                            (status().isFound());
         } catch (final Exception e) {
             fail(e.getMessage());
         }
