@@ -27,9 +27,7 @@ public class PeriodScheduler extends AbstractScheduler {
 
     public PeriodScheduler(final SchedulerConstructorWrapper schedulerConstructorWrapper) {
         this.jobConfiguration = schedulerConstructorWrapper.getJobConfiguration();
-        this.threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        this.threadPoolTaskScheduler.setPoolSize(1);
-        this.threadPoolTaskScheduler.afterPropertiesSet();
+        this.threadPoolTaskScheduler = schedulerConstructorWrapper.getThreadPoolTaskScheduler();
         this.jobSchedulerConfiguration = this.jobConfiguration.getJobSchedulerConfiguration();
         this.job = schedulerConstructorWrapper.getJob();
         this.jobRunner = new JobRunner(this.job, schedulerConstructorWrapper.getJobLauncher(),
@@ -41,7 +39,7 @@ public class PeriodScheduler extends AbstractScheduler {
         } else {
             schedulerStatus = SchedulerStatus.INITIALIZED;
         }
-        setStatus(schedulerStatus);
+        this.setStatus(schedulerStatus);
     }
 
     @Override
@@ -50,17 +48,17 @@ public class PeriodScheduler extends AbstractScheduler {
         log.debug("Scheduling: " + this.jobRunner.getJob().getName() +
                 " with Parameters: " + this.jobRunner.getJobParameters().toProperties());
         this.threadPoolTaskScheduler.scheduleWithFixedDelay(this.jobRunner, initialDelay, this.jobSchedulerConfiguration.getFixedDelay());
-        setStatus(SchedulerStatus.RUNNING);
+        this.setStatus(SchedulerStatus.RUNNING);
     }
 
     @Override
     public void terminate() {
         this.threadPoolTaskScheduler.shutdown();
         while (this.threadPoolTaskScheduler.getActiveCount() > 0) {
-            setStatus(SchedulerStatus.IN_TERMINATION);
+            this.setStatus(SchedulerStatus.IN_TERMINATION);
         }
         this.threadPoolTaskScheduler.initialize();
-        setStatus(SchedulerStatus.STOPPED);
+        this.setStatus(SchedulerStatus.STOPPED);
     }
 
     @Override

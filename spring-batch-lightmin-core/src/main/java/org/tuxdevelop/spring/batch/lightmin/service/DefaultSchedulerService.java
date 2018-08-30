@@ -8,6 +8,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.CronScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
@@ -26,6 +27,8 @@ import java.util.Set;
  */
 @Slf4j
 public class DefaultSchedulerService implements SchedulerService {
+
+    private static final String EXECUTOR_SUFFIX = "_executor";
 
     private ApplicationContext applicationContext;
 
@@ -52,10 +55,10 @@ public class DefaultSchedulerService implements SchedulerService {
         final String beanName;
         switch (schedulerType) {
             case CRON:
-                beanName = registerScheduler(jobConfiguration, CronScheduler.class);
+                beanName = this.registerScheduler(jobConfiguration, CronScheduler.class);
                 break;
             case PERIOD:
-                beanName = registerScheduler(jobConfiguration, PeriodScheduler.class);
+                beanName = this.registerScheduler(jobConfiguration, PeriodScheduler.class);
                 break;
             default:
                 throw new SpringBatchLightminConfigurationException("Unknown Scheduler Type: " + schedulerType);
@@ -70,9 +73,9 @@ public class DefaultSchedulerService implements SchedulerService {
 
     @Override
     public void refreshSchedulerForJob(final JobConfiguration jobConfiguration) {
-        terminate(jobConfiguration.getJobSchedulerConfiguration().getBeanName());
-        unregisterSchedulerForJob(jobConfiguration.getJobSchedulerConfiguration().getBeanName());
-        registerSchedulerForJob(jobConfiguration);
+        this.terminate(jobConfiguration.getJobSchedulerConfiguration().getBeanName());
+        this.unregisterSchedulerForJob(jobConfiguration.getJobSchedulerConfiguration().getBeanName());
+        this.registerSchedulerForJob(jobConfiguration);
     }
 
     @Override
@@ -124,7 +127,7 @@ public class DefaultSchedulerService implements SchedulerService {
     }
 
     @Override
-    public JobLauncher createLobLauncher(TaskExecutorType taskExecutorType, JobRepository jobRepository) {
+    public JobLauncher createLobLauncher(final TaskExecutorType taskExecutorType, final JobRepository jobRepository) {
         return ServiceUtil.createJobLauncher(taskExecutorType, this.jobRepository);
     }
 
@@ -139,20 +142,29 @@ public class DefaultSchedulerService implements SchedulerService {
             final JobSchedulerConfiguration jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
             final String beanName;
             if (jobSchedulerConfiguration.getBeanName() == null || jobSchedulerConfiguration.getBeanName().isEmpty()) {
-                beanName = generateSchedulerBeanName(jobConfiguration.getJobName(),
+                beanName = this.generateSchedulerBeanName(jobConfiguration.getJobName(),
                         jobConfiguration.getJobConfigurationId(), jobConfiguration.getJobSchedulerConfiguration()
                                 .getJobSchedulerType());
             } else {
                 beanName = jobSchedulerConfiguration.getBeanName();
             }
+            final ThreadPoolTaskScheduler threadPoolTaskScheduler = this.registerThreadPoolTaskScheduler(beanName);
             final SchedulerConstructorWrapper schedulerConstructorWrapper = new SchedulerConstructorWrapper();
             schedulerConstructorWrapper.setJobParameters(jobParameters);
             schedulerConstructorWrapper.setJob(job);
             schedulerConstructorWrapper.setJobLauncher(jobLauncher);
             schedulerConstructorWrapper.setJobIncrementer(jobConfiguration.getJobIncrementer());
             schedulerConstructorWrapper.setJobConfiguration(jobConfiguration);
+            schedulerConstructorWrapper.setThreadPoolTaskScheduler(threadPoolTaskScheduler);
             constructorValues.add(schedulerConstructorWrapper);
-            this.beanRegistrar.registerBean(schedulerClass, beanName, constructorValues, null, null, null, null);
+            this.beanRegistrar.registerBean(
+                    schedulerClass,
+                    beanName,
+                    constructorValues,
+                    null,
+                    null,
+                    null,
+                    null);
             return beanName;
         } catch (final Exception e) {
             throw new SpringBatchLightminConfigurationException(e, e.getMessage());
@@ -162,5 +174,19 @@ public class DefaultSchedulerService implements SchedulerService {
     private String generateSchedulerBeanName(final String jobName, final Long id,
                                              final JobSchedulerType jobSchedulerType) {
         return jobName + jobSchedulerType.name() + id;
+    }
+
+    private ThreadPoolTaskScheduler registerThreadPoolTaskScheduler(final String jobConfigurationBeanName) {
+        final String beanName = jobConfigurationBeanName + EXECUTOR_SUFFIX;
+        this.beanRegistrar.registerBean(
+                ThreadPoolTaskScheduler.class,
+                beanName,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        return this.applicationContext.getBean(beanName, ThreadPoolTaskScheduler.class);
     }
 }
