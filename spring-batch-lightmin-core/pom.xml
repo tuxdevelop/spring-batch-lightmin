@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-batch-lightmin</artifactId>
         <groupId>org.tuxdevelop</groupId>
-        <version>0.5.0</version>
+        <version>0.5.1-SNAPSHOT</version>
     </parent>
 
     <packaging>jar</packaging>
