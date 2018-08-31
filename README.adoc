@@ -16,7 +16,7 @@ and depending beans out of the box.
 
 == Documentation
 
-The documentation can be found at https://github.com/tuxdevelop/spring-batch-lightmin/tree/master/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[Spring Batch Linghtmin Documentation]
+The documentation can be found at https://github.com/tuxdevelop/spring-batch-lightmin/blob/master/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[Spring Batch Linghtmin Documentation]
 
 == Samples
 
