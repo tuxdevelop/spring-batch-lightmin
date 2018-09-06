@@ -46,8 +46,8 @@ public final class ResourceToAdminMapper {
         final Map<String, org.springframework.batch.core.JobParameter> parametersMap = new HashMap<>();
         if (jobParameters != null) {
             for (final Map.Entry<String, JobParameter> entry : jobParameters.getParameters().entrySet()) {
-                final org.springframework.batch.core.JobParameter.ParameterType parameterType = map(entry.getValue()
-                        .getParameterType());
+                final org.springframework.batch.core.JobParameter.ParameterType parameterType =
+                        map(entry.getValue().getParameterType());
                 final org.springframework.batch.core.JobParameter jobParameter;
                 final String parameter = String.valueOf(entry.getValue().getParameter());
                 switch (parameterType) {

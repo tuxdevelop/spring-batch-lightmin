@@ -307,14 +307,18 @@ public final class ParameterParser {
     public static Date parseDate(final String dateString) {
         Date date;
         try {
-            date = simpleDateFormatTimeStamp.parse(dateString);
-        } catch (final ParseException e) {
-            log.info("Could not parse date: " + dateString);
+            date = new Date(Long.parseLong(dateString));
+        } catch (final Exception ex) {
             try {
-                date = simpleDateFormat.parse(dateString);
-            } catch (final ParseException e1) {
-                log.error(e.getMessage());
-                throw new SpringBatchLightminApplicationException(e1, e1.getMessage());
+                date = simpleDateFormatTimeStamp.parse(dateString);
+            } catch (final ParseException e) {
+                log.info("Could not parse date: " + dateString);
+                try {
+                    date = simpleDateFormat.parse(dateString);
+                } catch (final ParseException e1) {
+                    log.error(e.getMessage());
+                    throw new SpringBatchLightminApplicationException(e1, e1.getMessage());
+                }
             }
         }
         return date;
@@ -324,7 +328,7 @@ public final class ParameterParser {
 
         STRING("STRING"), LONG("LONG"), DATE("DATE"), DOUBLE("DOUBLE");
 
-        private String typeString;
+        private final String typeString;
 
         StringTypes(final String typeString) {
             this.typeString = typeString;
