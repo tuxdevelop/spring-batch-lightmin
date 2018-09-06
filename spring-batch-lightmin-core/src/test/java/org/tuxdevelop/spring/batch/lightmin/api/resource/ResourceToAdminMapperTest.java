@@ -9,7 +9,6 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.util.ParameterParser;
 
-import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -45,7 +44,7 @@ public class ResourceToAdminMapperTest {
         final JobConfigurations jobConfigurationsToMap = new JobConfigurations();
         jobConfigurationsToMap.setJobConfigurations(jobConfigurations);
         final Collection<JobConfiguration> result = ResourceToAdminMapper.map(jobConfigurationsToMap);
-        assertJobConfigurations(result, jobConfigurationsToMap);
+        this.assertJobConfigurations(result, jobConfigurationsToMap);
     }
 
     @Test
@@ -71,14 +70,14 @@ public class ResourceToAdminMapperTest {
         final JobConfigurations jobConfigurationsToMap = new JobConfigurations();
         jobConfigurationsToMap.setJobConfigurations(jobConfigurations);
         final Collection<JobConfiguration> result = ResourceToAdminMapper.map(jobConfigurationsToMap);
-        assertJobConfigurations(result, jobConfigurationsToMap);
+        this.assertJobConfigurations(result, jobConfigurationsToMap);
     }
 
     /**
      * Test for issue #23
      */
     @Test
-    public void testMapDateComparedToParameterParser(){
+    public void testMapDateComparedToParameterParser() {
 
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ParameterParser.DATE_FORMAT_WITH_TIMESTAMP);
         final Date now = new Date();
@@ -86,27 +85,35 @@ public class ResourceToAdminMapperTest {
         jobParameter.setParameter(simpleDateFormat.format(now));
         jobParameter.setParameterType(ParameterType.DATE);
 
+        final JobParameter jobParameter2 = new JobParameter();
+        jobParameter2.setParameter(String.valueOf(now.getTime()));
+        jobParameter2.setParameterType(ParameterType.DATE);
+
+
         final Map<String, JobParameter> parameterMap = new HashMap<>();
-        parameterMap.put("date_parameter",jobParameter);
+        parameterMap.put("date_parameter", jobParameter);
+        parameterMap.put("second_date", jobParameter2);
 
         final JobParameters jobParameters = new JobParameters();
         jobParameters.setParameters(parameterMap);
 
-        org.springframework.batch.core.JobParameters result = ResourceToAdminMapper.map(jobParameters);
+        final org.springframework.batch.core.JobParameters result = ResourceToAdminMapper.map(jobParameters);
         assertThat(result).isNotNull();
-        assertThat(result.getParameters()).hasSize(1);
+        assertThat(result.getParameters()).hasSize(2);
 
         final Date resultDate = result.getDate("date_parameter");
+        final Date resultDate2 = result.getDate("second_date");
         final Date parserResult = ParameterParser.parseDate(simpleDateFormat.format(now));
 
         assertThat(resultDate).isEqualTo(parserResult);
+        assertThat(resultDate2).isEqualTo(parserResult);
     }
 
     private void assertJobConfigurations(final Collection<JobConfiguration> jobConfigurationCollection, final JobConfigurations jobConfigurations) {
         for (final JobConfiguration jobConfiguration : jobConfigurationCollection) {
-            final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration compareWith = getById
+            final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration compareWith = this.getById
                     (jobConfiguration.getJobConfigurationId(), jobConfigurations);
-            assertJobConfiguration(jobConfiguration, compareWith);
+            this.assertJobConfiguration(jobConfiguration, compareWith);
         }
     }
 
@@ -116,10 +123,10 @@ public class ResourceToAdminMapperTest {
         assertThat(compareWith).isNotNull();
         assertThat(jobConfiguration.getJobName()).isEqualTo(compareWith.getJobName());
         assertThat(jobConfiguration.getJobConfigurationId()).isEqualTo(compareWith.getJobConfigurationId());
-        assertJobParameters(jobConfiguration.getJobParameters(), compareWith.getJobParameters());
-        assertJobSchedulerConfiguration(jobConfiguration.getJobSchedulerConfiguration(), compareWith
+        this.assertJobParameters(jobConfiguration.getJobParameters(), compareWith.getJobParameters());
+        this.assertJobSchedulerConfiguration(jobConfiguration.getJobSchedulerConfiguration(), compareWith
                 .getJobSchedulerConfiguration());
-        assertJobListenerConfiguration(jobConfiguration.getJobListenerConfiguration(), compareWith.getJobListenerConfiguration());
+        this.assertJobListenerConfiguration(jobConfiguration.getJobListenerConfiguration(), compareWith.getJobListenerConfiguration());
     }
 
     private void assertJobSchedulerConfiguration(final JobSchedulerConfiguration jobSchedulerConfiguration,
@@ -128,9 +135,9 @@ public class ResourceToAdminMapperTest {
             assertThat(jobSchedulerConfiguration.getFixedDelay()).isEqualTo(compareWith.getFixedDelay());
             assertThat(jobSchedulerConfiguration.getInitialDelay()).isEqualTo(compareWith.getInitialDelay());
             assertThat(jobSchedulerConfiguration.getCronExpression()).isEqualTo(compareWith.getCronExpression());
-            assertJobSchedulerType(jobSchedulerConfiguration.getJobSchedulerType(), compareWith.getJobSchedulerType());
-            assertSchedulerStatus(jobSchedulerConfiguration.getSchedulerStatus(), compareWith.getSchedulerStatus());
-            assertTaskExecuorType(jobSchedulerConfiguration.getTaskExecutorType(), compareWith.getTaskExecutorType());
+            this.assertJobSchedulerType(jobSchedulerConfiguration.getJobSchedulerType(), compareWith.getJobSchedulerType());
+            this.assertSchedulerStatus(jobSchedulerConfiguration.getSchedulerStatus(), compareWith.getSchedulerStatus());
+            this.assertTaskExecuorType(jobSchedulerConfiguration.getTaskExecutorType(), compareWith.getTaskExecutorType());
         } else {
             assertThat(compareWith).isNull();
         }
