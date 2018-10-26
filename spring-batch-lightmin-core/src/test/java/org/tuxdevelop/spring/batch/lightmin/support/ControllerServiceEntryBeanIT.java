@@ -3,7 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.support;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
@@ -23,7 +23,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = ITMapConfiguration.class)
+@SpringBootTest(classes = ITMapConfiguration.class)
 public class ControllerServiceEntryBeanIT {
 
     @Autowired
