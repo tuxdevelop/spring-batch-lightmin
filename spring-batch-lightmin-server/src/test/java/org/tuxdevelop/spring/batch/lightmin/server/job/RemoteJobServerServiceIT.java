@@ -3,8 +3,8 @@ package org.tuxdevelop.spring.batch.lightmin.server.job;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
@@ -29,11 +29,12 @@ public class RemoteJobServerServiceIT extends JobServerServiceIT {
     @Autowired
     private LightminClientRegistrator lightminClientRegistrator;
     @Autowired
-    private EmbeddedWebApplicationContext embeddedWebApplicationContext;
-    @Autowired
     private LightminClientProperties lightminClientProperties;
     @Autowired
     private LightminProperties lightminProperties;
+
+    @LocalServerPort
+    private Integer port;
 
     @Override
     public JobServerService getJobServerService() {
@@ -52,7 +53,6 @@ public class RemoteJobServerServiceIT extends JobServerServiceIT {
     @Before
     public void init() {
         super.init();
-        final int port = this.embeddedWebApplicationContext.getEmbeddedServletContainer().getPort();
         this.lightminClientProperties.setServiceUrl("http://localhost:" + port);
         this.lightminClientProperties.setServerPort(port);
         this.lightminClientProperties.setManagementPort(port);

@@ -4,10 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.configuration.JobRegistry;
@@ -22,12 +21,7 @@ import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.listener.FolderListener;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 
-import java.util.Map;
-import java.util.Set;
-
 import static org.assertj.core.api.Fail.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -56,7 +50,8 @@ public class DefaultListenerServiceTest {
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobListenerConfiguration);
         listenerService.registerListenerForJob(jobConfiguration);
         verify(jobRegistry, times(1)).getJob(anyString());
-        verify(beanRegistrar, times(1)).registerBean(any(Class.class), anyString(), any(Set.class), any(Set.class), any(Map.class), any(Map.class), any(Set.class));
+        verify(beanRegistrar, times(1))
+                .registerBean(any(Class.class), anyString(), anySet(), eq(null), eq(null), eq(null), eq(null));
     }
 
     @Test
@@ -80,7 +75,7 @@ public class DefaultListenerServiceTest {
         listenerConstructorWrapper.setJobLauncher(jobLauncher);
         listenerConstructorWrapper.setJobParameters(new JobParametersBuilder().toJobParameters());
         final FolderListener folderListener = new FolderListener(listenerConstructorWrapper);
-        when(applicationContext.getBean(anyString(), Matchers.any(Class.class))).thenReturn(folderListener);
+        when(applicationContext.getBean(anyString(), any(Class.class))).thenReturn(folderListener);
         when(applicationContext.containsBean(anyString())).thenReturn(Boolean.TRUE);
         try {
             listenerService.activateListener("testBean", Boolean.FALSE);
@@ -104,7 +99,7 @@ public class DefaultListenerServiceTest {
         listenerConstructorWrapper.setJobLauncher(jobLauncher);
         listenerConstructorWrapper.setJobParameters(new JobParametersBuilder().toJobParameters());
         final FolderListener folderListener = new FolderListener(listenerConstructorWrapper);
-        when(applicationContext.getBean(anyString(), Matchers.any(Class.class))).thenReturn(folderListener);
+        when(applicationContext.getBean(anyString(), any(Class.class))).thenReturn(folderListener);
         when(applicationContext.containsBean(anyString())).thenReturn(Boolean.TRUE);
         try {
             listenerService.terminateListener("testBean");

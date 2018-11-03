@@ -4,10 +4,9 @@ package org.tuxdevelop.spring.batch.lightmin.client.registration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.scheduling.TaskScheduler;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -15,11 +14,9 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class RegistrationLightminClientApplicationBeanTest {
 
     @Mock
@@ -29,7 +26,7 @@ public class RegistrationLightminClientApplicationBeanTest {
     @Mock
     private LightminClientRegistrator lightminClientRegistrator;
 
-    @InjectMocks
+    //    @InjectMocks
     private RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean;
 
     @Test

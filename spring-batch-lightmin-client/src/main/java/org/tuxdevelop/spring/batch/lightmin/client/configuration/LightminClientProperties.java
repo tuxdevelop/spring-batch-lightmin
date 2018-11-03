@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
+import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.StringUtils;
@@ -61,9 +61,10 @@ public class LightminClientProperties {
 
     @Autowired
     public LightminClientProperties(final ManagementServerProperties managementServerProperties,
-                                    final ServerProperties serverProperties,
-                                    @Value("${spring.application.name:spring-boot-application}") final String name,
-                                    @Value("${endpoints.health.id:health}") final String healthEndpointId) {
+            final ServerProperties serverProperties,
+            @Value("${spring.application.name:spring-boot-application}") final String name,
+            //Todo: Refactor with HealthEndpointProperties (id got deleted)
+            @Value("${endpoints.health.id:health}") final String healthEndpointId) {
         this.name = name;
         this.healthEndpointId = healthEndpointId;
         this.managementServerProperties = managementServerProperties;
@@ -78,7 +79,7 @@ public class LightminClientProperties {
 
         if ((this.managementPort == null || this.managementPort.equals(this.serverPort))
                 && getServiceUrl() != null) {
-            return append(getServiceUrl(), this.managementServerProperties.getContextPath());
+            return append(getServiceUrl(), this.managementServerProperties.getServlet().getContextPath());
         }
 
         if (this.managementPort == null) {
@@ -95,11 +96,12 @@ public class LightminClientProperties {
                 hostAddress = address.getHostAddress();
             }
             return append(append(createLocalUri(hostAddress, this.managementPort),
-                    this.serverProperties.getContextPath()), this.managementServerProperties.getContextPath());
+                    this.serverProperties.getServlet().getContextPath()),
+                    this.managementServerProperties.getServlet().getContextPath());
 
         }
         return append(createLocalUri(determineHost(), this.managementPort),
-                this.managementServerProperties.getContextPath());
+                this.managementServerProperties.getServlet().getContextPath());
     }
 
     public String getHealthUrl() {
@@ -130,15 +132,16 @@ public class LightminClientProperties {
                 hostAddress = address.getHostAddress();
             }
             return append(append(createLocalUri(hostAddress, this.serverPort),
-                    this.serverProperties.getServletPath()), this.serverProperties.getContextPath());
+                    this.serverProperties.getServlet().getPath()), this.serverProperties.getServlet().getContextPath());
 
         }
         return append(append(createLocalUri(determineHost(), this.serverPort),
-                this.serverProperties.getServletPath()), this.serverProperties.getContextPath());
+                this.serverProperties.getServlet().getPath()), this.serverProperties.getServlet().getContextPath());
     }
 
     private String createLocalUri(final String host, final int port) {
-        final String scheme = this.serverProperties.getSsl() != null && this.serverProperties.getSsl().isEnabled() ? "https" : "http";
+        final String scheme = this.serverProperties.getSsl() != null && this.serverProperties.getSsl()
+                .isEnabled() ? "https" : "http";
         return scheme + "://" + host + ":" + port;
     }
 

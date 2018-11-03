@@ -92,15 +92,14 @@
             <artifactId>spring-batch-integration</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-java-dsl</artifactId>
-        </dependency>
-
         <!-- quartz -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
 
     </dependencies>
