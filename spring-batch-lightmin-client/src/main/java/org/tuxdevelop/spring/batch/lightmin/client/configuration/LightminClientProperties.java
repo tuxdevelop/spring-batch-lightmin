@@ -132,11 +132,11 @@ public class LightminClientProperties {
                 hostAddress = address.getHostAddress();
             }
             return append(append(createLocalUri(hostAddress, this.serverPort),
-                    this.serverProperties.getServlet().getPath()), this.serverProperties.getServlet().getContextPath());
+                    this.serverProperties.getServlet().getContextPath()), this.serverProperties.getServlet().getContextPath());
 
         }
         return append(append(createLocalUri(determineHost(), this.serverPort),
-                this.serverProperties.getServlet().getPath()), this.serverProperties.getServlet().getContextPath());
+                this.serverProperties.getServlet().getContextPath()), this.serverProperties.getServlet().getContextPath());
     }
 
     private String createLocalUri(final String host, final int port) {
