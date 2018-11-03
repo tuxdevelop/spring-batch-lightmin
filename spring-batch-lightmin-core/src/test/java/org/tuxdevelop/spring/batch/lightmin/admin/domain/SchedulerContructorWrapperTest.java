@@ -7,7 +7,6 @@ public class SchedulerContructorWrapperTest extends PojoTestBase {
 
     @Override
     public void performPojoTest() {
-        testStructureAndBehavior(SchedulerConstructorWrapper.class);
-        testEquals(SchedulerConstructorWrapper.class);
+        this.testStructureAndBehavior(SchedulerConstructorWrapper.class);
     }
 }

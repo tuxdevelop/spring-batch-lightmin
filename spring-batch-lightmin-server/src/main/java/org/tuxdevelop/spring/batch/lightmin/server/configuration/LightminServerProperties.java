@@ -34,6 +34,10 @@ public class LightminServerProperties {
     @Setter
     private Boolean discoveryEnabled = Boolean.FALSE;
 
+    @Getter
+    @Setter
+    private Boolean useXForwardedHeaders = Boolean.FALSE;
+
     public void setContextPath(final String pathPrefix) {
         if (!pathPrefix.startsWith("/") || pathPrefix.endsWith("/")) {
             throw new IllegalArgumentException(

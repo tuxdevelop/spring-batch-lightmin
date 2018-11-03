@@ -17,7 +17,7 @@ public class MapJobExecutionEventRepository implements JobExecutionEventReposito
     }
 
     @Override
-    public void save(final JobExecutionEventInfo jobExecutionEventInfo) {
+    public synchronized void save(final JobExecutionEventInfo jobExecutionEventInfo) {
         this.store.put(jobExecutionEventInfo.getJobExecutionId(), jobExecutionEventInfo);
     }
 
@@ -48,9 +48,24 @@ public class MapJobExecutionEventRepository implements JobExecutionEventReposito
     }
 
     private void sortByStartDate(final List<JobExecutionEventInfo> jobExecutionEventInfos) {
-        jobExecutionEventInfos.sort((jobExecutionEventInfo, jobExecutionEventInfoCompare)
-                -> (jobExecutionEventInfoCompare.getStartDate()
-                .compareTo(jobExecutionEventInfo.getStartDate())));
+        if (jobExecutionEventInfos != null && !jobExecutionEventInfos.isEmpty()) {
+            jobExecutionEventInfos.sort((jobExecutionEventInfo, jobExecutionEventInfoCompare) -> {
+                final int result;
+                if (jobExecutionEventInfoCompare.getStartDate() != null) {
+                    if (jobExecutionEventInfo.getStartDate() != null) {
+                        result = jobExecutionEventInfoCompare.getStartDate()
+                                .compareTo(jobExecutionEventInfo.getStartDate());
+                    } else {
+                        result = 1;
+                    }
+                } else {
+                    result = -1;
+                }
+                return result;
+            });
+        } else {
+            log.debug("Skip sorting for a null or empty list");
+        }
     }
 
     private List<JobExecutionEventInfo> subset(

@@ -31,9 +31,7 @@ public class CronScheduler extends AbstractScheduler {
 
     public CronScheduler(final SchedulerConstructorWrapper schedulerConstructorWrapper) {
         this.jobConfiguration = schedulerConstructorWrapper.getJobConfiguration();
-        this.threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        this.threadPoolTaskScheduler.setPoolSize(1);
-        this.threadPoolTaskScheduler.afterPropertiesSet();
+        this.threadPoolTaskScheduler = schedulerConstructorWrapper.getThreadPoolTaskScheduler();
         this.jobSchedulerConfiguration = this.jobConfiguration.getJobSchedulerConfiguration();
         this.timeZone = TimeZone.getDefault();
         this.trigger = new CronTrigger(this.jobSchedulerConfiguration.getCronExpression(), this.timeZone);
@@ -49,7 +47,7 @@ public class CronScheduler extends AbstractScheduler {
         } else {
             schedulerStatus = SchedulerStatus.INITIALIZED;
         }
-        setStatus(schedulerStatus);
+        this.setStatus(schedulerStatus);
     }
 
     @Override
@@ -57,17 +55,17 @@ public class CronScheduler extends AbstractScheduler {
         log.info("Scheduling: " + this.jobRunner.getJob().getName() +
                 " with Parameters: " + this.jobRunner.getJobParameters().toProperties());
         this.threadPoolTaskScheduler.schedule(this.jobRunner, this.trigger);
-        setStatus(SchedulerStatus.RUNNING);
+        this.setStatus(SchedulerStatus.RUNNING);
     }
 
     @Override
     public void terminate() {
         this.threadPoolTaskScheduler.shutdown();
         while (this.threadPoolTaskScheduler.getActiveCount() > 0) {
-            setStatus(SchedulerStatus.IN_TERMINATION);
+            this.setStatus(SchedulerStatus.IN_TERMINATION);
         }
         this.threadPoolTaskScheduler.initialize();
-        setStatus(SchedulerStatus.STOPPED);
+        this.setStatus(SchedulerStatus.STOPPED);
     }
 
     @Override

@@ -35,10 +35,11 @@ public class StepController extends CommonController {
                                     @ModelAttribute("jobExecution") final JobExecutionModel jobExecutionModel,
                                     @PathVariable("stepExecutionId") final Long stepExecutionId,
                                     @RequestParam("applicationid") final String applicationId) {
-        final LightminClientApplication lightminClientApplication = registrationBean.get(applicationId);
+        final LightminClientApplication lightminClientApplication = this.registrationBean.get(applicationId);
         final StepExecutionModel stepExecutionModel = new StepExecutionModel();
         final JobExecution jobExecution = jobExecutionModel.getJobExecution();
-        final StepExecution stepExecution = jobServerService.getStepExecution(jobExecution.getId(), stepExecutionId, lightminClientApplication);
+        final StepExecution stepExecution =
+                this.jobServerService.getStepExecution(jobExecution.getId(), stepExecutionId, lightminClientApplication);
         stepExecutionModel.setJobInstanceId(jobExecution.getJobInstance().getId());
         stepExecutionModel.setStepExecution(stepExecution);
         modelMap.put("stepExecution", stepExecutionModel);

@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.admin.scheduler;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -17,6 +18,7 @@ import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplica
  * @see PeriodScheduler
  * @see CronScheduler
  */
+@Slf4j
 abstract class AbstractScheduler implements Scheduler, InitializingBean {
 
     @Setter
@@ -38,13 +40,13 @@ abstract class AbstractScheduler implements Scheduler, InitializingBean {
             this.jobLauncher = jobLauncher;
             this.jobParameters = jobParameters;
             this.jobIncrementer = jobIncrementer;
-            this.jobParameters = jobParameters;
         }
 
         @Override
         public void run() {
             try {
-                attachJobIncrementer();
+                this.attachJobIncrementer();
+                log.debug("Launching Job {}", this.job.getName());
                 this.jobLauncher.run(this.job, this.jobParameters);
             } catch (final Exception e) {
                 throw new SpringBatchLightminApplicationException(e, e.getMessage());

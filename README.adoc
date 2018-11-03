@@ -16,7 +16,7 @@ and depending beans out of the box.
 
 == Documentation
 
-The documentation can be found at http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/next/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[Spring Batch Linghtmin Documentation]
+The documentation can be found at http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/master/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[Spring Batch Linghtmin Documentation]
 
 == Samples
 
@@ -80,6 +80,23 @@ spring:
 -----
 
 The server itself has to be a _DiscoveryClient_.
+
+===== Server behind a Proxy
+
+The server ui uses redirects and the _HOST_ header is taken to create the redirect urls. This is the default behavior of Spring MVC.
+If the server ui is running behind a proxy, the implementation of the server takes care, that the _X-FORWARD-PREFIX_ header is used as well.
+
+If the proxy cannot pass the _HOST_ header or you do not want to change the default, e.g. _Zuul_, the following property can force the server
+to use the _X-FORWARDED-HOST_ header to build the redirect urls.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      server:
+        use-x-forwarded-headers: true
+----
 
 === Client
 
@@ -530,3 +547,9 @@ Additional job parameter, to give each job instance uniqueness.
 
 * NONE
 * DATE
+
+=== Events
+
+The Events view shows all current finished executions of all clients.
+
+image::event.png[]

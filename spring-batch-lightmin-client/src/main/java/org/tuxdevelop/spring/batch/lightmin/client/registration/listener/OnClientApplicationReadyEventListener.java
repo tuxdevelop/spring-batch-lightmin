@@ -13,7 +13,9 @@ public class OnClientApplicationReadyEventListener implements ApplicationListene
     private final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean;
     private final LightminClientProperties lightminClientProperties;
 
-    public OnClientApplicationReadyEventListener(final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean, final LightminClientProperties lightminClientProperties) {
+    public OnClientApplicationReadyEventListener(
+            final RegistrationLightminClientApplicationBean registrationLightminClientApplicationBean,
+            final LightminClientProperties lightminClientProperties) {
         this.registrationLightminClientApplicationBean = registrationLightminClientApplicationBean;
         this.lightminClientProperties = lightminClientProperties;
     }

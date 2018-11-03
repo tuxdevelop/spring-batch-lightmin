@@ -75,7 +75,7 @@ public class LightminClientRegistratorTest {
 
         try {
             when(this.lightminServerLocator.getRemoteUrls()).thenReturn(Collections.singletonList("http://localhost:8080"));
-            this.lightminClientRegistrator.deregister();
+            this.lightminClientRegistrator.deregister(null);
         } catch (final Exception e) {
             fail(e.getMessage());
         }

@@ -25,7 +25,10 @@ public class RegistrationController {
         this.registrationBean = registrationBean;
     }
 
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<LightminClientApplication> register(
             @RequestBody final LightminClientApplication lightminClientApplication) {
         log.debug("Register LightminClientApplication {}", lightminClientApplication);
@@ -34,7 +37,7 @@ public class RegistrationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredLightminClientApplication);
     }
 
-    @RequestMapping(value = "{applicationid}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{applicationid}", method = RequestMethod.DELETE)
     public ResponseEntity<?> unregister(@PathVariable(value = "applicationid") final String applicationId) {
         log.debug("Unregister LightminClientApplication with id {}", applicationId);
         final LightminClientApplication lightminClientApplication = this.registrationBean.deleteRegistration(applicationId);
@@ -45,7 +48,9 @@ public class RegistrationController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<LightminClientApplication[]> getAll() {
         final Collection<LightminClientApplication> lightminClientApplications = this.registrationBean.getAll();
         return ResponseEntity.ok(

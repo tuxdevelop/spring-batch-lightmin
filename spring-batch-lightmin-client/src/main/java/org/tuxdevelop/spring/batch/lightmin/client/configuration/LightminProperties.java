@@ -12,9 +12,9 @@ public class LightminProperties {
     private Long period = 10000L;
     private String username;
     private String password;
-    private boolean autoDeregistration;
-    private boolean autoRegistration = true;
-    private boolean registerOnce = true;
+    private boolean autoDeregistration = Boolean.TRUE;
+    private boolean autoRegistration = Boolean.TRUE;
+    private boolean registerOnce = Boolean.FALSE;
 
     public String[] getLightminUrl() {
         final String[] adminUrls;

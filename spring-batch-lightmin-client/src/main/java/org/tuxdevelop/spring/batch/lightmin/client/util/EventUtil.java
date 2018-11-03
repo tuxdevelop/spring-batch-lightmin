@@ -16,14 +16,19 @@ public final class EventUtil {
     private EventUtil() {
     }
 
-    public static void updatePorts(final ContextRefreshedEvent event, final LightminClientProperties lightminClientProperties) {
+    public static void updatePorts(
+            final ContextRefreshedEvent event,
+            final LightminClientProperties lightminClientProperties) {
         final Integer serverPort;
         final Integer managementPort;
         if (lightminClientProperties.getServerPort() != null) {
             serverPort = lightminClientProperties.getServerPort();
         } else {
 
-            final Integer serverPortEnv = event.getApplicationContext().getEnvironment().getProperty("server.port", Integer.class);
+            final Integer serverPortEnv = event
+                    .getApplicationContext()
+                    .getEnvironment()
+                    .getProperty("server.port", Integer.class);
 
             if (serverPortEnv == null) {
                 serverPort = SERVER_PORT_DEFAULT;
@@ -37,7 +42,10 @@ public final class EventUtil {
         if (lightminClientProperties.getManagementPort() != null) {
             managementPort = lightminClientProperties.getManagementPort();
         } else {
-            managementPort = event.getApplicationContext().getEnvironment().getProperty("management.port", Integer.class, serverPort);
+            managementPort = event
+                    .getApplicationContext()
+                    .getEnvironment()
+                    .getProperty("management.port", Integer.class, serverPort);
         }
         log.info("Using management port {} for lightmin  client application registration", serverPort);
         lightminClientProperties.setManagementPort(managementPort);

@@ -9,6 +9,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
@@ -29,40 +30,40 @@ public class BeanRegistrarIT {
 
     @Test
     public void registerBeanStringIT() {
-        beanRegistrar.registerBean(String.class, "sampleString", null, null, null, null, null);
-        final String registeredBean = (String) applicationContext.getBean("sampleString");
+        this.beanRegistrar.registerBean(String.class, "sampleString", null, null, null, null, null);
+        final String registeredBean = (String) this.applicationContext.getBean("sampleString");
         assertThat(registeredBean).isNotNull();
-        applicationContext.close();
+        this.applicationContext.close();
     }
 
     @Test
     public void registerBeanStringValueIT() {
         final Set<Object> constructorValues = new HashSet<>();
         constructorValues.add("Test");
-        beanRegistrar.registerBean(String.class, "sampleString", constructorValues, null, null, null, null);
-        final String registeredBean = (String) applicationContext.getBean("sampleString");
+        this.beanRegistrar.registerBean(String.class, "sampleString", constructorValues, null, null, null, null);
+        final String registeredBean = (String) this.applicationContext.getBean("sampleString");
         assertThat(registeredBean).isNotNull();
         assertThat(registeredBean).isEqualTo("Test");
-        applicationContext.close();
+        this.applicationContext.close();
     }
 
     @Test(expected = NoSuchBeanDefinitionException.class)
     public void unregisterBeanStringIT() {
         final Set<Object> constructorValues = new HashSet<>();
         constructorValues.add("sampleStringSecond");
-        beanRegistrar.registerBean(String.class, "sampleStringSecond", constructorValues, null, null, null, null);
-        final String registeredBean = (String) applicationContext.getBean("sampleStringSecond");
+        this.beanRegistrar.registerBean(String.class, "sampleStringSecond", constructorValues, null, null, null, null);
+        final String registeredBean = (String) this.applicationContext.getBean("sampleStringSecond");
         assertThat(registeredBean).isNotNull();
         assertThat(registeredBean).isEqualTo("sampleStringSecond");
-        beanRegistrar.unregisterBean("sampleStringSecond");
-        final String gotBean = applicationContext.getBean("sampleStringSecond", String.class);
+        this.beanRegistrar.unregisterBean("sampleStringSecond");
+        final String gotBean = this.applicationContext.getBean("sampleStringSecond", String.class);
         log.info("got: " + gotBean);
-        applicationContext.close();
+        this.applicationContext.close();
     }
 
     @Test(expected = NoSuchBeanDefinitionException.class)
     public void unregisterBeanNotFoundIT() {
-        beanRegistrar.unregisterBean("notExistingBean");
+        this.beanRegistrar.unregisterBean("notExistingBean");
     }
 
     @Test
@@ -70,28 +71,31 @@ public class BeanRegistrarIT {
         final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
         final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.initialize();
         final SchedulerConstructorWrapper schedulerConstructorWrapper = new SchedulerConstructorWrapper();
-        schedulerConstructorWrapper.setJob(simpleJob);
+        schedulerConstructorWrapper.setJob(this.simpleJob);
         schedulerConstructorWrapper.setJobConfiguration(jobConfiguration);
         schedulerConstructorWrapper.setJobIncrementer(JobIncrementer.DATE);
-        schedulerConstructorWrapper.setJobLauncher(jobLauncher);
+        schedulerConstructorWrapper.setJobLauncher(this.jobLauncher);
         schedulerConstructorWrapper.setJobParameters(new JobParametersBuilder().toJobParameters());
+        schedulerConstructorWrapper.setThreadPoolTaskScheduler(scheduler);
         final Set<Object> constructorValues = new HashSet<>();
         constructorValues.add(schedulerConstructorWrapper);
-        beanRegistrar
+        this.beanRegistrar
                 .registerBean(PeriodScheduler.class, "sampleBeanRegistrar", constructorValues, null, null, null, null);
-        final PeriodScheduler periodScheduler = applicationContext.getBean("sampleBeanRegistrar", PeriodScheduler
+        final PeriodScheduler periodScheduler = this.applicationContext.getBean("sampleBeanRegistrar", PeriodScheduler
                 .class);
         assertThat(periodScheduler).isNotNull();
         periodScheduler.schedule();
-        applicationContext.close();
+        this.applicationContext.close();
     }
 
     @Before
     public void init() {
-        applicationContext = new AnnotationConfigApplicationContext(ITConfiguration.class);
-        beanRegistrar = applicationContext.getBean(BeanRegistrar.class);
-        simpleJob = applicationContext.getBean("simpleJob", Job.class);
-        jobLauncher = applicationContext.getBean("jobLauncher", JobLauncher.class);
+        this.applicationContext = new AnnotationConfigApplicationContext(ITConfiguration.class);
+        this.beanRegistrar = this.applicationContext.getBean(BeanRegistrar.class);
+        this.simpleJob = this.applicationContext.getBean("simpleJob", Job.class);
+        this.jobLauncher = this.applicationContext.getBean("jobLauncher", JobLauncher.class);
     }
 }
