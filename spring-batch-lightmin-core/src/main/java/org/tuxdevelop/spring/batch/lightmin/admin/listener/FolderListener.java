@@ -1,12 +1,13 @@
 package org.tuxdevelop.spring.batch.lightmin.admin.listener;
 
+import java.io.File;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.integration.launch.JobLaunchRequest;
 import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
 import org.springframework.integration.dsl.IntegrationFlows;
+import org.springframework.integration.dsl.MessageChannels;
 import org.springframework.integration.dsl.Pollers;
-import org.springframework.integration.dsl.channel.MessageChannels;
 import org.springframework.integration.file.dsl.Files;
 import org.springframework.integration.file.filters.AcceptOnceFileListFilter;
 import org.springframework.integration.file.filters.CompositeFileListFilter;
@@ -15,8 +16,6 @@ import org.springframework.integration.file.filters.SimplePatternFileListFilter;
 import org.springframework.integration.file.transformer.AbstractFilePayloadTransformer;
 import org.tuxdevelop.spring.batch.lightmin.admin.domain.ListenerConstructorWrapper;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
-
-import java.io.File;
 
 /**
  * @author Marcel Becker
