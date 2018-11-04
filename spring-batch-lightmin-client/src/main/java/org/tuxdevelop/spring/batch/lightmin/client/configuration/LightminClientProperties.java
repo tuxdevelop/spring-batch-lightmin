@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.StringUtils;
 
@@ -58,17 +59,19 @@ public class LightminClientProperties {
 
     private final ManagementServerProperties managementServerProperties;
     private final ServerProperties serverProperties;
-
+    private final WebMvcProperties webMvcProperties;
     @Autowired
     public LightminClientProperties(final ManagementServerProperties managementServerProperties,
-            final ServerProperties serverProperties,
-            @Value("${spring.application.name:spring-boot-application}") final String name,
-            //Todo: Refactor with HealthEndpointProperties (id got deleted)
-            @Value("${endpoints.health.id:health}") final String healthEndpointId) {
+        final ServerProperties serverProperties,
+        @Value("${spring.application.name:spring-boot-application}") final String name,
+        //Todo: Refactor with HealthEndpointProperties (id got deleted)
+        @Value("${endpoints.health.id:health}") final String healthEndpointId,
+        WebMvcProperties webMvcProperties) {
         this.name = name;
         this.healthEndpointId = healthEndpointId;
         this.managementServerProperties = managementServerProperties;
         this.serverProperties = serverProperties;
+        this.webMvcProperties = webMvcProperties;
     }
 
     //TODO: refactor to only one return statement
@@ -132,11 +135,11 @@ public class LightminClientProperties {
                 hostAddress = address.getHostAddress();
             }
             return append(append(createLocalUri(hostAddress, this.serverPort),
-                    this.serverProperties.getServlet().getContextPath()), this.serverProperties.getServlet().getContextPath());
+                    this.webMvcProperties.getServlet().getPath()), this.serverProperties.getServlet().getContextPath());
 
         }
         return append(append(createLocalUri(determineHost(), this.serverPort),
-                this.serverProperties.getServlet().getContextPath()), this.serverProperties.getServlet().getContextPath());
+            this.webMvcProperties.getServlet().getPath()), this.serverProperties.getServlet().getContextPath());
     }
 
     private String createLocalUri(final String host, final int port) {
