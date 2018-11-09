@@ -1780,7 +1780,10 @@ If the application will be restarted, all stored <em>JobConfigurations</em> will
 <h5 id="_curl">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications' -i -X POST \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -d '{
   &quot;id&quot; : null,
   &quot;name&quot; : &quot;it-application&quot;,
   &quot;managementUrl&quot; : &quot;http://localhost&quot;,
@@ -1807,8 +1810,8 @@ If the application will be restarted, all stored <em>JobConfigurations</em> will
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/applications HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost
 Content-Length: 772
 
@@ -1839,21 +1842,20 @@ Content-Length: 772
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-X-Application-Context: it-application:0
+Date: Fri, 09 Nov 2018 03:25:14 GMT
+Content-Length: 857
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 02 Nov 2018 15:05:40 GMT
-Content-Length: 852
 
 {
-  &quot;id&quot; : &quot;9a04b1a1&quot;,
+  &quot;id&quot; : &quot;57ed2d81&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:54625&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:54625/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:54625&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:39821&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:39821/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:39821&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
-    &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1541171139824
+    &quot;status&quot; : &quot;OFFLINE&quot;,
+    &quot;timeInMills&quot; : 1541733914655
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1877,7 +1879,9 @@ Content-Length: 852
 <h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/9a04b1a1' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/57ed2d81' -i -X DELETE \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
 </div>
@@ -1885,9 +1889,9 @@ Content-Length: 852
 <h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/9a04b1a1 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/57ed2d81 HTTP/1.1
 Content-Type: application/json; charset=UTF-8
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
@@ -1897,21 +1901,20 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Date: Fri, 09 Nov 2018 03:25:14 GMT
+Content-Length: 857
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 02 Nov 2018 15:05:40 GMT
-Content-Length: 852
 
 {
-  &quot;id&quot; : &quot;9a04b1a1&quot;,
+  &quot;id&quot; : &quot;57ed2d81&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:54625&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:54625/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:54625&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:39821&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:39821/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:39821&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
-    &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1541171139824
+    &quot;status&quot; : &quot;OFFLINE&quot;,
+    &quot;timeInMills&quot; : 1541733914655
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -1935,7 +1938,9 @@ Content-Length: 852
 <h5 id="_curl_3">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications' -i -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications' -i -X GET \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
 </div>
@@ -1944,8 +1949,8 @@ Content-Length: 852
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/applications HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
@@ -1955,42 +1960,20 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Content-Length: 1717
+Date: Fri, 09 Nov 2018 03:25:14 GMT
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 02 Nov 2018 15:05:39 GMT
-Content-Length: 1691
 
 [ {
-  &quot;id&quot; : &quot;93bcf0aa&quot;,
+  &quot;id&quot; : &quot;57ed2d81&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:0&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:0/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:0&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:39821&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:39821/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:39821&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;OFFLINE&quot;,
-    &quot;timeInMills&quot; : 1541171138961
-  },
-  &quot;lightminClientInformation&quot; : {
-    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
-    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
-    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
-    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
-    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
-    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
-    &quot;supportedApiFeatures&quot; : [ &quot;JOB_EXECUTION_QUERY_SERVICE&quot; ],
-    &quot;registeredJobs&quot; : [ ],
-    &quot;externalLinks&quot; : { }
-  }
-}, {
-  &quot;id&quot; : &quot;9a04b1a1&quot;,
-  &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:54625&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:54625/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:54625&quot;,
-  &quot;lightminClientApplicationStatus&quot; : {
-    &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1541171139824
+    &quot;timeInMills&quot; : 1541733914655
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2001,6 +1984,27 @@ Content-Length: 1691
     &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
     &quot;supportedApiFeatures&quot; : [ &quot;JOB_EXECUTION_QUERY_SERVICE&quot; ],
     &quot;registeredJobs&quot; : [ &quot;simpleJob&quot; ],
+    &quot;externalLinks&quot; : { }
+  }
+}, {
+  &quot;id&quot; : &quot;6342660c&quot;,
+  &quot;name&quot; : &quot;it-application&quot;,
+  &quot;managementUrl&quot; : &quot;http://amond-MacBookPro:0&quot;,
+  &quot;healthUrl&quot; : &quot;http://amond-MacBookPro:0/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://amond-MacBookPro:0&quot;,
+  &quot;lightminClientApplicationStatus&quot; : {
+    &quot;status&quot; : &quot;OFFLINE&quot;,
+    &quot;timeInMills&quot; : 1541733911194
+  },
+  &quot;lightminClientInformation&quot; : {
+    &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
+    &quot;supportedSchedulerStatuses&quot; : [ &quot;INITIALIZED&quot;, &quot;RUNNING&quot;, &quot;STOPPED&quot;, &quot;IN_TERMINATION&quot; ],
+    &quot;supportedTaskExecutorTypes&quot; : [ &quot;SYNCHRONOUS&quot;, &quot;ASYNCHRONOUS&quot; ],
+    &quot;supportedJobIncrementers&quot; : [ &quot;DATE&quot;, &quot;NONE&quot; ],
+    &quot;supportedJobListenerTypes&quot; : [ &quot;LOCAL_FOLDER_LISTENER&quot; ],
+    &quot;supportedListenerStatuses&quot; : [ &quot;ACTIVE&quot;, &quot;STOPPED&quot; ],
+    &quot;supportedApiFeatures&quot; : [ &quot;JOB_EXECUTION_QUERY_SERVICE&quot; ],
+    &quot;registeredJobs&quot; : [ ],
     &quot;externalLinks&quot; : { }
   }
 } ]</code></pre>
@@ -2014,7 +2018,10 @@ Content-Length: 1691
 <h5 id="_curl_4">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/events/jobexecutions' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/events/jobexecutions' -i -X POST \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -d '{
   &quot;applicationName&quot; : &quot;testApplication&quot;,
   &quot;jobName&quot; : &quot;sampleJob&quot;,
   &quot;jobExecutionId&quot; : 1,
@@ -2022,8 +2029,8 @@ Content-Length: 1691
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1541171141122,
-  &quot;endDate&quot; : 1541171151122
+  &quot;startDate&quot; : 1541733914783,
+  &quot;endDate&quot; : 1541733924783
 }'</code></pre>
 </div>
 </div>
@@ -2033,10 +2040,10 @@ Content-Length: 1691
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/events/jobexecutions HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
-Host: localhost
 Content-Length: 247
+Accept: application/json, application/javascript, text/javascript, text/json
+Host: localhost
 
 {
   &quot;applicationName&quot; : &quot;testApplication&quot;,
@@ -2046,8 +2053,8 @@ Content-Length: 247
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1541171141122,
-  &quot;endDate&quot; : 1541171151122
+  &quot;startDate&quot; : 1541733914783,
+  &quot;endDate&quot; : 1541733924783
 }</code></pre>
 </div>
 </div>
@@ -2057,8 +2064,7 @@ Content-Length: 247
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-X-Application-Context: it-application:0
-Date: Fri, 02 Nov 2018 15:05:40 GMT</code></pre>
+Date: Fri, 09 Nov 2018 03:25:14 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2074,7 +2080,8 @@ Date: Fri, 02 Nov 2018 15:05:40 GMT</code></pre>
 <h6 id="_curl_5">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages/all?jobinstanceid=15' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages/all?jobinstanceid=19' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
 </div>
@@ -2082,8 +2089,8 @@ Date: Fri, 02 Nov 2018 15:05:40 GMT</code></pre>
 <h6 id="_http_request_5">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutionpages/all?jobinstanceid=15 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutionpages/all?jobinstanceid=19 HTTP/1.1
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
@@ -2093,38 +2100,37 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Date: Fri, 09 Nov 2018 03:25:14 GMT
+Content-Length: 1541
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 02 Nov 2018 15:05:41 GMT
-Content-Length: 1405
 
 {
   &quot;startIndex&quot; : 0,
   &quot;pageSize&quot; : 1,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;totalJobExecutionCount&quot; : 1,
-  &quot;jobInstanceId&quot; : 15,
+  &quot;jobInstanceId&quot; : 19,
   &quot;jobExecutions&quot; : [ {
-    &quot;id&quot; : 15,
+    &quot;id&quot; : 19,
     &quot;version&quot; : 2,
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1541171142532,
+          &quot;parameter&quot; : &quot;2018-11-09T03:25:14.466+0000&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
     },
     &quot;jobInstance&quot; : {
-      &quot;id&quot; : 15,
+      &quot;id&quot; : 19,
       &quot;version&quot; : 0,
       &quot;jobName&quot; : &quot;simpleJob&quot;
     },
     &quot;stepExecutions&quot; : [ {
-      &quot;id&quot; : 16,
+      &quot;id&quot; : 20,
       &quot;version&quot; : 3,
-      &quot;jobExecutionId&quot; : 15,
+      &quot;jobExecutionId&quot; : 19,
       &quot;stepName&quot; : &quot;simpleStep&quot;,
       &quot;status&quot; : &quot;COMPLETED&quot;,
       &quot;readCount&quot; : 0,
@@ -2134,9 +2140,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1541171142540,
-      &quot;endTime&quot; : 1541171142542,
-      &quot;lastUpdated&quot; : 1541171142542,
+      &quot;startTime&quot; : &quot;2018-11-09T03:25:14.468+0000&quot;,
+      &quot;endTime&quot; : &quot;2018-11-09T03:25:14.469+0000&quot;,
+      &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:14.469+0000&quot;,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -2146,10 +2152,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1541171142534,
-    &quot;createTime&quot; : 1541171142533,
-    &quot;endTime&quot; : 1541171142543,
-    &quot;lastUpdated&quot; : 1541171142549,
+    &quot;startTime&quot; : &quot;2018-11-09T03:25:14.467+0000&quot;,
+    &quot;createTime&quot; : &quot;2018-11-09T03:25:14.467+0000&quot;,
+    &quot;endTime&quot; : &quot;2018-11-09T03:25:14.469+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:14.473+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2168,7 +2174,8 @@ Content-Length: 1405
 <h6 id="_curl_6">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages?jobinstanceid=14&amp;startindex=0&amp;pagesize=5' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages?jobinstanceid=18&amp;startindex=0&amp;pagesize=5' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
 </div>
@@ -2176,8 +2183,8 @@ Content-Length: 1405
 <h6 id="_http_request_6">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutionpages?jobinstanceid=14&amp;startindex=0&amp;pagesize=5 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutionpages?jobinstanceid=18&amp;startindex=0&amp;pagesize=5 HTTP/1.1
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
@@ -2187,38 +2194,37 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Date: Fri, 09 Nov 2018 03:25:14 GMT
+Content-Length: 1541
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 02 Nov 2018 15:05:41 GMT
-Content-Length: 1405
 
 {
   &quot;startIndex&quot; : 0,
   &quot;pageSize&quot; : 5,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;totalJobExecutionCount&quot; : 1,
-  &quot;jobInstanceId&quot; : 14,
+  &quot;jobInstanceId&quot; : 18,
   &quot;jobExecutions&quot; : [ {
-    &quot;id&quot; : 14,
+    &quot;id&quot; : 18,
     &quot;version&quot; : 2,
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1541171142468,
+          &quot;parameter&quot; : &quot;2018-11-09T03:25:14.422+0000&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
     },
     &quot;jobInstance&quot; : {
-      &quot;id&quot; : 14,
+      &quot;id&quot; : 18,
       &quot;version&quot; : 0,
       &quot;jobName&quot; : &quot;simpleJob&quot;
     },
     &quot;stepExecutions&quot; : [ {
-      &quot;id&quot; : 15,
+      &quot;id&quot; : 19,
       &quot;version&quot; : 3,
-      &quot;jobExecutionId&quot; : 14,
+      &quot;jobExecutionId&quot; : 18,
       &quot;stepName&quot; : &quot;simpleStep&quot;,
       &quot;status&quot; : &quot;COMPLETED&quot;,
       &quot;readCount&quot; : 0,
@@ -2228,9 +2234,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1541171142473,
-      &quot;endTime&quot; : 1541171142475,
-      &quot;lastUpdated&quot; : 1541171142475,
+      &quot;startTime&quot; : &quot;2018-11-09T03:25:14.424+0000&quot;,
+      &quot;endTime&quot; : &quot;2018-11-09T03:25:14.424+0000&quot;,
+      &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:14.424+0000&quot;,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -2240,10 +2246,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1541171142469,
-    &quot;createTime&quot; : 1541171142468,
-    &quot;endTime&quot; : 1541171142477,
-    &quot;lastUpdated&quot; : 1541171142483,
+    &quot;startTime&quot; : &quot;2018-11-09T03:25:14.422+0000&quot;,
+    &quot;createTime&quot; : &quot;2018-11-09T03:25:14.422+0000&quot;,
+    &quot;endTime&quot; : &quot;2018-11-09T03:25:14.425+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:14.429+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2262,7 +2268,8 @@ Content-Length: 1405
 <h6 id="_curl_7">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/19' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/23' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
 </div>
@@ -2270,8 +2277,8 @@ Content-Length: 1405
 <h6 id="_http_request_7">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutions/19 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutions/23 HTTP/1.1
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
@@ -2281,32 +2288,31 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Date: Fri, 09 Nov 2018 03:25:14 GMT
 Content-Type: application/json;charset=UTF-8
+Content-Length: 1290
 Transfer-Encoding: chunked
-Date: Fri, 02 Nov 2018 15:05:41 GMT
-Content-Length: 1154
 
 {
-  &quot;id&quot; : 19,
+  &quot;id&quot; : 23,
   &quot;version&quot; : 2,
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1541171142705,
+        &quot;parameter&quot; : &quot;2018-11-09T03:25:14.554+0000&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
   },
   &quot;jobInstance&quot; : {
-    &quot;id&quot; : 18,
+    &quot;id&quot; : 22,
     &quot;version&quot; : 0,
     &quot;jobName&quot; : &quot;simpleJob&quot;
   },
   &quot;stepExecutions&quot; : [ {
-    &quot;id&quot; : 20,
+    &quot;id&quot; : 24,
     &quot;version&quot; : 3,
-    &quot;jobExecutionId&quot; : 19,
+    &quot;jobExecutionId&quot; : 23,
     &quot;stepName&quot; : &quot;simpleStep&quot;,
     &quot;status&quot; : &quot;COMPLETED&quot;,
     &quot;readCount&quot; : 0,
@@ -2316,9 +2322,9 @@ Content-Length: 1154
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1541171142710,
-    &quot;endTime&quot; : 1541171142713,
-    &quot;lastUpdated&quot; : 1541171142713,
+    &quot;startTime&quot; : &quot;2018-11-09T03:25:14.555+0000&quot;,
+    &quot;endTime&quot; : &quot;2018-11-09T03:25:14.556+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:14.556+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2328,10 +2334,10 @@ Content-Length: 1154
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1541171142707,
-  &quot;createTime&quot; : 1541171142706,
-  &quot;endTime&quot; : 1541171142715,
-  &quot;lastUpdated&quot; : 1541171142720,
+  &quot;startTime&quot; : &quot;2018-11-09T03:25:14.554+0000&quot;,
+  &quot;createTime&quot; : &quot;2018-11-09T03:25:14.554+0000&quot;,
+  &quot;endTime&quot; : &quot;2018-11-09T03:25:14.556+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:14.560+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2349,10 +2355,13 @@ Content-Length: 1154
 <h6 id="_curl_8">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/query?jobname=simpleJob&amp;resultsize=4' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/query?jobname=simpleJob&amp;resultsize=4' -i -X POST \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -d '{
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1541171242038,
-  &quot;START_DATE&quot; : 1541171042038
+  &quot;END_DATE&quot; : 1541734014206,
+  &quot;START_DATE&quot; : 1541733814206
 }'</code></pre>
 </div>
 </div>
@@ -2362,15 +2371,15 @@ Content-Length: 1154
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/jobexecutions/query?jobname=simpleJob&amp;resultsize=4 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
-Host: localhost
 Content-Length: 95
+Accept: application/json, application/javascript, text/javascript, text/json
+Host: localhost
 
 {
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1541171242038,
-  &quot;START_DATE&quot; : 1541171042038
+  &quot;END_DATE&quot; : 1541734014206,
+  &quot;START_DATE&quot; : 1541733814206
 }</code></pre>
 </div>
 </div>
@@ -2380,19 +2389,171 @@ Content-Length: 95
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Date: Fri, 09 Nov 2018 03:25:14 GMT
+Content-Length: 5167
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 02 Nov 2018 15:05:41 GMT
-Content-Length: 4638
 
 [ {
+  &quot;id&quot; : 13,
+  &quot;version&quot; : 2,
+  &quot;jobParameters&quot; : {
+    &quot;parameters&quot; : {
+      &quot;date&quot; : {
+        &quot;parameter&quot; : &quot;2018-11-09T03:25:14.197+0000&quot;,
+        &quot;parameterType&quot; : &quot;DATE&quot;
+      }
+    }
+  },
+  &quot;jobInstance&quot; : {
+    &quot;id&quot; : 13,
+    &quot;version&quot; : 0,
+    &quot;jobName&quot; : &quot;simpleJob&quot;
+  },
+  &quot;stepExecutions&quot; : [ {
+    &quot;id&quot; : 14,
+    &quot;version&quot; : 3,
+    &quot;jobExecutionId&quot; : 13,
+    &quot;stepName&quot; : &quot;simpleStep&quot;,
+    &quot;status&quot; : &quot;COMPLETED&quot;,
+    &quot;readCount&quot; : 0,
+    &quot;writeCount&quot; : 0,
+    &quot;commitCount&quot; : 1,
+    &quot;rollbackCount&quot; : 0,
+    &quot;readSkipCount&quot; : 0,
+    &quot;processSkipCount&quot; : 0,
+    &quot;writeSkipCount&quot; : 0,
+    &quot;startTime&quot; : &quot;2018-11-09T03:25:14.199+0000&quot;,
+    &quot;endTime&quot; : &quot;2018-11-09T03:25:14.200+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:14.200+0000&quot;,
+    &quot;exitStatus&quot; : {
+      &quot;exitCode&quot; : &quot;COMPLETED&quot;,
+      &quot;exitDescription&quot; : &quot;&quot;
+    },
+    &quot;terminateOnly&quot; : false,
+    &quot;filterCount&quot; : 0,
+    &quot;failureExceptions&quot; : [ ]
+  } ],
+  &quot;status&quot; : &quot;COMPLETED&quot;,
+  &quot;startTime&quot; : &quot;2018-11-09T03:25:14.198+0000&quot;,
+  &quot;createTime&quot; : &quot;2018-11-09T03:25:14.197+0000&quot;,
+  &quot;endTime&quot; : &quot;2018-11-09T03:25:14.200+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:14.205+0000&quot;,
+  &quot;exitStatus&quot; : {
+    &quot;exitCode&quot; : &quot;COMPLETED&quot;,
+    &quot;exitDescription&quot; : &quot;&quot;
+  },
+  &quot;failureExceptions&quot; : [ ],
+  &quot;jobConfigurationName&quot; : null
+}, {
+  &quot;id&quot; : 12,
+  &quot;version&quot; : 2,
+  &quot;jobParameters&quot; : {
+    &quot;parameters&quot; : {
+      &quot;date&quot; : {
+        &quot;parameter&quot; : &quot;2018-11-09T03:25:14.160+0000&quot;,
+        &quot;parameterType&quot; : &quot;DATE&quot;
+      }
+    }
+  },
+  &quot;jobInstance&quot; : {
+    &quot;id&quot; : 12,
+    &quot;version&quot; : 0,
+    &quot;jobName&quot; : &quot;simpleJob&quot;
+  },
+  &quot;stepExecutions&quot; : [ {
+    &quot;id&quot; : 13,
+    &quot;version&quot; : 3,
+    &quot;jobExecutionId&quot; : 12,
+    &quot;stepName&quot; : &quot;simpleStep&quot;,
+    &quot;status&quot; : &quot;COMPLETED&quot;,
+    &quot;readCount&quot; : 0,
+    &quot;writeCount&quot; : 0,
+    &quot;commitCount&quot; : 1,
+    &quot;rollbackCount&quot; : 0,
+    &quot;readSkipCount&quot; : 0,
+    &quot;processSkipCount&quot; : 0,
+    &quot;writeSkipCount&quot; : 0,
+    &quot;startTime&quot; : &quot;2018-11-09T03:25:14.164+0000&quot;,
+    &quot;endTime&quot; : &quot;2018-11-09T03:25:14.165+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:14.165+0000&quot;,
+    &quot;exitStatus&quot; : {
+      &quot;exitCode&quot; : &quot;COMPLETED&quot;,
+      &quot;exitDescription&quot; : &quot;&quot;
+    },
+    &quot;terminateOnly&quot; : false,
+    &quot;filterCount&quot; : 0,
+    &quot;failureExceptions&quot; : [ ]
+  } ],
+  &quot;status&quot; : &quot;COMPLETED&quot;,
+  &quot;startTime&quot; : &quot;2018-11-09T03:25:14.162+0000&quot;,
+  &quot;createTime&quot; : &quot;2018-11-09T03:25:14.161+0000&quot;,
+  &quot;endTime&quot; : &quot;2018-11-09T03:25:14.165+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:14.169+0000&quot;,
+  &quot;exitStatus&quot; : {
+    &quot;exitCode&quot; : &quot;COMPLETED&quot;,
+    &quot;exitDescription&quot; : &quot;&quot;
+  },
+  &quot;failureExceptions&quot; : [ ],
+  &quot;jobConfigurationName&quot; : null
+}, {
+  &quot;id&quot; : 10,
+  &quot;version&quot; : 2,
+  &quot;jobParameters&quot; : {
+    &quot;parameters&quot; : {
+      &quot;date&quot; : {
+        &quot;parameter&quot; : &quot;2018-11-09T03:25:13.586+0000&quot;,
+        &quot;parameterType&quot; : &quot;DATE&quot;
+      }
+    }
+  },
+  &quot;jobInstance&quot; : {
+    &quot;id&quot; : 10,
+    &quot;version&quot; : 0,
+    &quot;jobName&quot; : &quot;simpleJob&quot;
+  },
+  &quot;stepExecutions&quot; : [ {
+    &quot;id&quot; : 11,
+    &quot;version&quot; : 3,
+    &quot;jobExecutionId&quot; : 10,
+    &quot;stepName&quot; : &quot;simpleStep&quot;,
+    &quot;status&quot; : &quot;COMPLETED&quot;,
+    &quot;readCount&quot; : 0,
+    &quot;writeCount&quot; : 0,
+    &quot;commitCount&quot; : 1,
+    &quot;rollbackCount&quot; : 0,
+    &quot;readSkipCount&quot; : 0,
+    &quot;processSkipCount&quot; : 0,
+    &quot;writeSkipCount&quot; : 0,
+    &quot;startTime&quot; : &quot;2018-11-09T03:25:13.590+0000&quot;,
+    &quot;endTime&quot; : &quot;2018-11-09T03:25:13.592+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:13.592+0000&quot;,
+    &quot;exitStatus&quot; : {
+      &quot;exitCode&quot; : &quot;COMPLETED&quot;,
+      &quot;exitDescription&quot; : &quot;&quot;
+    },
+    &quot;terminateOnly&quot; : false,
+    &quot;filterCount&quot; : 0,
+    &quot;failureExceptions&quot; : [ ]
+  } ],
+  &quot;status&quot; : &quot;COMPLETED&quot;,
+  &quot;startTime&quot; : &quot;2018-11-09T03:25:13.587+0000&quot;,
+  &quot;createTime&quot; : &quot;2018-11-09T03:25:13.586+0000&quot;,
+  &quot;endTime&quot; : &quot;2018-11-09T03:25:13.593+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:13.598+0000&quot;,
+  &quot;exitStatus&quot; : {
+    &quot;exitCode&quot; : &quot;COMPLETED&quot;,
+    &quot;exitDescription&quot; : &quot;&quot;
+  },
+  &quot;failureExceptions&quot; : [ ],
+  &quot;jobConfigurationName&quot; : null
+}, {
   &quot;id&quot; : 9,
   &quot;version&quot; : 2,
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1541171142015,
+        &quot;parameter&quot; : &quot;2018-11-09T03:25:13.519+0000&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2415,9 +2576,9 @@ Content-Length: 4638
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1541171142024,
-    &quot;endTime&quot; : 1541171142028,
-    &quot;lastUpdated&quot; : 1541171142028,
+    &quot;startTime&quot; : &quot;2018-11-09T03:25:13.523+0000&quot;,
+    &quot;endTime&quot; : &quot;2018-11-09T03:25:13.525+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:13.525+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2427,163 +2588,10 @@ Content-Length: 4638
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1541171142017,
-  &quot;createTime&quot; : 1541171142016,
-  &quot;endTime&quot; : 1541171142029,
-  &quot;lastUpdated&quot; : 1541171142035,
-  &quot;exitStatus&quot; : {
-    &quot;exitCode&quot; : &quot;COMPLETED&quot;,
-    &quot;exitDescription&quot; : &quot;&quot;
-  },
-  &quot;failureExceptions&quot; : [ ],
-  &quot;jobConfigurationName&quot; : null
-}, {
-  &quot;id&quot; : 8,
-  &quot;version&quot; : 2,
-  &quot;jobParameters&quot; : {
-    &quot;parameters&quot; : {
-      &quot;date&quot; : {
-        &quot;parameter&quot; : 1541171141951,
-        &quot;parameterType&quot; : &quot;DATE&quot;
-      }
-    }
-  },
-  &quot;jobInstance&quot; : {
-    &quot;id&quot; : 8,
-    &quot;version&quot; : 0,
-    &quot;jobName&quot; : &quot;simpleJob&quot;
-  },
-  &quot;stepExecutions&quot; : [ {
-    &quot;id&quot; : 9,
-    &quot;version&quot; : 3,
-    &quot;jobExecutionId&quot; : 8,
-    &quot;stepName&quot; : &quot;simpleStep&quot;,
-    &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;readCount&quot; : 0,
-    &quot;writeCount&quot; : 0,
-    &quot;commitCount&quot; : 1,
-    &quot;rollbackCount&quot; : 0,
-    &quot;readSkipCount&quot; : 0,
-    &quot;processSkipCount&quot; : 0,
-    &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1541171141956,
-    &quot;endTime&quot; : 1541171141960,
-    &quot;lastUpdated&quot; : 1541171141960,
-    &quot;exitStatus&quot; : {
-      &quot;exitCode&quot; : &quot;COMPLETED&quot;,
-      &quot;exitDescription&quot; : &quot;&quot;
-    },
-    &quot;terminateOnly&quot; : false,
-    &quot;filterCount&quot; : 0,
-    &quot;failureExceptions&quot; : [ ]
-  } ],
-  &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1541171141953,
-  &quot;createTime&quot; : 1541171141952,
-  &quot;endTime&quot; : 1541171141962,
-  &quot;lastUpdated&quot; : 1541171141966,
-  &quot;exitStatus&quot; : {
-    &quot;exitCode&quot; : &quot;COMPLETED&quot;,
-    &quot;exitDescription&quot; : &quot;&quot;
-  },
-  &quot;failureExceptions&quot; : [ ],
-  &quot;jobConfigurationName&quot; : null
-}, {
-  &quot;id&quot; : 6,
-  &quot;version&quot; : 2,
-  &quot;jobParameters&quot; : {
-    &quot;parameters&quot; : {
-      &quot;date&quot; : {
-        &quot;parameter&quot; : 1541171141361,
-        &quot;parameterType&quot; : &quot;DATE&quot;
-      }
-    }
-  },
-  &quot;jobInstance&quot; : {
-    &quot;id&quot; : 6,
-    &quot;version&quot; : 0,
-    &quot;jobName&quot; : &quot;simpleJob&quot;
-  },
-  &quot;stepExecutions&quot; : [ {
-    &quot;id&quot; : 7,
-    &quot;version&quot; : 3,
-    &quot;jobExecutionId&quot; : 6,
-    &quot;stepName&quot; : &quot;simpleStep&quot;,
-    &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;readCount&quot; : 0,
-    &quot;writeCount&quot; : 0,
-    &quot;commitCount&quot; : 1,
-    &quot;rollbackCount&quot; : 0,
-    &quot;readSkipCount&quot; : 0,
-    &quot;processSkipCount&quot; : 0,
-    &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1541171141368,
-    &quot;endTime&quot; : 1541171141370,
-    &quot;lastUpdated&quot; : 1541171141370,
-    &quot;exitStatus&quot; : {
-      &quot;exitCode&quot; : &quot;COMPLETED&quot;,
-      &quot;exitDescription&quot; : &quot;&quot;
-    },
-    &quot;terminateOnly&quot; : false,
-    &quot;filterCount&quot; : 0,
-    &quot;failureExceptions&quot; : [ ]
-  } ],
-  &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1541171141363,
-  &quot;createTime&quot; : 1541171141362,
-  &quot;endTime&quot; : 1541171141371,
-  &quot;lastUpdated&quot; : 1541171141376,
-  &quot;exitStatus&quot; : {
-    &quot;exitCode&quot; : &quot;COMPLETED&quot;,
-    &quot;exitDescription&quot; : &quot;&quot;
-  },
-  &quot;failureExceptions&quot; : [ ],
-  &quot;jobConfigurationName&quot; : null
-}, {
-  &quot;id&quot; : 5,
-  &quot;version&quot; : 2,
-  &quot;jobParameters&quot; : {
-    &quot;parameters&quot; : {
-      &quot;pathToTargetFile&quot; : {
-        &quot;parameter&quot; : &quot;~/input/current_file.csv&quot;,
-        &quot;parameterType&quot; : &quot;STRING&quot;
-      }
-    }
-  },
-  &quot;jobInstance&quot; : {
-    &quot;id&quot; : 5,
-    &quot;version&quot; : 0,
-    &quot;jobName&quot; : &quot;simpleJob&quot;
-  },
-  &quot;stepExecutions&quot; : [ {
-    &quot;id&quot; : 6,
-    &quot;version&quot; : 3,
-    &quot;jobExecutionId&quot; : 5,
-    &quot;stepName&quot; : &quot;simpleStep&quot;,
-    &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;readCount&quot; : 0,
-    &quot;writeCount&quot; : 0,
-    &quot;commitCount&quot; : 1,
-    &quot;rollbackCount&quot; : 0,
-    &quot;readSkipCount&quot; : 0,
-    &quot;processSkipCount&quot; : 0,
-    &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1541171141304,
-    &quot;endTime&quot; : 1541171141308,
-    &quot;lastUpdated&quot; : 1541171141308,
-    &quot;exitStatus&quot; : {
-      &quot;exitCode&quot; : &quot;COMPLETED&quot;,
-      &quot;exitDescription&quot; : &quot;&quot;
-    },
-    &quot;terminateOnly&quot; : false,
-    &quot;filterCount&quot; : 0,
-    &quot;failureExceptions&quot; : [ ]
-  } ],
-  &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1541171141298,
-  &quot;createTime&quot; : 1541171141295,
-  &quot;endTime&quot; : 1541171141309,
-  &quot;lastUpdated&quot; : 1541171141314,
+  &quot;startTime&quot; : &quot;2018-11-09T03:25:13.521+0000&quot;,
+  &quot;createTime&quot; : &quot;2018-11-09T03:25:13.520+0000&quot;,
+  &quot;endTime&quot; : &quot;2018-11-09T03:25:13.526+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2018-11-09T03:25:13.532+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2604,7 +2612,10 @@ Content-Length: 4638
 <h6 id="_curl_9">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/joblaunches' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/joblaunches' -i -X POST \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -d '{
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
@@ -2623,10 +2634,10 @@ Content-Length: 4638
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/joblaunches HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
-Host: localhost
+Accept: application/json, application/javascript, text/javascript, text/json
 Content-Length: 205
+Host: localhost
 
 {
   &quot;jobName&quot; : &quot;simpleJob&quot;,
@@ -2647,8 +2658,7 @@ Content-Length: 205
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-X-Application-Context: it-application:0
-Date: Fri, 02 Nov 2018 15:05:40 GMT</code></pre>
+Date: Fri, 09 Nov 2018 03:25:14 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2662,7 +2672,8 @@ Date: Fri, 02 Nov 2018 15:05:40 GMT</code></pre>
 <h6 id="_curl_10">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/41' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/9' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
 </div>
@@ -2670,8 +2681,8 @@ Date: Fri, 02 Nov 2018 15:05:40 GMT</code></pre>
 <h6 id="_http_request_10">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/jobconfiguration/41 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/jobconfiguration/9 HTTP/1.1
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
@@ -2681,14 +2692,13 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 02 Nov 2018 15:05:44 GMT
-Content-Length: 412
+Date: Fri, 09 Nov 2018 03:25:13 GMT
+Content-Length: 411
 
 {
-  &quot;jobConfigurationId&quot; : 41,
+  &quot;jobConfigurationId&quot; : 9,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;jobSchedulerConfiguration&quot; : {
     &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
@@ -2714,7 +2724,8 @@ Content-Length: 412
 <h6 id="_curl_11">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
 </div>
@@ -2723,7 +2734,7 @@ Content-Length: 412
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
@@ -2733,11 +2744,10 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Content-Length: 7394
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 02 Nov 2018 15:05:44 GMT
-Content-Length: 22129
+Date: Fri, 09 Nov 2018 03:25:13 GMT
 
 {
   &quot;jobConfigurations&quot; : [ {
@@ -2752,22 +2762,6 @@ Content-Length: 22129
       &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
     },
     &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 2,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : { }
     },
@@ -2861,7 +2855,7 @@ Content-Length: 22129
       &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
       &quot;filePattern&quot; : &quot;*_input.txt&quot;,
       &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
+      &quot;listenerStatus&quot; : &quot;ACTIVE&quot;,
       &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
     },
     &quot;jobParameters&quot; : {
@@ -2967,502 +2961,6 @@ Content-Length: 22129
   }, {
     &quot;jobConfigurationId&quot; : 15,
     &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 16,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 17,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 18,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 19,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 20,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 21,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 22,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 23,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 24,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 25,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 26,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 27,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 28,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 29,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 30,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 31,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 32,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 33,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 35,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 36,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 37,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 38,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 39,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 40,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;ACTIVE&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 41,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 42,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 43,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 44,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 45,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 46,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 47,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
     &quot;jobSchedulerConfiguration&quot; : null,
     &quot;jobListenerConfiguration&quot; : {
       &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
@@ -3477,7 +2975,7 @@ Content-Length: 22129
     },
     &quot;jobIncrementer&quot; : &quot;DATE&quot;
   }, {
-    &quot;jobConfigurationId&quot; : 48,
+    &quot;jobConfigurationId&quot; : 16,
     &quot;jobName&quot; : &quot;simpleJob&quot;,
     &quot;jobSchedulerConfiguration&quot; : {
       &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
@@ -3493,7 +2991,7 @@ Content-Length: 22129
     },
     &quot;jobIncrementer&quot; : &quot;DATE&quot;
   }, {
-    &quot;jobConfigurationId&quot; : 49,
+    &quot;jobConfigurationId&quot; : 17,
     &quot;jobName&quot; : &quot;simpleJob&quot;,
     &quot;jobSchedulerConfiguration&quot; : null,
     &quot;jobListenerConfiguration&quot; : {
@@ -3520,7 +3018,8 @@ Content-Length: 22129
 <h6 id="_curl_12">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/simpleJob' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/simpleJob' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
 </div>
@@ -3529,7 +3028,7 @@ Content-Length: 22129
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/simpleJob HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
@@ -3539,11 +3038,10 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Content-Length: 5072
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Fri, 02 Nov 2018 15:05:44 GMT
-Content-Length: 19807
+Date: Fri, 09 Nov 2018 03:25:13 GMT
 
 {
   &quot;jobConfigurations&quot; : [ {
@@ -3558,22 +3056,6 @@ Content-Length: 19807
       &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
     },
     &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 2,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : { }
     },
@@ -3667,7 +3149,7 @@ Content-Length: 19807
       &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
       &quot;filePattern&quot; : &quot;*_input.txt&quot;,
       &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
+      &quot;listenerStatus&quot; : &quot;ACTIVE&quot;,
       &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
     },
     &quot;jobParameters&quot; : {
@@ -3738,502 +3220,6 @@ Content-Length: 19807
       &quot;parameters&quot; : { }
     },
     &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 13,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 14,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 15,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 16,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 17,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 18,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 19,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 20,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 21,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 22,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 23,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 24,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 25,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 26,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 27,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 28,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 29,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 30,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 31,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 32,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 33,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 35,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 36,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 37,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 38,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 39,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 40,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;ACTIVE&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 41,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 42,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 43,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : {
-      &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
-      &quot;cronExpression&quot; : null,
-      &quot;initialDelay&quot; : 100000,
-      &quot;fixedDelay&quot; : 100000,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;,
-      &quot;schedulerStatus&quot; : &quot;INITIALIZED&quot;
-    },
-    &quot;jobListenerConfiguration&quot; : null,
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
-  }, {
-    &quot;jobConfigurationId&quot; : 44,
-    &quot;jobName&quot; : &quot;simpleJob&quot;,
-    &quot;jobSchedulerConfiguration&quot; : null,
-    &quot;jobListenerConfiguration&quot; : {
-      &quot;jobListenerType&quot; : &quot;LOCAL_FOLDER_LISTENER&quot;,
-      &quot;sourceFolder&quot; : &quot;src/test/resources&quot;,
-      &quot;filePattern&quot; : &quot;*_input.txt&quot;,
-      &quot;pollerPeriod&quot; : 1000,
-      &quot;listenerStatus&quot; : &quot;STOPPED&quot;,
-      &quot;taskExecutorType&quot; : &quot;ASYNCHRONOUS&quot;
-    },
-    &quot;jobParameters&quot; : {
-      &quot;parameters&quot; : { }
-    },
-    &quot;jobIncrementer&quot; : &quot;DATE&quot;
   } ]
 }</code></pre>
 </div>
@@ -4246,7 +3232,10 @@ Content-Length: 19807
 <h6 id="_curl_13">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X POST \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -d '{
   &quot;jobConfigurationId&quot; : null,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;jobSchedulerConfiguration&quot; : null,
@@ -4269,10 +3258,10 @@ Content-Length: 19807
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/jobconfigurations HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
-Host: localhost
+Accept: application/json, application/javascript, text/javascript, text/json
 Content-Length: 424
+Host: localhost
 
 {
   &quot;jobConfigurationId&quot; : null,
@@ -4297,8 +3286,7 @@ Content-Length: 424
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-X-Application-Context: it-application:0
-Date: Fri, 02 Nov 2018 15:05:44 GMT</code></pre>
+Date: Fri, 09 Nov 2018 03:25:13 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4309,8 +3297,11 @@ Date: Fri, 02 Nov 2018 15:05:44 GMT</code></pre>
 <h6 id="_curl_14">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X PUT -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
-  &quot;jobConfigurationId&quot; : 36,
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X PUT \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -d '{
+  &quot;jobConfigurationId&quot; : 4,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;jobSchedulerConfiguration&quot; : null,
   &quot;jobListenerConfiguration&quot; : {
@@ -4334,13 +3325,13 @@ Date: Fri, 02 Nov 2018 15:05:44 GMT</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">PUT /api/jobconfigurations HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Content-Length: 440
 Content-Type: application/json; charset=UTF-8
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost
-Content-Length: 441
 
 {
-  &quot;jobConfigurationId&quot; : 36,
+  &quot;jobConfigurationId&quot; : 4,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;jobSchedulerConfiguration&quot; : null,
   &quot;jobListenerConfiguration&quot; : {
@@ -4364,8 +3355,7 @@ Content-Length: 441
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
-Date: Fri, 02 Nov 2018 15:05:43 GMT</code></pre>
+Date: Fri, 09 Nov 2018 03:25:11 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4376,7 +3366,8 @@ Date: Fri, 02 Nov 2018 15:05:43 GMT</code></pre>
 <h6 id="_curl_15">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/34' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/2' -i -X DELETE \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
 </div>
@@ -4384,8 +3375,8 @@ Date: Fri, 02 Nov 2018 15:05:43 GMT</code></pre>
 <h6 id="_http_request_15">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/jobconfigurations/jobconfiguration/34 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/jobconfigurations/jobconfiguration/2 HTTP/1.1
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
@@ -4395,8 +3386,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
-Date: Fri, 02 Nov 2018 15:05:43 GMT</code></pre>
+Date: Fri, 09 Nov 2018 03:25:11 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4407,7 +3397,8 @@ Date: Fri, 02 Nov 2018 15:05:43 GMT</code></pre>
 <h6 id="_curl_16">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/40/start' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/8/start' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
 </div>
@@ -4415,8 +3406,8 @@ Date: Fri, 02 Nov 2018 15:05:43 GMT</code></pre>
 <h6 id="_http_request_16">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/40/start HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/8/start HTTP/1.1
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
@@ -4426,8 +3417,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
-Date: Fri, 02 Nov 2018 15:05:44 GMT</code></pre>
+Date: Fri, 09 Nov 2018 03:25:13 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4438,7 +3428,8 @@ Date: Fri, 02 Nov 2018 15:05:44 GMT</code></pre>
 <h6 id="_curl_17">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/38/stop' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/6/stop' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
 </div>
@@ -4446,8 +3437,8 @@ Date: Fri, 02 Nov 2018 15:05:44 GMT</code></pre>
 <h6 id="_http_request_17">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/38/stop HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/6/stop HTTP/1.1
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
@@ -4457,8 +3448,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
-Date: Fri, 02 Nov 2018 15:05:43 GMT</code></pre>
+Date: Fri, 09 Nov 2018 03:25:11 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -4915,7 +3905,7 @@ already beeb launched, the <em>JobParameters</em> of the last run will be shown.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-11-02 15:59:54 +01:00
+Last updated 2018-11-04 01:25:14 +09:00
 </div>
 </div>
 </body>
