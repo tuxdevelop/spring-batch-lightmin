@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: it-application
+  batch:
+    job:
+      enabled: false

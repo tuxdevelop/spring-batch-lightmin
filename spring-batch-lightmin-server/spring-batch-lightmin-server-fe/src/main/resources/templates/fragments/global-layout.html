@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Marcel Becker"/>
+
+    <title>Spring Batch Lightmin</title>
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+    <!-- Custom styles for this template -->
+    <link th:href="@{css/lightmin.css}" rel="stylesheet"/>
+    <link th:href="@{css/all.min.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div th:fragment="sidebar">
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a id="menu-toggle" href="#">
+                    <img th:src="@{vendor/img/platform-spring-boot.png}"/>
+                    <img th:src="@{vendor/img/spring-batch-logo.png}"/>
+                    <img th:if=" ${@environment.getProperty('spring.batch.lightmin.server.fe.img-path') != null}"
+                         th:src="${@environment.getProperty('spring.batch.lightmin.server.fe.img-path')}"
+                         height="40px" width="120px" style="display:inline;"/>
+                    <h4 class="label label-default" style="display:inline;"
+                        th:if="${@environment.getProperty('spring.batch.lightmin.server.fe.label') != null}"
+                        th:text="${@environment.getProperty('spring.batch.lightmin.server.fe.label')}">
+                    </h4>
+                </a>
+            </li>
+            <li class="sidebar-brand">
+                <a href="#" th:href="@{applications}">
+                    Spring Batch Lightmin
+                </a>
+            </li>
+            <li>
+                <a href="#" th:href="@{applications}">
+                    Applications
+                </a>
+            </li>
+            <li>
+                <a href="#" th:href="@{events}">
+                    Events
+                </a>
+            </li>
+            <li>
+                <a href="#" th:href="@{about}">
+                    About
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script th:src="@{vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+</div>
+</body>
+</html>

@@ -5,61 +5,19 @@
     <parent>
         <artifactId>spring-batch-lightmin</artifactId>
         <groupId>org.tuxdevelop</groupId>
-        <version>0.6.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>spring-batch-lightmin-client</artifactId>
+    <packaging>pom</packaging>
 
-    <dependencies>
-        <!-- lightmin -->
-        <dependency>
-            <groupId>org.tuxdevelop</groupId>
-            <artifactId>spring-batch-lightmin-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!-- spring boot -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- spring cloud -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-commons</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
-            <optional>true</optional>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-    </dependencies>
+    <modules>
+        <module>spring-batch-lightmin-client-core</module>
+        <module>spring-batch-lightmin-client-discovery-consul</module>
+        <module>spring-batch-lightmin-client-discovery-eureka</module>
+        <module>spring-batch-lightmin-client-discovery-core</module>
+        <module>spring-batch-lightmin-client-classic</module>
+    </modules>
 
 </project>

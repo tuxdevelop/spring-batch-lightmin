@@ -1,13 +1,13 @@
 package org.tuxdevelop.spring.batch.lightmin.api.resource.admin;
 
-import org.tuxdevelop.spring.batch.lightmin.PojoTestBase;
+import org.tuxdevelop.spring.batch.lightmin.test.PojoTestBase;
 
 
 public class JobConfigurationsTest extends PojoTestBase {
 
     @Override
     public void performPojoTest() {
-        testStructureAndBehavior(JobConfigurations.class);
-        testEquals(JobConfigurations.class);
+        this.testStructureAndBehavior(JobConfigurations.class);
+        this.testEquals(JobConfigurations.class);
     }
 }

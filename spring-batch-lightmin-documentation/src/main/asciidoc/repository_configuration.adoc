@@ -1,0 +1,168 @@
+== Job Configuration Repository Configuration
+
+=== Jdbc Configuration Repository
+
+The following configuration properties can be used for the jdbc configuration repository
+
+==== Table Names
+
+If the table name of the provided ddl schemas does not match your requirements, you can rename them and configure the custom names via property.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      repository:
+        jdbc:
+          #default: BATCH_JOB_CONFIGURATION
+          job-configuration-table-name: my-jc-table-name
+          #default: BATCH_JOB_CONFIGURATION_VALUE
+          job-configuration-value-table-name: my-jcv-table-name
+          #default: BATCH_JOB_CONFIGURATION_PARAMETERS
+          job-configuration-parameter-table-name: mv-jcp-table-name
+----
+
+==== Database Schema name
+
+If you have to define a custom schema for your database, the following property can be used.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      repository:
+        jdbc:
+          configuration-database-schema: my-schema
+----
+
+==== Datasource Name
+
+Per default, the repository tries to get a DataSource bean with the name _dataSource_. If the DataSource has a different name in your configuration, the following property can be used.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      repository:
+        jdbc:
+          data-source-name: myDataSourceName
+----
+
+=== Remote Configuration Repository
+
+The following configuration properties can be used for the remote configuration repository
+
+==== Common
+
+The following properties can be used with and without service discovery
+
+===== Credentials
+
+If the _Remote Repository Server_ is secured, the following properties can be used to set a username and a password.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      repository:
+        remote:
+          username: username
+          password: password
+----
+
+==== No Service Discovery
+
+===== Server Url
+
+The property points directly to the url of remote repository server.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      repository:
+        remote:
+          server-url: http://my-server.domain:8180
+----
+
+==== Discovery
+
+===== Enable Discovery
+
+This property has to be set to true to enable the discovery.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      repository:
+        remote:
+          #default: false
+          discover-remote-repository: true
+----
+
+===== Remote Repository Discovery Name
+
+Set or change the discovery name of the _Remote Repository Server_.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      repository:
+        remote:
+          #default: spring-batch-lightmin-repository-server
+          server-discovery-name: my-remote-repo
+----
+
+
+===== Remote Repository Context Path
+
+If the Remote Repository uses a context path, this property will be added to the discovered url by the _DiscoveryClient_.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      repository:
+        remote:
+          context-path: /remote-repo-server
+----
+
+===== Startup Discovery Retry
+
+The retry count to find the repository server.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      repository:
+        remote:
+          #default: 30
+          server-startup-discovery-retry: 10
+----
+
+===== Startup Discovery Wait Time
+
+The time period between the retries.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      repository:
+        remote:
+          #default: 500 in millis
+          server-startup-discovery-retry-wait-time: 200
+----

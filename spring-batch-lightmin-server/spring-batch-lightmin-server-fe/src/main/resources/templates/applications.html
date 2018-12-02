@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"></head>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="navbar-brand text-info" href="#">
+                        <h4>Applications</h4>
+                    </a>
+                </nav>
+            </div>
+            <div class="row-fluid content">
+                <table class="table table-sm">
+                    <tbody>
+                    <tr th:each="applicationCluster : ${applicationClusters}">
+                        <div th:include="fragments/applications :: application-cluster-card"></div>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script language="javascript">
+    setInterval(function () {
+        window.location.reload(1);
+    }, 30000);
+</script>
+</body>
+</html>

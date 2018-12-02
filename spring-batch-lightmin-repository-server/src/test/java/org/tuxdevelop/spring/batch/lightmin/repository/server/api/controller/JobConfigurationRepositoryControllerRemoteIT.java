@@ -7,12 +7,13 @@ import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
-import org.tuxdevelop.spring.batch.lightmin.admin.repository.RemoteJobConfigurationRepository;
-import org.tuxdevelop.spring.batch.lightmin.admin.repository.RemoteJobConfigurationRepositoryLocator;
-import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
+import org.springframework.web.client.RestTemplate;
+import org.tuxdevelop.spring.batch.lightmin.repository.JobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.repository.RemoteJobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.repository.RemoteJobConfigurationRepositoryLocator;
+import org.tuxdevelop.spring.batch.lightmin.repository.configuration.RemoteJobConfigurationRepositoryConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.test.util.ITJobConfigurationRepository;
-import org.tuxdevelop.test.configuration.RemoteIntegrationTestConfiguration;
+import org.tuxdevelop.test.configuration.remote.RemoteIntegrationTestConfiguration;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {RemoteIntegrationTestConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -20,7 +21,7 @@ import org.tuxdevelop.test.configuration.RemoteIntegrationTestConfiguration;
 public class JobConfigurationRepositoryControllerRemoteIT extends JobConfigurationRepositoryControllerIT {
 
     @Autowired
-    private SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
+    private RemoteJobConfigurationRepositoryConfigurationProperties properties;
     @Autowired
     private ITJobConfigurationRepository itJobConfigurationRepository;
     @Autowired
@@ -38,9 +39,10 @@ public class JobConfigurationRepositoryControllerRemoteIT extends JobConfigurati
     @Before
     public void init() {
         super.init();
-        this.springBatchLightminConfigurationProperties.setRemoteRepositoryServerUrl("http://localhost:" + this.localPort);
+        this.properties.setServerUrl("http://localhost:" + this.localPort);
         this.jobConfigurationRepository = new RemoteJobConfigurationRepository(
-                this.springBatchLightminConfigurationProperties,
+                this.properties,
+                new RestTemplate(),
                 this.remoteJobConfigurationRepositoryLocator);
     }
 

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"/>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/application-navigation :: nav"/>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" th:href="@{/applications}" class="text-info">Applications</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-info" href="#"
+                       th:href="@{/application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
+                       th:text="${applicationContextModel.applicationName}"></a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-info" href="#"
+                       th:href="@{/batch-jobs(application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                        Batch Jobs
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-info" href="#"
+                       th:text="${applicationContextModel.jobName}"
+                       th:href="@{batch-job-executions(job-name=${applicationContextModel.jobName},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                    </a>
+                </li>
+                <li class="breadcrumb-item text-muted"
+                    th:text="'JobExecutionId ' + ${applicationContextModel.jobExecutionId}">
+                </li>
+            </ol>
+        </nav>
+
+        <div class="row-fluid content">
+            <div class="card text-secondary">
+                <div class="card-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-info">Execution Summary</h5>
+                            <table class="table table-text-sm">
+                                <tbody class="text-muted">
+                                <tr>
+                                    <td>Restart Job</td>
+                                    <td>
+                                        <form id="restart-jobexecution-form" method="post"
+                                              style="display: inline;"
+                                              th:if="${jobExecution.isCompleted}"
+                                              th:action="@{batch-job-execution(restart-batch-job-execution='restart',
+                                                            job-name=${applicationContextModel.jobName},
+                                                            application-instance-id=${applicationContextModel.applicationInstanceId},
+                                                            job-execution-id=${jobExecution.id})}">
+                                            <button
+                                                    class="text-info btn-sm btn-primary-outline btn-hover"
+                                                    type="submit"
+                                                    name="stop-scheduler" style="display: inline;">
+                                                <i class="fas fa-redo-alt"></i>
+                                            </button>
+                                        </form>
+                                        <form id="stop-jobexecution-form" method="post"
+                                              style="display: inline;"
+                                              th:if="${!jobExecution.isCompleted}"
+                                              th:action="@{batch-job-execution(stop-batch-job-execution='stop',
+                                                            job-name=${applicationContextModel.jobName},
+                                                            application-instance-id=${applicationContextModel.applicationInstanceId},
+                                                            job-execution-id=${jobExecution.id})}">
+                                            <button
+                                                    class="text-danger btn-sm btn-primary-outline btn-hover"
+                                                    type="submit"
+                                                    name="stop-scheduler" style="display: inline;">
+                                                <i class="far fa-stop-circle"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Start Time</td>
+                                    <td th:text="${jobExecution.startTime}"></td>
+                                </tr>
+                                <tr>
+                                    <td>End Time</td>
+                                    <td th:text="${jobExecution.endTime}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Duration</td>
+                                    <td th:text="${jobExecution.duration}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td th:class="${jobExecution.statusClass}" th:text="${jobExecution.status}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Exit Code</td>
+                                    <td th:class="${jobExecution.exitStatusClass}"
+                                        th:text="${jobExecution.exitStatus}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Exit Message</td>
+                                    <td th:text="${jobExecution.exitMessage}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Job Parameters</td>
+                                    <td>
+                                        <table class="table">
+                                            <tbody>
+                                            <tr th:each="jobParameter : ${jobExecution.jobParameters}">
+                                                <td th:text="${jobParameter.key}"></td>
+                                                <td th:text="${jobParameter.value}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-info">Step Executions</h5>
+                            <div class="card-body">
+                                <table class="table table-sm">
+                                    <thead class="table-text-sm text-secondary">
+                                    <tr>
+                                        <th>Step Name</th>
+                                        <th>Reads</th>
+                                        <th>Writes</th>
+                                        <th>Commits</th>
+                                        <th>Rollbacks</th>
+                                        <th>Skips (Read/Process/Write)</th>
+                                        <th>Duration</th>
+                                        <th>Step Status</th>
+                                        <th>Exit Message</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="text-muted table-text-sm">
+                                    <tr th:each="stepExecution : ${jobExecution.stepExecutions}">
+                                        <td th:text="${stepExecution.stepName}"></td>
+                                        <td th:text="${stepExecution.readCount}"></td>
+                                        <td th:text="${stepExecution.writeCount}"></td>
+                                        <td th:text="${stepExecution.commitCount}"></td>
+                                        <td th:text="${stepExecution.rollbackCount}"></td>
+                                        <td th:text="${stepExecution.readSkipCount} + '/' + ${stepExecution.processSkipCount} + '/' + ${stepExecution.writeSkipCount}"></td>
+                                        <td th:text="${stepExecution.duration}"></td>
+                                        <td th:class="${stepExecution.statusClass}"
+                                            th:text="${stepExecution.status}"></td>
+                                        <td th:text="${stepExecution.exitMessage}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

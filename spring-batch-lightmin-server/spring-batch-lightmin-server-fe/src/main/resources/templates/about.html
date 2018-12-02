@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"></head>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div class="card border-0">
+            <div class="card-header border-0 bg-white">
+                <h3 class="text-info"> About Spring Batch Ligthmin </h3>
+            </div>
+            <div class="card-body border-0 text-muted bg-white">
+                Spring Batch Lightmin is released under the Apache License v2.
+            </div>
+            <div class="card-footer border-0 bg-white">
+                <a href="https://github.com/tuxdevelop/spring-batch-lightmin" target="_blank">Sources on GitHub</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
