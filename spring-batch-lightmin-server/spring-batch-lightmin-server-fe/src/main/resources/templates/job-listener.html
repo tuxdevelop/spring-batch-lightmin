@@ -17,12 +17,12 @@
         <div class="row-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#" th:href="@{/applications}"
+                    <li class="breadcrumb-item"><a href="#" th:href="@{applications}"
                                                    class="text-info">Applications</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a class="text-info" href="#"
-                           th:href="@{/application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
+                           th:href="@{application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
                            th:text="${applicationContextModel.applicationName}"></a>
                     </li>
 

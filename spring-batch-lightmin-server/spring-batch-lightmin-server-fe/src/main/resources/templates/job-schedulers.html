@@ -16,11 +16,11 @@
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#" th:href="@{/applications}" class="text-info">Applications</a>
+                <li class="breadcrumb-item"><a href="#" th:href="@{applications}" class="text-info">Applications</a>
                 </li>
                 <li class="breadcrumb-item">
                     <a class="text-info" href="#"
-                       th:href="@{/application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
+                       th:href="@{application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
                        th:text="${applicationContextModel.applicationName}"></a>
                 </li>
                 <li class="breadcrumb-item text-muted">Scheduler</li>
@@ -98,7 +98,7 @@
                                                     <form id="stop-scheduler-form" method="post"
                                                           style="display: inline;"
                                                           th:if="${scheduler.config.isStoppable}"
-                                                          th:action="@{/job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                                          th:action="@{job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
                                                         <button class="text-danger btn-sm btn-primary-outline btn-hover"
                                                                 type="submit"
                                                                 name="stop-scheduler" style="display: inline;">
@@ -108,7 +108,7 @@
                                                     <form id="start-scheduler-form" method="post"
                                                           style="display: inline;"
                                                           th:if="${scheduler.config.isStartable}"
-                                                          th:action="@{/job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                                          th:action="@{job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
                                                         <button class="text-info btn-sm btn-primary-outline btn-hover"
                                                                 type="submit"
                                                                 name="start-scheduler" style="display: inline;">
@@ -123,7 +123,7 @@
                                                     </a>
                                                     <form id="delete-scheduler-form" method="post"
                                                           style="display: inline;"
-                                                          th:action="@{/job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                                          th:action="@{job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
                                                         <button class="text-danger btn-sm btn-primary-outline btn-hover"
                                                                 type="submit"
                                                                 name="delete-scheduler" style="display: inline;">

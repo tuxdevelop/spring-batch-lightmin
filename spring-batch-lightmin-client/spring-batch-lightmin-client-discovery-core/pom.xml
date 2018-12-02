@@ -20,6 +20,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- spring boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- spring cloud -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

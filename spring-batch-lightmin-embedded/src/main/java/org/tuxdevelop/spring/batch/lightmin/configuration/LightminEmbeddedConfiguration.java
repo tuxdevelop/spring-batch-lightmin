@@ -4,13 +4,12 @@ import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminCore;
-import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminService;
 import org.tuxdevelop.spring.batch.lightmin.client.annotation.EnableLightminClientCore;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.event.EmbeddedJobExecutionEventPublisher;
 import org.tuxdevelop.spring.batch.lightmin.client.event.JobExecutionEventPublisher;
+import org.tuxdevelop.spring.batch.lightmin.event.listener.OnApplicationReadyEventEmbeddedListener;
 import org.tuxdevelop.spring.batch.lightmin.server.annotation.EnableLightminServerCore;
-import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnApplicationReadyEventEmbeddedListener;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.annotation.EnableLightminServerFrontend;
 import org.tuxdevelop.spring.batch.lightmin.server.service.AdminServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.service.EventService;
@@ -27,7 +26,6 @@ import org.tuxdevelop.spring.batch.lightmin.service.ServiceEntry;
 @Configuration
 @EnableLightminCore
 @EnableLightminClientCore
-@EnableLightminService
 @EnableLightminServerCore
 @EnableLightminServerFrontend
 public class LightminEmbeddedConfiguration {

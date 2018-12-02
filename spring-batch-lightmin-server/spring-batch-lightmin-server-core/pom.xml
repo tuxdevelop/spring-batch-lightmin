@@ -18,5 +18,12 @@
             <artifactId>spring-batch-lightmin-client-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- spring boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

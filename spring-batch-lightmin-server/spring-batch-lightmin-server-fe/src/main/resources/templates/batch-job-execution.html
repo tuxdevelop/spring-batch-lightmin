@@ -16,16 +16,16 @@
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#" th:href="@{/applications}" class="text-info">Applications</a>
+                <li class="breadcrumb-item"><a href="#" th:href="@{applications}" class="text-info">Applications</a>
                 </li>
                 <li class="breadcrumb-item">
                     <a class="text-info" href="#"
-                       th:href="@{/application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
+                       th:href="@{application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
                        th:text="${applicationContextModel.applicationName}"></a>
                 </li>
                 <li class="breadcrumb-item">
                     <a class="text-info" href="#"
-                       th:href="@{/batch-jobs(application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                       th:href="@{batch-jobs(application-instance-id=${applicationContextModel.applicationInstanceId})}">
                         Batch Jobs
                     </a>
                 </li>
