@@ -67,36 +67,45 @@ public class LightminClientProperties {
         this.serverProperties = serverProperties;
     }
 
-    //TODO: refactor to only one return statement
     public String getManagementUrl() {
+
+        final String resultManagamentUrl;
+
         if (this.managementUrl != null) {
-            return this.managementUrl;
-        }
-
-        if ((this.managementPort == null || this.managementPort.equals(this.serverPort))
-                && this.getServiceUrl() != null) {
-            return this.append(this.getServiceUrl(), this.managementServerProperties.getContextPath());
-        }
-
-        if (this.managementPort == null) {
-            throw new IllegalStateException(
-                    "serviceUrl must be set when deployed to servlet-container");
-        }
-
-        if (this.preferIp) {
-            final InetAddress address = this.serverProperties.getAddress();
-            final String hostAddress;
-            if (address == null) {
-                hostAddress = this.determineHost();
+            resultManagamentUrl = this.managementUrl;
+        } else {
+            if ((this.managementPort == null || this.managementPort.equals(this.serverPort))
+                    && this.getServiceUrl() != null) {
+                resultManagamentUrl = this.append(this.getServiceUrl(), this.managementServerProperties.getContextPath());
             } else {
-                hostAddress = address.getHostAddress();
-            }
-            return this.append(this.append(this.createLocalUri(hostAddress, this.managementPort),
-                    this.serverProperties.getContextPath()), this.managementServerProperties.getContextPath());
+                if (this.managementPort == null) {
+                    throw new IllegalStateException(
+                            "serviceUrl must be set when deployed to servlet-container");
+                } else {
+                    if (this.preferIp) {
+                        final InetAddress address = this.serverProperties.getAddress();
+                        final String hostAddress = this.getHostAddress(address);
+                        resultManagamentUrl = this.append(this.append(this.createLocalUri(hostAddress, this.managementPort),
+                                this.serverProperties.getContextPath()), this.managementServerProperties.getContextPath());
 
+                    } else {
+                        resultManagamentUrl = this.append(this.createLocalUri(this.determineHost(), this.managementPort),
+                                this.managementServerProperties.getContextPath());
+                    }
+                }
+            }
         }
-        return this.append(this.createLocalUri(this.determineHost(), this.managementPort),
-                this.managementServerProperties.getContextPath());
+        return resultManagamentUrl;
+    }
+
+    private String getHostAddress(final InetAddress address) {
+        final String hostAddress;
+        if (address == null) {
+            hostAddress = this.determineHost();
+        } else {
+            hostAddress = address.getHostAddress();
+        }
+        return hostAddress;
     }
 
     public String getHealthUrl() {
@@ -107,47 +116,50 @@ public class LightminClientProperties {
         return this.append(managementUrl, this.healthEndpointId);
     }
 
-    //TODO: refactor to only one return statement
     public String getServiceUrl() {
+
+        final String resultServiceUrl;
+
         if (this.serviceUrl != null) {
-            return this.serviceUrl;
-        }
-
-        if (this.serverPort == null) {
-            throw new IllegalStateException(
-                    "serviceUrl must be set when deployed to servlet-container");
-        }
-
-        if (this.preferIp) {
-            final InetAddress address = this.serverProperties.getAddress();
-            final String hostAddress;
-            if (address == null) {
-                hostAddress = this.determineHost();
+            resultServiceUrl = this.serviceUrl;
+        } else {
+            if (this.serverPort == null) {
+                throw new IllegalStateException(
+                        "serviceUrl must be set when deployed to servlet-container");
             } else {
-                hostAddress = address.getHostAddress();
-            }
-            return this.append(this.append(this.createLocalUri(hostAddress, this.serverPort),
-                    this.serverProperties.getServletPath()), this.serverProperties.getContextPath());
+                if (this.preferIp) {
+                    final InetAddress address = this.serverProperties.getAddress();
+                    final String hostAddress = this.getHostAddress(address);
+                    resultServiceUrl = this.append(this.append(this.createLocalUri(hostAddress, this.serverPort),
+                            this.serverProperties.getServletPath()), this.serverProperties.getContextPath());
 
+                } else {
+                    resultServiceUrl = this.append(this.append(this.createLocalUri(this.determineHost(), this.serverPort),
+                            this.serverProperties.getServletPath()), this.serverProperties.getContextPath());
+                }
+            }
         }
-        return this.append(this.append(this.createLocalUri(this.determineHost(), this.serverPort),
-                this.serverProperties.getServletPath()), this.serverProperties.getContextPath());
+        return resultServiceUrl;
     }
 
     private String createLocalUri(final String host, final int port) {
-        final String scheme = this.serverProperties.getSsl() != null && this.serverProperties.getSsl().isEnabled() ? "https" : "http";
+        final String scheme =
+                this.serverProperties.getSsl() != null && this.serverProperties.getSsl().isEnabled() ? "https" : "http";
         return scheme + "://" + host + ":" + port;
     }
 
-    //TODO: refactor to only one return statement
     private String append(final String uri, final String path) {
+
+        final String resultBaseUri;
+
         final String baseUri = uri.replaceFirst("/+$", "");
         if (StringUtils.isEmpty(path)) {
-            return baseUri;
+            resultBaseUri = baseUri;
+        } else {
+            final String normPath = path.replaceFirst("^/+", "").replaceFirst("/+$", "");
+            resultBaseUri = baseUri + "/" + normPath;
         }
-
-        final String normPath = path.replaceFirst("^/+", "").replaceFirst("/+$", "");
-        return baseUri + "/" + normPath;
+        return resultBaseUri;
     }
 
     private InetAddress getHostAddress() {
