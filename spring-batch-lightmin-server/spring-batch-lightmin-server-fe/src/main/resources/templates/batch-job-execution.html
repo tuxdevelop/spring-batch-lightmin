@@ -50,11 +50,14 @@
                             <table class="table table-text-sm">
                                 <tbody class="text-muted">
                                 <tr>
-                                    <td>Restart Job</td>
+                                    <td>
+                                        <label th:if="${jobExecution.isFinished}">Restart Job Execution</label>
+                                        <label th:if="${!jobExecution.isFinished}">Stop Job Execution</label>
+                                    </td>
                                     <td>
                                         <form id="restart-jobexecution-form" method="post"
                                               style="display: inline;"
-                                              th:if="${jobExecution.isCompleted}"
+                                              th:if="${jobExecution.isFinished}"
                                               th:action="@{batch-job-execution(restart-batch-job-execution='restart',
                                                             job-name=${applicationContextModel.jobName},
                                                             application-instance-id=${applicationContextModel.applicationInstanceId},
@@ -68,7 +71,7 @@
                                         </form>
                                         <form id="stop-jobexecution-form" method="post"
                                               style="display: inline;"
-                                              th:if="${!jobExecution.isCompleted}"
+                                              th:if="${!jobExecution.isFinished}"
                                               th:action="@{batch-job-execution(stop-batch-job-execution='stop',
                                                             job-name=${applicationContextModel.jobName},
                                                             application-instance-id=${applicationContextModel.applicationInstanceId},

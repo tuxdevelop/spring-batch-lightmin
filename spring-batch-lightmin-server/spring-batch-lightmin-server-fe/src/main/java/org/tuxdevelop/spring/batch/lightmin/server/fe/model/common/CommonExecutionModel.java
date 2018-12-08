@@ -13,6 +13,7 @@ public abstract class CommonExecutionModel {
     protected static final String EXECUTING = "executing";
     protected static final String STARTED = "started";
     protected static final String UNKNOWN = "unknown";
+    protected static final String FAILED = "failed";
 
     protected Long id;
     protected String status;
@@ -27,6 +28,12 @@ public abstract class CommonExecutionModel {
 
     public Boolean getIsCompleted() {
         return StringUtils.hasText(this.exitStatus) ? this.exitStatus.toLowerCase().equals(COMPLETED) : Boolean.FALSE;
+    }
+
+    public Boolean getIsFinished() {
+        return StringUtils.hasText(this.exitStatus) ?
+                this.exitStatus.toLowerCase().equals(COMPLETED) || this.exitStatus.toLowerCase().equals(FAILED) :
+                Boolean.FALSE;
     }
 
     public String getStatusClass() {
