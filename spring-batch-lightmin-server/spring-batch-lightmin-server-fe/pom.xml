@@ -23,6 +23,18 @@
 
         <dependency>
             <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-test-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-test-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
             <artifactId>spring-batch-lightmin-util</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -127,7 +127,7 @@ public class JobSchedulerFeService extends CommonJobConfigurationFeService {
     }
 
     //from model
-    private JobConfiguration map(final SchedulerJobConfigurationModel schedulerModel) {
+    JobConfiguration map(final SchedulerJobConfigurationModel schedulerModel) {
 
         final JobConfiguration jobConfiguration = new JobConfiguration();
 

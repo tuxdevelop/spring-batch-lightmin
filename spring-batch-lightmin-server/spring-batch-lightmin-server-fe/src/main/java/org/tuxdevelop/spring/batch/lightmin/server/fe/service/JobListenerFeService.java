@@ -131,7 +131,7 @@ public class JobListenerFeService extends CommonJobConfigurationFeService {
     }
 
     //from model
-    private JobConfiguration map(final ListenerJobConfigurationModel listenerModel) {
+    JobConfiguration map(final ListenerJobConfigurationModel listenerModel) {
 
         final JobConfiguration jobConfiguration = new JobConfiguration();
 
