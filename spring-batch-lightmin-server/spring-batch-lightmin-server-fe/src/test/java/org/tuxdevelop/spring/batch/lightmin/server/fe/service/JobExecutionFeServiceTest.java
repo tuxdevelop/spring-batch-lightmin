@@ -11,7 +11,9 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobExecution;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobExecutionPage;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobInstancePage;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
+import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.server.fe.model.common.ApplicationContextModel;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.common.ContentPageModel;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.job.batch.JobExecutionDetailsModel;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.job.batch.JobExecutionModel;
@@ -19,6 +21,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 import org.tuxdevelop.spring.batch.lightmin.test.api.ApiTestHelper;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -35,6 +38,8 @@ public class JobExecutionFeServiceTest {
     private RegistrationBean registrationBean;
     @Mock
     private JobServerService jobServerService;
+    @Mock
+    private LightminClientProperties lightminClientProperties;
 
     @Test
     public void testGetJobExecutionModelPage() {
@@ -114,6 +119,29 @@ public class JobExecutionFeServiceTest {
         verify(this.jobServerService, times(1))
                 .stopJobExecution(JOB_EXECUTION_ID, applicationInstance);
 
+    }
+
+    /*
+     * Test for CommonFeService
+     */
+    @Test
+    public void testGetApplicationContextModel() {
+
+        when(this.lightminClientProperties.getHealthUrl()).thenReturn("http://localhost:8180/health");
+        when(this.lightminClientProperties.getName()).thenReturn("test-app");
+        when(this.lightminClientProperties.getServiceUrl()).thenReturn("http://localhost:8180");
+        when(this.lightminClientProperties.getServiceUrl()).thenReturn("http://localhost:8180");
+
+        final List<String> jobNames = Arrays.asList("test-job1", "test-job2");
+
+        final LightminClientApplication lightminClientApplication =
+                LightminClientApplication.createApplication(jobNames, this.lightminClientProperties);
+
+        when(this.registrationBean.findById(APPLICATION_INSTANCE_ID)).thenReturn(lightminClientApplication);
+
+        final ApplicationContextModel result = this.jobExecutionFeService.getApplicationContextModel(APPLICATION_INSTANCE_ID);
+
+        BDDAssertions.then(result).isNotNull();
     }
 
     @Before
