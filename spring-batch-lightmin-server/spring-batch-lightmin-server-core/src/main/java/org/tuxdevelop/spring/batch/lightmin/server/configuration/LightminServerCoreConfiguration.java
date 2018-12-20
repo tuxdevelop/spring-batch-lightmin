@@ -58,6 +58,12 @@ public class LightminServerCoreConfiguration {
         return new JournalServiceBean(journalRepository);
     }
 
+    @Bean
+    @ConditionalOnMissingBean(name = "clientRestTemplate")
+    public RestTemplate clientRestTemplate(final LightminServerCoreProperties lightminServerCoreProperties) {
+        return RestTemplateFactory.getRestTemplate(lightminServerCoreProperties);
+    }
+
     static class RestTemplateFactory {
 
         private static RestTemplate restTemplate;

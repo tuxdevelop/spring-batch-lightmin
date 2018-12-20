@@ -1,5 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.server.configuration;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -20,16 +21,17 @@ public class LightminServerStandaloneDiscoveryConfiguration {
 
 
     @Bean
-    public DiscoveryRegistrationBean discoveryRegistrationBean(final RegistrationBean registrationBean,
-                                                               final LightminServerCoreProperties lightminServerCoreProperties) {
-        final RestTemplate restTemplate = LightminServerCoreConfiguration.RestTemplateFactory.getRestTemplate(lightminServerCoreProperties);
+    public DiscoveryRegistrationBean discoveryRegistrationBean(
+            final RegistrationBean registrationBean,
+            @Qualifier("clientRestTemplate") final RestTemplate restTemplate) {
         return new DiscoveryRegistrationBean(registrationBean, restTemplate);
     }
 
     @Bean
-    public LightminApplicationDiscoveryListener lightminApplicationDiscoveryListener(final DiscoveryClient discoveryClient,
-                                                                                     final DiscoveryRegistrationBean discoveryRegistrationBean,
-                                                                                     final HeartbeatMonitor heartbeatMonitor) {
+    public LightminApplicationDiscoveryListener lightminApplicationDiscoveryListener(
+            final DiscoveryClient discoveryClient,
+            final DiscoveryRegistrationBean discoveryRegistrationBean,
+            final HeartbeatMonitor heartbeatMonitor) {
         return new LightminApplicationDiscoveryListener(discoveryClient, discoveryRegistrationBean, heartbeatMonitor);
     }
 

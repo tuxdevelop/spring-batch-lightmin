@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.client.configuration;
 
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -40,6 +41,13 @@ public class LightminClientConfiguration {
         return new LightminClientApplicationRestController(lightminClientApplicationService);
     }
 
+    @Bean(name = "serverRestTemplate")
+    @ConditionalOnMissingBean(name = "serverRestTemplate")
+    public RestTemplate serverRestTemplate(final LightminClientProperties lightminClientProperties) {
+        return LightminServerRestTemplateFactory.getRestTemplate(
+                lightminClientProperties.getServer());
+    }
+
     @Configuration
     @ConditionalOnProperty(
             prefix = "spring.batch.lightmin.client",
@@ -52,9 +60,8 @@ public class LightminClientConfiguration {
         @ConditionalOnMissingBean(value = {JobExecutionEventPublisher.class})
         public JobExecutionEventPublisher jobExecutionEventPublisher(
                 final LightminServerLocatorService lightminServerLocatorService,
-                final LightminClientProperties lightminClientProperties) {
-            final RestTemplate restTemplate = LightminServerRestTemplateFactory.getRestTemplate(
-                    lightminClientProperties.getServer());
+                final LightminClientProperties lightminClientProperties,
+                @Qualifier("serverRestTemplate") final RestTemplate restTemplate) {
             return new RemoteJobExecutionEventPublisher(restTemplate, lightminServerLocatorService);
         }
 

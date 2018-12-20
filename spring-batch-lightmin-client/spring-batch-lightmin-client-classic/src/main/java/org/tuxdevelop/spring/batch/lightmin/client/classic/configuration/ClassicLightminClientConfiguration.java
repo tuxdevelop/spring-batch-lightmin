@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.client.classic.configuration;
 
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +16,6 @@ import org.tuxdevelop.spring.batch.lightmin.client.classic.service.UrlLightminSe
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminServerLocatorService;
 
-import static org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientConfiguration.LightminServerRestTemplateFactory.getRestTemplate;
-
 @Configuration
 @EnableLightminClientCore
 @EnableConfigurationProperties(
@@ -29,8 +28,9 @@ public class ClassicLightminClientConfiguration {
             final LightminClientProperties lightminClientProperties,
             final LightminClientClassicConfigurationProperties lightminClientClassicConfigurationProperties,
             final JobRegistry jobRegistry,
-            final LightminServerLocatorService lightminServerLocatorService) {
-        final RestTemplate restTemplate = getRestTemplate(lightminClientProperties.getServer());
+            final LightminServerLocatorService lightminServerLocatorService,
+            @Qualifier("serverRestTemplate") final RestTemplate restTemplate) {
+
         return new LightminClientRegistratorService(
                 lightminClientProperties,
                 lightminClientClassicConfigurationProperties,

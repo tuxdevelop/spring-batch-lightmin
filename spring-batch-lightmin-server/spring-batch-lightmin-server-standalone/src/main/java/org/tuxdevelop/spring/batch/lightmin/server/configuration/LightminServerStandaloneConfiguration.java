@@ -1,9 +1,11 @@
 package org.tuxdevelop.spring.batch.lightmin.server.configuration;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
+import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.server.annotation.EnableLightminServerCore;
 import org.tuxdevelop.spring.batch.lightmin.server.api.controller.JobExecutionEventController;
 import org.tuxdevelop.spring.batch.lightmin.server.api.controller.RegistrationController;
@@ -36,19 +38,20 @@ public class LightminServerStandaloneConfiguration {
     }
 
     @Bean
-    public AdminServerService adminServerService(final LightminServerCoreProperties lightminServerCoreProperties) {
-        return new RemoteAdminServerService(LightminServerCoreConfiguration.RestTemplateFactory.getRestTemplate(lightminServerCoreProperties));
+    public AdminServerService adminServerService(@Qualifier("clientRestTemplate") final RestTemplate restTemplate) {
+        return new RemoteAdminServerService(restTemplate);
     }
 
     @Bean
-    public JobServerService jobServerService(final LightminServerCoreProperties lightminServerCoreProperties) {
-        return new RemoteJobServerService(LightminServerCoreConfiguration.RestTemplateFactory.getRestTemplate(lightminServerCoreProperties));
+    public JobServerService jobServerService(@Qualifier("clientRestTemplate") final RestTemplate restTemplate) {
+        return new RemoteJobServerService(restTemplate);
     }
 
     @Bean
-    public ClientApplicationStatusUpdater clientApplicationStatusUpdater(final LightminServerCoreProperties lightminServerCoreProperties,
-                                                                         final LightminApplicationRepository lightminApplicationRepository) {
-        return new ClientApplicationStatusUpdater(LightminServerCoreConfiguration.RestTemplateFactory.getRestTemplate(lightminServerCoreProperties), lightminApplicationRepository);
+    public ClientApplicationStatusUpdater clientApplicationStatusUpdater(
+            @Qualifier("clientRestTemplate") final RestTemplate restTemplate,
+            final LightminApplicationRepository lightminApplicationRepository) {
+        return new ClientApplicationStatusUpdater(restTemplate, lightminApplicationRepository);
     }
 
     @Bean
