@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"></head>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/events-navigation :: nav"></div>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" th:href="@{events}" class="text-info">Events</a></li>
+                <li class="breadcrumb-item text-muted">Job Executions</li>
+            </ol>
+        </nav>
+
+        <div class="row-fluid content">
+            <div class="card text-secondary">
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead class="text-secondary">
+                        <tr class="bg-light">
+                            <th>Job Name</th>
+                            <th>Execution Id</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Application</th>
+                            <th>Exit Code</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="event : ${pageModel.value}">
+                            <td th:text="${event.jobName}"></td>
+                            <td>
+                                <a href="#" class="text-info"
+                                   th:text="${event.id}"
+                                   th:href="@{batch-job-execution(job-execution-id=${event.id},job-name=${event.jobName},application-instance-id=${event.applicationInstanceId})}">
+                                </a>
+                            </td>
+                            <td th:text="${event.startTime}"></td>
+                            <td th:text="${event.endTime}"></td>
+                            <td th:text="${event.applicationName}"></td>
+                            <td th:class="${event.exitStatusClass}" th:text="${event.exitStatus}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <span class="text-left" th:if="${pageModel.hasPrevious}">
+                        <a href="#"
+                           th:href="@{job-execution-events(start-index=${pageModel.previousStartIndex})}"
+                           class="text-info table-text-sm">&laquo; prev</a>
+                    </span>
+                    <span class="text-right" th:if="${pageModel.hasMore}">
+                        <a href="#"
+                           th:href="@{job-execution-events(start-index=${pageModel.nextStartIndex})}"
+                           class="text-info table-text-sm">next &raquo;</a>
+                     </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

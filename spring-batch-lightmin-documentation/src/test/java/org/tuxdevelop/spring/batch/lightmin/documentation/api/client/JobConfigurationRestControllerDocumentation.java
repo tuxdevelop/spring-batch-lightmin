@@ -2,8 +2,8 @@ package org.tuxdevelop.spring.batch.lightmin.documentation.api.client;
 
 import com.jayway.restassured.http.ContentType;
 import org.junit.Test;
-import org.tuxdevelop.spring.batch.lightmin.api.controller.AbstractRestController;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.client.api.controller.AbstractRestController;
 import org.tuxdevelop.spring.batch.lightmin.documentation.api.AbstractServiceDocumentation;
 
 import static com.jayway.restassured.RestAssured.given;
@@ -30,7 +30,7 @@ public class JobConfigurationRestControllerDocumentation extends AbstractService
                                 prettyPrint()),
                         preprocessResponse(prettyPrint())))
                 .when()
-                .port(getServerPort())
+                .port(this.getServerPort())
                 .get(AbstractRestController.JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS)
                 .then()
                 .assertThat().statusCode(is(200));
@@ -50,7 +50,7 @@ public class JobConfigurationRestControllerDocumentation extends AbstractService
                         pathParameters(
                                 parameterWithName("jobname").description("The name of the Spring Batch Job"))))
                 .when()
-                .port(getServerPort())
+                .port(this.getServerPort())
                 .get(AbstractRestController.JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS_JOB_NAME, "simpleJob")
                 .then()
                 .assertThat().statusCode(is(200));
@@ -71,15 +71,15 @@ public class JobConfigurationRestControllerDocumentation extends AbstractService
                                 parameterWithName("jobconfigurationid").description("The id of the Job " +
                                         "Configuration"))))
                 .when()
-                .port(getServerPort())
-                .get(AbstractRestController.JobConfigurationRestControllerAPI.JOB_CONFIGURATION_JOB_CONFIGURATION_ID, addedJobConfigurationId)
+                .port(this.getServerPort())
+                .get(AbstractRestController.JobConfigurationRestControllerAPI.JOB_CONFIGURATION_JOB_CONFIGURATION_ID, this.addedJobConfigurationId)
                 .then()
                 .assertThat().statusCode(is(200));
     }
 
     @Test
     public void testAddJobConfiguration() {
-        final JobConfiguration jobConfiguration = createApiJobConfiguration();
+        final JobConfiguration jobConfiguration = this.createApiJobConfiguration();
         given(this.documentationSpec)
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
@@ -91,7 +91,7 @@ public class JobConfigurationRestControllerDocumentation extends AbstractService
                                 prettyPrint()),
                         preprocessResponse(prettyPrint())))
                 .when()
-                .port(getServerPort())
+                .port(this.getServerPort())
                 .body(jobConfiguration)
                 .post(AbstractRestController.JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS)
                 .then()
@@ -100,7 +100,7 @@ public class JobConfigurationRestControllerDocumentation extends AbstractService
 
     @Test
     public void testUpdateJobConfiguration() {
-        final JobConfiguration jobConfiguration = serviceEntry.getJobConfigurationById(addedListenerJobConfigurationId);
+        final JobConfiguration jobConfiguration = this.serviceEntry.getJobConfigurationById(this.addedListenerJobConfigurationId);
         given(this.documentationSpec)
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
@@ -112,7 +112,7 @@ public class JobConfigurationRestControllerDocumentation extends AbstractService
                                 prettyPrint()),
                         preprocessResponse(prettyPrint())))
                 .when()
-                .port(getServerPort())
+                .port(this.getServerPort())
                 .body(jobConfiguration)
                 .put(AbstractRestController.JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS)
                 .then()
@@ -134,9 +134,9 @@ public class JobConfigurationRestControllerDocumentation extends AbstractService
                                 parameterWithName("jobconfigurationid").description("The id of the Job " +
                                         "Configuration"))))
                 .when()
-                .port(getServerPort())
+                .port(this.getServerPort())
                 .delete(AbstractRestController.JobConfigurationRestControllerAPI
-                        .JOB_CONFIGURATION_JOB_CONFIGURATION_ID, addedListenerJobConfigurationId)
+                        .JOB_CONFIGURATION_JOB_CONFIGURATION_ID, this.addedListenerJobConfigurationId)
                 .then()
                 .assertThat().statusCode(is(200));
     }
@@ -156,9 +156,9 @@ public class JobConfigurationRestControllerDocumentation extends AbstractService
                                 parameterWithName("jobconfigurationid").description("The id of the Job " +
                                         "Configuration"))))
                 .when()
-                .port(getServerPort())
+                .port(this.getServerPort())
                 .get(AbstractRestController.JobConfigurationRestControllerAPI
-                        .JOB_CONFIGURATION_START, addedListenerJobConfigurationId)
+                        .JOB_CONFIGURATION_START, this.addedListenerJobConfigurationId)
                 .then()
                 .assertThat().statusCode(is(200));
     }
@@ -178,9 +178,9 @@ public class JobConfigurationRestControllerDocumentation extends AbstractService
                                 parameterWithName("jobconfigurationid").description("The id of the Job " +
                                         "Configuration"))))
                 .when()
-                .port(getServerPort())
+                .port(this.getServerPort())
                 .get(AbstractRestController.JobConfigurationRestControllerAPI
-                        .JOB_CONFIGURATION_STOP, addedListenerJobConfigurationId)
+                        .JOB_CONFIGURATION_STOP, this.addedListenerJobConfigurationId)
                 .then()
                 .assertThat().statusCode(is(200));
 

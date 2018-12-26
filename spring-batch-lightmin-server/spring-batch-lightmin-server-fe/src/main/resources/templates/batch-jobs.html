@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"/>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/application-navigation :: nav"/>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" th:href="@{applications}" class="text-info">Applications</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-info" href="#"
+                       th:href="@{application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
+                       th:text="${applicationContextModel.applicationName}"></a>
+                </li>
+                <li class="breadcrumb-item text-muted">Batch Jobs</li>
+            </ol>
+        </nav>
+
+        <div class="row-fluid content">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead class="text-secondary">
+                        <tr class="bg-light">
+                            <th>Job Name</th>
+                            <th>Job Instances</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-text-sm text-muted">
+                        <tr th:each="batchJob : ${batchJobs}">
+                            <td>
+                                <a href="#" class="text-info"
+                                   th:text="${batchJob.jobName}"
+                                   th:href="@{batch-job-executions(job-name=${batchJob.jobName},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+
+                                </a>
+                            </td>
+                            <td th:text="${batchJob.instanceCount}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="job-parameter-description">
+
+
+    <div class="card col-sm-6 border-0">
+        <div class="card-body">
+            <h5 class="card-title text-info">Parameter Usage</h5>
+            <table class="table table-sm">
+                <tbody class="table-text-sm">
+                <tr>
+                    <td class="text-info">Syntax</td>
+                    <td class="text-muted">parameterKey(parameterType)=parameterValue</td>
+                </tr>
+                <tr>
+                    <td class="text-info">Parameter Types</td>
+                    <td class="text-muted">String, Long, Double, Date</td>
+                </tr>
+                <tr>
+                    <td class="text-info">Date Format</td>
+                    <td class="text-muted">yyyy/MM/dd, yyyy/MM/dd HH:mm:ss:SSS</td>
+                </tr>
+                <tr>
+                    <td class="text-info">Example</td>
+                    <td class="text-muted">syncFolder(String)=/home/user/sync, poller(Long)=20000</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

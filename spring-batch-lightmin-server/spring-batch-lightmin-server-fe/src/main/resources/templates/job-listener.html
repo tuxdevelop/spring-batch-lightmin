@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"></head>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/application-navigation :: nav"></div>
+
+        <div class="row-fluid">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#" th:href="@{applications}"
+                                                   class="text-info">Applications</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="text-info" href="#"
+                           th:href="@{application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
+                           th:text="${applicationContextModel.applicationName}"></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        <a class="text-info" href="#"
+                           th:href="@{job-listeners(application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                            Listener
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted"
+                        th:text="${listenerConfiguration.config.typeRead.displayText}"></li>
+                    <li class="breadcrumb-item text-muted" th:text="${modificationType.value}"></li>
+
+                    <li class="breadcrumb-item text-muted"
+                        th:if="${modificationType.value == 'update' }"
+                        th:text="${listenerConfiguration.jobName}"></li>
+                </ol>
+            </nav>
+
+            <form id="listenerConfigurationForm" method="post" class="text-secondary"
+                  th:object="${listenerConfiguration}">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="form-group row" th:if="${modificationType.value == 'add'}">
+                            <label class="col-sm-2 col-form-label">Batch Job</label>
+                            <div class="col-sm-2">
+                                <select class="form-control form-control-sm"
+                                        th:field=" *{jobName}"
+                                        th:value="*{jobName}">
+                                    <option class="text-muted"
+                                            th:each="job : ${applicationContextModel.registeredJobs}"
+                                            th:text="${job}"
+                                            th:value="${job}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div th:if="${modificationType.value == 'update'}">
+                            <input type="hidden"
+                                   th:value="*{jobName}"
+                                   th:field="*{jobName}"/>
+                        </div>
+                        <div class="form-group row" th:if="${modificationType.value == 'add'}">
+                            <label class="col-sm-2 col-form-label">Status</label>
+                            <div class="col-sm-2">
+                                <select class="form-control form-control-sm"
+                                        th:value=" *{config.status}"
+                                        th:field="*{config.status}">
+                                    <option class="text-muted"
+                                            th:each="status : ${applicationContextModel.listenerStatus}"
+                                            th:text="${status.displayText}"
+                                            th:value="${status.value}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div th:if="${modificationType.value == 'update'}">
+                            <input type="hidden"
+                                   th:value="*{config.status}"
+                                   th:field="*{config.status}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Source Folder</label>
+                            <div class="col-sm-4">
+                                <input class="text-muted text-sm-left w-100" th:value="*{config.sourceFolder}"
+                                       th:field="*{config.sourceFolder}"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">File Pattern</label>
+                            <div class="col-sm-2">
+                                <input class="text-muted text-sm-left" th:value="*{config.filePattern}"
+                                       th:field="*{config.FilePattern}"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Poller Period</label>
+                            <div class="col-sm-2">
+                                <input class="text-muted text-sm-left"
+                                       th:value="*{config.pollerPeriod}"
+                                       th:field="*{config.pollerPeriod}"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Executor</label>
+                            <div class="col-sm-2">
+                                <select class="form-control form-control-sm"
+                                        th:value="*{config.taskExecutor}"
+                                        th:field="*{config.taskExecutor}">
+                                    <option class="text-muted"
+                                            th:each="executor : ${applicationContextModel.taskExecutorTypes}"
+                                            th:value="${executor.value}"
+                                            th:text="${executor.displayText}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Job Parameters</label>
+                            <div class="col-sm-4">
+                                            <textarea type="text"
+                                                      class="form-control form-control-sm text-muted text-sm-left w-100"
+                                                      id="jobParamters"
+                                                      th:value="*{parameters}"
+                                                      th:field="*{parameters}">
+                                            </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Job Incrementer</label>
+                            <div class="col-sm-2">
+                                <select class="form-control form-control-sm"
+                                        th:value="*{incrementer}"
+                                        th:field="*{incrementer}">
+                                    <option class="text-muted"
+                                            th:each="incrementer : ${applicationContextModel.jobIncrementers}"
+                                            th:value="${incrementer.value}"
+                                            th:text="${incrementer.displayText}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" th:value="${listenerConfiguration.config.type}"
+                       th:field="*{config.type}"/>
+                <input type="hidden" th:value="${listenerConfiguration.id}"
+                       th:field="*{id}"/>
+
+                <div class="card border-0"
+                     th:if="${modificationType.value == 'add'}">
+                    <div class="card-body">
+                        <button
+                                class="btn btn-info"
+                                type="submit"
+                                name="add-listener">
+                            Add
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card border-0" th:if="${modificationType.value == 'update'}">
+                    <div class="card-body">
+                        <button
+                                class="btn btn-info"
+                                type="submit"
+                                name="update-listener">
+                            Update
+                        </button>
+                    </div>
+                </div>
+                <div th:include="fragments/validation :: field-errors"></div>
+            </form>
+
+            <div th:include="fragments/hints :: job-parameter-description"></div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

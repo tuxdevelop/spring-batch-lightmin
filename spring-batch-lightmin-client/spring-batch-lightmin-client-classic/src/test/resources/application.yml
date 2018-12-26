@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: test_application
+  batch:
+    lightmin:
+      batch:
+        repository-type: map
+      client:
+        classic:
+          server:
+            url: http://localhost:8080

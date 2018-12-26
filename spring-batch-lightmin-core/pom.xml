@@ -2,106 +2,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>spring-batch-lightmin</artifactId>
-        <groupId>org.tuxdevelop</groupId>
-        <version>0.6.0-SNAPSHOT</version>
-    </parent>
-
-    <packaging>jar</packaging>
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <artifactId>spring-batch-lightmin</artifactId>
+        <groupId>org.tuxdevelop</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
     <artifactId>spring-batch-lightmin-core</artifactId>
+    <packaging>pom</packaging>
 
-    <dependencies>
-
-        <!-- lightmin -->
-        <dependency>
-            <groupId>org.tuxdevelop</groupId>
-            <artifactId>spring-batch-lightmin-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!-- spring -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- spring boot-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
-        <!-- spring cloud -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-commons</artifactId>
-        </dependency>
-
-        <!-- spring batch -->
-        <dependency>
-            <groupId>org.springframework.batch</groupId>
-            <artifactId>spring-batch-core</artifactId>
-        </dependency>
-
-        <!-- spring integration -->
-        <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-file</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.batch</groupId>
-            <artifactId>spring-batch-integration</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-java-dsl</artifactId>
-        </dependency>
-
-        <!-- quartz -->
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-        </dependency>
-
-    </dependencies>
+    <modules>
+        <module>spring-batch-lightmin-core-batch</module>
+        <module>spring-batch-lightmin-core-service</module>
+        <module>spring-batch-lightmin-core-configuration</module>
+        <module>spring-batch-lightmin-core-starter</module>
+    </modules>
+    
 </project>

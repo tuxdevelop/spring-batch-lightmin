@@ -32,24 +32,28 @@
         </developer>
     </developers>
 
-    <version>0.6.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <modules>
         <module>spring-batch-lightmin-core</module>
-        <module>spring-batch-lightmin-ui</module>
         <module>spring-batch-lightmin-documentation</module>
         <module>spring-batch-lightmin-client</module>
         <module>spring-batch-lightmin-api</module>
         <module>spring-batch-lightmin-server</module>
         <module>spring-batch-lightmin-repository-server</module>
+        <module>spring-batch-lightmin-repository</module>
+        <module>spring-batch-lightmin-domain</module>
+        <module>spring-batch-lightmin-test</module>
+        <module>spring-batch-lightmin-util</module>
+        <module>spring-batch-lightmin-embedded</module>
     </modules>
 
     <properties>
-        <platform-bom.version>Brussels-SR12</platform-bom.version>
-        <spring-cloud-dependencies.version>Edgware.SR4</spring-cloud-dependencies.version>
+        <platform-bom.version>Brussels-SR15</platform-bom.version>
+        <spring-cloud-dependencies.version>Edgware.SR5</spring-cloud-dependencies.version>
         <assertj.version>3.10.0</assertj.version>
         <openpojo.version>0.8.6</openpojo.version>
-        <equalsverifier.version>1.7.5</equalsverifier.version>
+        <equalsverifier.version>2.3</equalsverifier.version>
         <datafactory.version>0.8</datafactory.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>

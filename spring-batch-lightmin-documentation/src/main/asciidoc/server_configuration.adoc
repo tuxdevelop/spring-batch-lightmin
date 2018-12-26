@@ -1,9 +1,9 @@
-=== Server Configuration
+== Server Configuration
 
 The _SpringBatchLightmin-Server_ provides defaults configurations.
 These configurations can be overridden via properties.
 
-==== Context Path
+=== Context Path
 
 If the server has a concrete context path, which is different from the servlet path,
 the default value can be overridden by the following property.
@@ -18,7 +18,7 @@ spring:
         context-path: /my-path
 ----
 
-==== Heartbeat period
+=== Heartbeat period
 
 The _Heartbeat period_ is the time in mills to check the health status of the clients.
 
@@ -32,7 +32,7 @@ spring:
         heartbeat-period: 1000
 ----
 
-==== Credentials
+=== Credentials
 
 If the server has to pass username and password to the clients, the values can be
 configured via properties.
@@ -47,7 +47,7 @@ spring:
        client-password: password
 ----
 
-==== Server Side auto discovery
+=== Server Side auto discovery
 
 In order to detected lightmin client via service discovery, the following property has to be set to true
 
@@ -60,7 +60,7 @@ spring:
         discovery-enabled: true
 -----
 
-==== Server behind a Proxy
+=== Server behind a Proxy
 
 The server ui uses redirects and the _HOST_ header is taken to create the redirect urls. This is the default behavior of Spring MVC.
 If the server ui is running behind a proxy, the implementation of the server takes care, that the _X-FORWARD-PREFIX_ header is used as well.
@@ -76,3 +76,22 @@ spring:
       server:
         use-x-forwarded-headers: true
 ----
+
+=== Custom UI Logo and Text
+
+If you want to place a custom logo or text next to the _Spring Boot_ and _Spring Batch_ logo, the following properties can be used.
+If the logo property is set, the text will be displayed
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      server:
+        fe:
+          #Displays the give label value
+          label: DEV
+          #Displays the image of the given url (local and remote)
+          img-path: img/logo.png
+----
+

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"/>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/application-navigation :: nav"/>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" th:href="@{applications}" class="text-info">Applications</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-info" href="#"
+                       th:href="@{application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
+                       th:text="${applicationContextModel.applicationName}"></a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-info" href="#"
+                       th:href="@{batch-jobs(application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                        Batch Jobs
+                    </a>
+                </li>
+                <li class="breadcrumb-item text-muted" th:text="${applicationContextModel.jobName}">
+                </li>
+            </ol>
+        </nav>
+
+        <div class="row-fluid content">
+            <div class="card ">
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead class="text-secondary">
+                        <tr class="bg-light">
+                            <th>Instance Id</th>
+                            <th>Execution Id</th>
+                            <th>Creation Time</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                            <th>Exit Code</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-muted table-text-sm" th:each="jobExecution : ${pageModel.value}">
+                            <td th:text="${jobExecution.instanceId}"></td>
+                            <td>
+                                <a href="#" class="text-info"
+                                   th:text="${jobExecution.id}"
+                                   th:href="@{batch-job-execution(job-execution-id=${jobExecution.id},job-name=${applicationContextModel.jobName},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                </a>
+                            </td>
+                            <td th:text="${jobExecution.createTime}"></td>
+                            <td th:text="${jobExecution.startTime}"></td>
+                            <td th:text="${jobExecution.endTime}"></td>
+                            <td th:text="${jobExecution.duration}"></td>
+                            <td th:class="${jobExecution.statusClass}" th:text="${jobExecution.status}"></td>
+                            <td th:class="${jobExecution.exitStatusClass}" th:text="${jobExecution.exitStatus}"
+                                class="text-info"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <span class="text-left" th:if="${pageModel.hasPrevious}">
+                        <a href="#"
+                           th:href="@{batch-job-executions(start-index=${pageModel.previousStartIndex},application-instance-id=${applicationContextModel.applicationInstanceId},job-name=${applicationContextModel.jobName})}"
+                           class="text-info table-text-sm">&laquo; prev</a>
+                    </span>
+                    <span class="text-right" th:if="${pageModel.hasMore}">
+                        <a href="#"
+                           th:href="@{batch-job-executions(start-index=${pageModel.nextStartIndex},application-instance-id=${applicationContextModel.applicationInstanceId},job-name=${applicationContextModel.jobName})}"
+                           class="text-info table-text-sm">next &raquo;</a>
+                     </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

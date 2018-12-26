@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="nav">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand text-info" href="#"
+           th:href="@{application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
+           th:text="${applicationContextModel.applicationName}"></a>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#"
+                   th:href="@{batch-jobs(application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                    Batch Jobs <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"
+                   th:href="@{job-schedulers(application-instance-id=${applicationContextModel.applicationInstanceId})}">Scheduler
+                    <span
+                            class="sr-only">(current)
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"
+                   th:href="@{job-listeners(application-instance-id=${applicationContextModel.applicationInstanceId})}">Listener
+                    <span
+                            class="sr-only">(current)
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="jobLauncherDropDown" role="button"
+                   data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Job Launcher
+                </a>
+                <div class="dropdown-menu bg-info" aria-labelledby="jobLauncherDropDown">
+                    <ul>
+                        <li class="dropdown-item-info"
+                            th:each="jobName : ${applicationContextModel.registeredJobs}">
+                            <a href="#"
+                               class="dropdown-item-info"
+                               th:text="${jobName}"
+                               th:href="@{job-launcher(job-name=${jobName},application-instance-id=${applicationContextModel.applicationInstanceId})}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

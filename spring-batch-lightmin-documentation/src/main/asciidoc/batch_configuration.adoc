@@ -1,0 +1,62 @@
+== Batch Configuration
+
+The following properties can be used to configure _Spring Batch_ in lightmin clients.
+
+=== Repository Type
+
+The type of the _JobRepository_.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      batch:
+        #default: jdbc
+        repository-type: map
+----
+
+=== Jdbc JobRepository Configuration
+
+For the jdbc JobRepository, the following properties can be used.
+
+==== Table Prefix
+
+Prefix for all Spring Batch tables.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      batch:
+        #default: BATCH_
+        table-prefix: MY_PREFIX_
+----
+
+==== Datasource Name
+
+The name of the DataSource which should be used for _Spring Batch_.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      batch:
+        #default: dataSource
+        data-source-name: myDataSourceName
+----
+
+==== Database Schema
+
+The database schema name.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      batch:
+        database-schema: myDatabaseSchema
+----

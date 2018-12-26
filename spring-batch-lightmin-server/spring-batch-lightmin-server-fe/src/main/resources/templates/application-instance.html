@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"/>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/application-navigation :: nav"/>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" th:href="@{applications}" class="text-info">Applications</a>
+                </li>
+                <li class="breadcrumb-item text-muted" th:text="${applicationInstance.name}"></li>
+            </ol>
+        </nav>
+
+        <div th:include="fragments/application-overview :: cards"/>
+
+    </div>
+
+</div>
+
+</body>
+</html>

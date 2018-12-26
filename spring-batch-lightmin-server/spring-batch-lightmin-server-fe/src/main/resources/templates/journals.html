@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"></head>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/events-navigation :: nav"></div>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" th:href="@{events}" class="text-info">Events</a></li>
+                <li class="breadcrumb-item text-muted">Journal</li>
+            </ol>
+        </nav>
+
+        <div class="row-fluid content">
+            <div class="card text-secondary">
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead class="text-secondary">
+                        <tr class="bg-light">
+                            <th>Timestamp</th>
+                            <th>Application Name</th>
+                            <th>Hostname</th>
+                            <th>State Change</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="journal : ${journals}">
+                            <td th:text="${journal.timestamp}"></td>
+                            <td th:text="${journal.applicationName}"></td>
+                            <td th:text="${journal.host}"></td>
+                            <td th:text="${journal.oldStatus} + ' -> ' +${journal.newStatus}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,6 +1,8 @@
 package org.tuxdevelop.spring.batch.lightmin.api.resource.common;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -9,6 +11,8 @@ import java.io.Serializable;
  * @Since 0.3
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class JobParameter implements Serializable {
 
     private static final long serialVersionUID = 1L;

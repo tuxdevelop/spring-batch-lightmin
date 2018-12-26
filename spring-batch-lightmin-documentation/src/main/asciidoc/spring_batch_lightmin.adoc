@@ -1,25 +1,15 @@
-= Spring Batch Lightmin
-Version {docVersion}
-:toc: left
-:toclevels: 3
 :imagesdir: images
 
-include::introduction.adoc[]
-
-include::getting_started.adoc[]
-
-include::jdbc_support.adoc[]
-
-include::map_support.adoc[]
-
-include::remote_repository_support.adoc[]
+include::../../../../README.adoc[]
 
 include::server_configuration.adoc[]
 
 include::client_configuration.adoc[]
 
+include::repository_configuration.adoc[]
+
+include::batch_configuration.adoc[]
+
 include::job_configuration.adoc[]
 
 include::rest_api.adoc[]
-
-include::ui.adoc[]

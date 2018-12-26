@@ -10,13 +10,13 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.tuxdevelop.spring.batch.lightmin.configuration.EnableSpringBatchLightmin;
+import org.tuxdevelop.spring.batch.lightmin.batch.annotation.EnableLightminBatch;
 
 import java.util.List;
 
 @Slf4j
 @Configuration
-@EnableSpringBatchLightmin
+@EnableLightminBatch
 public class ITJobConfiguration {
 
     @Autowired
@@ -27,23 +27,23 @@ public class ITJobConfiguration {
 
     @Bean
     public Job simpleJob() {
-        return jobBuilderFactory
+        return this.jobBuilderFactory
                 .get("simpleJob")
-                .start(simpleStep())
+                .start(this.simpleStep())
                 .build();
     }
 
     @Bean
     public Job simpleBlockingJob() {
-        return jobBuilderFactory
+        return this.jobBuilderFactory
                 .get("simpleBlockingJob")
-                .start(simpleBlockingStep())
+                .start(this.simpleBlockingStep())
                 .build();
     }
 
     @Bean
     public Step simpleStep() {
-        return stepBuilderFactory
+        return this.stepBuilderFactory
                 .get("simpleStep")
                 .<Long, Long>chunk(1)
                 .reader(new SimpleReader())
@@ -54,7 +54,7 @@ public class ITJobConfiguration {
 
     @Bean
     public Step simpleBlockingStep() {
-        return stepBuilderFactory
+        return this.stepBuilderFactory
                 .get("simpleStep")
                 .<Long, Long>chunk(1)
                 .reader(new SimpleBlockingReader())
@@ -70,8 +70,8 @@ public class ITJobConfiguration {
 
         @Override
         public Long read() throws Exception {
-            final Long value = index >= values.length ? null : values[index];
-            index++;
+            final Long value = this.index >= values.length ? null : values[this.index];
+            this.index++;
             return value;
         }
 
@@ -84,11 +84,11 @@ public class ITJobConfiguration {
 
         @Override
         public Long read() throws Exception {
-            if (index > 3) {
-                index = 0;
+            if (this.index > 3) {
+                this.index = 0;
             }
-            final Long value = index >= values.length ? null : values[index];
-            index++;
+            final Long value = this.index >= values.length ? null : values[this.index];
+            this.index++;
             return value;
         }
 

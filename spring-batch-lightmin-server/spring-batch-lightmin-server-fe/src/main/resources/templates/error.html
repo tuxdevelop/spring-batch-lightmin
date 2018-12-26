@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"></head>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="card border-0">
+                <div class="card-header text-danger">
+                    Unexpected Error Occured
+                </div>
+                <div th:if="${exceptionModel != null}" class="card-body border-0">
+                    <table class="table table-sm border-0">
+                        <tbody>
+                        <tr class="border-0">
+                            <td class="text-info">Error Message</td>
+                            <td class="text-muted" th:text="${exceptionModel.exception.message}"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-info">Timestamp</td>
+                            <td class="text-muted" th:text="${exceptionModel.timestamp}"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-info">Request Url</td>
+                            <td class="text-muted" th:text="${exceptionModel.url}"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-info">Status</td>
+                            <td class="text-muted" th:text="${exceptionModel.status}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:if="${exceptionModel == null}" class="card-body border-0 text-danger">
+                    <h6 class="card-title">Please check log files, no detailed information available</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

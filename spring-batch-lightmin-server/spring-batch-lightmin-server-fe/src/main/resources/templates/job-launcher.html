@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"></head>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/application-navigation :: nav"></div>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" th:href="@{applications}" class="text-info">Applications</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-info" href="#"
+                       th:href="@{application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
+                       th:text="${applicationContextModel.applicationName}"></a>
+                </li>
+                <li class="breadcrumb-item text-muted">Job Launcher</li>
+                <li class="breadcrumb-item text-muted"></li>
+            </ol>
+        </nav>
+        <form id="launchJob" th:action="@{job-launcher}" th:object="${jobLauncher}" action="#" method="post">
+            <div class="card border-0">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Job Parameters</label>
+                        <div class="col-sm-4">
+                        <textarea type="text" class="form-control form-control-sm text-muted" id="jobParamters"
+                                  th:value="*{jobParameters}"
+                                  th:field="*{jobParameters}">
+                        </textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Job Incrementer</label>
+                        <div class="col-sm-1">
+                            <select class="form-control form-control-sm"
+                                    th:value="*{jobIncrementer}"
+                                    th:field="*{jobIncrementer}">
+                                <option
+                                        th:each="incrementer : ${applicationContextModel.jobIncrementers}"
+                                        th:value="${incrementer.value}"
+                                        th:text="${incrementer.displayText}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card border-0">
+                <div class="card-body">
+                    <button type="submit" class="btn btn-info">Launch
+                    </button>
+                </div>
+            </div>
+            <input type="hidden" th:value="${applicationContextModel.applicationInstanceId}"
+                   th:field="*{applicationInstanceId}"/>
+            <input type="hidden" th:value="*{jobName}"
+                   th:field="${applicationContextModel.jobName}"/>
+
+            <div th:include="fragments/validation :: field-errors"></div>
+        </form>
+        <div th:include="fragments/hints :: job-parameter-description"></div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"></head>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/application-navigation :: nav"></div>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" th:href="@{applications}" class="text-info">Applications</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-info" href="#"
+                       th:href="@{application-instance(application-instance-id=${applicationContextModel.applicationInstanceId})}"
+                       th:text="${applicationContextModel.applicationName}"></a>
+                </li>
+                <li class="breadcrumb-item text-muted">Listener</li>
+            </ol>
+        </nav>
+
+        <div class="row-fluid content">
+            <div class="card">
+                <div class="card-header bg-light text-info">
+                    <div class="dropdown" style="display: inline;">
+                        <a class=" btn btn-sm btn-info dropdown-toggle" href="#" role="button"
+                           id="listenerDropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add
+                        </a>
+                        <div class="dropdown-menu bg-info" aria-labelledby="listenerDropdownMenuLink">
+                            <ul>
+                                <li class="dropdown-item-info"
+                                    th:each="listenerType : ${applicationContextModel.listenerTypes}">
+                                    <a href="#"
+                                       class="dropdown-item-info"
+                                       name="init-add-listener"
+                                       th:text="${listenerType.displayText}"
+                                       th:href="@{job-listener(init-add-listener='init-add-listener',listener-type=${listenerType.value},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <tbody>
+                        <tr th:each="listeners : ${mapJobConfigurations.jobConfigurations}">
+                            <td>
+                                <div class="card">
+                                    <div class="card-header bg-info text-white">
+                                        <h6 style="display: inline;" th:text="${listeners.key}"></h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-sm">
+                                            <thead class="text-secondary">
+                                            <tr>
+                                                <th>Type</th>
+                                                <th>Source Folder</th>
+                                                <th>File Pattern</th>
+                                                <th>Poller Period</th>
+                                                <th>Executor</th>
+                                                <th>Parameters</th>
+                                                <th>Incremeter</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="text-muted table-text-sm">
+                                            <tr th:each="listener : ${listeners.value}">
+                                                <td th:text="${listener.config.typeRead.displayText}"></td>
+                                                <td th:text="${listener.config.sourceFolder}"></td>
+                                                <td th:text="${listener.config.filePattern}"></td>
+                                                <td th:text="${listener.config.pollerPeriod}"></td>
+                                                <td th:text="${listener.config.taskExecutorRead.displayText}"></td>
+                                                <td>
+                                                    <table class="table-sm">
+                                                        <tbody>
+                                                        <tr th:each="parameter : ${listener.parametersRead}">
+                                                            <td th:text="${parameter.key}"></td>
+                                                            <td th:text="${parameter.value}"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td th:text="${listener.incrementerRead.displayText}"></td>
+                                                <td class="text-info"
+                                                    th:text="${listener.config.statusRead.displayText}"></td>
+                                                <td>
+                                                    <form id="stop-listener-form" method="post"
+                                                          style="display: inline;"
+                                                          th:if="${listener.config.isStoppable}"
+                                                          th:action="@{job-listeners(job-configuration-id=${listener.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                                        <button class="text-danger btn-sm btn-primary-outline btn-hover"
+                                                                type="submit"
+                                                                name="stop-listener" style="display: inline;">
+                                                            <i class="far fa-stop-circle"></i>
+                                                        </button>
+                                                    </form>
+                                                    <form id="start-listener-form" method="post"
+                                                          style="display: inline;"
+                                                          th:if="${listener.config.isStartable}"
+                                                          th:action="@{job-listeners(job-configuration-id=${listener.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                                        <button class="text-info btn-sm btn-primary-outline btn-hover"
+                                                                type="submit"
+                                                                name="start-listener" style="display: inline;">
+                                                            <i class="far fa-play-circle"></i>
+                                                        </button>
+                                                    </form>
+                                                    <a href="#"
+                                                       name="init-edit-listener"
+                                                       class="text-muted btn-sm btn-primary-outline nounderline"
+                                                       th:href="@{job-listener(init-edit-listener='init-edit-listener',job-configuration-id=${listener.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                                        <i class="far fa-edit"></i>
+                                                    </a>
+                                                    <form id="delete-listener-form" method="post"
+                                                          style="display: inline;"
+                                                          th:action="@{job-listeners(job-configuration-id=${listener.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                                        <button class="text-danger btn-sm btn-primary-outline btn-hover"
+                                                                type="submit"
+                                                                name="delete-listener" style="display: inline;">
+                                                            <i class="far fa-trash-alt"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

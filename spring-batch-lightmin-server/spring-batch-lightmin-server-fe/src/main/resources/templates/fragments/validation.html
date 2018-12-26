@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="field-errors">
+    <div th:if="${#fields.hasErrors('*')}">
+        <div class="card border-danger col-sm-6">
+            <div class="card-body border-0">
+                <h5 class="card-header bg-white text-danger">Errors</h5>
+                <ul class="list-group border-0">
+                    <li class="list-group-item text-danger border-0" th:each="err : ${#fields.detailedErrors()}"
+                        th:text="${err.global}? '*' : ${err.message} ">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

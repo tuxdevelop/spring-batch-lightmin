@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: test_application
+  batch:
+    lightmin:
+      batch:
+        repository-type: map

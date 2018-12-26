@@ -1,116 +1,12 @@
-=== Client Configuration
+== Client Configuration
 
 The _SpringBatchLightmin-Client_ tries to configure all client side properties
 by using the _Spring Boot_ auto configured _Server-_, _ManagementServer-_ and _Actuator-Properties_,
 excepted the _url_ of the _SpringBatchLightmin-Server_. All these properties can be overridden.
 
-==== Lightmin Server
+=== Core
 
-The _url_ is a mandatory property. The value is a comma separated list of server urls.
-
-[source, yaml]
-----
-spring:
-  batch:
-    lightmin:
-      server:
-        url: http://localhost:8090, http://localhost:9000
-----
-
-==== API
-
-The _api_ property gives the relative path to the server side api.
-If the value is my/api and the _url_ value is http://server:8080, the client tries
-to register at http://server:8080/my/api
-
-[source, yaml]
-----
-spring:
-  batch:
-    lightmin:
-      server:
-        #default api/applications
-        api: api/application
-----
-
-==== Registration Period
-
-The _period_ is the time in millis, the client tries to register at the servers.
-
-[source, yaml]
-----
-spring:
-  batch:
-    lightmin:
-      server:
-        #default 10000
-        period: 100
-----
-
-==== Credentials
-
-If the client needs credentials to access the server, _username_ and _password_
- can be set via properties.
-
-[source, yaml]
-----
-spring:
-  batch:
-    lightmin:
-      server:
-        username: username
-----
-
-[source, yaml]
-----
-spring:
-  batch:
-    lightmin:
-      server:
-        password: password
-----
-
-==== Auto Registration
-
-If _auto-registration_ is set to true, the client tries to register itself automatically.
-
-[source, yaml]
-----
-spring:
-  batch:
-    lightmin:
-      server:
-        #default true
-        auto-registration: true
-----
-
-==== Auto De-Registration
-
-If _auto-deregistration_ is set to true, the client calls the server for de-registration before the shutdown.
-
-[source, yaml]
-----
-spring:
-  batch:
-    lightmin:
-      server:
-        #default true
-        auto-deregistration: false
-----
-
-==== Register Once
-
-If _register-once_ is set to true, the client will register itself only at one server.
-
-[source, yaml]
-----
-spring:
-  batch:
-    lightmin:
-      server:
-        #default false
-        auto-register-once: true
-----
+The core properties can be changed for all clients.
 
 ==== Service Url
 
@@ -191,3 +87,164 @@ spring:
       client:
         hostname: my.fqdn
 ----
+
+===== Publish Job Events
+
+The _publish-job-events_ property can used to deactivate the pushes from the client to the server when a JobExecution is finished.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+        #default: true
+        publish-job-events: false
+----
+
+===== Credentials to access Server
+
+If the server is secured with a username and password, the following to properties can be set on the client side.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+       server:
+         username: myuser
+         password: mypassword
+----
+
+
+=== Classic Client
+
+The following properties can be changed for the classic client
+
+==== Auto Registration
+
+If _auto-registration_ is set to true, the client tries to register itself automatically.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+        classic:
+            #default true
+            auto-registration: true
+----
+
+==== Auto De-Registration
+
+If _auto-deregistration_ is set to true, the client calls the server for de-registration before the shutdown.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+        classic:
+          #default true
+          auto-deregistration: false
+----
+
+==== Register Once
+
+If _register-once_ is set to true, the client will register itself only at one server.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+        classic:
+          #default false
+          auto-register-once: true
+----
+
+==== Registration Period
+
+The _period_ is the time in millis, the client tries to register at the servers.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+        classic:
+          #default 10000
+          period: 100
+----
+
+==== Lightmin Server
+
+The _url_ is a mandatory property. The value is a comma separated list of server urls.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+        classic:
+          server:
+            url: http://localhost:8090, http://localhost:9000
+----
+
+==== API
+
+The _api_ property gives the relative path to the server side api.
+If the value is my/api and the _url_ value is http://server:8080, the client tries
+to register at http://server:8080/my/api
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+        classic:
+          server:
+            #default api/applications
+            api: api/application
+----
+
+=== Discovery Client
+
+The following properties can be changed for the discovery client
+
+==== Server Discovery Name
+
+The name discovery name of the server which should be used by the _DiscoveryClient_.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+        discovery:
+         #default: lightmin-server
+         server-discovery-name: my-server
+----
+
+==== Server Context Path
+
+If the server has a context path, this property will be used to enhance the discovery address by the _DiscoveryClient_.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+        discovery:
+         server-context-path: /server
+----
+

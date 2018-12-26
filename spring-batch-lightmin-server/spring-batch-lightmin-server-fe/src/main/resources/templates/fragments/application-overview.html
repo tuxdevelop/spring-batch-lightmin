@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div th:fragment="cards">
+    <div class="row-fluid content">
+        <div class="card-group">
+            <div class="card border-0">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">Application Information</div>
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <td class="text-muted">Service Url</td>
+                                        <td class="text-info" th:text="${applicationInstance.serviceUrl}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Health Url</td>
+                                        <td class="text-info" th:text="${applicationInstance.healthUrl}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class=" text-muted
+                                        ">Management Url
+                                        </td>
+                                        <td class="text-info" th:text="${applicationInstance.managementUrl}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">Registered Jobs</div>
+                                <div class="card-body">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr th:each="job : ${applicationInstance.registeredJobs}">
+                                            <td>
+                                                <a href="job-instances.html"
+                                                   class="text-info"
+                                                   th:text="${job.jobName}"
+                                                   th:href="@{batch-job-executions(job-name=${job.jobName},application-instance-id=${applicationInstance.id})}">
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">External Links</div>
+                                <div class="card-body">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr th:each="externalLink : ${applicationInstance.externalLinks}">
+                                            <td class="text-muted" th:text="${externalLink.key}"></td>
+                                            <td>
+                                                <a class="text-info" href="#" th:href="${externalLink.value}"
+                                                   th:text="${externalLink.value}"></a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

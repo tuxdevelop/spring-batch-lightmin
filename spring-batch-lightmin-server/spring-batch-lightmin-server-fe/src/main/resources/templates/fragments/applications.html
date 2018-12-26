@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="application-cluster-card">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title text-info" th:text="${applicationCluster.name}"></h5>
+            <h6 data-toggle="collapse"
+                id="applications-toggle"
+                class="card-subtitle mb-2 text-muted clickable"
+                th:attr="data-target='#accordion_' + ${applicationCluster.name}"
+                th:text="${applicationCluster.size} + ' Instance(s)'"></h6>
+            <div th:id="'accordion_' + ${applicationCluster.name}" class="collapse">
+                <ul class="list-group">
+                    <li class="list-group-item"
+                        th:each="applicationInstance : ${applicationCluster.applicationInstances}">
+                        <div class="card-group">
+                            <div class="card border-0">
+                                <div class="card-body-inner">
+                                    <h6 class="card-title text-secondary" th:text="${applicationInstance.name}"></h6>
+                                </div>
+                            </div>
+                            <div class="card border-0">
+                                <div class="card-body-inner">
+                                    <h6 class="card-title text-secondary"
+                                        th:text="${applicationInstance.serviceUrl}"></h6>
+                                </div>
+                            </div>
+                            <div class="card border-0">
+                                <div class="card-body-inner">
+                                    <div th:if="${applicationInstance.isUp}">
+                                        <a href="#" class="text-info nounderline"
+                                           th:href="@{application-instance(application-instance-id=${applicationInstance.id})}">
+                                            <i class="fas fa-2x fa-cloud-upload-alt" style="display: inline;"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body-inner">
+                                    <div th:if="${applicationInstance.isDown}">
+                                        <a href="#" class="text-info nounderline"
+                                           th:href="@{application-instance(application-instance-id=${applicationInstance.id})}">
+                                            <i class="fas fa-2x fa-cloud-upload-alt text-danger"
+                                               style="display: inline;"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body-inner">
+                                    <div th:if="${applicationInstance.isOffline}">
+                                        <i class="fas fa-2x fa-cloud-download-alt" style="display: inline;"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body-inner">
+                                    <div th:if="${applicationInstance.isUnknown}">
+                                        <i class="far fa-2x fa-question-circle text-warning"
+                                           style="display: inline;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card border-0">
+                                <form method="post" class="form-inline" id="removeApplication"
+                                      th:action="@{applications(application-instance-id=${applicationInstance.id})}">
+                                    <div class="form-group">
+                                        <button
+                                                type="submit"
+                                                class="btn btn-primary-outline btn-sm"
+                                                name="delete-application-instance">
+                                            <i class="far fa-2x fa-trash-alt text-danger"
+                                               style="display: inline;"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $("#applications-toggle").click(function (e) {
+            e.preventDefault();
+            $("#collapse").toggleClass("toggled");
+        });
+    </script>
+</div>
+</body>
+</html>

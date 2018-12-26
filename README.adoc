@@ -1,92 +1,102 @@
 = Spring Batch Lightmin
-:toc:
-:asciidoctor-source: ./spring-batch-lightmin-documentation/src/main/asciidoc
+:toc: left
+:imagesdir: /spring-batch-lightmin-documentation/src/main/doc/images
 
-The _Spring Batch Lightmin_ is a client-server library on top of the _Spring Batch_ and _Spring Boot_ to monitor and configure _Spring Batch Jobs_.
-By enabling the _Spring Batch Lightmin_, a _BatchConfigurer_ will be registered and provides
+== About
 
-* JobRepository
-* JobOperator
-* JobExplorer
-* JobLauncher
-* JobBuilderFactory
-* StepBuilderFactory
+_Spring Batch Lightmin_ is a client/server batch and scheduling platform for the _Spring Boot_ stack. The batch stack based on _Spring Batch_.
 
-and depending beans out of the box.
+== Architecture
+
+image::lightmin_architecture.001.jpeg[]
 
 == Documentation
 
-The documentation can be found at http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/master/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[Spring Batch Linghtmin Documentation]
+The full documentation can be found at
+
+* http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/1.0.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[1.x] (Spring Boot 1.5.x)
+* http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/0.5.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[0.5.x] (old design - Spring Boot 1.5.x)
 
 == Samples
 
-Samples of the _Spring Batch Lightmin_ are available at https://github.com/tuxdevelop/spring-batch-lightmin-samples[Sample Applications]
-
-== Overview
-
-image::overview.png[]
+All samples for _Spring Batch Lightmin_ can be found at https://github.com/tuxdevelop/spring-batch-lightmin-samples[Sample Applications]
 
 == Getting Started
 
-=== Server
+The following section describes a quick start guide to setup the client server architecture.
+If your want to get an overview of the configuration options, please read the documentation.
+The getting started guide for the _Embedded Mode_ can be found in the section _Embedded Lightmin_.
 
-==== Maven Dependencies
+=== Spring Batch Lightmin BOM
 
-[source,xml]
+Add the _Spring Batch Lightmin BOM_ to the dependency management section of your project.
+
+[source, xml]
 ----
 <dependency>
     <groupId>org.tuxdevelop</groupId>
-    <artifactId>spring-batch-lightmin-server</artifactId>
-    <version>{spring-batch-lightmin.version}</version>
+    <artifactId>spring-batch-lightmin-bom</artifactId>
+    <version>${spring-batch-lightmin.version}</version>
+    <type>pom</type>
+    <scope>import</type>
+</dependency>
+----
+
+=== Setting up the Server
+
+The server component is currently only available in a standalone mode. This means, the servers do not sync the state between each other.
+A cluster mode will be added in a future release.
+
+The server itself is also a _Spring Boot_ application.
+
+==== Maven Dependencies
+
+The following dependency has to added to your project.
+
+[source, xml]
+----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-server-standalone</artifactId>
+    <version>${spring-batch-lightmin.version}</version>
 </dependency>
 ----
 
 ==== Enable the Server
 
-[source,java]
+In order to enable the server, the annotation _@EnableLightminServer_ has to added to one of the _@Configuration_ classes.
+
+[source, java]
 ----
+@EnableLightminServer
 @SpringBootApplication
-@EnableSpringBatchLightminServer
 public class LightminServer {
 
-
-    public static void main(final String[] args) {
-        SpringApplication.run(LightminServer.class, args);
-    }
 }
 ----
 
-The code above enables the _SpringBatchLightminServer_ with default properties.
+==== Service Discovery
 
-===== Property Configuration
+Depending on the clients, the server is also able to find the clients via service discovery.
+
+To enable the feature, a _DiscoveryClient_ implementation has to added and configured(e.g. Consul, Eureka, etc...)
+and the following property has to set to true
 
 [source, yaml]
 ----
-server:
-  port: 8090
-----
-
-==== Server service discovery
-
-In order to detected lightmin client via service discovery, the following property has to be set to true
-
-[source, yaml]
------
-spring:
+spring::
   batch:
     lightmin:
       server:
         discovery-enabled: true
------
+----
 
-The server itself has to be a _DiscoveryClient_.
+==== Server behind a Proxy
 
-===== Server behind a Proxy
+The server frontend  uses redirects and the _HOST_ header is taken to create the redirect urls. This is the default behaviour of Spring MVC.
+If the server frontend is running behind a proxy, the implementation of the server takes care, that the _X-FORWARD-PREFIX_ header is used as well.
 
-The server ui uses redirects and the _HOST_ header is taken to create the redirect urls. This is the default behavior of Spring MVC.
-If the server ui is running behind a proxy, the implementation of the server takes care, that the _X-FORWARD-PREFIX_ header is used as well.
-
-If the proxy cannot pass the _HOST_ header or you do not want to change the default, e.g. _Zuul_, the following property can force the server
+If the proxy cannot pass the _HOST_ header or you do not want to change the defaults, e.g. _Zuul_, the following property can force the server
 to use the _X-FORWARDED-HOST_ header to build the redirect urls.
 
 [source, yaml]
@@ -98,458 +108,508 @@ spring:
         use-x-forwarded-headers: true
 ----
 
-=== Client
+=== Setting up a Client
 
-==== Maven Dependencies
+The client applications are responsible to provide _Spring Batch Job_ definitions. The _Spring Batch Lightmin_ client framework provides all the configurations to set up _Spring Batch_ and the communication with the server.
 
-[source,xml]
-----
+==== Step one - Client type
+
+The type of the client decides how the registration to the server should be done. Currently to types are supported, classic and via service discovery.
+
+===== Classic
+
+The classic client has to know where the servers are located and will send a registration request after the start up.
+
+[source, xml]
+-----
 <dependency>
     <groupId>org.tuxdevelop</groupId>
-    <artifactId>spring-batch-lightmin-client</artifactId>
-    <version>{spring-batch-lightmin.version}</version>
+    <artifactId>spring-batch-lightmin-client-classic</artifactId>
+    <version>${spring-batch-lightmin.version}</version>
 </dependency>
-----
+-----
 
-==== Enable the Client
+The dependency above will provide everything which is required for the classic client.
+The annotation _@EnableLightminClientClassic_ has to added to one of the configuration classes.
 
 [source, java]
 ----
 @SpringBootApplication
-@EnableSpringBatchLightminClient
-public class LightminClient {
+@EnableLightminClientClassic
+public class ClientApplication {
 
     public static void main(final String[] args) {
-        SpringApplication.run(LightminClient.class, args);
+        SpringApplication.run(ClientApplication.class, args);
     }
-
 }
+
 ----
 
-The code above enables the _SpringBatchLightminClient_ with the default configuration.
-The default configuration provides a _JdbcJobRepository_, _JdbcJobConfigurationRepository_ and
-needs a configured _DataSource_ with the bean name _dataSource_.
+The following configuration properties have to be present
 
-In order to register to the _SpringBatchLightminServer_, the property
-_spring.batch.lightmin.server.url_ has to be set.
+[source, yaml]
+----
+spring:
+  application:
+    name: my-client-application <1>
+  batch:
+    lightmin:
+      client:
+        classic:
+          server:
+            url: http://myserver1.domain:8180, http://myserver2.domain:8180 <2>
 
-===== Property Configuration
+----
+
+<1> The _spring.application.name_ is used to identify a client and handle a cluster of the instances.
+<2> The _url_ property is a list of server to which the registration request should be send.
+
+===== Service Discovery
+
+_Spring Batch Lightmin_ provides two implementations for the discovery client type.
+Both implementations add a tags to the underlying service discovery technology, so the server could identify lightmin clients.
+
+====== Consul Client
+
+The following dependency has to added for the consul client
+
+[source, xml]
+-----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-client-discovery-consul</artifactId>
+    <version>${spring-batch-lightmin.version}</version>
+</dependency>
+-----
+
+The annotation _@EnableLightminClientConsul_ enables the fully integration with Consul.
+
+[source, java]
+----
+@SpringBootApplication
+@EnableLightminClientConsul
+public class ClientApplication {
+
+    public static void main(final String[] args) {
+        SpringApplication.run(ClientApplication.class, args);
+    }
+}
+
+----
+
+The configuration options for Consul can be found in the _Spring Cloud Consul_ documentation.
+
+The client is sending per default events to the server, in order to find the server via service discovery,
+ the following property has to be set.
 
 [source, yaml]
 ----
 spring:
   batch:
     lightmin:
-      server:
-        url: http://localhost:8090
+      client:
+        discovery:
+          server-discovery-name: lightmin-server <1>
 ----
 
-==== Service Discovery
+<1> The service discovery name of the server.
 
-The client library also provides support for service discovery with _Consul_ and _Eureka_.
+====== Eureka Client
 
-In order to use service discovery, one of the spring cloud starter has to be on the classpath
+The following dependency has to added for the eureka client
 
-The dependency below shows the consul integration
+[source, xml]
+-----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-client-discovery-eureka</artifactId>
+    <version>${spring-batch-lightmin.version}</version>
+</dependency>
+-----
+
+The annotation _@EnableLightminClientEureka_ enables the fully integration with Eureka.
+
+[source, java]
+----
+@SpringBootApplication
+@EnableLightminClientEureka
+public class ClientApplication {
+
+    public static void main(final String[] args) {
+        SpringApplication.run(ClientApplication.class, args);
+    }
+}
+
+----
+
+The configuration options for Eureka can be found in the _Spring Cloud Netflix_ documentation.
+
+The client is sending per default events to the server, in order to find the server via service discovery,
+ the following property has to be set.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+        discovery:
+          server-discovery-name: lightmin-server <1>
+----
+
+<1> The service discovery name of the server.
+
+==== Step two - The Configuration Repository
+
+The _Configuration Repository_ is the component which stores the scheduler and listener configurations of the lightmin clients.
+This configurations are loaded at start time and can be managed with the server frontend or API calls.
+
+_Spring Batch Lightmin_ provides three implementation of the repository
+
+* *map* - In memory repository, all changes will be gone after a restart.
+* *jdbc* - The client fetches and stores the configurations in a database.
+* *remote* - The client fetches and stores the configurations via API calls to a repository server.
+
+===== Map Repository
 
 [source, xml]
 ----
 <dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-repository-map</artifactId>
+    <version>${spring-batch-lightmin.version}</version>
 </dependency>
 ----
 
-In order to use the discovery feature of s_Spring Cloud_ one configuration class has to have the _@EnableDiscoveryClient_ annotation.
+The annotation _@EnableLightminMapConfigurationRepository_ enables the in memory repository.
 
 [source, java]
 ----
-@EnableScheduling
-@EnableDiscoveryClient
-@EnableSpringBatchLightminClient
-public class AddressMigratorApp {
+@SpringBootApplication
+@EnableLightminClientConsul
+@EnableLightminMapConfigurationRepository
+public class ClientApplication {
 
     public static void main(final String[] args) {
-        SpringApplication.run(AddressMigratorApp.class, args);
+        SpringApplication.run(ClientApplication.class, args);
     }
-
 }
 ----
 
+===== Jdbc Repository
 
-===== Auto registration server side
-
-The client has to set the following property to activate the client side adaption for the server side auto registration.
-
-[source, yaml]
-----
-spring:
-  batch:
-    lightmin:
-      client:
-        # default value: false
-        discovery-enabled: true
-----
-
-If the property is set to _true_. the discovery client configuration will be enriched by meta tags, which let the server detected the _Spring Batch Lightmin_ clients.
-
-If the server should be also found via service discovery, e.g. for push notifications, the next section will give all the details for the configuration.
-
-===== Client side server discovery
-
-In order to find the server via service discovery, the following properties has to be set.
-
-[source, yaml]
-----
-spring:
-  batch:
-    lightmin:
-      client:
-        # default value: false
-        discover-server: true
-        # default value: lightmin-server
-        server-discovery-name: lightmin-server
-----
-
-This will enable the following behavior
-
-* The lightmin client will use service discovery for push notification to the server.
-* The lightmin client will use service discovery to register at the server, if the following property is set to *false* or not present.
-
-[source, yaml]
-----
-spring:
-  batch:
-    lightmin:
-      client:
-        discovery-enabled: false
-----
-
-===== Service Discovery for Remote Repository Server
-
-If the client has configured service discovery, the following properties will activate client side auto detection for the _Remote Repository Server_.
-The _Remote Repository Server_ itself has to be a _DiscoveryClient_ as well.
-
-[source ,yaml]
-----
-spring:
-  batch:
-    lightmin:
-      application-name: my-application-name
-      lightmin-repository-type: remote
-      # default value: false
-      discover-remote-repository: true
-      # default value: spring-batch-lightmin-repository-server
-      remote-repository-server-discovery-name: spring-batch-lightmin-repository-server
-
-----
-
-
-=== Embedded Server
-
-If you want to use the _SpringBatchLightmin_ in a single application context, an
-embedded server mode is provided.
-
-==== Maven Dependencies
-
-[source,xml]
+[source, xml]
 ----
 <dependency>
     <groupId>org.tuxdevelop</groupId>
-    <artifactId>spring-batch-lightmin-server</artifactId>
-    <version>{spring-batch-lightmin.version}</version>
+    <artifactId>spring-batch-lightmin-repository-jdbc</artifactId>
+    <version>${spring-batch-lightmin.version}</version>
 </dependency>
 ----
 
-==== Enable the Server
+The annotation _@EnableLightminJdbcConfigurationRepository_ enables the jdbc repository.
 
-[source,java]
+[source, java]
 ----
 @SpringBootApplication
-@EnableEmbeddedSpringBatchLightminServer
-public class LightminEmbeddedServer {
-
+@EnableLightminClientConsul
+@EnableLightminJdbcConfigurationRepository
+public class ClientApplication {
 
     public static void main(final String[] args) {
-        SpringApplication.run(LightminEmbeddedServer.class, args);
+        SpringApplication.run(ClientApplication.class, args);
     }
 }
 ----
 
-The code above will boostrap the _SpringBatchLightminClient_ and the
-_SpringBatchLightminServer_ in an embedded mode.
+The jdbc repository requires a configured datasource bean with the name _dataSource_.
 
+If the project configuration requires a specific datasource for the lightmin repository,
+ the bean name can set via configuration property.
+More configuration options can be found in the documentation.
 
-=== Remote Repository Server
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      repository:
+        jdbc:
+          data-source-name: myDataSource <1>
+----
 
-The third repository type is the _remote repository_. The _Job Configurations_ are located on an external service.
+<1> Overriding the default datasource name.
 
-==== Maven
+The database schema ddl and drop scripts for various databases are located in the dependency above under the path:
 
-[source,xml]
+[source, yaml]
+----
+org/tuxdevelop/spring/batch/lightmin/repository
+----
+
+===== Remote Repository
+
+[source, xml]
+----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-repository-remote</artifactId>
+    <version>${spring-batch-lightmin.version}</version>
+</dependency>
+----
+
+The annotation _@EnableLightminRemoteConfigurationRepository_ enables the remote repository.
+
+[source, java]
+----
+@SpringBootApplication
+@EnableLightminClientConsul
+@EnableLightminRemoteConfigurationRepository
+public class ClientApplication {
+
+    public static void main(final String[] args) {
+        SpringApplication.run(ClientApplication.class, args);
+    }
+}
+----
+
+The remote repository can be located via url and service discovery.
+
+For the url way, the following properties has to be set:
+
+[source,yaml]
+----
+  spring:
+    batch:
+      lightmin:
+        repository:
+          remote:
+            server-url: http://my-server.domain:8280 <1>
+----
+
+<1> The url to the remote repository server
+
+For the service discovery approach, the following properties has to set and a _DiscoveryClient_ bean has to be present.
+
+[source, yaml]
+----
+  spring:
+    batch:
+      lightmin:
+        repository:
+          remote:
+            discover-remote-repository: true <1>
+            server-discovery-name: remoteRepositorySever <2>
+----
+
+<1> Enables the discovery feature
+<2> The discovery name of the remote repository server
+
+Further configuration options can be found in the documentation.
+
+==== Step three - Configure Spring Batch
+
+The client configurations are enabling the _Spring Batch_ stack as well. _Spring Batch_ itself has to have a configured _JobRepository_.
+This _JobRepository_ can be in memory via map or jdbc.
+
+The configuration of the _JobRepository_ can be done via properties, so _Spring Batch Lightmin_ knows what to configure.
+
+===== Map JobRepository
+
+For the map repository, the following configuration is enough:
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      batch:
+        repository-type: map
+----
+
+===== Jdbc Repository
+
+For the jdbc repository, the following configuration is enough:
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      batch:
+        repository-type: jdbc
+----
+
+Properties like dataSource name, table prefix etc. can be overridden as well. Please check the documentation for more details.
+
+==== Clients in Containers
+
+If a client runs inside a container like _Docker_, the dns name of the host systems has to be transferred to server on registration time.
+For this use case, a property is available.
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      client:
+        hostname: FQDN of the host
+----
+
+== Remote Repository Server
+
+The _Remote Repository Server_ is a _Spring Boot_ application which provides a REST API for clients.
+
+The server itself needs a job configuration repository itself. The server supports map and jdbc.
+
+=== Maven
+
+For the Jdbc repository, the following dependencies have to be added.
+
+[source, xml]
 ----
 <dependency>
     <groupId>org.tuxdevelop</groupId>
     <artifactId>spring-batch-lightmin-repository-server</artifactId>
-    <version>{spring-batch-lightmin.version}</version>
+    <version>${spring-batch-lightmin.version}</version>
+</dependency>
+
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-repository-jdbc</artifactId>
+    <version>${spring-batch-lightmin.version}</version>
 </dependency>
 ----
 
-==== Enable the Remote Repository Server
+=== Configuration
+
+The configuration of the used repository can be found in the client section.
+
+The annotation _@EnableLightminRepositoryServer_ enables the server and the corresponding annotation the _job configuration repository_.
 
 [source, java]
 ----
 @SpringBootApplication
-@EnableSpringBatchLightminRemoteRepositoryServer
-public class LightminRepositoryServer {
-
+@EnableLightminRepositoryServer
+@EnableLightminJdbcConfigurationRepository
+public class RepositoryServerApplication {
 
     public static void main(final String[] args) {
-        SpringApplication.run(LightminRepositoryServer.class, args);
+        SpringApplication.run(RepositoryServerApplication.class, args);
     }
 }
 ----
 
+== Embedded Lightmin
 
-=== Getting the lastest SNAPSHOTS
+If the client server architecture does not fit the requirements, _Spring Batch Lightmin_ also provides am embedded mode, which ships the client and server in one package.
 
-In order to get the latest _SNAPSHOTS_, you have to activate the sonatype snapshot repository.
+=== Maven
 
-[source,xml]
+[source, xml]
 ----
-<repositories>
-    <repository>
-        <id>ossrh</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </repository>
-</repositories>
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-embedded</artifactId>
+    <version>${spring-batch-lightmin.version}</version>
+</dependency>
 ----
 
+=== Configuration
 
-== Spring Batch Lightmin UI
+In this case, a specific client does not have to be configured. The _Job Configuration Repository_ and _Spring Batch_ have to be configured like for a regular client.
+
+[source, java]
+----
+@SpringBootApplication
+@EnableLightminEmbedded
+@EnableLightminMapConfigurationRepository
+public class EmbeddedLightminApplication {
+
+    public static void main(final String[] args) {
+        SpringApplication.run(EmbeddedLightminApplication.class, args);
+    }
+}
+----
+
+[source, yaml]
+----
+spring:
+  batch:
+    lightmin:
+      batch:
+        repository-type: map
+----
+
+== Server User Interface
 
 === Applications
 
-The start page of the _SpringBatchLightmin_ shows all register applications. The status value shows the current health status of the application.
+The start page of the _SpringBatchLightmin_ shows all register applications. The status icon shows the current health status of the application.
 
-image::index.png[]
+image::applications.png[]
 
-=== Application Information
+=== Application Instance Dashboard
 
-The application information view is the entry point to the monitoring and administration of a client application. The overview shows the important endpoints, all known _Spring Batch Jobs_ and configured external links of the client application.
-The Menu gives the access to monitoring (Job), administration (Job Configurations) and job launcher sections.
+The application dashboard is the entry point to the monitoring and administration of a client application instance. The overview shows the important endpoints, all known _Spring Batch Jobs_ and configured external links of the client application.
 
-image::application_info.png[]
+image::dashboard.png[]
 
-=== Jobs
+=== Batch Jobs
 
-All known jobs  of the client application will be listed in the jobs tab with their current instance count.
-To get more detailed informations about the job instances, you have to click on the job name, you want to view.
+The batch jobs overview shows all registered batch jobs of the application instance and the execution count of them.
 
-image::jobs.png[]
+image::batch-jobs.png[]
 
-==== Job Instances
 
-After selecting a job by name, all instances of the job will be listed with their current execution count. In order
-to get more detailed information about the executions of the instance, select the desired job instance id.
+=== Batch Job Executions
 
-image::job_instances.png[]
-
-==== Job Executions
-
-The view will show an overview of all executions for the selected instance id. To get details of the job execution,
+The view  shows an overview of all executions for the selected job. To get details of the job execution,
 click on the desired id.
 
-image::job_instance.png[]
+image::batch-job.png[]
 
-==== Job Execution
+=== Job Execution
 
 The job execution view shows you a detailed overview about the job and step executions of the selected job execution.
 
-image::job_execution.png[]
+image::job-execution.png[]
 
-=== Job Configurations
-
-The job configurations view gives an overview about all stored job configurations. At this point, you can add and delete
- new job configurations, start and stop and edit existing configurations.
-
-==== Job Scheduler
+=== Job Scheduler
 
 _Job Scheduler Configurations_ are cron or time based scheduler.
 
-image::job_scheduler_configurations.png[]
+image::scheduler.png[]
 
-===== Add Job Scheduler Configuration
+==== Add Job Scheduler Configuration
 
-image::scheduler_select.png[]
+===== Period Scheduler
 
-====== Job Scheduler Type
+image::scheduler-period-add.png[]
 
-* CRON
-* PERIOD
+===== Cron Scheduler
 
-image::scheduler_add.png[]
+image::scheduler-cron-add.png[]
 
-====== Job Name
+=== Job Listener
 
-Registered _Spring Batch Jobs_.
+image::listener.png[]
 
-====== CRON Expression
+==== Add Job Listener configuration
 
-CRON expression, if the _Job Scheduler Type_ is _CRON_
+image::listener-add.png[]
 
-====== Fixed Delay
 
-Restart delay, if the _Job Scheduler Type_ is _PERIOD_
+=== Job Launcher
 
-====== Initial Delay
+image::job-launcher.png[]
 
-Initial delay of the first job launch, if the _Job Scheduler Type_ is _PERIOD_
+=== Job Execution Events
 
-====== Task Executor Type
+image::job-execution-events.png[]
 
-* SYNCHRONOUS
-* ASYNCHRONOUS
+=== Journal
 
-====== Scheduler Status
+image::journal.png[]
 
-* INITIALIZED
-* RUNNING
-* STOPPED
 
-====== Job Parameters
-
-Configurable parameters, which will be passed to the _JobLauncher_ on each start.
-
-The format of the parameters has to
-
-----
-name(type)=value, name2(type)=value2
-----
-
-Possible types are
-
-* String
-* Long
-* Double
-* Date
-
-====== Job Incrementer Type
-
-Additional job parameter, to give each job instance uniqueness.
-
-* NONE
-* DATE
-
-==== Job Listener
-
-_Job Listener Configurations_ bases on event, e.g. the viewed folder gets a new file.
-
-image::job_listener_configurations.png[]
-
-===== Add Job Listener configuration
-
-image::listener_select.png[]
-
-====== Job Scheduler Type
-
-* LOCALE FOLDER LISTENER
-
-If the _LOCAL FOLDER LISTENER_ event is fired, the absolute path to the file will be passed as _Job Parameter_ with
-the name *_fileSource_* to the _Job Launcher_.
-
-image::listener_add.png[]
-
-====== Job Name
-
-Registered _Spring Batch Jobs_.
-
-====== Source Folder
-
-The path to the listened folder
-
-====== File Pattern
-
-Ant based file pattern, e.g. *.txt
-
-====== Poller Period
-
-The time in millis between the the current and the next folder scan.
-
-====== Task Executor Type
-
-* SYNCHRONOUS
-* ASYNCHRONOUS
-
-====== Listener Status
-
-* ACTIVE
-* STOPPED
-
-====== Job Parameters
-
-Configurable parameters, which will be passed to the _JobLauncher_ on each start.
-
-The format of the parameters has to
-
-----
-name(type)=value, name2(type)=value2
-----
-
-Possible types are
-
-* String
-* Long
-* Double
-* Date
-
-====== Job Incrementer Type
-
-Additional job parameter, to give each job instance uniqueness.
-
-* NONE
-* DATE
-
-==== Job Launcher
-
-image::job_launcher_select.png[]
-
-
-===== Job Name
-
-Name of the _Spring Batch Job_
-
-===== Job Launcher Configuration
-
-image::job_launcher.png[]
-
-====== Job Parameters
-
-Configurable parameters, which will be passed to the _JobLauncher_ on start. If an execution of the selected has
-already been launched, the _JobParameters_ of the last run will be shown.
-
-The format of the parameters has to
-
-----
-name(type)=value, name2(type)=value2
-----
-
-Possible types are
-
-* String
-* Long
-* Double
-* Date
-
-====== Job Incrementer
-
-Additional job parameter, to give each job instance uniqueness.
-
-* NONE
-* DATE
-
-=== Events
-
-The Events view shows all current finished executions of all clients.
-
-image::event.png[]
