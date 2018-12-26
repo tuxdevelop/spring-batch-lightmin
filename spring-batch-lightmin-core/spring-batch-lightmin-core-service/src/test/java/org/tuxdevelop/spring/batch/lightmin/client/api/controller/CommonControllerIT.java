@@ -8,8 +8,8 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
@@ -43,9 +43,6 @@ public abstract class CommonControllerIT {
     private AdminService adminService;
 
     @Autowired
-    private EmbeddedWebApplicationContext embeddedWebApplicationContext;
-
-    @Autowired
     private Job simpleJob;
 
     @Autowired
@@ -59,13 +56,16 @@ public abstract class CommonControllerIT {
     @Autowired
     protected RestTemplate restTemplate;
 
+    @LocalServerPort
+    private int serverPort;
+
     protected Long addedJobConfigurationId;
     protected Long launchedJobExecutionId;
     protected Long launchedJobInstanceId;
     protected Long launchedStepExecutionId;
 
     protected int getServerPort() {
-        return this.embeddedWebApplicationContext.getEmbeddedServletContainer().getPort();
+        return serverPort;
     }
 
 

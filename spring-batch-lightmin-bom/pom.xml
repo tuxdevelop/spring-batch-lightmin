@@ -6,8 +6,31 @@
 
     <groupId>org.tuxdevelop</groupId>
     <artifactId>spring-batch-lightmin-bom</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
+    <name>Spring Batch Lightmin BOM</name>
+
+    <!-- project description -->
+    <description>BOM for Spring Batch Lightmin</description>
+
+    <!-- project url -->
+    <url>https://github.com/tuxdevelop/spring-batch-lightmin/spring-batch-lightmin-bom</url>
+
+    <!-- license -->
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Marcel Becker</name>
+            <email>tuxdevelop@gmail.com</email>
+        </developer>
+    </developers>
+
 
     <properties>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>

@@ -1,17 +1,16 @@
 package org.tuxdevelop.spring.batch.lightmin.documentation.api.server;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 import org.junit.Test;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.documentation.api.AbstractServiceDocumentation;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
-import static org.springframework.restdocs.restassured.operation.preprocess.RestAssuredPreprocessors.modifyUris;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class RegistrationControllerDocumentation extends AbstractServiceDocumentation {
 

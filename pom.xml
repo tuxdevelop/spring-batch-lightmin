@@ -32,7 +32,7 @@
         </developer>
     </developers>
 
-    <version>1.0.0-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
 
     <modules>
         <module>spring-batch-lightmin-core</module>
@@ -49,11 +49,11 @@
     </modules>
 
     <properties>
-        <platform-bom.version>Brussels-SR15</platform-bom.version>
-        <spring-cloud-dependencies.version>Edgware.SR5</spring-cloud-dependencies.version>
+        <spring.boot.version>2.1.1.RELEASE</spring.boot.version>
+        <spring-cloud-dependencies.version>Greenwich.RC1</spring-cloud-dependencies.version>
         <assertj.version>3.10.0</assertj.version>
-        <openpojo.version>0.8.6</openpojo.version>
-        <equalsverifier.version>2.3</equalsverifier.version>
+        <openpojo.version>0.8.10</openpojo.version>
+        <equalsverifier.version>1.7.5</equalsverifier.version>
         <datafactory.version>0.8</datafactory.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
@@ -74,9 +74,9 @@
         <dependencies>
             <!-- spring.io plattform -->
             <dependency>
-                <groupId>io.spring.platform</groupId>
-                <artifactId>platform-bom</artifactId>
-                <version>${platform-bom.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -371,5 +371,21 @@
             </build>
         </profile>
     </profiles>
+
+    <!-- TODO: remove -->
+    <repositories>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>

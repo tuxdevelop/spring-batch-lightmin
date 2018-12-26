@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
+import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
+import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -43,7 +44,6 @@ public class LightminClientProperties {
     @Getter
     @Setter
     private String hostname;
-
     @Getter
     private final String name;
     @Getter
@@ -55,28 +55,35 @@ public class LightminClientProperties {
 
     private final ManagementServerProperties managementServerProperties;
     private final ServerProperties serverProperties;
+    private final WebEndpointProperties webEndpointProperties;
 
     @Autowired
     public LightminClientProperties(final ManagementServerProperties managementServerProperties,
                                     final ServerProperties serverProperties,
                                     @Value("${spring.application.name:spring-boot-application}") final String name,
-                                    @Value("${endpoints.health.id:health}") final String healthEndpointId) {
+                                    @Value("${endpoints.health.id:health}") final String healthEndpointId,
+                                    final WebEndpointProperties webEndpointProperties) {
         this.name = name;
         this.healthEndpointId = healthEndpointId;
         this.managementServerProperties = managementServerProperties;
         this.serverProperties = serverProperties;
+        this.webEndpointProperties = webEndpointProperties;
     }
 
     public String getManagementUrl() {
 
-        final String resultManagamentUrl;
+        final String resultManagementUrl;
 
         if (this.managementUrl != null) {
-            resultManagamentUrl = this.managementUrl;
+            resultManagementUrl = this.managementUrl;
         } else {
             if ((this.managementPort == null || this.managementPort.equals(this.serverPort))
                     && this.getServiceUrl() != null) {
-                resultManagamentUrl = this.append(this.getServiceUrl(), this.managementServerProperties.getContextPath());
+                resultManagementUrl =
+                        this.append(
+                                this.append(this.getServiceUrl(),
+                                        this.managementServerProperties.getServlet().getContextPath()),
+                                this.webEndpointProperties.getBasePath());
             } else {
                 if (this.managementPort == null) {
                     throw new IllegalStateException(
@@ -85,17 +92,21 @@ public class LightminClientProperties {
                     if (this.preferIp) {
                         final InetAddress address = this.serverProperties.getAddress();
                         final String hostAddress = this.getHostAddress(address);
-                        resultManagamentUrl = this.append(this.append(this.createLocalUri(hostAddress, this.managementPort),
-                                this.serverProperties.getContextPath()), this.managementServerProperties.getContextPath());
+                        resultManagementUrl = this.append(
+                                this.append(this.createLocalUri(hostAddress, this.managementPort),
+                                        this.managementServerProperties.getServlet().getContextPath()),
+                                this.webEndpointProperties.getBasePath());
 
                     } else {
-                        resultManagamentUrl = this.append(this.createLocalUri(this.determineHost(), this.managementPort),
-                                this.managementServerProperties.getContextPath());
+                        resultManagementUrl = this.append(
+                                this.append(this.createLocalUri(this.determineHost(), this.managementPort),
+                                        this.managementServerProperties.getServlet().getContextPath()),
+                                this.webEndpointProperties.getBasePath());
                     }
                 }
             }
         }
-        return resultManagamentUrl;
+        return resultManagementUrl;
     }
 
     private String getHostAddress(final InetAddress address) {
@@ -117,9 +128,7 @@ public class LightminClientProperties {
     }
 
     public String getServiceUrl() {
-
         final String resultServiceUrl;
-
         if (this.serviceUrl != null) {
             resultServiceUrl = this.serviceUrl;
         } else {
@@ -130,12 +139,13 @@ public class LightminClientProperties {
                 if (this.preferIp) {
                     final InetAddress address = this.serverProperties.getAddress();
                     final String hostAddress = this.getHostAddress(address);
-                    resultServiceUrl = this.append(this.append(this.createLocalUri(hostAddress, this.serverPort),
-                            this.serverProperties.getServletPath()), this.serverProperties.getContextPath());
+                    resultServiceUrl =
+                            this.append(this.createLocalUri(hostAddress, this.serverPort),
+                                    this.serverProperties.getServlet().getContextPath());
 
                 } else {
-                    resultServiceUrl = this.append(this.append(this.createLocalUri(this.determineHost(), this.serverPort),
-                            this.serverProperties.getServletPath()), this.serverProperties.getContextPath());
+                    resultServiceUrl = this.append(this.createLocalUri(this.determineHost(), this.serverPort),
+                            this.serverProperties.getServlet().getContextPath());
                 }
             }
         }
@@ -149,17 +159,16 @@ public class LightminClientProperties {
     }
 
     private String append(final String uri, final String path) {
-
-        final String resultBaseUri;
-
         final String baseUri = uri.replaceFirst("/+$", "");
+        final String resultUri;
         if (StringUtils.isEmpty(path)) {
-            resultBaseUri = baseUri;
+            resultUri = baseUri;
         } else {
+
             final String normPath = path.replaceFirst("^/+", "").replaceFirst("/+$", "");
-            resultBaseUri = baseUri + "/" + normPath;
+            resultUri = baseUri + "/" + normPath;
         }
-        return resultBaseUri;
+        return resultUri;
     }
 
     private InetAddress getHostAddress() {

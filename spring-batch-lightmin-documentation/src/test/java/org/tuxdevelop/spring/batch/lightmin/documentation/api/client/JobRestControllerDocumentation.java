@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.documentation.api.client;
 
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 import org.junit.Test;
 import org.springframework.batch.core.ExitStatus;
 import org.tuxdevelop.spring.batch.lightmin.batch.dao.QueryParameterKey;
@@ -12,12 +12,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
-import static org.springframework.restdocs.restassured.operation.preprocess.RestAssuredPreprocessors.modifyUris;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 public class JobRestControllerDocumentation extends AbstractServiceDocumentation {
 

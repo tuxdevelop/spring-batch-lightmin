@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
