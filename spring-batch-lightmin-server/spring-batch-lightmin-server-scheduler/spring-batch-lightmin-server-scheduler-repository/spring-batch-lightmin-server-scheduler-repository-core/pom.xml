@@ -3,20 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>spring-batch-lightmin</artifactId>
+        <artifactId>spring-batch-lightmin-server-scheduler-repository</artifactId>
         <groupId>org.tuxdevelop</groupId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spring-batch-lightmin-server</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>spring-batch-lightmin-server-scheduler-repository-core</artifactId>
 
-    <modules>
-        <module>spring-batch-lightmin-server-core</module>
-        <module>spring-batch-lightmin-server-standalone</module>
-        <module>spring-batch-lightmin-server-fe</module>
-        <module>spring-batch-lightmin-server-scheduler</module>
-    </modules>
 
 </project>
