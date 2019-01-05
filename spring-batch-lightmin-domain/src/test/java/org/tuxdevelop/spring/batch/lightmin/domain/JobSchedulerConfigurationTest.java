@@ -11,7 +11,6 @@ public class JobSchedulerConfigurationTest extends PojoTestBase {
     @Override
     public void performPojoTest() {
         this.testStructureAndBehavior(JobSchedulerConfiguration.class);
-        this.testEquals(JobSchedulerConfiguration.class);
     }
 
     @Test

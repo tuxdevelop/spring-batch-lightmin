@@ -24,6 +24,14 @@ All samples for _Spring Batch Lightmin_ can be found at https://github.com/tuxde
 
 == Getting Started
 
+[IMPORTANT]
+====
+Spring 5.1.x set the the property _spring.main.allow-bean-definition-overriding_ to **false** as a default.
+In order to use the current version of Spring Batch Lightmin, this property has to be set to **true**.
+
+This issue can hopefully be solved in the upcoming releases.
+====
+
 The following section describes a quick start guide to setup the client server architecture.
 If your want to get an overview of the configuration options, please read the documentation.
 The getting started guide for the _Embedded Mode_ can be found in the section _Embedded Lightmin_.
@@ -39,7 +47,7 @@ Add the _Spring Batch Lightmin BOM_ to the dependency management section of your
     <artifactId>spring-batch-lightmin-bom</artifactId>
     <version>${spring-batch-lightmin.version}</version>
     <type>pom</type>
-    <scope>import</type>
+    <scope>import</scope>
 </dependency>
 ----
 

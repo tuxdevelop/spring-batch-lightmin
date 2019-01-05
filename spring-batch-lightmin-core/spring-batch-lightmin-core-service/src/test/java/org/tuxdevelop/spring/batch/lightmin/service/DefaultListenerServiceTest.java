@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -106,7 +105,7 @@ public class DefaultListenerServiceTest {
         listenerConstructorWrapper.setJobLauncher(this.jobLauncher);
         listenerConstructorWrapper.setJobParameters(new JobParametersBuilder().toJobParameters());
         final FolderListener folderListener = new FolderListener(listenerConstructorWrapper);
-        when(this.applicationContext.getBean(anyString(), Matchers.any(Class.class))).thenReturn(folderListener);
+        when(this.applicationContext.getBean(anyString(), any(Class.class))).thenReturn(folderListener);
         when(this.applicationContext.containsBean(anyString())).thenReturn(Boolean.TRUE);
         try {
             this.listenerService.terminateListener("testBean");

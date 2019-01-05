@@ -7,7 +7,6 @@ public class JobListenerConfigurationTest extends PojoTestBase {
 
     @Override
     public void performPojoTest() {
-        this.testEquals(JobListenerConfiguration.class);
         this.testStructureAndBehavior(JobListenerConfiguration.class);
     }
 }
