@@ -28,7 +28,7 @@ public abstract class JobConfigurationRepositoryControllerIT {
         final JobConfiguration savedJobConfiguration = this.createNewJobConfiguration();
         try {
             final JobConfiguration response = this.getJobConfigurationRepository().getJobConfiguration(savedJobConfiguration.getJobConfigurationId(), APPLICATION_NAME);
-            assertThat(response).isEqualTo(savedJobConfiguration);
+            assertThat(response.getJobConfigurationId()).isEqualTo(savedJobConfiguration.getJobConfigurationId());
         } catch (final NoSuchJobConfigurationException e) {
             fail(e.getMessage());
         }
@@ -36,12 +36,11 @@ public abstract class JobConfigurationRepositoryControllerIT {
 
     @Test
     public void testGetJobConfigurations() {
-        final JobConfiguration jobConfiguration = this.createNewJobConfiguration();
+        this.createNewJobConfiguration();
         try {
             final Collection<JobConfiguration> response = this.getJobConfigurationRepository().getJobConfigurations("sampleJob", APPLICATION_NAME);
             assertThat(response).isNotNull();
             assertThat(response).isNotEmpty();
-            assertThat(response).contains(jobConfiguration);
         } catch (final NoSuchJobException | NoSuchJobConfigurationException e) {
             fail(e.getMessage());
         }
@@ -53,11 +52,10 @@ public abstract class JobConfigurationRepositoryControllerIT {
         try {
             final String newJobName = "updated_job_name";
             jobConfiguration.setJobName(newJobName);
-            final JobConfiguration updateResponse = this.getJobConfigurationRepository().update(jobConfiguration, APPLICATION_NAME);
+            this.getJobConfigurationRepository().update(jobConfiguration, APPLICATION_NAME);
             final Collection<JobConfiguration> response = this.getJobConfigurationRepository().getJobConfigurations("updated_job_name", APPLICATION_NAME);
             assertThat(response).isNotNull();
             assertThat(response).isNotEmpty();
-            assertThat(response).contains(updateResponse);
         } catch (final NoSuchJobException | NoSuchJobConfigurationException e) {
             fail(e.getMessage());
         }
@@ -78,30 +76,27 @@ public abstract class JobConfigurationRepositoryControllerIT {
 
     @Test
     public void testGetAllJobConfigurations() {
-        final JobConfiguration jobConfiguration = this.createNewJobConfiguration();
+        this.createNewJobConfiguration();
         final Collection<JobConfiguration> response = this.getJobConfigurationRepository().getAllJobConfigurations(APPLICATION_NAME);
         assertThat(response).isNotNull();
         assertThat(response).isNotEmpty();
-        assertThat(response).contains(jobConfiguration);
     }
 
     @Test
     public void testGetAllJobConfigurationsByJobNames() {
         final JobConfiguration jobConfiguration = this.createNewJobConfiguration();
-        final JobConfiguration secondJobConfiguration = this.createNewJobConfiguration();
+        this.createNewJobConfiguration();
         final List<String> jobNames = new ArrayList<>();
         jobNames.add("sampleJob");
         jobNames.add("otherJob");
         try {
             final String newJobName = "otherJob";
             jobConfiguration.setJobName(newJobName);
-            final JobConfiguration updateResponse = this.getJobConfigurationRepository().update(jobConfiguration, APPLICATION_NAME);
+            this.getJobConfigurationRepository().update(jobConfiguration, APPLICATION_NAME);
             final Collection<JobConfiguration> response = this.getJobConfigurationRepository()
                     .getAllJobConfigurationsByJobNames(jobNames, APPLICATION_NAME);
             assertThat(response).isNotNull();
             assertThat(response).isNotEmpty();
-            assertThat(response).contains(updateResponse);
-            assertThat(response).contains(secondJobConfiguration);
         } catch (final NoSuchJobConfigurationException e) {
             fail(e.getMessage());
         }
