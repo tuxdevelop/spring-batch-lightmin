@@ -19,6 +19,8 @@ public interface SchedulerExecutionRepository {
 
     List<SchedulerExecution> findByState(Integer state);
 
+    List<SchedulerExecution> findByStateAndDate(Integer state, Date date);
+
     List<SchedulerExecution> findBySchedulerConfigurationId(Long schedulerConfigurationId);
 
     void deleteByState(Integer state);

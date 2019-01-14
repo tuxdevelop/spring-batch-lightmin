@@ -29,6 +29,12 @@ public interface LightminApplicationRepository {
     LightminClientApplication find(final String id);
 
     /**
+     * @param applicationName
+     * @return
+     */
+    Collection<LightminClientApplication> findByApplicationName(final String applicationName);
+
+    /**
      * @param id
      * @return
      */

@@ -9,8 +9,15 @@ public class SchedulerExecution {
 
     private Long id;
     private Long schedulerConfigurationId;
-    private Date nextSchedule;
+    private Date nextFireTime;
     private Integer executionCount;
     private Integer state;
 
+    public void incrementExecutionCount() {
+        if (this.executionCount == null) {
+            this.executionCount = 1;
+        } else {
+            this.executionCount++;
+        }
+    }
 }

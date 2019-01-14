@@ -11,5 +11,14 @@
 
     <artifactId>spring-batch-lightmin-server-scheduler-repository-core</artifactId>
 
+    <dependencies>
+
+        <!-- Spring Batch Lightmin -->
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>
