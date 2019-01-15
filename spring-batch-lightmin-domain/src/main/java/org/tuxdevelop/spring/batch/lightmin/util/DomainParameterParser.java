@@ -47,40 +47,44 @@ public final class DomainParameterParser {
         final StringBuilder stringBuilder = new StringBuilder();
         if (parametersMap != null) {
             for (final Entry<String, Object> entry : parametersMap.entrySet()) {
-                final String key = entry.getKey();
-                final Object value = entry.getValue();
-                final String valueType;
-                final String valueString;
-                if (value instanceof Long || value instanceof Integer) {
-                    valueType = "(Long)";
-                    valueString = value.toString();
-                } else if (value instanceof String) {
-                    valueType = "(String)";
-                    valueString = (String) value;
-                } else if (value instanceof Double) {
-                    valueType = "(Double)";
-                    valueString = value.toString();
-                } else if (value instanceof Date) {
-                    valueType = "(Date)";
-                    valueString = simpleDateFormatTimeStamp.format((Date) value);
-                } else {
-                    throw new SpringBatchLightminApplicationException("Unknown ParameterType:" + value.getClass().getName());
-                }
-                stringBuilder.append(key);
-                stringBuilder.append(valueType);
-                stringBuilder.append("=");
-                stringBuilder.append(valueString);
+                parseParameterEntryToString(stringBuilder, entry);
                 stringBuilder.append(",");
             }
         }
         final String tempParameters = stringBuilder.toString();
         final String result;
-        if (!tempParameters.isEmpty() && tempParameters.length() >= 1) {
+        if (!tempParameters.isEmpty()) {
             result = tempParameters.substring(0, tempParameters.length() - 1);
         } else {
             result = tempParameters;
         }
         return result;
+    }
+
+    public static void parseParameterEntryToString(final StringBuilder stringBuilder, final Entry<String, Object> entry) {
+        final String key = entry.getKey();
+        final Object value = entry.getValue();
+        final String valueType;
+        final String valueString;
+        if (value instanceof Long || value instanceof Integer) {
+            valueType = "(Long)";
+            valueString = value.toString();
+        } else if (value instanceof String) {
+            valueType = "(String)";
+            valueString = (String) value;
+        } else if (value instanceof Double) {
+            valueType = "(Double)";
+            valueString = value.toString();
+        } else if (value instanceof Date) {
+            valueType = "(Date)";
+            valueString = simpleDateFormatTimeStamp.format((Date) value);
+        } else {
+            throw new SpringBatchLightminApplicationException("Unknown ParameterType:" + value.getClass().getName());
+        }
+        stringBuilder.append(key);
+        stringBuilder.append(valueType);
+        stringBuilder.append("=");
+        stringBuilder.append(valueString);
     }
 
     /**

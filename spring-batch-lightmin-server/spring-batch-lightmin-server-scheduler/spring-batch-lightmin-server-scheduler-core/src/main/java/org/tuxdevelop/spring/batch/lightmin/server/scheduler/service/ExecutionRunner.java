@@ -8,10 +8,8 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.util.ApiParameterParser;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
-import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
-import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
 
 import java.util.ArrayList;
@@ -23,39 +21,37 @@ import java.util.Map;
 public class ExecutionRunner implements Runnable {
 
     private final SchedulerExecution schedulerExecution;
-    private final SchedulerConfigurationService schedulerConfigurationService;
-    private final SchedulerExecutionService schedulerExecutionService;
-    private final JobServerService jobServerService;
-    private final LightminApplicationRepository lightminApplicationRepository;
+    private final ExecutionRunnerService executionRunnerService;
 
     public ExecutionRunner(
             final SchedulerExecution schedulerExecution,
-            final SchedulerConfigurationService schedulerConfigurationService,
-            final SchedulerExecutionService schedulerExecutionService,
-            final JobServerService jobServerService,
-            final LightminApplicationRepository lightminApplicationRepository) {
+            final ExecutionRunnerService executionRunnerService) {
         this.schedulerExecution = schedulerExecution;
-        this.schedulerConfigurationService = schedulerConfigurationService;
-        this.schedulerExecutionService = schedulerExecutionService;
-        this.jobServerService = jobServerService;
-        this.lightminApplicationRepository = lightminApplicationRepository;
+        this.executionRunnerService = executionRunnerService;
     }
 
     @Override
     public void run() {
-        SchedulerConfiguration schedulerConfiguration = null;
         try {
+            final SchedulerConfiguration schedulerConfiguration =
+                    this.executionRunnerService.findSchedulerConfigurationById(
+                            this.schedulerExecution.getSchedulerConfigurationId());
             updateExecution(ExecutionStatus.RUNNING, Boolean.TRUE);
-            schedulerConfiguration = fireJobLaunch(this.schedulerExecution);
-            updateExecution(ExecutionStatus.FINISHED, Boolean.FALSE);
-        } catch (final Exception e) {
-            //TODO: log
-            updateExecution(ExecutionStatus.FAILED, Boolean.FALSE);
-        }
-        if (schedulerConfiguration != null) {
+            try {
+                fireJobLaunch(schedulerConfiguration);
+                updateExecution(ExecutionStatus.FINISHED, Boolean.FALSE);
+            } catch (final Exception e) {
+                log.error("Execution for {} failed ", this.schedulerExecution, e);
+                if (schedulerConfiguration.getRetriable() &&
+                        this.schedulerExecution.getExecutionCount() <= schedulerConfiguration.getMaxRetries()) {
+                    updateExecution(ExecutionStatus.FAILED, Boolean.FALSE);
+                } else {
+                    updateExecution(ExecutionStatus.LOST, Boolean.FALSE);
+                }
+            }
             createNextExecution(schedulerConfiguration.getCronExpression());
-        } else {
-            //TODO: what should be done if something went wrong?
+        } catch (final Exception e) {
+            log.error("Error while processing scheduled job state {} ", this.schedulerExecution, e);
         }
     }
 
@@ -70,12 +66,12 @@ public class ExecutionRunner implements Runnable {
             log.trace("Count of the execution will not be increased");
         }
         this.schedulerExecution.setState(status);
-        this.schedulerExecutionService.save(this.schedulerExecution);
+        this.executionRunnerService.saveSchedulerExecution(this.schedulerExecution);
     }
 
     private void createNextExecution(final String cronExpression) {
         try {
-            this.schedulerExecutionService.createNextExecution(this.schedulerExecution, cronExpression);
+            this.executionRunnerService.createNextExecution(this.schedulerExecution, cronExpression);
         } catch (final Exception e) {
             //TODO: log and what to do?
         }
@@ -87,24 +83,19 @@ public class ExecutionRunner implements Runnable {
      * EXECUTE JOB
      */
 
-    private SchedulerConfiguration fireJobLaunch(final SchedulerExecution schedulerExecution) {
-        final Long schedulerConfigurationId = schedulerExecution.getSchedulerConfigurationId();
-        //1. get scheduler configuration
-        final SchedulerConfiguration schedulerConfiguration = getSchedulerConfiguration(schedulerConfigurationId);
+    private void fireJobLaunch(final SchedulerConfiguration schedulerConfiguration) {
         final String applicationName = schedulerConfiguration.getApplication();
         final String jobName = schedulerConfiguration.getJobName();
         final Integer instanceExecutionCount = schedulerConfiguration.getInstanceExecutionCount();
-        //2. get job parameters
+        //1. get job parameters
         final JobParameters jobParameters = getJobParameters(schedulerConfiguration);
-        //3. get JobLaunch
+        //2. get JobLaunch
         final JobLaunch jobLaunch = getJobLaunch(jobName, jobParameters);
-        //4. get lightmin client instances
+        //3. get lightmin client instances
         final List<LightminClientApplication> lightminClientApplications =
                 getLightminClientApplications(instanceExecutionCount, applicationName);
-        //5. launch jobs on instances
+        //4. launch jobs on instances
         launchJobForInstances(jobLaunch, lightminClientApplications);
-
-        return schedulerConfiguration;
     }
 
     private void launchJobForInstances(final JobLaunch jobLaunch,
@@ -118,7 +109,7 @@ public class ExecutionRunner implements Runnable {
                                                                           final String applicationName) {
         final List<LightminClientApplication> lightminClientApplications = new ArrayList<>();
         final Collection<LightminClientApplication> foundInstances =
-                this.lightminApplicationRepository.findByApplicationName(applicationName);
+                this.executionRunnerService.findLightminApplicationsByName(applicationName);
         if (count > foundInstances.size()) {
             //TODO: decide how to handle
         } else {
@@ -132,7 +123,7 @@ public class ExecutionRunner implements Runnable {
 
 
     private void launchJob(final JobLaunch jobLaunch, final LightminClientApplication lightminClientApplication) {
-        this.jobServerService.launchJob(jobLaunch, lightminClientApplication);
+        this.executionRunnerService.launchJob(jobLaunch, lightminClientApplication);
     }
 
     private JobLaunch getJobLaunch(final String jobName, final JobParameters jobParameters) {
@@ -151,7 +142,7 @@ public class ExecutionRunner implements Runnable {
     }
 
     private SchedulerConfiguration getSchedulerConfiguration(final Long id) {
-        return this.schedulerConfigurationService.findById(id);
+        return this.executionRunnerService.findSchedulerConfigurationById(id);
     }
 
     private void attachIncremeter(final JobIncrementer jobIncrementer, final JobParameters jobParameters) {

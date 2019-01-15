@@ -13,6 +13,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>spring-batch-lightmin-server-scheduler-repository-core</module>
+        <module>spring-batch-lightmin-server-scheduler-repository-jdbc</module>
+        <module>spring-batch-lightmin-server-scheduler-repository-test</module>
     </modules>
 
 

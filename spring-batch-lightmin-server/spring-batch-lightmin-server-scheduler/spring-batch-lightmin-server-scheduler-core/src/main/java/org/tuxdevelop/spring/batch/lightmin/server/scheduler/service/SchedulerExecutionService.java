@@ -9,6 +9,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.S
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 public class SchedulerExecutionService {
@@ -38,6 +39,14 @@ public class SchedulerExecutionService {
         schedulerExecution.setNextFireTime(nextFireTime);
         //5. save
         this.save(schedulerExecution);
+    }
+
+    public List<SchedulerExecution> findScheduledExecutions(final Integer state, final Date date) {
+        return this.schedulerExecutionRepository.findByStateAndDate(state, date);
+    }
+
+    public List<SchedulerExecution> findScheduledExecutions(final Integer state) {
+        return this.schedulerExecutionRepository.findByState(state);
     }
 
     public Date getNextFireTime(final String cronExpression) {

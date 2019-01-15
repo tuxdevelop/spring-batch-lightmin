@@ -13,6 +13,8 @@ public class SchedulerConfiguration {
     private String cronExpression;
     private String application;
     private String jobName;
+    private Boolean retriable;
+    private Integer maxRetries;
     private JobIncrementer jobIncrementer;
     private Map<String, Object> jobParameters;
 }

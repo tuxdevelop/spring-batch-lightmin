@@ -13,6 +13,8 @@ public interface SchedulerExecutionRepository {
 
     void delete(Long id);
 
+    void deleteBySchedulerConfigurationId(Long schedulerConfigurationId);
+
     List<SchedulerExecution> findAll();
 
     List<SchedulerExecution> findNextExecutions(Date date);
