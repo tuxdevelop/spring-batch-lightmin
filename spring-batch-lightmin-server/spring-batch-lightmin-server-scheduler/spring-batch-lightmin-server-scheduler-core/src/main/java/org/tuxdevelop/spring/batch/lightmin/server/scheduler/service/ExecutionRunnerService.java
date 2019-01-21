@@ -5,6 +5,7 @@ import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 
 import java.util.Collection;
@@ -43,7 +44,7 @@ public class ExecutionRunnerService {
         this.jobServerService.launchJob(jobLaunch, lightminClientApplication);
     }
 
-    public SchedulerConfiguration findSchedulerConfigurationById(final Long id) {
+    public SchedulerConfiguration findSchedulerConfigurationById(final Long id) throws SchedulerConfigurationNotFoundException {
         return this.schedulerConfigurationService.findById(id);
     }
 }

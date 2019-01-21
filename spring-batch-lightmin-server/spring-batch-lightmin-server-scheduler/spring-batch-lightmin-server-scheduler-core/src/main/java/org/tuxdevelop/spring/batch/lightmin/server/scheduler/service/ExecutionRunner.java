@@ -10,6 +10,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.util.ApiParameterParser
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
 
 import java.util.ArrayList;
@@ -141,7 +142,7 @@ public class ExecutionRunner implements Runnable {
         return jobParameters;
     }
 
-    private SchedulerConfiguration getSchedulerConfiguration(final Long id) {
+    private SchedulerConfiguration getSchedulerConfiguration(final Long id) throws SchedulerConfigurationNotFoundException {
         return this.executionRunnerService.findSchedulerConfigurationById(id);
     }
 

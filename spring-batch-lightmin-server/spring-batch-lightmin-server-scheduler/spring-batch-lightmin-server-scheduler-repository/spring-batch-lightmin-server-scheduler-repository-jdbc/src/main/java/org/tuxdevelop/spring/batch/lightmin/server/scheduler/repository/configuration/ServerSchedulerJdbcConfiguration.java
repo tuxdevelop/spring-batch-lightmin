@@ -41,7 +41,7 @@ public class ServerSchedulerJdbcConfiguration {
     @Bean
     public SchedulerExecutionRepository schedulerExecutionRepository(
             @Qualifier("serverSchedulerJdbcTemplate") final JdbcTemplate serverSchedulerJdbcTemplate,
-            final ServerSchedulerJdbcConfigurationProperties properties) {
+            final ServerSchedulerJdbcConfigurationProperties properties) throws Exception {
         return new JdbcSchedulerExecutionRepository(serverSchedulerJdbcTemplate, properties);
     }
 }

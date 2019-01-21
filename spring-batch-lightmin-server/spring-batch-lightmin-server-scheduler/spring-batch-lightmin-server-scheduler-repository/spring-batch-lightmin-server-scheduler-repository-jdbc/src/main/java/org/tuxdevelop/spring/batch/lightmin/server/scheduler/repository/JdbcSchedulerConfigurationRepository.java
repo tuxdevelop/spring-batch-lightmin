@@ -2,6 +2,10 @@ package org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.item.database.Order;
+import org.springframework.batch.item.database.PagingQueryProvider;
+import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -9,16 +13,14 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.configuration.ServerSchedulerJdbcConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurationRepository {
 
@@ -31,14 +33,17 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                 new SchedulerConfigurationValueDAO(
                         jdbcTemplate,
                         properties.getConfigurationValueTable());
-        this.schedulerConfigurationDAO =
-                new SchedulerConfigurationDAO(
-                        jdbcTemplate,
-                        properties.getConfigurationTable(),
-                        this.schedulerConfigurationValueDAO,
-                        properties.getDatabaseSchema());
-
-
+        try {
+            this.schedulerConfigurationDAO =
+                    new SchedulerConfigurationDAO(
+                            jdbcTemplate,
+                            properties.getConfigurationTable(),
+                            this.schedulerConfigurationValueDAO,
+                            properties.getDatabaseSchema());
+        } catch (final Exception e) {
+            //TODO: throw runtime exception
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -54,8 +59,12 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
     }
 
     @Override
-    public SchedulerConfiguration findById(final Long id) {
-        return this.schedulerConfigurationDAO.findById(id);
+    public SchedulerConfiguration findById(final Long id) throws SchedulerConfigurationNotFoundException {
+        try {
+            return this.schedulerConfigurationDAO.findById(id);
+        } catch (final Exception e) {
+            throw new SchedulerConfigurationNotFoundException("Could not find SchedulerConfiguration for id " + id, e);
+        }
     }
 
     @Override
@@ -69,8 +78,18 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
     }
 
     @Override
+    public List<SchedulerConfiguration> findAll(final int startIndex, final int pageSize) {
+        return this.schedulerConfigurationDAO.findAll(startIndex, pageSize);
+    }
+
+    @Override
     public List<SchedulerConfiguration> findByApplication(final String application) {
         return this.schedulerConfigurationDAO.findByApplication(application);
+    }
+
+    @Override
+    public Integer getCount() {
+        return this.schedulerConfigurationDAO.getCount();
     }
 
     // ###########################
@@ -78,6 +97,8 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
     // ###########################
 
     private static class SchedulerConfigurationDAO {
+
+        private static final String FIELDS = "S.id, S.application_name, S.job_name";
 
         private static final String GET_ALL =
                 "SELECT * FROM %s";
@@ -94,16 +115,20 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                 "DELETE FROM %s WHERE "
                         + SchedulerConfigurationDomain.ID + " = ?";
 
+        private static final String COUNT =
+                "SELECT COUNT(1) FROM %s";
+
         private final JdbcTemplate jdbcTemplate;
         private final SimpleJdbcInsert simpleJdbcInsert;
         private final String tableName;
         private final SchedulerConfigurationValueDAO schedulerConfigurationValueDAO;
         private final SchedulerConfigurationRowMapper rowMapper;
+        private final PagingQueryProvider findAllPagingQueryProvider;
 
         private SchedulerConfigurationDAO(final JdbcTemplate jdbcTemplate,
                                           final String tableName,
                                           final SchedulerConfigurationValueDAO schedulerConfigurationValueDAO,
-                                          final String schema) {
+                                          final String schema) throws Exception {
             this.jdbcTemplate = jdbcTemplate;
             this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                     .withTableName(tableName)
@@ -112,6 +137,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
             this.tableName = tableName;
             this.schedulerConfigurationValueDAO = schedulerConfigurationValueDAO;
             this.rowMapper = new SchedulerConfigurationRowMapper();
+            this.findAllPagingQueryProvider = getPagingQueryProvider(null);
         }
 
         SchedulerConfiguration findById(final Long id) {
@@ -137,6 +163,31 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                 this.schedulerConfigurationValueDAO.attachValues(schedulerConfiguration);
             }
             return schedulerConfigurations;
+        }
+
+        List<SchedulerConfiguration> findAll(final int startIndex, final int pageSize) {
+            if (startIndex <= 0) {
+                final List<SchedulerConfiguration> schedulerConfigurations =
+                        this.jdbcTemplate.query(this.findAllPagingQueryProvider.generateFirstPageQuery(pageSize),
+                                this.rowMapper);
+                for (final SchedulerConfiguration schedulerConfiguration : schedulerConfigurations) {
+                    this.schedulerConfigurationValueDAO.attachValues(schedulerConfiguration);
+                }
+                return schedulerConfigurations;
+            }
+            try {
+                final Long startAfterValue = this.jdbcTemplate.queryForObject(
+                        this.findAllPagingQueryProvider.generateJumpToItemQuery(startIndex, startIndex), Long.class);
+                final List<SchedulerConfiguration> schedulerConfigurations =
+                        this.jdbcTemplate.query(this.findAllPagingQueryProvider.generateRemainingPagesQuery(pageSize),
+                                this.rowMapper, startAfterValue);
+                for (final SchedulerConfiguration schedulerConfiguration : schedulerConfigurations) {
+                    this.schedulerConfigurationValueDAO.attachValues(schedulerConfiguration);
+                }
+                return schedulerConfigurations;
+            } catch (final IncorrectResultSizeDataAccessException e) {
+                return Collections.emptyList();
+            }
         }
 
         List<SchedulerConfiguration> findByApplication(final String applicationName) {
@@ -180,6 +231,29 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                     new Object[]{id},
                     new int[]{Types.NUMERIC}
             );
+        }
+
+        Integer getCount() {
+            final String query = String.format(COUNT, this.tableName);
+            return this.jdbcTemplate.queryForObject(query, Integer.class);
+        }
+
+        private PagingQueryProvider getPagingQueryProvider(final String whereClause) throws Exception {
+            return this.getPagingQueryProvider(null, whereClause);
+        }
+
+        private PagingQueryProvider getPagingQueryProvider(String fromClause, String whereClause) throws Exception {
+            final SqlPagingQueryProviderFactoryBean factory = new SqlPagingQueryProviderFactoryBean();
+            factory.setDataSource(this.jdbcTemplate.getDataSource());
+            fromClause = "%s S" + (fromClause == null ? "" : ", " + fromClause);
+            factory.setFromClause(String.format(fromClause, this.tableName));
+            factory.setSelectClause(FIELDS);
+            final Map<String, Order> sortKeys = new HashMap<>();
+            sortKeys.put("id", Order.ASCENDING);
+            factory.setSortKeys(sortKeys);
+            whereClause = whereClause == null ? "" : whereClause;
+            factory.setWhereClause(whereClause);
+            return factory.getObject();
         }
 
         // ########

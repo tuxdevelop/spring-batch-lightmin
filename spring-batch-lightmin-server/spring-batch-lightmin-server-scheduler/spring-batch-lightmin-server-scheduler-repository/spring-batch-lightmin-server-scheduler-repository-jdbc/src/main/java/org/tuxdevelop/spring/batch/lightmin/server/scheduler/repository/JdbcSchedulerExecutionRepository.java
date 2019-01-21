@@ -1,20 +1,24 @@
 package org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository;
 
+import org.springframework.batch.item.database.Order;
+import org.springframework.batch.item.database.PagingQueryProvider;
+import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.configuration.ServerSchedulerJdbcConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerExecutionNotFoundException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepository {
+
+    private static final String FIELDS = "S.id, S.scheduler_configuration_id, S.next_fire_time, S.execution_count, S.state";
 
     private static final String FIND_ALL =
             "SELECT * FROM %s";
@@ -33,7 +37,7 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
 
     private static final String FIND_BY_STATE =
             "SELECT * FROM %s WHERE "
-                    + SchedulerExecutionDomain.STATE + " <= ?";
+                    + SchedulerExecutionDomain.STATE + " = ?";
 
     private static final String FIND_BY_STATE_AND_LESS_EQUAL_DATE =
             "SELECT * FROM %s WHERE "
@@ -66,9 +70,11 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
     private final SimpleJdbcInsert simpleJdbcInsert;
     private final String tableName;
     private final SchedulerExecutionRowMapper rowMapper;
+    private final PagingQueryProvider byStatePagingQueryProvider;
+    private final PagingQueryProvider findAllPagingQueryProvider;
 
     public JdbcSchedulerExecutionRepository(final JdbcTemplate jdbcTemplate,
-                                            final ServerSchedulerJdbcConfigurationProperties properties) {
+                                            final ServerSchedulerJdbcConfigurationProperties properties) throws Exception {
         this.jdbcTemplate = jdbcTemplate;
         this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withSchemaName(properties.getDatabaseSchema())
@@ -76,6 +82,8 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
                 .usingGeneratedKeyColumns(SchedulerExecutionDomain.ID);
         this.tableName = properties.getExecutionTable();
         this.rowMapper = new SchedulerExecutionRowMapper();
+        this.byStatePagingQueryProvider = getPagingQueryProvider("S.state = ?");
+        this.findAllPagingQueryProvider = getPagingQueryProvider(null);
     }
 
     @Override
@@ -93,14 +101,18 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
     }
 
     @Override
-    public SchedulerExecution findById(final Long id) {
+    public SchedulerExecution findById(final Long id) throws SchedulerExecutionNotFoundException {
         final String query = String.format(FIND_BY_ID, this.tableName);
-        return this.jdbcTemplate.queryForObject(
-                query,
-                new Object[]{id},
-                new int[]{Types.NUMERIC},
-                this.rowMapper
-        );
+        try {
+            return this.jdbcTemplate.queryForObject(
+                    query,
+                    new Object[]{id},
+                    new int[]{Types.NUMERIC},
+                    this.rowMapper
+            );
+        } catch (final Exception e) {
+            throw new SchedulerExecutionNotFoundException("Could not find SchedulerExecution for id " + id, e);
+        }
     }
 
     @Override
@@ -133,6 +145,22 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
     }
 
     @Override
+    public List<SchedulerExecution> findAll(final int startIndex, final int pageSize) {
+        if (startIndex <= 0) {
+            return this.jdbcTemplate.query(this.findAllPagingQueryProvider.generateFirstPageQuery(pageSize),
+                    this.rowMapper);
+        }
+        try {
+            final Long startAfterValue = this.jdbcTemplate.queryForObject(
+                    this.findAllPagingQueryProvider.generateJumpToItemQuery(startIndex, pageSize), Long.class);
+            return this.jdbcTemplate.query(this.findAllPagingQueryProvider.generateRemainingPagesQuery(pageSize),
+                    this.rowMapper, startAfterValue);
+        } catch (final IncorrectResultSizeDataAccessException e) {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
     public List<SchedulerExecution> findNextExecutions(final Date date) {
         final String query = String.format(FIND_BY_LESS_EQUAL_DATE, this.tableName);
         return this.jdbcTemplate.query(
@@ -152,6 +180,22 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
                 new int[]{Types.NUMERIC},
                 this.rowMapper
         );
+    }
+
+    @Override
+    public List<SchedulerExecution> findByState(final Integer state, final int startIndex, final int pageSize) {
+        if (startIndex <= 0) {
+            return this.jdbcTemplate.query(this.byStatePagingQueryProvider.generateFirstPageQuery(pageSize),
+                    this.rowMapper, state);
+        }
+        try {
+            final Long startAfterValue = this.jdbcTemplate.queryForObject(
+                    this.byStatePagingQueryProvider.generateJumpToItemQuery(startIndex, pageSize), Long.class, state);
+            return this.jdbcTemplate.query(this.byStatePagingQueryProvider.generateRemainingPagesQuery(pageSize),
+                    this.rowMapper, state, startAfterValue);
+        } catch (final IncorrectResultSizeDataAccessException e) {
+            return Collections.emptyList();
+        }
     }
 
     @Override
@@ -221,6 +265,24 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
         return schedulerExecution;
     }
 
+    private PagingQueryProvider getPagingQueryProvider(final String whereClause) throws Exception {
+        return this.getPagingQueryProvider(null, whereClause);
+    }
+
+    private PagingQueryProvider getPagingQueryProvider(String fromClause, String whereClause) throws Exception {
+        final SqlPagingQueryProviderFactoryBean factory = new SqlPagingQueryProviderFactoryBean();
+        factory.setDataSource(this.jdbcTemplate.getDataSource());
+        fromClause = "%s S" + (fromClause == null ? "" : ", " + fromClause);
+        factory.setFromClause(String.format(fromClause, this.tableName));
+        factory.setSelectClause(FIELDS);
+        final Map<String, Order> sortKeys = new HashMap<>();
+        sortKeys.put("id", Order.ASCENDING);
+        factory.setSortKeys(sortKeys);
+        whereClause = whereClause == null ? "" : whereClause;
+        factory.setWhereClause(whereClause);
+        return factory.getObject();
+    }
+
     private static class SchedulerExecutionRowMapper implements RowMapper<SchedulerExecution> {
 
         @Override
@@ -229,9 +291,9 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
             final SchedulerExecution schedulerExecution = new SchedulerExecution();
             schedulerExecution.setId(resultSet.getLong(SchedulerExecutionDomain.ID));
             schedulerExecution.setSchedulerConfigurationId(resultSet.getLong(SchedulerExecutionDomain.SCHEDULER_CONFIGURATION_ID));
-            schedulerExecution.setNextFireTime(new Date(resultSet.getDate(SchedulerExecutionDomain.NEXT_FIRE_TIME).getTime()));
+            schedulerExecution.setNextFireTime(new Date(resultSet.getTimestamp(SchedulerExecutionDomain.NEXT_FIRE_TIME).getTime()));
             schedulerExecution.setState(resultSet.getInt(SchedulerExecutionDomain.STATE));
-            schedulerExecution.setExecutionCount(resultSet.getInt(SchedulerExecutionDomain.STATE));
+            schedulerExecution.setExecutionCount(resultSet.getInt(SchedulerExecutionDomain.EXECUTION_COUNT));
             return schedulerExecution;
         }
     }

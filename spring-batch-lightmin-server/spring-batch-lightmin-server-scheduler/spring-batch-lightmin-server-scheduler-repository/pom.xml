@@ -15,6 +15,7 @@
         <module>spring-batch-lightmin-server-scheduler-repository-core</module>
         <module>spring-batch-lightmin-server-scheduler-repository-jdbc</module>
         <module>spring-batch-lightmin-server-scheduler-repository-test</module>
+        <module>spring-batch-lightmin-server-scheduler-repository-map</module>
     </modules>
 
 

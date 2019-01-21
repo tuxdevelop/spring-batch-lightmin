@@ -4,6 +4,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 
 public class SchedulerConfigurationService {
 
@@ -27,7 +28,7 @@ public class SchedulerConfigurationService {
     }
 
     @Transactional(readOnly = true)
-    public SchedulerConfiguration findById(final Long id) {
+    public SchedulerConfiguration findById(final Long id) throws SchedulerConfigurationNotFoundException {
         return this.schedulerConfigurationRepository.findById(id);
     }
 }
