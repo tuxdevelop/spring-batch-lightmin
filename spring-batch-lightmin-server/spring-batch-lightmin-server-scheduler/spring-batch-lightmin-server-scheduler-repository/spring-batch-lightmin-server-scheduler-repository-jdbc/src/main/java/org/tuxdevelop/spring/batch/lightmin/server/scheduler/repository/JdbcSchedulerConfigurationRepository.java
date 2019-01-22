@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.configuration.ServerSchedulerJdbcConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerValidationException;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
 
@@ -49,13 +50,16 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
     @Override
     public SchedulerConfiguration save(final SchedulerConfiguration schedulerConfiguration) {
         final SchedulerConfiguration result;
-
-        if (schedulerConfiguration.getId() != null) {
-            result = this.schedulerConfigurationDAO.update(schedulerConfiguration);
+        if (schedulerConfiguration != null) {
+            if (schedulerConfiguration.getId() != null) {
+                result = this.schedulerConfigurationDAO.update(schedulerConfiguration);
+            } else {
+                result = this.schedulerConfigurationDAO.save(schedulerConfiguration);
+            }
+            return result;
         } else {
-            result = this.schedulerConfigurationDAO.save(schedulerConfiguration);
+            throw new SchedulerValidationException("schedulerConfiguration must not be null");
         }
-        return result;
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.configuration.ServerSchedulerJdbcConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerValidationException;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerExecutionNotFoundException;
 
 import java.sql.ResultSet;
@@ -90,14 +91,17 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
     public SchedulerExecution save(final SchedulerExecution schedulerExecution) {
 
         final SchedulerExecution result;
+        if (schedulerExecution != null) {
 
-        if (schedulerExecution.getId() == null) {
-            result = create(schedulerExecution);
+            if (schedulerExecution.getId() == null) {
+                result = create(schedulerExecution);
+            } else {
+                result = update(schedulerExecution);
+            }
+            return result;
         } else {
-            result = update(schedulerExecution);
+            throw new SchedulerValidationException("schedulerExecution must not be null");
         }
-
-        return result;
     }
 
     @Override

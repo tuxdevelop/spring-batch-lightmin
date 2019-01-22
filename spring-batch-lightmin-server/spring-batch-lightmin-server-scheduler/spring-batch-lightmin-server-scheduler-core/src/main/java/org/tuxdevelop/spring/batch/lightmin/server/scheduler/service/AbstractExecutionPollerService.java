@@ -23,6 +23,7 @@ public abstract class AbstractExecutionPollerService {
         this.threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         this.threadPoolTaskExecutor.setCorePoolSize(properties.getThreadPoolCoreSize());
         this.threadPoolTaskExecutor.setMaxPoolSize(properties.getThreadPoolSize());
+        this.threadPoolTaskExecutor.afterPropertiesSet();
     }
 
     public void triggerScheduledExecutions() {

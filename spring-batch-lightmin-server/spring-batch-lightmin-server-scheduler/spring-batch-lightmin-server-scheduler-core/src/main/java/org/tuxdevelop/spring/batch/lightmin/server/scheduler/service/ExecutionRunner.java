@@ -10,7 +10,6 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.util.ApiParameterParser
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
-import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
 
 import java.util.ArrayList;
@@ -75,6 +74,7 @@ public class ExecutionRunner implements Runnable {
             this.executionRunnerService.createNextExecution(this.schedulerExecution, cronExpression);
         } catch (final Exception e) {
             //TODO: log and what to do?
+            log.error("Error while creating next execution for {}", this.schedulerExecution, e);
         }
     }
 
@@ -124,6 +124,7 @@ public class ExecutionRunner implements Runnable {
 
 
     private void launchJob(final JobLaunch jobLaunch, final LightminClientApplication lightminClientApplication) {
+        log.debug("Launching {} for client instance {}", jobLaunch, lightminClientApplication);
         this.executionRunnerService.launchJob(jobLaunch, lightminClientApplication);
     }
 
@@ -140,10 +141,6 @@ public class ExecutionRunner implements Runnable {
         final JobParameters jobParameters = ApiParameterParser.parseParametersToJobParameters(parametersString);
         attachIncremeter(schedulerConfiguration.getJobIncrementer(), jobParameters);
         return jobParameters;
-    }
-
-    private SchedulerConfiguration getSchedulerConfiguration(final Long id) throws SchedulerConfigurationNotFoundException {
-        return this.executionRunnerService.findSchedulerConfigurationById(id);
     }
 
     private void attachIncremeter(final JobIncrementer jobIncrementer, final JobParameters jobParameters) {

@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerValidationException;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerExecutionNotFoundException;
 
 import java.util.*;
@@ -14,23 +15,28 @@ public class MapSchedulerExecutionRepository implements SchedulerExecutionReposi
     private final AtomicLong currentId = new AtomicLong(1L);
 
     @Override
-    public SchedulerExecution save(final SchedulerExecution schedulerExecution) {
+    public synchronized SchedulerExecution save(final SchedulerExecution schedulerExecution) {
         final Long id;
-        if (schedulerExecution.getId() != null) {
-            id = schedulerExecution.getId();
+        if (schedulerExecution != null) {
+            if (schedulerExecution.getId() != null) {
+                id = schedulerExecution.getId();
+            } else {
+                id = getNextId();
+                schedulerExecution.setId(id);
+            }
+            this.store.put(id, copy(schedulerExecution));
+            return schedulerExecution;
         } else {
-            id = getNextId();
-            schedulerExecution.setId(id);
+            throw new SchedulerValidationException("schedulerExecution must not be null");
         }
-        this.store.put(id, schedulerExecution);
-        return schedulerExecution;
+
     }
 
     @Override
     public SchedulerExecution findById(final Long id) throws SchedulerExecutionNotFoundException {
         final SchedulerExecution schedulerExecution;
         if (this.store.containsKey(id)) {
-            schedulerExecution = this.store.get(id);
+            schedulerExecution = copy(this.store.get(id));
         } else {
             throw new SchedulerExecutionNotFoundException("Could not find a SchedulerExecution for id " + id);
         }
@@ -69,7 +75,7 @@ public class MapSchedulerExecutionRepository implements SchedulerExecutionReposi
         if (this.store.isEmpty()) {
             log.debug("No SchedulerExecutions available");
         } else {
-            schedulerExecutions.addAll(this.store.values());
+            schedulerExecutions.addAll(copy(this.store.values()));
             this.sort(schedulerExecutions);
         }
         return schedulerExecutions;
@@ -169,7 +175,29 @@ public class MapSchedulerExecutionRepository implements SchedulerExecutionReposi
     }
 
     private void sort(final List<SchedulerExecution> schedulerExecutions) {
-        schedulerExecutions.sort((schedulerExecution, schedulerExecutionToCompare)
-                -> Long.signum(schedulerExecution.getId() - schedulerExecutionToCompare.getId()));
+        if (schedulerExecutions != null && !schedulerExecutions.isEmpty() && schedulerExecutions.size() > 1) {
+            schedulerExecutions.sort((schedulerExecution, schedulerExecutionToCompare)
+                    -> Long.signum(schedulerExecution.getId() - schedulerExecutionToCompare.getId()));
+        } else {
+            log.trace("Empty Collection, nothing to sort");
+        }
+    }
+
+    private List<SchedulerExecution> copy(final Collection<SchedulerExecution> schedulerExecutions) {
+        final List<SchedulerExecution> copy = new ArrayList<>();
+        for (final SchedulerExecution schedulerExecution : schedulerExecutions) {
+            copy.add(copy(schedulerExecution));
+        }
+        return copy;
+    }
+
+    private SchedulerExecution copy(final SchedulerExecution schedulerExecution) {
+        final SchedulerExecution copy = new SchedulerExecution();
+        copy.setSchedulerConfigurationId(schedulerExecution.getSchedulerConfigurationId());
+        copy.setNextFireTime(schedulerExecution.getNextFireTime());
+        copy.setState(schedulerExecution.getState());
+        copy.setExecutionCount(schedulerExecution.getExecutionCount());
+        copy.setId(schedulerExecution.getId());
+        return copy;
     }
 }

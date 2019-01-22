@@ -2,12 +2,10 @@ package org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerValidationException;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
@@ -19,21 +17,25 @@ public class MapSchedulerConfigurationRepository implements SchedulerConfigurati
     @Override
     public SchedulerConfiguration save(final SchedulerConfiguration schedulerConfiguration) {
         final Long id;
-        if (schedulerConfiguration.getId() != null) {
-            id = schedulerConfiguration.getId();
+        if (schedulerConfiguration != null) {
+            if (schedulerConfiguration.getId() != null) {
+                id = schedulerConfiguration.getId();
+            } else {
+                id = getNextId();
+                schedulerConfiguration.setId(id);
+            }
+            this.store.put(id, copy(schedulerConfiguration));
+            return schedulerConfiguration;
         } else {
-            id = getNextId();
-            schedulerConfiguration.setId(id);
+            throw new SchedulerValidationException("schedulerConfiguration must not be null");
         }
-        this.store.put(id, schedulerConfiguration);
-        return schedulerConfiguration;
     }
 
     @Override
     public SchedulerConfiguration findById(final Long id) throws SchedulerConfigurationNotFoundException {
         final SchedulerConfiguration schedulerConfiguration;
         if (this.store.containsKey(id)) {
-            schedulerConfiguration = this.store.get(id);
+            schedulerConfiguration = copy(this.store.get(id));
         } else {
             throw new SchedulerConfigurationNotFoundException("Could not find a SchedulerConfiguration for id " + id);
         }
@@ -58,7 +60,7 @@ public class MapSchedulerConfigurationRepository implements SchedulerConfigurati
         if (this.store.isEmpty()) {
             log.debug("No SchedulerConfigurations available");
         } else {
-            schedulerConfigurations.addAll(this.store.values());
+            schedulerConfigurations.addAll(copy(this.store.values()));
             this.sort(schedulerConfigurations);
         }
         return schedulerConfigurations;
@@ -95,6 +97,28 @@ public class MapSchedulerConfigurationRepository implements SchedulerConfigurati
 
     private synchronized Long getNextId() {
         return this.currentId.getAndIncrement();
+    }
+
+    private List<SchedulerConfiguration> copy(final Collection<SchedulerConfiguration> schedulerConfigurations) {
+        final List<SchedulerConfiguration> copy = new ArrayList<>();
+        for (final SchedulerConfiguration schedulerConfiguration : schedulerConfigurations) {
+            copy.add(copy(schedulerConfiguration));
+        }
+        return copy;
+    }
+
+    private SchedulerConfiguration copy(final SchedulerConfiguration schedulerConfiguration) {
+        final SchedulerConfiguration copy = new SchedulerConfiguration();
+        copy.setId(schedulerConfiguration.getId());
+        copy.setCronExpression(schedulerConfiguration.getCronExpression());
+        copy.setJobParameters(schedulerConfiguration.getJobParameters());
+        copy.setJobIncrementer(schedulerConfiguration.getJobIncrementer());
+        copy.setRetriable(schedulerConfiguration.getRetriable());
+        copy.setInstanceExecutionCount(schedulerConfiguration.getInstanceExecutionCount());
+        copy.setMaxRetries(schedulerConfiguration.getMaxRetries());
+        copy.setJobName(schedulerConfiguration.getJobName());
+        copy.setApplication(schedulerConfiguration.getApplication());
+        return copy;
     }
 
     private List<SchedulerConfiguration> subset(final List<SchedulerConfiguration> schedulerConfigurations,
