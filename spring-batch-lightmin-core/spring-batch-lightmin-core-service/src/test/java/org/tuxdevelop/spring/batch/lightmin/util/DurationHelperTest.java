@@ -15,7 +15,7 @@ public class DurationHelperTest {
         final Date startTime = new Date(0);
         final Date endTime = new Date(duration);
         final String durationValue = DurationHelper.createDurationValue(startTime, endTime);
-        assertThat(durationValue).isEqualTo(String.valueOf(expected));
+        assertThat(durationValue).isEqualTo(expected);
     }
 
     @Test

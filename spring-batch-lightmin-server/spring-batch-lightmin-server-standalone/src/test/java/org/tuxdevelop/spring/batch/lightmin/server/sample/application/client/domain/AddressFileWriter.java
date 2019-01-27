@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Component
@@ -33,8 +34,8 @@ public class AddressFileWriter {
         } catch (final IOException e) {
             e.printStackTrace();
         }
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file), "utf-8"))) {
+        try (final Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), StandardCharsets.UTF_8))) {
             writer.write("zip_code;city;street;house_number");
             for (int i = 0; i < FILE_ROWS; i++) {
                 final BatchTaskAddress batchTaskAddress = createBatchTaskAddress();
