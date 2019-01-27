@@ -14,6 +14,8 @@ image::lightmin_architecture.001.jpeg[]
 
 The full documentation can be found at
 
+=======
+* http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/2.0.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[2.x] (Spring Boot 2.1.x)
 * http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/1.0.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[1.x] (Spring Boot 1.5.x)
 * http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/0.5.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[0.5.x] (old design - Spring Boot 1.5.x)
 
@@ -22,6 +24,14 @@ The full documentation can be found at
 All samples for _Spring Batch Lightmin_ can be found at https://github.com/tuxdevelop/spring-batch-lightmin-samples[Sample Applications]
 
 == Getting Started
+
+[IMPORTANT]
+====
+Spring 5.1.x set the the property _spring.main.allow-bean-definition-overriding_ to **false** as a default.
+In order to use the current version of Spring Batch Lightmin, this property has to be set to **true**.
+
+This issue can hopefully be solved in the upcoming releases.
+====
 
 The following section describes a quick start guide to setup the client server architecture.
 If your want to get an overview of the configuration options, please read the documentation.
@@ -38,7 +48,7 @@ Add the _Spring Batch Lightmin BOM_ to the dependency management section of your
     <artifactId>spring-batch-lightmin-bom</artifactId>
     <version>${spring-batch-lightmin.version}</version>
     <type>pom</type>
-    <scope>import</type>
+    <scope>import</scope>
 </dependency>
 ----
 

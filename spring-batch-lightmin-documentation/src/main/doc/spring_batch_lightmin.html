@@ -509,82 +509,6 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_about">About</a></li>
 <li><a href="#_architecture">Architecture</a></li>
 <li><a href="#_documentation">Documentation</a></li>
-<li><a href="#_samples">Samples</a></li>
-<li><a href="#_getting_started">Getting Started</a>
-<ul class="sectlevel2">
-<li><a href="#_spring_batch_lightmin_bom">Spring Batch Lightmin BOM</a></li>
-<li><a href="#_setting_up_the_server">Setting up the Server</a></li>
-<li><a href="#_setting_up_a_client">Setting up a Client</a></li>
-</ul>
-</li>
-<li><a href="#_remote_repository_server">Remote Repository Server</a>
-<ul class="sectlevel2">
-<li><a href="#_maven">Maven</a></li>
-<li><a href="#_configuration">Configuration</a></li>
-</ul>
-</li>
-<li><a href="#_embedded_lightmin">Embedded Lightmin</a>
-<ul class="sectlevel2">
-<li><a href="#_maven_2">Maven</a></li>
-<li><a href="#_configuration_2">Configuration</a></li>
-</ul>
-</li>
-<li><a href="#_server_user_interface">Server User Interface</a>
-<ul class="sectlevel2">
-<li><a href="#_applications">Applications</a></li>
-<li><a href="#_application_instance_dashboard">Application Instance Dashboard</a></li>
-<li><a href="#_batch_jobs">Batch Jobs</a></li>
-<li><a href="#_batch_job_executions">Batch Job Executions</a></li>
-<li><a href="#_job_execution">Job Execution</a></li>
-<li><a href="#_job_scheduler">Job Scheduler</a></li>
-<li><a href="#_job_listener">Job Listener</a></li>
-<li><a href="#_job_launcher">Job Launcher</a></li>
-<li><a href="#_job_execution_events">Job Execution Events</a></li>
-<li><a href="#_journal">Journal</a></li>
-</ul>
-</li>
-<li><a href="#_server_configuration">Server Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#_context_path">Context Path</a></li>
-<li><a href="#_heartbeat_period">Heartbeat period</a></li>
-<li><a href="#_credentials">Credentials</a></li>
-<li><a href="#_server_side_auto_discovery">Server Side auto discovery</a></li>
-<li><a href="#_server_behind_a_proxy_2">Server behind a Proxy</a></li>
-<li><a href="#_custom_ui_logo_and_text">Custom UI Logo and Text</a></li>
-</ul>
-</li>
-<li><a href="#_client_configuration">Client Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#_core">Core</a></li>
-<li><a href="#_classic_client">Classic Client</a></li>
-<li><a href="#_discovery_client">Discovery Client</a></li>
-</ul>
-</li>
-<li><a href="#_job_configuration_repository_configuration">Job Configuration Repository Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#_jdbc_configuration_repository">Jdbc Configuration Repository</a></li>
-<li><a href="#_remote_configuration_repository">Remote Configuration Repository</a></li>
-</ul>
-</li>
-<li><a href="#_batch_configuration">Batch Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#_repository_type">Repository Type</a></li>
-<li><a href="#_jdbc_jobrepository_configuration">Jdbc JobRepository Configuration</a></li>
-</ul>
-</li>
-<li><a href="#_job_configurations">Job Configurations</a>
-<ul class="sectlevel2">
-<li><a href="#_anatomy_of_a_job_configuration">Anatomy of a Job Configuration</a></li>
-<li><a href="#_jobconfiguration_repository">JobConfiguration Repository</a></li>
-</ul>
-</li>
-<li><a href="#_rest_api">REST API</a>
-<ul class="sectlevel2">
-<li><a href="#_server">Server</a></li>
-<li><a href="#_client">Client</a></li>
-<li><a href="#_remote_repository_2">Remote Repository</a></li>
-</ul>
-</li>
 </ul>
 </div>
 </div>
@@ -613,8 +537,13 @@ table.CodeRay td.code>pre{padding:0}
 <div class="paragraph">
 <p>The full documentation can be found at</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="ulist">
 <ul>
+<li>
+<p><a href="http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/2.0.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html">2.x</a> (Spring Boot 2.1.x)</p>
+</li>
 <li>
 <p><a href="http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/1.0.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html">1.x</a> (Spring Boot 1.5.x)</p>
 </li>
@@ -623,26 +552,41 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>== Samples</p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_samples">Samples</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>All samples for <em>Spring Batch Lightmin</em> can be found at <a href="https://github.com/tuxdevelop/spring-batch-lightmin-samples">Sample Applications</a></p>
 </div>
+<div class="paragraph">
+<p>== Getting Started</p>
 </div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Spring 5.1.x set the the property <em>spring.main.allow-bean-definition-overriding</em> to <strong>false</strong> as a default.
+In order to use the current version of Spring Batch Lightmin, this property has to be set to <strong>true</strong>.</p>
 </div>
-<div class="sect1">
-<h2 id="_getting_started">Getting Started</h2>
-<div class="sectionbody">
+<div class="paragraph">
+<p>This issue can hopefully be solved in the upcoming releases.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>The following section describes a quick start guide to setup the client server architecture.
 If your want to get an overview of the configuration options, please read the documentation.
 The getting started guide for the <em>Embedded Mode</em> can be found in the section <em>Embedded Lightmin</em>.</p>
 </div>
-<div class="sect2">
-<h3 id="_spring_batch_lightmin_bom">Spring Batch Lightmin BOM</h3>
+<div class="paragraph">
+<p>=== Spring Batch Lightmin BOM</p>
+</div>
 <div class="paragraph">
 <p>Add the <em>Spring Batch Lightmin BOM</em> to the dependency management section of your project.</p>
 </div>
@@ -653,13 +597,13 @@ The getting started guide for the <em>Embedded Mode</em> can be found in the sec
     <span class="tag">&lt;artifactId&gt;</span>spring-batch-lightmin-bom<span class="tag">&lt;/artifactId&gt;</span>
     <span class="tag">&lt;version&gt;</span>${spring-batch-lightmin.version}<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;type&gt;</span>pom<span class="tag">&lt;/type&gt;</span>
-    <span class="tag">&lt;scope&gt;</span>import<span class="tag">&lt;/type&gt;</span>
+    <span class="tag">&lt;scope&gt;</span>import<span class="tag">&lt;/scope&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Setting up the Server</p>
 </div>
-<div class="sect2">
-<h3 id="_setting_up_the_server">Setting up the Server</h3>
 <div class="paragraph">
 <p>The server component is currently only available in a standalone mode. This means, the servers do not sync the state between each other.
 A cluster mode will be added in a future release.</p>
@@ -667,8 +611,9 @@ A cluster mode will be added in a future release.</p>
 <div class="paragraph">
 <p>The server itself is also a <em>Spring Boot</em> application.</p>
 </div>
-<div class="sect3">
-<h4 id="_maven_dependencies">Maven Dependencies</h4>
+<div class="paragraph">
+<p>==== Maven Dependencies</p>
+</div>
 <div class="paragraph">
 <p>The following dependency has to added to your project.</p>
 </div>
@@ -681,9 +626,9 @@ A cluster mode will be added in a future release.</p>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Enable the Server</p>
 </div>
-<div class="sect3">
-<h4 id="_enable_the_server">Enable the Server</h4>
 <div class="paragraph">
 <p>In order to enable the server, the annotation <em>@EnableLightminServer</em> has to added to one of the <em>@Configuration</em> classes.</p>
 </div>
@@ -696,9 +641,9 @@ A cluster mode will be added in a future release.</p>
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Service Discovery</p>
 </div>
-<div class="sect3">
-<h4 id="_service_discovery">Service Discovery</h4>
 <div class="paragraph">
 <p>Depending on the clients, the server is also able to find the clients via service discovery.</p>
 </div>
@@ -715,9 +660,9 @@ and the following property has to set to true</p>
         <span class="key">discovery-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Server behind a Proxy</p>
 </div>
-<div class="sect3">
-<h4 id="_server_behind_a_proxy">Server behind a Proxy</h4>
 <div class="paragraph">
 <p>The server frontend  uses redirects and the <em>HOST</em> header is taken to create the redirect urls. This is the default behaviour of Spring MVC.
 If the server frontend is running behind a proxy, the implementation of the server takes care, that the <em>X-FORWARD-PREFIX</em> header is used as well.</p>
@@ -735,20 +680,21 @@ to use the <em>X-FORWARDED-HOST</em> header to build the redirect urls.</p>
         <span class="key">use-x-forwarded-headers</span>: <span class="string"><span class="content">true</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Setting up a Client</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_setting_up_a_client">Setting up a Client</h3>
 <div class="paragraph">
 <p>The client applications are responsible to provide <em>Spring Batch Job</em> definitions. The <em>Spring Batch Lightmin</em> client framework provides all the configurations to set up <em>Spring Batch</em> and the communication with the server.</p>
 </div>
-<div class="sect3">
-<h4 id="_step_one_client_type">Step one - Client type</h4>
+<div class="paragraph">
+<p>==== Step one - Client type</p>
+</div>
 <div class="paragraph">
 <p>The type of the client decides how the registration to the server should be done. Currently to types are supported, classic and via service discovery.</p>
 </div>
-<div class="sect4">
-<h5 id="_classic">Classic</h5>
+<div class="paragraph">
+<p>===== Classic</p>
+</div>
 <div class="paragraph">
 <p>The classic client has to know where the servers are located and will send a registration request after the start up.</p>
 </div>
@@ -803,15 +749,16 @@ The annotation <em>@EnableLightminClientClassic</em> has to added to one of the 
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>===== Service Discovery</p>
 </div>
-<div class="sect4">
-<h5 id="_service_discovery_2">Service Discovery</h5>
 <div class="paragraph">
 <p><em>Spring Batch Lightmin</em> provides two implementations for the discovery client type.
 Both implementations add a tags to the underlying service discovery technology, so the server could identify lightmin clients.</p>
 </div>
-<div class="sect5">
-<h6 id="_consul_client">Consul Client</h6>
+<div class="paragraph">
+<p>====== Consul Client</p>
+</div>
 <div class="paragraph">
 <p>The following dependency has to added for the consul client</p>
 </div>
@@ -863,9 +810,9 @@ Both implementations add a tags to the underlying service discovery technology, 
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>====== Eureka Client</p>
 </div>
-<div class="sect5">
-<h6 id="_eureka_client">Eureka Client</h6>
 <div class="paragraph">
 <p>The following dependency has to added for the eureka client</p>
 </div>
@@ -917,11 +864,9 @@ Both implementations add a tags to the underlying service discovery technology, 
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>==== Step two - The Configuration Repository</p>
 </div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_step_two_the_configuration_repository">Step two - The Configuration Repository</h4>
 <div class="paragraph">
 <p>The <em>Configuration Repository</em> is the component which stores the scheduler and listener configurations of the lightmin clients.
 This configurations are loaded at start time and can be managed with the server frontend or API calls.</p>
@@ -942,8 +887,9 @@ This configurations are loaded at start time and can be managed with the server 
 </li>
 </ul>
 </div>
-<div class="sect4">
-<h5 id="_map_repository">Map Repository</h5>
+<div class="paragraph">
+<p>===== Map Repository</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
@@ -969,9 +915,9 @@ This configurations are loaded at start time and can be managed with the server 
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Jdbc Repository</p>
 </div>
-<div class="sect4">
-<h5 id="_jdbc_repository">Jdbc Repository</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
@@ -1030,9 +976,9 @@ More configuration options can be found in the documentation.</p>
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="error">org/tuxdevelop/spring/batch/lightmin/repository</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Remote Repository</p>
 </div>
-<div class="sect4">
-<h5 id="_remote_repository">Remote Repository</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
@@ -1108,10 +1054,9 @@ More configuration options can be found in the documentation.</p>
 <div class="paragraph">
 <p>Further configuration options can be found in the documentation.</p>
 </div>
+<div class="paragraph">
+<p>==== Step three - Configure Spring Batch</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_step_three_configure_spring_batch">Step three - Configure Spring Batch</h4>
 <div class="paragraph">
 <p>The client configurations are enabling the <em>Spring Batch</em> stack as well. <em>Spring Batch</em> itself has to have a configured <em>JobRepository</em>.
 This <em>JobRepository</em> can be in memory via map or jdbc.</p>
@@ -1119,8 +1064,9 @@ This <em>JobRepository</em> can be in memory via map or jdbc.</p>
 <div class="paragraph">
 <p>The configuration of the <em>JobRepository</em> can be done via properties, so <em>Spring Batch Lightmin</em> knows what to configure.</p>
 </div>
-<div class="sect4">
-<h5 id="_map_jobrepository">Map JobRepository</h5>
+<div class="paragraph">
+<p>===== Map JobRepository</p>
+</div>
 <div class="paragraph">
 <p>For the map repository, the following configuration is enough:</p>
 </div>
@@ -1133,9 +1079,9 @@ This <em>JobRepository</em> can be in memory via map or jdbc.</p>
         <span class="key">repository-type</span>: <span class="string"><span class="content">map</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Jdbc Repository</p>
 </div>
-<div class="sect4">
-<h5 id="_jdbc_repository_2">Jdbc Repository</h5>
 <div class="paragraph">
 <p>For the jdbc repository, the following configuration is enough:</p>
 </div>
@@ -1151,10 +1097,9 @@ This <em>JobRepository</em> can be in memory via map or jdbc.</p>
 <div class="paragraph">
 <p>Properties like dataSource name, table prefix etc. can be overridden as well. Please check the documentation for more details.</p>
 </div>
+<div class="paragraph">
+<p>==== Clients in Containers</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_clients_in_containers">Clients in Containers</h4>
 <div class="paragraph">
 <p>If a client runs inside a container like <em>Docker</em>, the dns name of the host systems has to be transferred to server on registration time.
 For this use case, a property is available.</p>
@@ -1168,21 +1113,18 @@ For this use case, a property is available.</p>
         <span class="key">hostname</span>: <span class="string"><span class="content">FQDN of the host</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>== Remote Repository Server</p>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_remote_repository_server">Remote Repository Server</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>The <em>Remote Repository Server</em> is a <em>Spring Boot</em> application which provides a REST API for clients.</p>
 </div>
 <div class="paragraph">
 <p>The server itself needs a job configuration repository itself. The server supports map and jdbc.</p>
 </div>
-<div class="sect2">
-<h3 id="_maven">Maven</h3>
+<div class="paragraph">
+<p>=== Maven</p>
+</div>
 <div class="paragraph">
 <p>For the Jdbc repository, the following dependencies have to be added.</p>
 </div>
@@ -1201,9 +1143,9 @@ For this use case, a property is available.</p>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Configuration</p>
 </div>
-<div class="sect2">
-<h3 id="_configuration">Configuration</h3>
 <div class="paragraph">
 <p>The configuration of the used repository can be found in the client section.</p>
 </div>
@@ -1223,17 +1165,15 @@ For this use case, a property is available.</p>
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>== Embedded Lightmin</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_embedded_lightmin">Embedded Lightmin</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>If the client server architecture does not fit the requirements, <em>Spring Batch Lightmin</em> also provides am embedded mode, which ships the client and server in one package.</p>
 </div>
-<div class="sect2">
-<h3 id="_maven_2">Maven</h3>
+<div class="paragraph">
+<p>=== Maven</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
@@ -1243,9 +1183,9 @@ For this use case, a property is available.</p>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Configuration</p>
 </div>
-<div class="sect2">
-<h3 id="_configuration_2">Configuration</h3>
 <div class="paragraph">
 <p>In this case, a specific client does not have to be configured. The <em>Job Configuration Repository</em> and <em>Spring Batch</em> have to be configured like for a regular client.</p>
 </div>
@@ -1271,14 +1211,12 @@ For this use case, a property is available.</p>
         <span class="key">repository-type</span>: <span class="string"><span class="content">map</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>== Server User Interface</p>
 </div>
+<div class="paragraph">
+<p>=== Applications</p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_server_user_interface">Server User Interface</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_applications">Applications</h3>
 <div class="paragraph">
 <p>The start page of the <em>SpringBatchLightmin</em> shows all register applications. The status icon shows the current health status of the application.</p>
 </div>
@@ -1287,9 +1225,9 @@ For this use case, a property is available.</p>
 <img src="images/applications.png" alt="applications">
 </div>
 </div>
+<div class="paragraph">
+<p>=== Application Instance Dashboard</p>
 </div>
-<div class="sect2">
-<h3 id="_application_instance_dashboard">Application Instance Dashboard</h3>
 <div class="paragraph">
 <p>The application dashboard is the entry point to the monitoring and administration of a client application instance. The overview shows the important endpoints, all known <em>Spring Batch Jobs</em> and configured external links of the client application.</p>
 </div>
@@ -1298,9 +1236,9 @@ For this use case, a property is available.</p>
 <img src="images/dashboard.png" alt="dashboard">
 </div>
 </div>
+<div class="paragraph">
+<p>=== Batch Jobs</p>
 </div>
-<div class="sect2">
-<h3 id="_batch_jobs">Batch Jobs</h3>
 <div class="paragraph">
 <p>The batch jobs overview shows all registered batch jobs of the application instance and the execution count of them.</p>
 </div>
@@ -1309,9 +1247,9 @@ For this use case, a property is available.</p>
 <img src="images/batch-jobs.png" alt="batch jobs">
 </div>
 </div>
+<div class="paragraph">
+<p>=== Batch Job Executions</p>
 </div>
-<div class="sect2">
-<h3 id="_batch_job_executions">Batch Job Executions</h3>
 <div class="paragraph">
 <p>The view  shows an overview of all executions for the selected job. To get details of the job execution,
 click on the desired id.</p>
@@ -1321,9 +1259,9 @@ click on the desired id.</p>
 <img src="images/batch-job.png" alt="batch job">
 </div>
 </div>
+<div class="paragraph">
+<p>=== Job Execution</p>
 </div>
-<div class="sect2">
-<h3 id="_job_execution">Job Execution</h3>
 <div class="paragraph">
 <p>The job execution view shows you a detailed overview about the job and step executions of the selected job execution.</p>
 </div>
@@ -1332,9 +1270,9 @@ click on the desired id.</p>
 <img src="images/job-execution.png" alt="job execution">
 </div>
 </div>
+<div class="paragraph">
+<p>=== Job Scheduler</p>
 </div>
-<div class="sect2">
-<h3 id="_job_scheduler">Job Scheduler</h3>
 <div class="paragraph">
 <p><em>Job Scheduler Configurations</em> are cron or time based scheduler.</p>
 </div>
@@ -1343,77 +1281,75 @@ click on the desired id.</p>
 <img src="images/scheduler.png" alt="scheduler">
 </div>
 </div>
-<div class="sect3">
-<h4 id="_add_job_scheduler_configuration">Add Job Scheduler Configuration</h4>
-<div class="sect4">
-<h5 id="_period_scheduler">Period Scheduler</h5>
+<div class="paragraph">
+<p>==== Add Job Scheduler Configuration</p>
+</div>
+<div class="paragraph">
+<p>===== Period Scheduler</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="images/scheduler-period-add.png" alt="scheduler period add">
 </div>
 </div>
+<div class="paragraph">
+<p>===== Cron Scheduler</p>
 </div>
-<div class="sect4">
-<h5 id="_cron_scheduler">Cron Scheduler</h5>
 <div class="imageblock">
 <div class="content">
 <img src="images/scheduler-cron-add.png" alt="scheduler cron add">
 </div>
 </div>
+<div class="paragraph">
+<p>=== Job Listener</p>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_job_listener">Job Listener</h3>
 <div class="imageblock">
 <div class="content">
 <img src="images/listener.png" alt="listener">
 </div>
 </div>
-<div class="sect3">
-<h4 id="_add_job_listener_configuration">Add Job Listener configuration</h4>
+<div class="paragraph">
+<p>==== Add Job Listener configuration</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="images/listener-add.png" alt="listener add">
 </div>
 </div>
+<div class="paragraph">
+<p>=== Job Launcher</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_job_launcher">Job Launcher</h3>
 <div class="imageblock">
 <div class="content">
 <img src="images/job-launcher.png" alt="job launcher">
 </div>
 </div>
+<div class="paragraph">
+<p>=== Job Execution Events</p>
 </div>
-<div class="sect2">
-<h3 id="_job_execution_events">Job Execution Events</h3>
 <div class="imageblock">
 <div class="content">
 <img src="images/job-execution-events.png" alt="job execution events">
 </div>
 </div>
+<div class="paragraph">
+<p>=== Journal</p>
 </div>
-<div class="sect2">
-<h3 id="_journal">Journal</h3>
 <div class="imageblock">
 <div class="content">
 <img src="images/journal.png" alt="journal">
 </div>
 </div>
+<div class="paragraph">
+<p>== Server Configuration</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_server_configuration">Server Configuration</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>The <em>SpringBatchLightmin-Server</em> provides defaults configurations.
 These configurations can be overridden via properties.</p>
 </div>
-<div class="sect2">
-<h3 id="_context_path">Context Path</h3>
+<div class="paragraph">
+<p>=== Context Path</p>
+</div>
 <div class="paragraph">
 <p>If the server has a concrete context path, which is different from the servlet path,
 the default value can be overridden by the following property.</p>
@@ -1428,9 +1364,9 @@ the default value can be overridden by the following property.</p>
         <span class="key">context-path</span>: <span class="string"><span class="content">/my-path</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Heartbeat period</p>
 </div>
-<div class="sect2">
-<h3 id="_heartbeat_period">Heartbeat period</h3>
 <div class="paragraph">
 <p>The <em>Heartbeat period</em> is the time in mills to check the health status of the clients.</p>
 </div>
@@ -1444,9 +1380,9 @@ the default value can be overridden by the following property.</p>
         <span class="key">heartbeat-period</span>: <span class="string"><span class="content">1000</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Credentials</p>
 </div>
-<div class="sect2">
-<h3 id="_credentials">Credentials</h3>
 <div class="paragraph">
 <p>If the server has to pass username and password to the clients, the values can be
 configured via properties.</p>
@@ -1461,9 +1397,9 @@ configured via properties.</p>
        <span class="key">client-password</span>: <span class="string"><span class="content">password</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Server Side auto discovery</p>
 </div>
-<div class="sect2">
-<h3 id="_server_side_auto_discovery">Server Side auto discovery</h3>
 <div class="paragraph">
 <p>In order to detected lightmin client via service discovery, the following property has to be set to true</p>
 </div>
@@ -1476,9 +1412,9 @@ configured via properties.</p>
         <span class="key">discovery-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Server behind a Proxy</p>
 </div>
-<div class="sect2">
-<h3 id="_server_behind_a_proxy_2">Server behind a Proxy</h3>
 <div class="paragraph">
 <p>The server ui uses redirects and the <em>HOST</em> header is taken to create the redirect urls. This is the default behavior of Spring MVC.
 If the server ui is running behind a proxy, the implementation of the server takes care, that the <em>X-FORWARD-PREFIX</em> header is used as well.</p>
@@ -1496,9 +1432,9 @@ to use the <em>X-FORWARDED-HOST</em> header to build the redirect urls.</p>
         <span class="key">use-x-forwarded-headers</span>: <span class="string"><span class="content">true</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Custom UI Logo and Text</p>
 </div>
-<div class="sect2">
-<h3 id="_custom_ui_logo_and_text">Custom UI Logo and Text</h3>
 <div class="paragraph">
 <p>If you want to place a custom logo or text next to the <em>Spring Boot</em> and <em>Spring Batch</em> logo, the following properties can be used.
 If the logo property is set, the text will be displayed</p>
@@ -1516,24 +1452,23 @@ If the logo property is set, the text will be displayed</p>
           <span class="key">img-path</span>: <span class="string"><span class="content">img/logo.png</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>== Client Configuration</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_client_configuration">Client Configuration</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>The <em>SpringBatchLightmin-Client</em> tries to configure all client side properties
 by using the <em>Spring Boot</em> auto configured <em>Server-</em>, <em>ManagementServer-</em> and <em>Actuator-Properties</em>,
 excepted the <em>url</em> of the <em>SpringBatchLightmin-Server</em>. All these properties can be overridden.</p>
 </div>
-<div class="sect2">
-<h3 id="_core">Core</h3>
+<div class="paragraph">
+<p>=== Core</p>
+</div>
 <div class="paragraph">
 <p>The core properties can be changed for all clients.</p>
 </div>
-<div class="sect3">
-<h4 id="_service_url">Service Url</h4>
+<div class="paragraph">
+<p>==== Service Url</p>
+</div>
 <div class="paragraph">
 <p>The <em>service-url</em> is the url of client.</p>
 </div>
@@ -1546,9 +1481,9 @@ excepted the <em>url</em> of the <em>SpringBatchLightmin-Server</em>. All these 
         <span class="key">service-url</span>: <span class="string"><span class="content">http://localhost:8080/my-app</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Management Url</p>
 </div>
-<div class="sect3">
-<h4 id="_management_url">Management Url</h4>
 <div class="paragraph">
 <p>The <em>management-url</em> is the management url of the client.</p>
 </div>
@@ -1561,9 +1496,9 @@ excepted the <em>url</em> of the <em>SpringBatchLightmin-Server</em>. All these 
         <span class="key">management-url</span>: <span class="string"><span class="content">http://localhost:8080/management</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Health Url</p>
 </div>
-<div class="sect3">
-<h4 id="_health_url">Health Url</h4>
 <div class="paragraph">
 <p>The <em>management-url</em> is the health url of the client, it is used by the server to check the status.</p>
 </div>
@@ -1576,9 +1511,9 @@ excepted the <em>url</em> of the <em>SpringBatchLightmin-Server</em>. All these 
         <span class="key">health-url</span>: <span class="string"><span class="content">http://localhost:8080/management/health</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Server Port</p>
 </div>
-<div class="sect3">
-<h4 id="_server_port">Server Port</h4>
 <div class="paragraph">
 <p>The <em>server-port</em> is the application port or the external port, if the application is running inside a container e.g. docker.</p>
 </div>
@@ -1591,9 +1526,9 @@ excepted the <em>url</em> of the <em>SpringBatchLightmin-Server</em>. All these 
         <span class="key">server-port</span>: <span class="string"><span class="content">8080</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Management Port</p>
 </div>
-<div class="sect3">
-<h4 id="_management_port">Management Port</h4>
 <div class="paragraph">
 <p>The <em>server-port</em> is the application management port or the external port, if the application is running inside a container e.g. docker.
 If the property is not set, the server-port will be taken.</p>
@@ -1607,9 +1542,9 @@ If the property is not set, the server-port will be taken.</p>
         <span class="key">management-port</span>: <span class="string"><span class="content">8081</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Hostname</p>
 </div>
-<div class="sect3">
-<h4 id="_hostname">Hostname</h4>
 <div class="paragraph">
 <p>The <em>hostname</em> property can be used to set the name which should be used for registration at the server.
 This can be helpful when running inside a container, e.g. docker.</p>
@@ -1623,8 +1558,9 @@ This can be helpful when running inside a container, e.g. docker.</p>
         <span class="key">hostname</span>: <span class="string"><span class="content">my.fqdn</span></span></code></pre>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_publish_job_events">Publish Job Events</h5>
+<div class="paragraph">
+<p>===== Publish Job Events</p>
+</div>
 <div class="paragraph">
 <p>The <em>publish-job-events</em> property can used to deactivate the pushes from the client to the server when a JobExecution is finished.</p>
 </div>
@@ -1638,9 +1574,9 @@ This can be helpful when running inside a container, e.g. docker.</p>
         <span class="key">publish-job-events</span>: <span class="string"><span class="content">false</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Credentials to access Server</p>
 </div>
-<div class="sect4">
-<h5 id="_credentials_to_access_server">Credentials to access Server</h5>
 <div class="paragraph">
 <p>If the server is secured with a username and password, the following to properties can be set on the client side.</p>
 </div>
@@ -1655,16 +1591,15 @@ This can be helpful when running inside a container, e.g. docker.</p>
          <span class="key">password</span>: <span class="string"><span class="content">mypassword</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Classic Client</p>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_classic_client">Classic Client</h3>
 <div class="paragraph">
 <p>The following properties can be changed for the classic client</p>
 </div>
-<div class="sect3">
-<h4 id="_auto_registration">Auto Registration</h4>
+<div class="paragraph">
+<p>==== Auto Registration</p>
+</div>
 <div class="paragraph">
 <p>If <em>auto-registration</em> is set to true, the client tries to register itself automatically.</p>
 </div>
@@ -1679,9 +1614,9 @@ This can be helpful when running inside a container, e.g. docker.</p>
             <span class="key">auto-registration</span>: <span class="string"><span class="content">true</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Auto De-Registration</p>
 </div>
-<div class="sect3">
-<h4 id="_auto_de_registration">Auto De-Registration</h4>
 <div class="paragraph">
 <p>If <em>auto-deregistration</em> is set to true, the client calls the server for de-registration before the shutdown.</p>
 </div>
@@ -1696,9 +1631,9 @@ This can be helpful when running inside a container, e.g. docker.</p>
           <span class="key">auto-deregistration</span>: <span class="string"><span class="content">false</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Register Once</p>
 </div>
-<div class="sect3">
-<h4 id="_register_once">Register Once</h4>
 <div class="paragraph">
 <p>If <em>register-once</em> is set to true, the client will register itself only at one server.</p>
 </div>
@@ -1713,9 +1648,9 @@ This can be helpful when running inside a container, e.g. docker.</p>
           <span class="key">auto-register-once</span>: <span class="string"><span class="content">true</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Registration Period</p>
 </div>
-<div class="sect3">
-<h4 id="_registration_period">Registration Period</h4>
 <div class="paragraph">
 <p>The <em>period</em> is the time in millis, the client tries to register at the servers.</p>
 </div>
@@ -1730,9 +1665,9 @@ This can be helpful when running inside a container, e.g. docker.</p>
           <span class="key">period</span>: <span class="string"><span class="content">100</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Lightmin Server</p>
 </div>
-<div class="sect3">
-<h4 id="_lightmin_server">Lightmin Server</h4>
 <div class="paragraph">
 <p>The <em>url</em> is a mandatory property. The value is a comma separated list of server urls.</p>
 </div>
@@ -1747,9 +1682,9 @@ This can be helpful when running inside a container, e.g. docker.</p>
             <span class="key">url</span>: <span class="string"><span class="content">http://localhost:8090, http://localhost:9000</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== API</p>
 </div>
-<div class="sect3">
-<h4 id="_api">API</h4>
 <div class="paragraph">
 <p>The <em>api</em> property gives the relative path to the server side api.
 If the value is my/api and the <em>url</em> value is <a href="http://server:8080" class="bare">http://server:8080</a>, the client tries
@@ -1767,15 +1702,15 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
             <span class="key">api</span>: <span class="string"><span class="content">api/application</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Discovery Client</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_discovery_client">Discovery Client</h3>
 <div class="paragraph">
 <p>The following properties can be changed for the discovery client</p>
 </div>
-<div class="sect3">
-<h4 id="_server_discovery_name">Server Discovery Name</h4>
+<div class="paragraph">
+<p>==== Server Discovery Name</p>
+</div>
 <div class="paragraph">
 <p>The name discovery name of the server which should be used by the <em>DiscoveryClient</em>.</p>
 </div>
@@ -1790,9 +1725,9 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
          <span class="key">server-discovery-name</span>: <span class="string"><span class="content">my-server</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Server Context Path</p>
 </div>
-<div class="sect3">
-<h4 id="_server_context_path">Server Context Path</h4>
 <div class="paragraph">
 <p>If the server has a context path, this property will be used to enhance the discovery address by the <em>DiscoveryClient</em>.</p>
 </div>
@@ -1806,20 +1741,18 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
          <span class="key">server-context-path</span>: <span class="string"><span class="content">/server</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>== Job Configuration Repository Configuration</p>
 </div>
+<div class="paragraph">
+<p>=== Jdbc Configuration Repository</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_job_configuration_repository_configuration">Job Configuration Repository Configuration</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_jdbc_configuration_repository">Jdbc Configuration Repository</h3>
 <div class="paragraph">
 <p>The following configuration properties can be used for the jdbc configuration repository</p>
 </div>
-<div class="sect3">
-<h4 id="_table_names">Table Names</h4>
+<div class="paragraph">
+<p>==== Table Names</p>
+</div>
 <div class="paragraph">
 <p>If the table name of the provided ddl schemas does not match your requirements, you can rename them and configure the custom names via property.</p>
 </div>
@@ -1838,9 +1771,9 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
           <span class="key">job-configuration-parameter-table-name</span>: <span class="string"><span class="content">mv-jcp-table-name</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Database Schema name</p>
 </div>
-<div class="sect3">
-<h4 id="_database_schema_name">Database Schema name</h4>
 <div class="paragraph">
 <p>If you have to define a custom schema for your database, the following property can be used.</p>
 </div>
@@ -1854,9 +1787,9 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
           <span class="key">configuration-database-schema</span>: <span class="string"><span class="content">my-schema</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Datasource Name</p>
 </div>
-<div class="sect3">
-<h4 id="_datasource_name">Datasource Name</h4>
 <div class="paragraph">
 <p>Per default, the repository tries to get a DataSource bean with the name <em>dataSource</em>. If the DataSource has a different name in your configuration, the following property can be used.</p>
 </div>
@@ -1870,20 +1803,21 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
           <span class="key">data-source-name</span>: <span class="string"><span class="content">myDataSourceName</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Remote Configuration Repository</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_remote_configuration_repository">Remote Configuration Repository</h3>
 <div class="paragraph">
 <p>The following configuration properties can be used for the remote configuration repository</p>
 </div>
-<div class="sect3">
-<h4 id="_common">Common</h4>
+<div class="paragraph">
+<p>==== Common</p>
+</div>
 <div class="paragraph">
 <p>The following properties can be used with and without service discovery</p>
 </div>
-<div class="sect4">
-<h5 id="_credentials_2">Credentials</h5>
+<div class="paragraph">
+<p>===== Credentials</p>
+</div>
 <div class="paragraph">
 <p>If the <em>Remote Repository Server</em> is secured, the following properties can be used to set a username and a password.</p>
 </div>
@@ -1898,12 +1832,12 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
           <span class="key">password</span>: <span class="string"><span class="content">password</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== No Service Discovery</p>
 </div>
+<div class="paragraph">
+<p>===== Server Url</p>
 </div>
-<div class="sect3">
-<h4 id="_no_service_discovery">No Service Discovery</h4>
-<div class="sect4">
-<h5 id="_server_url">Server Url</h5>
 <div class="paragraph">
 <p>The property points directly to the url of remote repository server.</p>
 </div>
@@ -1917,12 +1851,12 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
           <span class="key">server-url</span>: <span class="string"><span class="content">http://my-server.domain:8180</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Discovery</p>
 </div>
+<div class="paragraph">
+<p>===== Enable Discovery</p>
 </div>
-<div class="sect3">
-<h4 id="_discovery">Discovery</h4>
-<div class="sect4">
-<h5 id="_enable_discovery">Enable Discovery</h5>
 <div class="paragraph">
 <p>This property has to be set to true to enable the discovery.</p>
 </div>
@@ -1937,9 +1871,9 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
           <span class="key">discover-remote-repository</span>: <span class="string"><span class="content">true</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Remote Repository Discovery Name</p>
 </div>
-<div class="sect4">
-<h5 id="_remote_repository_discovery_name">Remote Repository Discovery Name</h5>
 <div class="paragraph">
 <p>Set or change the discovery name of the <em>Remote Repository Server</em>.</p>
 </div>
@@ -1954,9 +1888,9 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
           <span class="key">server-discovery-name</span>: <span class="string"><span class="content">my-remote-repo</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Remote Repository Context Path</p>
 </div>
-<div class="sect4">
-<h5 id="_remote_repository_context_path">Remote Repository Context Path</h5>
 <div class="paragraph">
 <p>If the Remote Repository uses a context path, this property will be added to the discovered url by the <em>DiscoveryClient</em>.</p>
 </div>
@@ -1970,9 +1904,9 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
           <span class="key">context-path</span>: <span class="string"><span class="content">/remote-repo-server</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Startup Discovery Retry</p>
 </div>
-<div class="sect4">
-<h5 id="_startup_discovery_retry">Startup Discovery Retry</h5>
 <div class="paragraph">
 <p>The retry count to find the repository server.</p>
 </div>
@@ -1987,9 +1921,9 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
           <span class="key">server-startup-discovery-retry</span>: <span class="string"><span class="content">10</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Startup Discovery Wait Time</p>
 </div>
-<div class="sect4">
-<h5 id="_startup_discovery_wait_time">Startup Discovery Wait Time</h5>
 <div class="paragraph">
 <p>The time period between the retries.</p>
 </div>
@@ -2004,19 +1938,15 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
           <span class="key">server-startup-discovery-retry-wait-time</span>: <span class="string"><span class="content">200</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>== Batch Configuration</p>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_batch_configuration">Batch Configuration</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>The following properties can be used to configure <em>Spring Batch</em> in lightmin clients.</p>
 </div>
-<div class="sect2">
-<h3 id="_repository_type">Repository Type</h3>
+<div class="paragraph">
+<p>=== Repository Type</p>
+</div>
 <div class="paragraph">
 <p>The type of the <em>JobRepository</em>.</p>
 </div>
@@ -2030,14 +1960,15 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
         <span class="key">repository-type</span>: <span class="string"><span class="content">map</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Jdbc JobRepository Configuration</p>
 </div>
-<div class="sect2">
-<h3 id="_jdbc_jobrepository_configuration">Jdbc JobRepository Configuration</h3>
 <div class="paragraph">
 <p>For the jdbc JobRepository, the following properties can be used.</p>
 </div>
-<div class="sect3">
-<h4 id="_table_prefix">Table Prefix</h4>
+<div class="paragraph">
+<p>==== Table Prefix</p>
+</div>
 <div class="paragraph">
 <p>Prefix for all Spring Batch tables.</p>
 </div>
@@ -2051,9 +1982,9 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
         <span class="key">table-prefix</span>: <span class="string"><span class="content">MY_PREFIX_</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Datasource Name</p>
 </div>
-<div class="sect3">
-<h4 id="_datasource_name_2">Datasource Name</h4>
 <div class="paragraph">
 <p>The name of the DataSource which should be used for <em>Spring Batch</em>.</p>
 </div>
@@ -2067,9 +1998,9 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
         <span class="key">data-source-name</span>: <span class="string"><span class="content">myDataSourceName</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Database Schema</p>
 </div>
-<div class="sect3">
-<h4 id="_database_schema">Database Schema</h4>
 <div class="paragraph">
 <p>The database schema name.</p>
 </div>
@@ -2082,18 +2013,15 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
         <span class="key">database-schema</span>: <span class="string"><span class="content">myDatabaseSchema</span></span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>== Job Configurations</p>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_job_configurations">Job Configurations</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>A job Configuration contains properties, which describes how a job should be launched by <em>Spring Batch Lightmin</em>.</p>
 </div>
-<div class="sect2">
-<h3 id="_anatomy_of_a_job_configuration">Anatomy of a Job Configuration</h3>
+<div class="paragraph">
+<p>=== Anatomy of a Job Configuration</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">JobConfiguration</span> <span class="directive">extends</span> AbstractConfiguration {
@@ -2108,24 +2036,20 @@ to register at <a href="http://server:8080/my/api" class="bare">http://server:80
 }</code></pre>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_properties">Properties</h4>
-<div class="sect4">
-<h5 id="_job_configuration_id">Job Configuration Id</h5>
 <div class="paragraph">
-<p>The <em>jobConfigurationId</em> is a technical id to make the configuration unique.</p>
+<p>==== Properties</p>
 </div>
-</div>
-<div class="sect4">
-<h5 id="_job_name">Job Name</h5>
 <div class="paragraph">
-<p>The <em>jobName</em> is the name of <em>Spring Batch Job</em> where the configuration belongs to.</p>
+<p>===== Job Configuration Id
+The <em>jobConfigurationId</em> is a technical id to make the configuration unique.</p>
 </div>
-</div>
-<div class="sect4">
-<h5 id="_job_parameters">Job Parameters</h5>
 <div class="paragraph">
-<p>The <em>jobParameters</em> are keys and values, which will passed to the <em>JobLauncher</em>, when a instance of a <em>Spring Batch
+<p>===== Job Name
+The <em>jobName</em> is the name of <em>Spring Batch Job</em> where the configuration belongs to.</p>
+</div>
+<div class="paragraph">
+<p>===== Job Parameters
+The <em>jobParameters</em> are keys and values, which will passed to the <em>JobLauncher</em>, when a instance of a <em>Spring Batch
 Job</em> will be triggered by a <em>JobConfiguration</em>. The key describes the type of the parameter. Following types are
 currently supported</p>
 </div>
@@ -2145,11 +2069,9 @@ currently supported</p>
 </li>
 </ul>
 </div>
-</div>
-<div class="sect4">
-<h5 id="_job_incrementer">Job Incrementer</h5>
 <div class="paragraph">
-<p>The <em>jobIncrementer</em> is a job parameter which will be added to existing job parameters. This incrementer can be used to
+<p>===== Job Incrementer
+The <em>jobIncrementer</em> is a job parameter which will be added to existing job parameters. This incrementer can be used to
 trigger a new <em>JobInstance</em> of a <em>Job</em>.</p>
 </div>
 <div class="listingblock">
@@ -2161,9 +2083,9 @@ trigger a new <em>JobInstance</em> of a <em>Job</em>.</p>
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Job Scheduler Configuration</p>
 </div>
-<div class="sect4">
-<h5 id="_job_scheduler_configuration">Job Scheduler Configuration</h5>
 <div class="paragraph">
 <p>The <em>JobSchedulerConfiguration</em> determines, in which way a <em>Job</em> should be launched.</p>
 </div>
@@ -2181,8 +2103,9 @@ trigger a new <em>JobInstance</em> of a <em>Job</em>.</p>
 }</code></pre>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_jobschedulertype">JobSchedulerType</h6>
+<div class="paragraph">
+<p>====== JobSchedulerType</p>
+</div>
 <div class="paragraph">
 <p>The JobSchedulerType determines, if the trigger is a CRON expression or by periods.</p>
 </div>
@@ -2194,24 +2117,24 @@ trigger a new <em>JobInstance</em> of a <em>Job</em>.</p>
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== cronExpression</p>
 </div>
-<div class="sect5">
-<h6 id="_cronexpression">cronExpression</h6>
 <div class="paragraph">
 <p>It has to be not null and a regular CRON expression, if the <em>JobSchedulerType</em> is set to <em>CRON</em>.
 It has to be null, if the <em>JobSchedulerType</em> is equal to <em>PERIOD</em>.</p>
 </div>
+<div class="paragraph">
+<p>====== initial- &amp; fixedDelay</p>
 </div>
-<div class="sect5">
-<h6 id="_initial_fixeddelay">initial- &amp; fixedDelay</h6>
 <div class="paragraph">
 <p>Both properties must not be null or negative, if the <em>JobSchedulerType</em> is set to <em>PERIOD</em>.
 The <em>initialDelay</em> configures the delay of the first launched after initialization and the
 <em>fixedDelay the</em> the period of a relaunch. Both values have to be null, if the <em>JobSchedulerType</em> is equal to <em>CRON</em>.</p>
 </div>
+<div class="paragraph">
+<p>====== TaskExecutorType</p>
 </div>
-<div class="sect5">
-<h6 id="_taskexecutortype">TaskExecutorType</h6>
 <div class="paragraph">
 <p>The <em>TaskExecutorType</em> determines, if the launch of a <em>Job</em> should be synchronously or asynchronously.
 If the value is set to <em>SYNCHRONOUS</em>, the task executor will wait, until the previous run is
@@ -2225,15 +2148,15 @@ finished. On <em>ASYNCHRONOUS</em> mode, the job will be launched, if the <em>CR
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== beanName</p>
 </div>
-<div class="sect5">
-<h6 id="_beanname">beanName</h6>
 <div class="paragraph">
 <p>The name of spring bean.</p>
 </div>
+<div class="paragraph">
+<p>====== SchedulerStatus</p>
 </div>
-<div class="sect5">
-<h6 id="_schedulerstatus">SchedulerStatus</h6>
 <div class="paragraph">
 <p>The <em>SchedulerStatus</em> represents the current status of scheduler of the
 <em>JobConfiguration</em>.</p>
@@ -2247,10 +2170,9 @@ finished. On <em>ASYNCHRONOUS</em> mode, the job will be launched, if the <em>CR
     IN_TERMINATION(<span class="string"><span class="delimiter">&quot;</span><span class="content">IN TERMINATION</span><span class="delimiter">&quot;</span></span>);</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Job Listener Configuration</p>
 </div>
-</div>
-<div class="sect4">
-<h5 id="_job_listener_configuration">Job Listener Configuration</h5>
 <div class="paragraph">
 <p>The <em>Job Listner Configurations</em> can be registered, to listen for events and triggers a job.</p>
 </div>
@@ -2267,8 +2189,9 @@ finished. On <em>ASYNCHRONOUS</em> mode, the job will be launched, if the <em>CR
     <span class="directive">private</span> TaskExecutorType taskExecutorType;</code></pre>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_job_listener_type">Job Listener Type</h6>
+<div class="paragraph">
+<p>====== Job Listener Type</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">enum</span> JobListenerType {
@@ -2288,31 +2211,30 @@ finished. On <em>ASYNCHRONOUS</em> mode, the job will be launched, if the <em>CR
 <p>If the <em>LOCAL FOLDER LISTENER</em> event is fired, the absolut path to the file will be passed as <em>Job Parameter</em> with
 the name <strong><em>fileSource</em></strong> to the <em>Job Launcher</em>.</p>
 </div>
+<div class="paragraph">
+<p>====== Source Folder</p>
 </div>
-<div class="sect5">
-<h6 id="_source_folder">Source Folder</h6>
 <div class="paragraph">
 <p>The file system folder, the listener should be registered for</p>
 </div>
+<div class="paragraph">
+<p>====== File Pattern</p>
 </div>
-<div class="sect5">
-<h6 id="_file_pattern">File Pattern</h6>
 <div class="paragraph">
 <p>Ant based pattern, to filter files, which should be used for the event.</p>
 </div>
+<div class="paragraph">
+<p>====== Poller Period</p>
 </div>
-<div class="sect5">
-<h6 id="_poller_period">Poller Period</h6>
-
+<div class="paragraph">
+<p>====== Bean Name</p>
 </div>
-<div class="sect5">
-<h6 id="_bean_name">Bean Name</h6>
 <div class="paragraph">
 <p>The name of spring bean.</p>
 </div>
+<div class="paragraph">
+<p>====== Listener Status</p>
 </div>
-<div class="sect5">
-<h6 id="_listener_status">Listener Status</h6>
 <div class="paragraph">
 <p>The <em>Listener Status</em> indicates the current status of the Listener Configuration</p>
 </div>
@@ -2325,9 +2247,9 @@ the name <strong><em>fileSource</em></strong> to the <em>Job Launcher</em>.</p>
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== Task Executor</p>
 </div>
-<div class="sect5">
-<h6 id="_task_executor">Task Executor</h6>
 <div class="paragraph">
 <p>The <em>TaskExecutorType</em> determines, if the launch of a <em>Job</em> should be synchronously or asynchronously.
 If the value is set to <em>SYNCHRONOUS</em>, the task executor will wait, until the previous run is
@@ -2341,12 +2263,9 @@ finished. On <em>ASYNCHRONOUS</em> mode, the job will be launched, if a new even
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== JobConfiguration Repository</p>
 </div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_jobconfiguration_repository">JobConfiguration Repository</h3>
 <div class="paragraph">
 <p>The <em>JobConfigurationRepository</em> describes an interface, to manage <em>JobConfigurations</em>.
 The current version provides three implementations, the <em>JdbcJobConfigurationRepository</em>, <em>RemoteJobConfigurationRepository</em> and the <em>MapJobConfigurationRepository</em>.</p>
@@ -2370,15 +2289,17 @@ The current version provides three implementations, the <em>JdbcJobConfiguration
     <span class="predefined-type">Collection</span>&lt;JobConfiguration&gt; getAllJobConfigurationsByJobNames(<span class="predefined-type">Collection</span>&lt;<span class="predefined-type">String</span>&gt; jobNames, <span class="predefined-type">String</span> applicationName);</code></pre>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_jdbcjobconfigurationrepository">JdbcJobConfigurationRepository</h4>
+<div class="paragraph">
+<p>==== JdbcJobConfigurationRepository</p>
+</div>
 <div class="paragraph">
 <p>The <em>JdbcJobConfigurationRepository</em> stores the <em>JobConfiguration</em> within a relational database.
 In order to use the jdbc version, a ddl schema has to be installed.
 Schemas for various providers are locate within the core jar.</p>
 </div>
-<div class="sect4">
-<h5 id="_h2_schema_example">H2 Schema example</h5>
+<div class="paragraph">
+<p>===== H2 Schema example</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="sql"><span class="class">CREATE</span> <span class="type">TABLE</span> BATCH_JOB_CONFIGURATION (
@@ -2408,40 +2329,41 @@ Schemas for various providers are locate within the core jar.</p>
 );</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== RemoteJobConfigurationRepository</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_remotejobconfigurationrepository">RemoteJobConfigurationRepository</h4>
 <div class="paragraph">
 <p>The <em>RemoteJobConfigurationRepository</em> communicates with an external <em>repository server</em> via <em>REST API</em>.</p>
 </div>
+<div class="paragraph">
+<p>==== MapJobConfigurationRepository</p>
 </div>
-<div class="sect3">
-<h4 id="_mapjobconfigurationrepository">MapJobConfigurationRepository</h4>
 <div class="paragraph">
 <p>The <em>MapJobConfigurationRepository</em> stores the <em>JobConfigurations</em> within a map.
 If the application will be restarted, all stored <em>JobConfigurations</em> will be lost.</p>
 </div>
+<div class="paragraph">
+<p>== REST API</p>
 </div>
+<div class="paragraph">
+<p>=== Server</p>
 </div>
+<div class="paragraph">
+<p>==== Register</p>
 </div>
+<div class="paragraph">
+<p>===== Curl</p>
 </div>
-<div class="sect1">
-<h2 id="_rest_api">REST API</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_server">Server</h3>
-<div class="sect3">
-<h4 id="_register">Register</h4>
-<div class="sect4">
-<h5 id="_curl">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications' -i -X POST \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -d '{
   &quot;id&quot; : null,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost/health&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost/actuator/health&quot;,
   &quot;serviceUrl&quot; : &quot;http://localhost&quot;,
   &quot;lightminClientApplicationStatus&quot; : null,
   &quot;lightminClientInformation&quot; : {
@@ -2458,22 +2380,22 @@ If the application will be restarted, all stored <em>JobConfigurations</em> will
 }'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== HTTP Request</p>
 </div>
-<div class="sect4">
-<h5 id="_http_request">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/applications HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Content-Length: 790
 Content-Type: application/json; charset=UTF-8
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost
-Content-Length: 772
 
 {
   &quot;id&quot; : null,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost/health&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost/actuator/health&quot;,
   &quot;serviceUrl&quot; : &quot;http://localhost&quot;,
   &quot;lightminClientApplicationStatus&quot; : null,
   &quot;lightminClientInformation&quot; : {
@@ -2490,27 +2412,26 @@ Content-Length: 772
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== HTTP Response</p>
 </div>
-<div class="sect4">
-<h5 id="_http_response">HTTP Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
+Content-Length: 870
+Date: Sun, 27 Jan 2019 20:24:12 GMT
 Transfer-Encoding: chunked
-Date: Wed, 26 Dec 2018 15:17:09 GMT
-Content-Length: 852
 
 {
-  &quot;id&quot; : &quot;dbf1d918&quot;,
+  &quot;id&quot; : &quot;9c9fb922&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:58523&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:58523/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:58523&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:50546/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:50546/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:50546&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1545837428825
+    &quot;timeInMills&quot; : 1548620651222
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2526,49 +2447,50 @@ Content-Length: 852
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Unregister</p>
 </div>
+<div class="paragraph">
+<p>===== Curl</p>
 </div>
-<div class="sect3">
-<h4 id="_unregister">Unregister</h4>
-<div class="sect4">
-<h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/dbf1d918' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/9c9fb922' -i -X DELETE \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== HTTP Request</p>
 </div>
-<div class="sect4">
-<h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/dbf1d918 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/9c9fb922 HTTP/1.1
 Content-Type: application/json; charset=UTF-8
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== HTTP Response</p>
 </div>
-<div class="sect4">
-<h5 id="_http_response_2">HTTP Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
 Content-Type: application/json;charset=UTF-8
+Content-Length: 870
+Date: Sun, 27 Jan 2019 20:24:12 GMT
 Transfer-Encoding: chunked
-Date: Wed, 26 Dec 2018 15:17:09 GMT
-Content-Length: 852
 
 {
-  &quot;id&quot; : &quot;dbf1d918&quot;,
+  &quot;id&quot; : &quot;9c9fb922&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:58523&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:58523/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:58523&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:50546/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:50546/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:50546&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1545837428825
+    &quot;timeInMills&quot; : 1548620651222
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2584,49 +2506,50 @@ Content-Length: 852
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Get All Lightmin Client Applications</p>
 </div>
+<div class="paragraph">
+<p>===== Curl</p>
 </div>
-<div class="sect3">
-<h4 id="_get_all_lightmin_client_applications">Get All Lightmin Client Applications</h4>
-<div class="sect4">
-<h5 id="_curl_3">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications' -i -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications' -i -X GET \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== HTTP Request</p>
 </div>
-<div class="sect4">
-<h5 id="_http_request_3">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/applications HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== HTTP Response</p>
 </div>
-<div class="sect4">
-<h5 id="_http_response_3">HTTP Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Date: Sun, 27 Jan 2019 20:24:11 GMT
+Content-Length: 874
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 26 Dec 2018 15:17:08 GMT
-Content-Length: 856
 
 [ {
-  &quot;id&quot; : &quot;dbf1d918&quot;,
+  &quot;id&quot; : &quot;9c9fb922&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:58523&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:58523/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:58523&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:50546/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:50546/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:50546&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1545837428825
+    &quot;timeInMills&quot; : 1548620651222
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2642,15 +2565,18 @@ Content-Length: 856
 } ]</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Consume Job Executions</p>
 </div>
+<div class="paragraph">
+<p>===== Curl</p>
 </div>
-<div class="sect3">
-<h4 id="_consume_job_executions">Consume Job Executions</h4>
-<div class="sect4">
-<h5 id="_curl_4">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/events/jobexecutions' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/events/jobexecutions' -i -X POST \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -d '{
   &quot;applicationName&quot; : &quot;testApplication&quot;,
   &quot;jobName&quot; : &quot;sampleJob&quot;,
   &quot;jobExecutionId&quot; : 1,
@@ -2658,21 +2584,21 @@ Content-Length: 856
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1545837430433,
-  &quot;endDate&quot; : 1545837440433
+  &quot;startDate&quot; : 1548620652684,
+  &quot;endDate&quot; : 1548620662684
 }'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== HTTP Request</p>
 </div>
-<div class="sect4">
-<h5 id="_http_request_4">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/events/jobexecutions HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
-Host: localhost
 Content-Length: 247
+Accept: application/json, application/javascript, text/javascript, text/json
+Host: localhost
 
 {
   &quot;applicationName&quot; : &quot;testApplication&quot;,
@@ -2682,58 +2608,58 @@ Content-Length: 247
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1545837430433,
-  &quot;endDate&quot; : 1545837440433
+  &quot;startDate&quot; : 1548620652684,
+  &quot;endDate&quot; : 1548620662684
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== HTTP Response</p>
 </div>
-<div class="sect4">
-<h5 id="_http_response_4">HTTP Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-X-Application-Context: it-application:0
-Date: Wed, 26 Dec 2018 15:17:09 GMT</code></pre>
+Date: Sun, 27 Jan 2019 20:24:12 GMT</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Client</p>
 </div>
+<div class="paragraph">
+<p>==== Jobs</p>
 </div>
+<div class="paragraph">
+<p>===== Get All Job Executions</p>
 </div>
-<div class="sect2">
-<h3 id="_client">Client</h3>
-<div class="sect3">
-<h4 id="_jobs">Jobs</h4>
-<div class="sect4">
-<h5 id="_get_all_job_executions">Get All Job Executions</h5>
-<div class="sect5">
-<h6 id="_curl_5">Curl</h6>
+<div class="paragraph">
+<p>====== Curl</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages/all?jobinstanceid=16' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages/all?jobinstanceid=16' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_5">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutionpages/all?jobinstanceid=16 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_5">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Content-Length: 1541
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 26 Dec 2018 15:17:11 GMT
-Content-Length: 1405
+Date: Sun, 27 Jan 2019 20:24:13 GMT
 
 {
   &quot;startIndex&quot; : 0,
@@ -2747,7 +2673,7 @@ Content-Length: 1405
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1545837431846,
+          &quot;parameter&quot; : &quot;2019-01-27T20:24:14.388+0000&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -2770,9 +2696,9 @@ Content-Length: 1405
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : 1545837431855,
-      &quot;endTime&quot; : 1545837431858,
-      &quot;lastUpdated&quot; : 1545837431858,
+      &quot;startTime&quot; : &quot;2019-01-27T20:24:14.404+0000&quot;,
+      &quot;endTime&quot; : &quot;2019-01-27T20:24:14.407+0000&quot;,
+      &quot;lastUpdated&quot; : &quot;2019-01-27T20:24:14.407+0000&quot;,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -2782,10 +2708,10 @@ Content-Length: 1405
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1545837431851,
-    &quot;createTime&quot; : 1545837431850,
-    &quot;endTime&quot; : 1545837431859,
-    &quot;lastUpdated&quot; : 1545837431864,
+    &quot;startTime&quot; : &quot;2019-01-27T20:24:14.395+0000&quot;,
+    &quot;createTime&quot; : &quot;2019-01-27T20:24:14.391+0000&quot;,
+    &quot;endTime&quot; : &quot;2019-01-27T20:24:14.408+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2019-01-27T20:24:14.415+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2796,38 +2722,38 @@ Content-Length: 1405
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Get Job Executions</p>
 </div>
+<div class="paragraph">
+<p>====== Curl</p>
 </div>
-<div class="sect4">
-<h5 id="_get_job_executions">Get Job Executions</h5>
-<div class="sect5">
-<h6 id="_curl_6">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages?jobinstanceid=15&amp;startindex=0&amp;pagesize=5' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages?jobinstanceid=15&amp;startindex=0&amp;pagesize=5' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_6">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutionpages?jobinstanceid=15&amp;startindex=0&amp;pagesize=5 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_6">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Content-Length: 878
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 26 Dec 2018 15:17:11 GMT
-Content-Length: 793
+Date: Sun, 27 Jan 2019 20:24:13 GMT
 
 {
   &quot;startIndex&quot; : 0,
@@ -2841,7 +2767,7 @@ Content-Length: 793
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : 1545837431777,
+          &quot;parameter&quot; : &quot;2019-01-27T20:24:14.305+0000&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -2853,10 +2779,10 @@ Content-Length: 793
     },
     &quot;stepExecutions&quot; : [ ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : 1545837431781,
-    &quot;createTime&quot; : 1545837431780,
-    &quot;endTime&quot; : 1545837431789,
-    &quot;lastUpdated&quot; : 1545837431794,
+    &quot;startTime&quot; : &quot;2019-01-27T20:24:14.312+0000&quot;,
+    &quot;createTime&quot; : &quot;2019-01-27T20:24:14.311+0000&quot;,
+    &quot;endTime&quot; : &quot;2019-01-27T20:24:14.322+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2019-01-27T20:24:14.330+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2867,38 +2793,38 @@ Content-Length: 793
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Get Job Execution</p>
 </div>
+<div class="paragraph">
+<p>====== Curl</p>
 </div>
-<div class="sect4">
-<h5 id="_get_job_execution">Get Job Execution</h5>
-<div class="sect5">
-<h6 id="_curl_7">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/20' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/20' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_7">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutions/20 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_7">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Date: Sun, 27 Jan 2019 20:24:14 GMT
 Content-Type: application/json;charset=UTF-8
+Content-Length: 1290
 Transfer-Encoding: chunked
-Date: Wed, 26 Dec 2018 15:17:11 GMT
-Content-Length: 1154
 
 {
   &quot;id&quot; : 20,
@@ -2906,7 +2832,7 @@ Content-Length: 1154
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1545837432009,
+        &quot;parameter&quot; : &quot;2019-01-27T20:24:14.736+0000&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2929,9 +2855,9 @@ Content-Length: 1154
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : 1545837432015,
-    &quot;endTime&quot; : 1545837432018,
-    &quot;lastUpdated&quot; : 1545837432018,
+    &quot;startTime&quot; : &quot;2019-01-27T20:24:14.744+0000&quot;,
+    &quot;endTime&quot; : &quot;2019-01-27T20:24:14.748+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2019-01-27T20:24:14.748+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2941,10 +2867,10 @@ Content-Length: 1154
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1545837432012,
-  &quot;createTime&quot; : 1545837432011,
-  &quot;endTime&quot; : 1545837432019,
-  &quot;lastUpdated&quot; : 1545837432025,
+  &quot;startTime&quot; : &quot;2019-01-27T20:24:14.740+0000&quot;,
+  &quot;createTime&quot; : &quot;2019-01-27T20:24:14.739+0000&quot;,
+  &quot;endTime&quot; : &quot;2019-01-27T20:24:14.749+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2019-01-27T20:24:14.757+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2954,50 +2880,52 @@ Content-Length: 1154
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Query Job Executions</p>
 </div>
+<div class="paragraph">
+<p>====== Curl</p>
 </div>
-<div class="sect4">
-<h5 id="_query_job_executions">Query Job Executions</h5>
-<div class="sect5">
-<h6 id="_curl_8">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/query?jobname=simpleJob&amp;resultsize=4' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/query?jobname=simpleJob&amp;resultsize=4' -i -X POST \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -d '{
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1545837531410,
-  &quot;START_DATE&quot; : 1545837331410
+  &quot;END_DATE&quot; : 1548620753761,
+  &quot;START_DATE&quot; : 1548620553761
 }'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_8">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/jobexecutions/query?jobname=simpleJob&amp;resultsize=4 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
-Host: localhost
 Content-Length: 95
+Accept: application/json, application/javascript, text/javascript, text/json
+Host: localhost
 
 {
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1545837531410,
-  &quot;START_DATE&quot; : 1545837331410
+  &quot;END_DATE&quot; : 1548620753761,
+  &quot;START_DATE&quot; : 1548620553761
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_8">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Content-Length: 2688
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 26 Dec 2018 15:17:11 GMT
-Content-Length: 2348
+Date: Sun, 27 Jan 2019 20:24:13 GMT
 
 [ {
   &quot;id&quot; : 10,
@@ -3005,7 +2933,7 @@ Content-Length: 2348
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1545837431387,
+        &quot;parameter&quot; : &quot;2019-01-27T20:24:13.728+0000&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3017,10 +2945,10 @@ Content-Length: 2348
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1545837431392,
-  &quot;createTime&quot; : 1545837431390,
-  &quot;endTime&quot; : 1545837431401,
-  &quot;lastUpdated&quot; : 1545837431409,
+  &quot;startTime&quot; : &quot;2019-01-27T20:24:13.733+0000&quot;,
+  &quot;createTime&quot; : &quot;2019-01-27T20:24:13.732+0000&quot;,
+  &quot;endTime&quot; : &quot;2019-01-27T20:24:13.750+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2019-01-27T20:24:13.760+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3033,7 +2961,7 @@ Content-Length: 2348
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1545837431387,
+        &quot;parameter&quot; : &quot;2019-01-27T20:24:13.728+0000&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3045,10 +2973,10 @@ Content-Length: 2348
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1545837431324,
-  &quot;createTime&quot; : 1545837431322,
-  &quot;endTime&quot; : 1545837431333,
-  &quot;lastUpdated&quot; : 1545837431339,
+  &quot;startTime&quot; : &quot;2019-01-27T20:24:13.649+0000&quot;,
+  &quot;createTime&quot; : &quot;2019-01-27T20:24:13.648+0000&quot;,
+  &quot;endTime&quot; : &quot;2019-01-27T20:24:13.665+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2019-01-27T20:24:13.674+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3061,7 +2989,7 @@ Content-Length: 2348
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1545837431387,
+        &quot;parameter&quot; : &quot;2019-01-27T20:24:13.728+0000&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3073,10 +3001,10 @@ Content-Length: 2348
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1545837430673,
-  &quot;createTime&quot; : 1545837430670,
-  &quot;endTime&quot; : 1545837430692,
-  &quot;lastUpdated&quot; : 1545837430700,
+  &quot;startTime&quot; : &quot;2019-01-27T20:24:12.997+0000&quot;,
+  &quot;createTime&quot; : &quot;2019-01-27T20:24:12.990+0000&quot;,
+  &quot;endTime&quot; : &quot;2019-01-27T20:24:13.021+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2019-01-27T20:24:13.028+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3089,7 +3017,7 @@ Content-Length: 2348
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : 1545837431387,
+        &quot;parameter&quot; : &quot;2019-01-27T20:24:13.728+0000&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3101,10 +3029,10 @@ Content-Length: 2348
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : 1545837430597,
-  &quot;createTime&quot; : 1545837430589,
-  &quot;endTime&quot; : 1545837430619,
-  &quot;lastUpdated&quot; : 1545837430627,
+  &quot;startTime&quot; : &quot;2019-01-27T20:24:12.890+0000&quot;,
+  &quot;createTime&quot; : &quot;2019-01-27T20:24:12.882+0000&quot;,
+  &quot;endTime&quot; : &quot;2019-01-27T20:24:12.914+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2019-01-27T20:24:12.922+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3114,18 +3042,21 @@ Content-Length: 2348
 } ]</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Job Launcher</p>
 </div>
+<div class="paragraph">
+<p>===== Launch Job</p>
 </div>
+<div class="paragraph">
+<p>====== Curl</p>
 </div>
-<div class="sect3">
-<h4 id="_job_launcher_2">Job Launcher</h4>
-<div class="sect4">
-<h5 id="_launch_job">Launch Job</h5>
-<div class="sect5">
-<h6 id="_curl_9">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/joblaunches' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/joblaunches' -i -X POST \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -d '{
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
@@ -3138,16 +3069,16 @@ Content-Length: 2348
 }'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_9">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/joblaunches HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
-Host: localhost
+Accept: application/json, application/javascript, text/javascript, text/json
 Content-Length: 205
+Host: localhost
 
 {
   &quot;jobName&quot; : &quot;simpleJob&quot;,
@@ -3162,51 +3093,50 @@ Content-Length: 205
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_9">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-X-Application-Context: it-application:0
-Date: Wed, 26 Dec 2018 15:17:09 GMT</code></pre>
+Date: Sun, 27 Jan 2019 20:24:12 GMT</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>==== Job Configurations</p>
 </div>
+<div class="paragraph">
+<p>===== Get Job Configuration By Id</p>
 </div>
+<div class="paragraph">
+<p>====== Curl</p>
 </div>
-<div class="sect3">
-<h4 id="_job_configurations_2">Job Configurations</h4>
-<div class="sect4">
-<h5 id="_get_job_configuration_by_id">Get Job Configuration By Id</h5>
-<div class="sect5">
-<h6 id="_curl_10">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/41' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/41' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_10">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/jobconfiguration/41 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_10">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Date: Sun, 27 Jan 2019 20:24:15 GMT
+Content-Length: 412
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 26 Dec 2018 15:17:12 GMT
-Content-Length: 412
 
 {
   &quot;jobConfigurationId&quot; : 41,
@@ -3227,38 +3157,38 @@ Content-Length: 412
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Get Job Configurations</p>
 </div>
+<div class="paragraph">
+<p>====== Curl</p>
 </div>
-<div class="sect4">
-<h5 id="_get_job_configurations">Get Job Configurations</h5>
-<div class="sect5">
-<h6 id="_curl_11">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_11">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_11">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Date: Sun, 27 Jan 2019 20:24:15 GMT
+Content-Length: 951
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 26 Dec 2018 15:17:12 GMT
-Content-Length: 951
 
 {
   &quot;jobConfigurations&quot; : [ {
@@ -3297,38 +3227,38 @@ Content-Length: 951
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Get Job Configuration By Job Name</p>
 </div>
+<div class="paragraph">
+<p>====== Curl</p>
 </div>
-<div class="sect4">
-<h5 id="_get_job_configuration_by_job_name">Get Job Configuration By Job Name</h5>
-<div class="sect5">
-<h6 id="_curl_12">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/simpleJob' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/simpleJob' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_12">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/simpleJob HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_12">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
+Date: Sun, 27 Jan 2019 20:24:15 GMT
+Content-Length: 951
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 26 Dec 2018 15:17:12 GMT
-Content-Length: 951
 
 {
   &quot;jobConfigurations&quot; : [ {
@@ -3367,15 +3297,18 @@ Content-Length: 951
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Add Job Configuration</p>
 </div>
+<div class="paragraph">
+<p>====== Curl</p>
 </div>
-<div class="sect4">
-<h5 id="_add_job_configuration">Add Job Configuration</h5>
-<div class="sect5">
-<h6 id="_curl_13">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X POST -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X POST \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -d '{
   &quot;jobConfigurationId&quot; : null,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;jobSchedulerConfiguration&quot; : null,
@@ -3392,16 +3325,16 @@ Content-Length: 951
 }'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_13">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/jobconfigurations HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
-Host: localhost
+Accept: application/json, application/javascript, text/javascript, text/json
 Content-Length: 424
+Host: localhost
 
 {
   &quot;jobConfigurationId&quot; : null,
@@ -3420,25 +3353,27 @@ Content-Length: 424
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_13">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-X-Application-Context: it-application:0
-Date: Wed, 26 Dec 2018 15:17:12 GMT</code></pre>
+Date: Sun, 27 Jan 2019 20:24:15 GMT</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Update Job Configuration</p>
 </div>
+<div class="paragraph">
+<p>====== Curl</p>
 </div>
-<div class="sect4">
-<h5 id="_update_job_configuration">Update Job Configuration</h5>
-<div class="sect5">
-<h6 id="_curl_14">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X PUT -H 'Accept: application/json, application/javascript, text/javascript' -H 'Content-Type: application/json; charset=UTF-8' -d '{
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X PUT \
+    -H 'Content-Type: application/json; charset=UTF-8' \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -d '{
   &quot;jobConfigurationId&quot; : 36,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;jobSchedulerConfiguration&quot; : null,
@@ -3457,14 +3392,14 @@ Date: Wed, 26 Dec 2018 15:17:12 GMT</code></pre>
 }'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_14">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">PUT /api/jobconfigurations HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
 Content-Type: application/json; charset=UTF-8
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost
 Content-Length: 441
 
@@ -3487,116 +3422,112 @@ Content-Length: 441
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_14">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
-Date: Wed, 26 Dec 2018 15:17:11 GMT</code></pre>
+Date: Sun, 27 Jan 2019 20:24:14 GMT</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Delete Job Configuration</p>
 </div>
+<div class="paragraph">
+<p>====== Curl</p>
 </div>
-<div class="sect4">
-<h5 id="_delete_job_configuration">Delete Job Configuration</h5>
-<div class="sect5">
-<h6 id="_curl_15">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/34' -i -X DELETE -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/34' -i -X DELETE \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_15">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/jobconfigurations/jobconfiguration/34 HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_15">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
-Date: Wed, 26 Dec 2018 15:17:11 GMT</code></pre>
+Date: Sun, 27 Jan 2019 20:24:14 GMT</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Start Job Configuration</p>
 </div>
+<div class="paragraph">
+<p>====== Curl</p>
 </div>
-<div class="sect4">
-<h5 id="_start_job_configuration">Start Job Configuration</h5>
-<div class="sect5">
-<h6 id="_curl_16">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/40/start' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/40/start' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_16">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/40/start HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_16">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
-Date: Wed, 26 Dec 2018 15:17:12 GMT</code></pre>
+Date: Sun, 27 Jan 2019 20:24:15 GMT</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>===== Stop Job Configuration</p>
 </div>
+<div class="paragraph">
+<p>====== Curl</p>
 </div>
-<div class="sect4">
-<h5 id="_stop_job_configuration">Stop Job Configuration</h5>
-<div class="sect5">
-<h6 id="_curl_17">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/38/stop' -i -H 'Accept: application/json, application/javascript, text/javascript'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/38/stop' -i -X GET \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Request</p>
 </div>
-<div class="sect5">
-<h6 id="_http_request_17">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/38/stop HTTP/1.1
-Accept: application/json, application/javascript, text/javascript
+Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>====== HTTP Response</p>
 </div>
-<div class="sect5">
-<h6 id="_http_response_17">HTTP Response</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-X-Application-Context: it-application:0
-Date: Wed, 26 Dec 2018 15:17:11 GMT</code></pre>
+Date: Sun, 27 Jan 2019 20:24:14 GMT</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>=== Remote Repository</p>
 </div>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_remote_repository_2">Remote Repository</h3>
-
 </div>
 </div>
 </div>

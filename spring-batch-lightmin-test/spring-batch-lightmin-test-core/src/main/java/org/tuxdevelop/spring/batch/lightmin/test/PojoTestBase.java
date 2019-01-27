@@ -24,7 +24,7 @@ public abstract class PojoTestBase {
     protected void testEquals(final Class<?> clazz) {
         EqualsVerifier
                 .forClass(clazz)
-                .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
+                .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS, Warning.REFERENCE_EQUALITY)
                 .verify();
     }
 

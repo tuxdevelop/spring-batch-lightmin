@@ -82,7 +82,7 @@ public abstract class PojoPackageTestBase {
 
                 EqualsVerifier
                         .forClass(clazz)
-                        .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS, Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                        .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
                         .verify();
             }
         } else {
@@ -100,7 +100,7 @@ public abstract class PojoPackageTestBase {
                 .with(new GetterTester())
                 .build();
 
-        validator.validate(this.pojoPackage, filterChain);
+        validator.validate(this.pojoPackage, this.filterChain);
     }
 
     public class FilterAbstractClasses implements PojoClassFilter {

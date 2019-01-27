@@ -1,10 +1,10 @@
 package org.tuxdevelop.spring.batch.lightmin.server.fe.model.listener;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.common.TaskExecutorTypeModel;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
