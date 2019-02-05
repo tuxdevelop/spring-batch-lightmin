@@ -207,11 +207,12 @@ public final class ResourceToDomainMapper {
     }
 
     private static Map<String, Object> mapToMap(final JobParameters jobParameters) {
+        final org.springframework.batch.core.JobParameters mapped = map(jobParameters);
         final Map<String, Object> jobParameterMap = new HashMap<>();
         if (jobParameters != null && jobParameters.getParameters() != null) {
-            final Map<String, JobParameter> parameters = jobParameters.getParameters();
-            for (final Map.Entry<String, JobParameter> entry : parameters.entrySet()) {
-                jobParameterMap.put(entry.getKey(), entry.getValue().getParameter());
+            final Map<String, org.springframework.batch.core.JobParameter> parameters = mapped.getParameters();
+            for (final Map.Entry<String, org.springframework.batch.core.JobParameter> entry : parameters.entrySet()) {
+                jobParameterMap.put(entry.getKey(), entry.getValue().getValue());
             }
         }
         return jobParameterMap;

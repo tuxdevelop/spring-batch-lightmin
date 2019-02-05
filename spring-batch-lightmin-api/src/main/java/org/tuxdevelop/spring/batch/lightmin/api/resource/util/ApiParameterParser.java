@@ -7,6 +7,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,13 @@ import java.util.Map.Entry;
 @Slf4j
 public final class ApiParameterParser {
 
+    public static final String DATE_FORMAT_WITH_TIMESTAMP = "yyyy/MM/dd HH:mm:ss:SSS";
+    public static final String DATE_FORMAT = "yyyy/MM/dd";
+
+    private static final SimpleDateFormat simpleDateFormatTimeStamp = new SimpleDateFormat(DATE_FORMAT_WITH_TIMESTAMP);
+
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
+
     private ApiParameterParser() {
     }
 
@@ -38,11 +46,72 @@ public final class ApiParameterParser {
      */
     public static String parseParametersToString(final org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters jobParameters) {
         final Map<String, org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter> parameters = jobParameters.getParameters();
-        final Map<String, Object> parameterMap = new HashMap<>();
+        final Map<String, Map<ParameterType, Object>> typeParameterMap = new HashMap<>();
+
         for (final Entry<String, org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter> entry : parameters.entrySet()) {
-            parameterMap.put(entry.getKey(), entry.getValue().getParameter());
+            final Map<ParameterType, Object> parameterMap = new HashMap<>();
+            parameterMap.put(entry.getValue().getParameterType(), entry.getValue().getParameter());
+            typeParameterMap.put(entry.getKey(), parameterMap);
         }
-        return DomainParameterParser.parseParameterMapToString(parameterMap);
+        return parseParameterMapToString(typeParameterMap);
+    }
+
+
+    /**
+     * Maps key value pairs of job parameters to a readable String
+     *
+     * @param parametersMap parameter map of String, Object
+     * @return a human readble representation of the parameter map
+     */
+    public static String parseParameterMapToString(final Map<String, Map<ParameterType, Object>> parametersMap) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        if (parametersMap != null) {
+            for (final Entry<String, Map<ParameterType, Object>> entry : parametersMap.entrySet()) {
+                final String key = entry.getKey();
+                final Map<ParameterType, Object> valueMap = entry.getValue();
+                final ParameterType type;
+                final Object value;
+                if (valueMap.size() != 1) {
+                    throw new IllegalArgumentException("");
+                } else {
+                    final Entry<ParameterType, Object> valueEntry = entry.getValue().entrySet().iterator().next();
+                    type = valueEntry.getKey();
+                    value = valueEntry.getValue();
+                }
+
+                final String valueType;
+                final String valueString;
+
+                if (ParameterType.LONG.equals(type)) {
+                    valueType = "(Long)";
+                    valueString = value.toString();
+                } else if (ParameterType.STRING.equals(type)) {
+                    valueType = "(String)";
+                    valueString = (String) value;
+                } else if (ParameterType.DOUBLE.equals(type)) {
+                    valueType = "(Double)";
+                    valueString = value.toString();
+                } else if (ParameterType.DATE.equals(type)) {
+                    valueType = "(Date)";
+                    valueString = simpleDateFormatTimeStamp.format((Date) value);
+                } else {
+                    throw new SpringBatchLightminApplicationException("Unknown ParameterType:" + value.getClass().getName());
+                }
+                stringBuilder.append(key);
+                stringBuilder.append(valueType);
+                stringBuilder.append("=");
+                stringBuilder.append(valueString);
+                stringBuilder.append(",");
+            }
+        }
+        final String tempParameters = stringBuilder.toString();
+        final String result;
+        if (!tempParameters.isEmpty() && tempParameters.length() >= 1) {
+            result = tempParameters.substring(0, tempParameters.length() - 1);
+        } else {
+            result = tempParameters;
+        }
+        return result;
     }
 
     /**

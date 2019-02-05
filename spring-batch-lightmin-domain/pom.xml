@@ -12,6 +12,17 @@
     <artifactId>spring-batch-lightmin-domain</artifactId>
 
     <dependencies>
+        <!-- jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
         <!-- quartz -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
