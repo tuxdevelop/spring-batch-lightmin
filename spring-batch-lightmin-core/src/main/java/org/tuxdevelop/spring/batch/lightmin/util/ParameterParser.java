@@ -47,12 +47,16 @@ public final class ParameterParser {
     public static String parseParametersToString(final org.tuxdevelop.spring.batch.lightmin.api.resource.common
             .JobParameters jobParameters) {
         final Map<String, org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter> parameters = jobParameters.getParameters();
-        final Map<String, Object> parameterMap = new HashMap<>();
+        final Map<String, Map<ParameterType, Object>> typeParameterMap = new HashMap<>();
+
         for (final Entry<String, org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter> entry : parameters.entrySet()) {
-            parameterMap.put(entry.getKey(), entry.getValue().getParameter());
+            final Map<ParameterType, Object> parameterMap = new HashMap<>();
+            parameterMap.put(entry.getValue().getParameterType(), entry.getValue().getParameter());
+            typeParameterMap.put(entry.getKey(), parameterMap);
         }
-        return parseParameterMapToString(parameterMap);
+        return parseParameterMapToString(typeParameterMap);
     }
+
 
     /**
      * Maps key value pairs of job parameters to a readable String
@@ -60,24 +64,35 @@ public final class ParameterParser {
      * @param parametersMap parameter map of String, Object
      * @return a human readble representation of the parameter map
      */
-    public static String parseParameterMapToString(final Map<String, Object> parametersMap) {
+    public static String parseParameterMapToString(final Map<String, Map<ParameterType, Object>> parametersMap) {
         final StringBuilder stringBuilder = new StringBuilder();
         if (parametersMap != null) {
-            for (final Entry<String, Object> entry : parametersMap.entrySet()) {
+            for (final Entry<String, Map<ParameterType, Object>> entry : parametersMap.entrySet()) {
                 final String key = entry.getKey();
-                final Object value = entry.getValue();
+                final Map<ParameterType, Object> valueMap = entry.getValue();
+                final ParameterType type;
+                final Object value;
+                if (valueMap.size() != 1) {
+                    throw new IllegalArgumentException("");
+                } else {
+                    final Entry<ParameterType, Object> valueEntry = entry.getValue().entrySet().iterator().next();
+                    type = valueEntry.getKey();
+                    value = valueEntry.getValue();
+                }
+
                 final String valueType;
                 final String valueString;
-                if (value instanceof Long || value instanceof Integer) {
+
+                if (ParameterType.LONG.equals(type)) {
                     valueType = "(Long)";
                     valueString = value.toString();
-                } else if (value instanceof String) {
+                } else if (ParameterType.STRING.equals(type)) {
                     valueType = "(String)";
                     valueString = (String) value;
-                } else if (value instanceof Double) {
+                } else if (ParameterType.DOUBLE.equals(type)) {
                     valueType = "(Double)";
                     valueString = value.toString();
-                } else if (value instanceof Date) {
+                } else if (ParameterType.DATE.equals(type)) {
                     valueType = "(Date)";
                     valueString = simpleDateFormatTimeStamp.format((Date) value);
                 } else {
@@ -99,6 +114,7 @@ public final class ParameterParser {
         }
         return result;
     }
+
 
     /**
      * maps a String a parameters to Spring Batch {@link org.springframework.batch.core.JobParameters}.
@@ -232,11 +248,15 @@ public final class ParameterParser {
      */
     public static String parseJobParametersToString(final JobParameters jobParameters) {
         final Map<String, JobParameter> jobParametersMap = jobParameters.getParameters();
-        final Map<String, Object> paramatersMap = new HashMap<>();
+        final Map<String, Map<ParameterType, Object>> typeParameterMap = new HashMap<>();
         for (final Entry<String, JobParameter> entry : jobParametersMap.entrySet()) {
-            paramatersMap.put(entry.getKey(), entry.getValue().getValue());
+            final Map<ParameterType, Object> parameterMap = new HashMap<>();
+            final JobParameter.ParameterType batchParameterType = entry.getValue().getType();
+            final ParameterType parameterType = ParameterType.valueOf(batchParameterType.name());
+            parameterMap.put(parameterType, entry.getValue().getValue());
+            typeParameterMap.put(entry.getKey(), parameterMap);
         }
-        return parseParameterMapToString(paramatersMap);
+        return parseParameterMapToString(typeParameterMap);
     }
 
     private static List<String> splitParameters(final String parameters) {
@@ -322,6 +342,10 @@ public final class ParameterParser {
             }
         }
         return date;
+    }
+
+    public static String parseDate(final Date date) {
+        return simpleDateFormatTimeStamp.format(date);
     }
 
     private enum StringTypes {
