@@ -43,24 +43,35 @@ public final class DomainParameterParser {
      * @param parametersMap parameter map of String, Object
      * @return a human readble representation of the parameter map
      */
-    public static String parseParameterMapToString(final Map<String, Object> parametersMap) {
+    public static String parseParameterMapToString(final Map<String, Map<JobParameter.ParameterType, Object>> parametersMap) {
         final StringBuilder stringBuilder = new StringBuilder();
         if (parametersMap != null) {
-            for (final Entry<String, Object> entry : parametersMap.entrySet()) {
+            for (final Entry<String, Map<JobParameter.ParameterType, Object>> entry : parametersMap.entrySet()) {
                 final String key = entry.getKey();
-                final Object value = entry.getValue();
+                final Map<JobParameter.ParameterType, Object> valueMap = entry.getValue();
+                final JobParameter.ParameterType type;
+                final Object value;
+                if (valueMap.size() != 1) {
+                    throw new IllegalArgumentException("Parameter are not present");
+                } else {
+                    final Entry<JobParameter.ParameterType, Object> valueEntry = entry.getValue().entrySet().iterator().next();
+                    type = valueEntry.getKey();
+                    value = valueEntry.getValue();
+                }
+
                 final String valueType;
                 final String valueString;
-                if (value instanceof Long || value instanceof Integer) {
+
+                if (JobParameter.ParameterType.LONG.equals(type)) {
                     valueType = "(Long)";
                     valueString = value.toString();
-                } else if (value instanceof String) {
+                } else if (JobParameter.ParameterType.STRING.equals(type)) {
                     valueType = "(String)";
                     valueString = (String) value;
-                } else if (value instanceof Double) {
+                } else if (JobParameter.ParameterType.DOUBLE.equals(type)) {
                     valueType = "(Double)";
                     valueString = value.toString();
-                } else if (value instanceof Date) {
+                } else if (JobParameter.ParameterType.DATE.equals(type)) {
                     valueType = "(Date)";
                     valueString = simpleDateFormatTimeStamp.format((Date) value);
                 } else {
@@ -158,12 +169,16 @@ public final class DomainParameterParser {
      * @return a String representation of {@link JobParameters}
      */
     public static String parseJobParametersToString(final JobParameters jobParameters) {
-        final Map<String, JobParameter> jobParametersMap = jobParameters.getParameters();
-        final Map<String, Object> paramatersMap = new HashMap<>();
-        for (final Entry<String, JobParameter> entry : jobParametersMap.entrySet()) {
-            paramatersMap.put(entry.getKey(), entry.getValue().getValue());
+        final Map<String, JobParameter> parameters = jobParameters.getParameters();
+        final Map<String, Map<JobParameter.ParameterType, Object>> typeParameterMap = new HashMap<>();
+
+        for (final Entry<String, JobParameter> entry : parameters.entrySet()) {
+            final Map<JobParameter.ParameterType, Object> parameterMap = new HashMap<>();
+            parameterMap.put(entry.getValue().getType(), entry.getValue().getValue());
+            typeParameterMap.put(entry.getKey(), parameterMap);
         }
-        return parseParameterMapToString(paramatersMap);
+
+        return parseParameterMapToString(typeParameterMap);
     }
 
     private static List<String> splitParameters(final String parameters) {
@@ -249,6 +264,10 @@ public final class DomainParameterParser {
             }
         }
         return date;
+    }
+
+    public static String parseDate(final Date date) {
+        return simpleDateFormatTimeStamp.format(date);
     }
 
     public enum StringTypes {
