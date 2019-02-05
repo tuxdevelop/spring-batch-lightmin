@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import static org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser.DATE_FORMAT_WITH_TIMESTAMP;
+
 /**
  * @author Marcel Becker
  * @since 1.0
@@ -28,12 +30,7 @@ import java.util.Map.Entry;
 @Slf4j
 public final class ApiParameterParser {
 
-    public static final String DATE_FORMAT_WITH_TIMESTAMP = "yyyy/MM/dd HH:mm:ss:SSS";
-    public static final String DATE_FORMAT = "yyyy/MM/dd";
-
     private static final SimpleDateFormat simpleDateFormatTimeStamp = new SimpleDateFormat(DATE_FORMAT_WITH_TIMESTAMP);
-
-    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
 
     private ApiParameterParser() {
     }
@@ -46,14 +43,11 @@ public final class ApiParameterParser {
      */
     public static String parseParametersToString(final org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters jobParameters) {
         final Map<String, org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter> parameters = jobParameters.getParameters();
-        final Map<String, Map<ParameterType, Object>> typeParameterMap = new HashMap<>();
-
+        final Map<String, Object> parameterMap = new HashMap<>();
         for (final Entry<String, org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter> entry : parameters.entrySet()) {
-            final Map<ParameterType, Object> parameterMap = new HashMap<>();
-            parameterMap.put(entry.getValue().getParameterType(), entry.getValue().getParameter());
-            typeParameterMap.put(entry.getKey(), parameterMap);
+            parameterMap.put(entry.getKey(), entry.getValue().getParameter());
         }
-        return parseParameterMapToString(typeParameterMap);
+        return parseParameterMapToString(parameterMap);
     }
 
 
@@ -63,35 +57,24 @@ public final class ApiParameterParser {
      * @param parametersMap parameter map of String, Object
      * @return a human readble representation of the parameter map
      */
-    public static String parseParameterMapToString(final Map<String, Map<ParameterType, Object>> parametersMap) {
+    private static String parseParameterMapToString(final Map<String, Object> parametersMap) {
         final StringBuilder stringBuilder = new StringBuilder();
         if (parametersMap != null) {
-            for (final Entry<String, Map<ParameterType, Object>> entry : parametersMap.entrySet()) {
+            for (final Entry<String, Object> entry : parametersMap.entrySet()) {
                 final String key = entry.getKey();
-                final Map<ParameterType, Object> valueMap = entry.getValue();
-                final ParameterType type;
-                final Object value;
-                if (valueMap.size() != 1) {
-                    throw new IllegalArgumentException("");
-                } else {
-                    final Entry<ParameterType, Object> valueEntry = entry.getValue().entrySet().iterator().next();
-                    type = valueEntry.getKey();
-                    value = valueEntry.getValue();
-                }
-
+                final Object value = entry.getValue();
                 final String valueType;
                 final String valueString;
-
-                if (ParameterType.LONG.equals(type)) {
+                if (value instanceof Long || value instanceof Integer) {
                     valueType = "(Long)";
                     valueString = value.toString();
-                } else if (ParameterType.STRING.equals(type)) {
+                } else if (value instanceof String) {
                     valueType = "(String)";
                     valueString = (String) value;
-                } else if (ParameterType.DOUBLE.equals(type)) {
+                } else if (value instanceof Double) {
                     valueType = "(Double)";
                     valueString = value.toString();
-                } else if (ParameterType.DATE.equals(type)) {
+                } else if (value instanceof Date) {
                     valueType = "(Date)";
                     valueString = simpleDateFormatTimeStamp.format((Date) value);
                 } else {
@@ -106,7 +89,7 @@ public final class ApiParameterParser {
         }
         final String tempParameters = stringBuilder.toString();
         final String result;
-        if (!tempParameters.isEmpty() && tempParameters.length() >= 1) {
+        if (!tempParameters.isEmpty()) {
             result = tempParameters.substring(0, tempParameters.length() - 1);
         } else {
             result = tempParameters;
