@@ -6,7 +6,7 @@
 
     <groupId>org.tuxdevelop</groupId>
     <artifactId>spring-batch-lightmin-bom</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Spring Batch Lightmin BOM</name>
