@@ -11,6 +11,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.test.configuration.ITConfiguration;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class JobLauncherBeanIT {
         final Map<String, JobParameter> jobParametersMap = new HashMap<>();
         final JobParameter jobParameter = new JobParameter();
         jobParameter.setParameterType(ParameterType.DATE);
-        jobParameter.setParameter("2017/02/10 13:42:00:001");
+        jobParameter.setParameter(new Date());
         jobParametersMap.put("someDate", jobParameter);
         jobParameters.setParameters(jobParametersMap);
         final JobLaunch jobLaunch = new JobLaunch();

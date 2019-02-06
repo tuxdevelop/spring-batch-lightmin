@@ -10,6 +10,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class JobLauncherControllerIT extends CommonControllerIT {
         jobParameter.setParameter(10.1);
         jobParameter.setParameterType(ParameterType.DOUBLE);
         final JobParameter jobParameterDate = new JobParameter();
-        jobParameterDate.setParameter("2017/02/10 13:42:00:001");
+        jobParameterDate.setParameter(new Date());
         jobParameterDate.setParameterType(ParameterType.DATE);
         final JobParameter jobParameterLong = new JobParameter();
         jobParameterLong.setParameter(10L);
