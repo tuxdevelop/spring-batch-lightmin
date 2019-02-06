@@ -1,0 +1,6 @@
+server:
+  port: 50111
+
+spring:
+  application:
+    name: embedded-test-app

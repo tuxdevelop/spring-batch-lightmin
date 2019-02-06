@@ -176,13 +176,7 @@ public class ResourceToDomainMapperTest {
             assertThat(jobParameterMap.containsKey(entry.getKey())).isTrue();
             final Object expected = jobParameterMap.get(entry.getKey());
             final JobParameter jobParameter = entry.getValue();
-            final Object paramValue;
-            if (jobParameter.getParameterType().equals(ParameterType.DATE)) {
-                paramValue = DomainParameterParser.parseDate(jobParameter.getParameter().toString());
-            } else {
-                paramValue = jobParameter.getParameter();
-            }
-            assertThat(paramValue).isEqualTo(expected);
+            assertThat(jobParameter.getParameter()).isEqualTo(expected);
         }
     }
 

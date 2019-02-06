@@ -90,7 +90,7 @@ public final class ApiParameterParser {
                     valueString = value.toString();
                 } else if (ParameterType.DATE.equals(type)) {
                     valueType = "(Date)";
-                    valueString = simpleDateFormatTimeStamp.format(new Date(Long.parseLong(value.toString())));
+                    valueString = simpleDateFormatTimeStamp.format((Date) value);
                 } else {
                     throw new SpringBatchLightminApplicationException("Unknown ParameterType:" + value.getClass().getName());
                 }
