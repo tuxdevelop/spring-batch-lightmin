@@ -32,7 +32,7 @@ public class ResourceToDomainMapperTest {
         jobParameterLong.setParameter(20L);
         jobParameterLong.setParameterType(ParameterType.LONG);
         final JobParameter jobParameterDate = new JobParameter();
-        jobParameterDate.setParameter("2017/02/10 13:42:00:001");
+        jobParameterDate.setParameter(new Date());
         jobParameterDate.setParameterType(ParameterType.DATE);
         parameters.put("double", jobParameterDouble);
         parameters.put("long", jobParameterLong);
@@ -82,11 +82,11 @@ public class ResourceToDomainMapperTest {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DomainParameterParser.DATE_FORMAT_WITH_TIMESTAMP);
         final Date now = new Date();
         final JobParameter jobParameter = new JobParameter();
-        jobParameter.setParameter(simpleDateFormat.format(now));
+        jobParameter.setParameter(now);
         jobParameter.setParameterType(ParameterType.DATE);
 
         final JobParameter jobParameter2 = new JobParameter();
-        jobParameter2.setParameter(String.valueOf(now.getTime()));
+        jobParameter2.setParameter(now);
         jobParameter2.setParameterType(ParameterType.DATE);
 
 
