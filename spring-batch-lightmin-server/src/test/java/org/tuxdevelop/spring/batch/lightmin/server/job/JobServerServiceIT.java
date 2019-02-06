@@ -13,6 +13,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,7 +86,7 @@ public abstract class JobServerServiceIT {
         jobParameter.setParameter(10.1);
         jobParameter.setParameterType(ParameterType.DOUBLE);
         final JobParameter jobParameterDate = new JobParameter();
-        jobParameterDate.setParameter("2017/02/10 13:42:00:001");
+        jobParameterDate.setParameter(new Date());
         jobParameterDate.setParameterType(ParameterType.DATE);
         final JobParameter jobParameterLong = new JobParameter();
         jobParameterLong.setParameter(10L);

@@ -32,7 +32,7 @@ public class ResourceToAdminMapperTest {
         jobParameterLong.setParameter(20L);
         jobParameterLong.setParameterType(ParameterType.LONG);
         final JobParameter jobParameterDate = new JobParameter();
-        jobParameterDate.setParameter("2017/02/10 13:42:00:001");
+        jobParameterDate.setParameter(new Date());
         jobParameterDate.setParameterType(ParameterType.DATE);
         parameters.put("double", jobParameterDouble);
         parameters.put("long", jobParameterLong);
@@ -82,11 +82,11 @@ public class ResourceToAdminMapperTest {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ParameterParser.DATE_FORMAT_WITH_TIMESTAMP);
         final Date now = new Date();
         final JobParameter jobParameter = new JobParameter();
-        jobParameter.setParameter(simpleDateFormat.format(now));
+        jobParameter.setParameter(now);
         jobParameter.setParameterType(ParameterType.DATE);
 
         final JobParameter jobParameter2 = new JobParameter();
-        jobParameter2.setParameter(String.valueOf(now.getTime()));
+        jobParameter2.setParameter(now);
         jobParameter2.setParameterType(ParameterType.DATE);
 
 
@@ -177,11 +177,7 @@ public class ResourceToAdminMapperTest {
             final Object expected = jobParameterMap.get(entry.getKey());
             final JobParameter jobParameter = entry.getValue();
             final Object paramValue;
-            if (jobParameter.getParameterType().equals(ParameterType.DATE)) {
-                paramValue = ParameterParser.parseDate(jobParameter.getParameter().toString());
-            } else {
-                paramValue = jobParameter.getParameter();
-            }
+            paramValue = jobParameter.getParameter();
             assertThat(paramValue).isEqualTo(expected);
         }
     }

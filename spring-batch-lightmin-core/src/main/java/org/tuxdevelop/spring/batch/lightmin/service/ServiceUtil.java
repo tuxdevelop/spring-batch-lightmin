@@ -51,6 +51,8 @@ final class ServiceUtil {
                                            final Object parameterValue) {
         if (parameterValue instanceof Long) {
             jobParametersBuilder.addLong(parameterName, (Long) parameterValue);
+        } else if (parameterValue instanceof Integer) {
+            jobParametersBuilder.addLong(parameterName, Long.valueOf((Integer) parameterValue));
         } else if (parameterValue instanceof Date) {
             jobParametersBuilder.addDate(parameterName, (Date) parameterValue);
         } else if (parameterValue instanceof String) {

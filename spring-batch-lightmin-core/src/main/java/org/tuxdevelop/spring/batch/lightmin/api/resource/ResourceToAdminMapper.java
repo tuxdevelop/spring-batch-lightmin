@@ -6,12 +6,8 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
-import org.tuxdevelop.spring.batch.lightmin.util.ParameterParser;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Marcel Becker
@@ -61,7 +57,7 @@ public final class ResourceToAdminMapper {
                         jobParameter = new org.springframework.batch.core.JobParameter(Long.parseLong(parameter));
                         break;
                     case DATE:
-                        jobParameter = new org.springframework.batch.core.JobParameter(ParameterParser.parseDate(parameter));
+                        jobParameter = new org.springframework.batch.core.JobParameter((Date) entry.getValue().getParameter());
                         break;
                     default:
                         throw new SpringBatchLightminApplicationException("Unknown JobParameterType: " + entry.getValue().getParameterType());
@@ -207,12 +203,11 @@ public final class ResourceToAdminMapper {
     }
 
     private static Map<String, Object> mapToMap(final JobParameters jobParameters) {
-        final org.springframework.batch.core.JobParameters mapped = map(jobParameters);
         final Map<String, Object> jobParameterMap = new HashMap<>();
         if (jobParameters != null && jobParameters.getParameters() != null) {
-            final Map<String, org.springframework.batch.core.JobParameter> parameters = mapped.getParameters();
-            for (final Map.Entry<String, org.springframework.batch.core.JobParameter> entry : parameters.entrySet()) {
-                jobParameterMap.put(entry.getKey(), entry.getValue().getValue());
+            final Map<String, JobParameter> parameters = jobParameters.getParameters();
+            for (final Map.Entry<String, JobParameter> entry : parameters.entrySet()) {
+                jobParameterMap.put(entry.getKey(), entry.getValue().getParameter());
             }
         }
         return jobParameterMap;

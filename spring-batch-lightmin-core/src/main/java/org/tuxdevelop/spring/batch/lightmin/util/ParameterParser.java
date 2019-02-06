@@ -204,7 +204,7 @@ public final class ParameterParser {
             if (value instanceof String) {
                 jobParameter.setParameterType(ParameterType.STRING);
                 jobParameter.setParameter(value);
-            } else if (value instanceof Long) {
+            } else if (value instanceof Long || value instanceof Integer) {
                 jobParameter.setParameterType(ParameterType.LONG);
                 jobParameter.setParameter(value);
             } else if (value instanceof Date) {

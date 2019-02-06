@@ -795,7 +795,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
         private JobConfigurationParameter createJobConfigurationParameter(final String key, final Object value) {
             final JobConfigurationParameter jobConfigurationParameter = new JobConfigurationParameter();
-            if (value instanceof Long) {
+            if (value instanceof Long || value instanceof Integer) {
                 jobConfigurationParameter.setParameterValue(value.toString());
                 jobConfigurationParameter.setParameterType(ParameterType.LONG.getId());
             } else if (value instanceof String) {

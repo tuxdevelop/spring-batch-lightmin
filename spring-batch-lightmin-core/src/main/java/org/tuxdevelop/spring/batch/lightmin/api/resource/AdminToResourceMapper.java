@@ -205,7 +205,7 @@ public final class AdminToResourceMapper {
 
     private static ParameterType mapObjectToParameterType(final Object value) {
         final ParameterType response;
-        if (value instanceof Long) {
+        if (value instanceof Long || value instanceof Integer) {
             response = ParameterType.LONG;
         } else if (value instanceof String) {
             response = ParameterType.STRING;
