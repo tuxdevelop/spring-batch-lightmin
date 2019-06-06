@@ -8,6 +8,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.util.ApiParameterParser;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ExecutionStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
 import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
@@ -36,20 +37,20 @@ public class ExecutionRunner implements Runnable {
             final SchedulerConfiguration schedulerConfiguration =
                     this.executionRunnerService.findSchedulerConfigurationById(
                             this.schedulerExecution.getSchedulerConfigurationId());
-            updateExecution(ExecutionStatus.RUNNING, Boolean.TRUE);
+            this.updateExecution(ExecutionStatus.RUNNING, Boolean.TRUE);
             try {
-                fireJobLaunch(schedulerConfiguration);
-                updateExecution(ExecutionStatus.FINISHED, Boolean.FALSE);
+                this.fireJobLaunch(schedulerConfiguration);
+                this.updateExecution(ExecutionStatus.FINISHED, Boolean.FALSE);
             } catch (final Exception e) {
                 log.error("Execution for {} failed ", this.schedulerExecution, e);
                 if (schedulerConfiguration.getRetriable() &&
                         this.schedulerExecution.getExecutionCount() <= schedulerConfiguration.getMaxRetries()) {
-                    updateExecution(ExecutionStatus.FAILED, Boolean.FALSE);
+                    this.updateExecution(ExecutionStatus.FAILED, Boolean.FALSE);
                 } else {
-                    updateExecution(ExecutionStatus.LOST, Boolean.FALSE);
+                    this.updateExecution(ExecutionStatus.LOST, Boolean.FALSE);
                 }
             }
-            createNextExecution(schedulerConfiguration.getCronExpression());
+            this.createNextExecution(schedulerConfiguration.getCronExpression());
         } catch (final Exception e) {
             log.error("Error while processing scheduled job state {} ", this.schedulerExecution, e);
         }
@@ -89,14 +90,14 @@ public class ExecutionRunner implements Runnable {
         final String jobName = schedulerConfiguration.getJobName();
         final Integer instanceExecutionCount = schedulerConfiguration.getInstanceExecutionCount();
         //1. get job parameters
-        final JobParameters jobParameters = getJobParameters(schedulerConfiguration);
+        final JobParameters jobParameters = this.getJobParameters(schedulerConfiguration);
         //2. get JobLaunch
-        final JobLaunch jobLaunch = getJobLaunch(jobName, jobParameters);
+        final JobLaunch jobLaunch = this.getJobLaunch(jobName, jobParameters);
         //3. get lightmin client instances
         final List<LightminClientApplication> lightminClientApplications =
-                getLightminClientApplications(instanceExecutionCount, applicationName);
+                this.getLightminClientApplications(instanceExecutionCount, applicationName);
         //4. launch jobs on instances
-        launchJobForInstances(jobLaunch, lightminClientApplications);
+        this.launchJobForInstances(jobLaunch, lightminClientApplications);
     }
 
     private void launchJobForInstances(final JobLaunch jobLaunch,
@@ -139,7 +140,7 @@ public class ExecutionRunner implements Runnable {
         final Map<String, Object> parametersMap = schedulerConfiguration.getJobParameters();
         final String parametersString = DomainParameterParser.parseParameterMapToString(parametersMap);
         final JobParameters jobParameters = ApiParameterParser.parseParametersToJobParameters(parametersString);
-        attachIncremeter(schedulerConfiguration.getJobIncrementer(), jobParameters);
+        this.attachIncremeter(schedulerConfiguration.getJobIncrementer(), jobParameters);
         return jobParameters;
     }
 

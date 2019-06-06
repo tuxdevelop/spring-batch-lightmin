@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.exception.SchedulerRuntimException;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerExecutionRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ExecutionStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerValidationException;
 
@@ -42,7 +43,7 @@ public class SchedulerExecutionService {
             //3. set status to new
             schedulerExecution.setState(ExecutionStatus.NEW);
             //4. determine next fire time
-            final Date nextFireTime = getNextFireTime(cronExpression);
+            final Date nextFireTime = this.getNextFireTime(cronExpression);
             schedulerExecution.setNextFireTime(nextFireTime);
             //5. save
             this.save(schedulerExecution);

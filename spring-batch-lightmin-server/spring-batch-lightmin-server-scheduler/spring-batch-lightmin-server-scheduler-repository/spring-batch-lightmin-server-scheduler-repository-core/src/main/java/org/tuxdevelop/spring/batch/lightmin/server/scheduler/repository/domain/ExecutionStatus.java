@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.server.scheduler.service;
+package org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain;
 
 public final class ExecutionStatus {
 

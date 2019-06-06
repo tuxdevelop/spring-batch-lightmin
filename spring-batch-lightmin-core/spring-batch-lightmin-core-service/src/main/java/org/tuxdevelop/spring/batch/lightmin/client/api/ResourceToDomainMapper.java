@@ -6,12 +6,8 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
-import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Marcel Becker
@@ -61,7 +57,7 @@ public final class ResourceToDomainMapper {
                         jobParameter = new org.springframework.batch.core.JobParameter(Long.parseLong(parameter));
                         break;
                     case DATE:
-                        jobParameter = new org.springframework.batch.core.JobParameter(DomainParameterParser.parseDate(parameter));
+                        jobParameter = new org.springframework.batch.core.JobParameter((Date) entry.getValue().getParameter());
                         break;
                     default:
                         throw new SpringBatchLightminApplicationException("Unknown JobParameterType: " + entry.getValue().getParameterType());

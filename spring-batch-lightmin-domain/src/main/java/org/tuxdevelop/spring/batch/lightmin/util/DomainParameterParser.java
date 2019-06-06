@@ -255,6 +255,10 @@ public final class DomainParameterParser {
         return date;
     }
 
+    public static String parseDate(final Date date) {
+        return simpleDateFormatTimeStamp.format(date);
+    }
+
     public enum StringTypes {
 
         STRING("STRING"), LONG("LONG"), DATE("DATE"), DOUBLE("DOUBLE");

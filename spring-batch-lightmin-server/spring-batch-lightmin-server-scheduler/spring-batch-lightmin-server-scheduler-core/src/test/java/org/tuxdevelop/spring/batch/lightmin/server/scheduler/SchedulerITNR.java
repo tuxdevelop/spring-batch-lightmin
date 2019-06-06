@@ -13,9 +13,9 @@ import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicatio
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.configuration.ServerSchedulerCoreConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerExecutionRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ExecutionStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
-import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.ExecutionStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 
 import java.util.Collections;
@@ -42,7 +42,7 @@ public class SchedulerITNR {
 
     @Test
     public void testNR() {
-        setup();
+        this.setup();
 
         while (true) ;
     }
@@ -58,8 +58,8 @@ public class SchedulerITNR {
     }
 
     private void setup() {
-        final SchedulerConfiguration config = createSchedulerConfiguration();
-        createSchedulerExecution(config.getId(), new Date(), ExecutionStatus.NEW);
+        final SchedulerConfiguration config = this.createSchedulerConfiguration();
+        this.createSchedulerExecution(config.getId(), new Date(), ExecutionStatus.NEW);
     }
 
 
