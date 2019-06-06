@@ -14,6 +14,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.configuration.ServerSchedulerJdbcConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerValidationException;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ServerSchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
 
@@ -102,7 +103,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
 
     private static class SchedulerConfigurationDAO {
 
-        private static final String FIELDS = "S.id, S.application_name, S.job_name";
+        private static final String FIELDS = "S.id, S.application_name, S.job_name, S.configuration_status";
 
         private static final String GET_ALL =
                 "SELECT * FROM %s";
@@ -121,6 +122,11 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
 
         private static final String COUNT =
                 "SELECT COUNT(1) FROM %s";
+
+        private static final String UPDATE_STATUS =
+                "UPDATE %s SET "
+                        + SchedulerConfigurationDomain.CONFIGURATION_STATUS
+                        + " = ?";
 
         private final JdbcTemplate jdbcTemplate;
         private final SimpleJdbcInsert simpleJdbcInsert;
@@ -141,7 +147,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
             this.tableName = tableName;
             this.schedulerConfigurationValueDAO = schedulerConfigurationValueDAO;
             this.rowMapper = new SchedulerConfigurationRowMapper();
-            this.findAllPagingQueryProvider = getPagingQueryProvider(null);
+            this.findAllPagingQueryProvider = this.getPagingQueryProvider(null);
         }
 
         SchedulerConfiguration findById(final Long id) {
@@ -211,6 +217,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
 
         SchedulerConfiguration update(final SchedulerConfiguration schedulerConfiguration) {
             this.schedulerConfigurationValueDAO.updateValues(schedulerConfiguration);
+            this.updateStatus(schedulerConfiguration.getStatus().getValue());
             this.schedulerConfigurationValueDAO.attachValues(schedulerConfiguration);
             return schedulerConfiguration;
         }
@@ -219,6 +226,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
             final Map<String, Object> keys = new HashMap<>();
             keys.put(SchedulerConfigurationDomain.APPLICATION_NAME, schedulerConfiguration.getApplication());
             keys.put(SchedulerConfigurationDomain.JOB_NAME, schedulerConfiguration.getJobName());
+            keys.put(SchedulerConfigurationDomain.CONFIGURATION_STATUS, schedulerConfiguration.getStatus().getValue());
             final Number id = this.simpleJdbcInsert.executeAndReturnKey(keys);
             schedulerConfiguration.setId(id.longValue());
             this.schedulerConfigurationValueDAO.saveValue(schedulerConfiguration);
@@ -234,6 +242,15 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                     sql,
                     new Object[]{id},
                     new int[]{Types.NUMERIC}
+            );
+        }
+
+        private void updateStatus(final String status) {
+            final String sql = String.format(UPDATE_STATUS, this.tableName);
+            this.jdbcTemplate.update(
+                    sql,
+                    new Object[]{status},
+                    new int[]{Types.VARCHAR}
             );
         }
 
@@ -272,6 +289,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
             final static String ID = "id";
             final static String APPLICATION_NAME = "application_name";
             final static String JOB_NAME = "job_name";
+            final static String CONFIGURATION_STATUS = "configuration_status";
         }
 
         private class SchedulerConfigurationRowMapper implements RowMapper<SchedulerConfiguration> {
@@ -282,6 +300,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                 schedulerConfiguration.setId(resultSet.getLong(SchedulerConfigurationDomain.ID));
                 schedulerConfiguration.setJobName(resultSet.getString(SchedulerConfigurationDomain.JOB_NAME));
                 schedulerConfiguration.setApplication(resultSet.getString(SchedulerConfigurationDomain.APPLICATION_NAME));
+                schedulerConfiguration.setStatus(ServerSchedulerStatus.getByValue(resultSet.getString(SchedulerConfigurationDomain.CONFIGURATION_STATUS)));
                 return schedulerConfiguration;
             }
         }
@@ -326,8 +345,8 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
 
         void saveValue(final SchedulerConfiguration schedulerConfiguration) {
 
-            final List<SchedulerConfigurationValue> values = mapSchedulerConfigurationValues(schedulerConfiguration);
-            mapSchedulerConfigurationValues(schedulerConfiguration);
+            final List<SchedulerConfigurationValue> values = this.mapSchedulerConfigurationValues(schedulerConfiguration);
+            this.mapSchedulerConfigurationValues(schedulerConfiguration);
 
             final String sql = String.format(INSERT_VALUES, this.tableName);
             this.jdbcTemplate.batchUpdate(
@@ -435,7 +454,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
 
                 switch (value.getType()) {
                     case TypeDomain.JOB_PARAMETER: {
-                        attachParameter(schedulerConfiguration, value);
+                        this.attachParameter(schedulerConfiguration, value);
                         break;
                     }
                     case TypeDomain.CRON_EXPRESSION: {

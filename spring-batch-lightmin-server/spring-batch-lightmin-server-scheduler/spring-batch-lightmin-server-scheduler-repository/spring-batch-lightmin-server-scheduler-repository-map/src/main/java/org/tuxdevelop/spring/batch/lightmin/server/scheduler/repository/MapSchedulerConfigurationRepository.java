@@ -3,6 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerValidationException;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ServerSchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 
 import java.util.*;
@@ -21,10 +22,10 @@ public class MapSchedulerConfigurationRepository implements SchedulerConfigurati
             if (schedulerConfiguration.getId() != null) {
                 id = schedulerConfiguration.getId();
             } else {
-                id = getNextId();
+                id = this.getNextId();
                 schedulerConfiguration.setId(id);
             }
-            this.store.put(id, copy(schedulerConfiguration));
+            this.store.put(id, this.copy(schedulerConfiguration));
             return schedulerConfiguration;
         } else {
             throw new SchedulerValidationException("schedulerConfiguration must not be null");
@@ -35,7 +36,7 @@ public class MapSchedulerConfigurationRepository implements SchedulerConfigurati
     public SchedulerConfiguration findById(final Long id) throws SchedulerConfigurationNotFoundException {
         final SchedulerConfiguration schedulerConfiguration;
         if (this.store.containsKey(id)) {
-            schedulerConfiguration = copy(this.store.get(id));
+            schedulerConfiguration = this.copy(this.store.get(id));
         } else {
             throw new SchedulerConfigurationNotFoundException("Could not find a SchedulerConfiguration for id " + id);
         }
@@ -60,7 +61,7 @@ public class MapSchedulerConfigurationRepository implements SchedulerConfigurati
         if (this.store.isEmpty()) {
             log.debug("No SchedulerConfigurations available");
         } else {
-            schedulerConfigurations.addAll(copy(this.store.values()));
+            schedulerConfigurations.addAll(this.copy(this.store.values()));
             this.sort(schedulerConfigurations);
         }
         return schedulerConfigurations;
@@ -68,8 +69,8 @@ public class MapSchedulerConfigurationRepository implements SchedulerConfigurati
 
     @Override
     public List<SchedulerConfiguration> findAll(final int startIndex, final int pageSize) {
-        final List<SchedulerConfiguration> schedulerConfigurations = findAll();
-        return subset(schedulerConfigurations, startIndex, pageSize);
+        final List<SchedulerConfiguration> schedulerConfigurations = this.findAll();
+        return this.subset(schedulerConfigurations, startIndex, pageSize);
     }
 
     @Override
@@ -102,7 +103,7 @@ public class MapSchedulerConfigurationRepository implements SchedulerConfigurati
     private List<SchedulerConfiguration> copy(final Collection<SchedulerConfiguration> schedulerConfigurations) {
         final List<SchedulerConfiguration> copy = new ArrayList<>();
         for (final SchedulerConfiguration schedulerConfiguration : schedulerConfigurations) {
-            copy.add(copy(schedulerConfiguration));
+            copy.add(this.copy(schedulerConfiguration));
         }
         return copy;
     }
@@ -118,6 +119,7 @@ public class MapSchedulerConfigurationRepository implements SchedulerConfigurati
         copy.setMaxRetries(schedulerConfiguration.getMaxRetries());
         copy.setJobName(schedulerConfiguration.getJobName());
         copy.setApplication(schedulerConfiguration.getApplication());
+        copy.setStatus(ServerSchedulerStatus.getByValue(schedulerConfiguration.getStatus().getValue()));
         return copy;
     }
 

@@ -3,6 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository;
 import org.assertj.core.api.BDDAssertions;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ServerSchedulerStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,8 @@ public abstract class SchedulerTest {
         jobParameters.put("LONG", 200L);
         jobParameters.put("STRING", "hello");
         schedulerConfiguration.setJobParameters(jobParameters);
-        final SchedulerConfiguration result = getSchedulerConfigurationRepository().save(schedulerConfiguration);
+        schedulerConfiguration.setStatus(ServerSchedulerStatus.ACTIVE);
+        final SchedulerConfiguration result = this.getSchedulerConfigurationRepository().save(schedulerConfiguration);
         BDDAssertions.then(result).isNotNull();
         BDDAssertions.then(result.getId()).isNotNull();
         return result;

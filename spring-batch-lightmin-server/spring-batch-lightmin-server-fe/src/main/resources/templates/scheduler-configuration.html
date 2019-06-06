@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- TODO: remove head -->
+<head th:fragment="header">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Marcel Becker"/>
+
+    <title>Spring Batch Lightmin</title>
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{vendor/bootstrap/css/bootstrap.min.css}" href="../static/vendor/bootstrap/css/bootstrap.min.css"
+          rel="stylesheet"/>
+    <!-- Custom styles for this template -->
+    <link th:href="@{css/lightmin.css}" href="../static/css/lightmin.css"
+          rel="stylesheet" rel="stylesheet"/>
+    <link th:href="@{css/all.min.css}" href="../static/css/all.min.css" rel="stylesheet"/>
+</head>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/scheduler-navigation :: nav"></div>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand text-info" href="#" th:href="@{scheduler}">Scheduler</a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{scheduler-configurations}">Scheduler Configurations<span
+                            class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </nav>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Scheduler Configurations</li>
+                <li class="breadcrumb-item">Application1</li>
+                <li class="breadcrumb-item">Add</li>
+            </ol>
+        </nav>
+
+        <form id="serverSchedulerConfiguration form" method="post" class="text-secondary"
+              th:object="${schedulerConfiguration}">
+            <div class="card border-0">
+                <div class="card-body">
+                    <div class="form-group row" th:if="${modificationType.value == 'add'}">
+                        <label class="col-sm-2 col-form-label">Batch Job</label>
+                        <div class="col-sm-2">
+                            <select class="form-control form-control-sm"
+                                    th:field=" *{jobName}"
+                                    th:value="*{jobName}">
+                                <option class="text-muted"
+                                        th:each="job : ${applicationContextModel.registeredJobs}"
+                                        th:text="${job}"
+                                        th:value="${job}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div th:if="${modificationType.value == 'update'}">
+                        <input type="hidden"
+                               th:value="*{jobName}"
+                               th:field="*{jobName}"/>
+                    </div>
+                    <div class="form-group row" th:if="${modificationType.value == 'add'}">
+                        <label class="col-sm-2 col-form-label">Status</label>
+                        <div class="col-sm-2">
+                            <select class="form-control form-control-sm"
+                                    th:value=" *{config.status}"
+                                    th:field="*{config.status}">
+                                <option class="text-muted"
+                                        th:each="status : ${applicationContextModel.schedulerStatus}"
+                                        th:text="${status.displayText}"
+                                        th:value="${status.value}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div th:if="${modificationType.value == 'update'}">
+                        <input type="hidden"
+                               th:value="*{config.status}"
+                               th:field="*{config.status}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="card border-0 w-100">
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Cron Expression</label>
+                        <div class="col-sm-3">
+                            <input class="text-muted text-sm-left" th:value="*{config.cronExpression}"
+                                   th:field="*{config.cronExpression}"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Instance Execution Count</label>
+                        <div class="col-sm-3">
+                            <input class="text-muted text-sm-left" th:value="*{config.executionCount}"
+                                   th:field="*{config.executionCount}"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Retryable</label>
+                        <div class="col-sm-3">
+                            <input class="text-muted text-sm-left" th:value="*{config.retryable}"
+                                   th:field="*{config.retryable}"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Max Retries</label>
+                        <div class="col-sm-3">
+                            <input class="text-muted text-sm-left" th:value="*{config.maxRetries}"
+                                   th:field="*{config.maxRetries}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Job Parameters</label>
+                        <div class="col-sm-4">
+                                            <textarea type="text"
+                                                      class="form-control form-control-sm text-muted text-sm-left w-100"
+                                                      id="jobParamters"
+                                                      th:value="*{parameters}"
+                                                      th:field="*{parameters}">
+                                            </textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Job Incrementer</label>
+                        <div class="col-sm-2">
+                            <select class="form-control form-control-sm"
+                                    th:value="*{incrementer}"
+                                    th:field="*{incrementer}">
+                                <option class="text-muted"
+                                        th:each="incrementer : ${applicationContextModel.jobIncrementers}"
+                                        th:value="${incrementer.value}"
+                                        th:text="${incrementer.displayText}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" th:value="${schedulerConfiguration.config.type}"
+                   th:field="*{config.type}"/>
+            <input type="hidden" th:value="${schedulerConfiguration.id}"
+                   th:field="*{id}"/>
+
+            <div class="card border-0"
+                 th:if="${modificationType.value == 'add'}">
+                <div class="card-body">
+                    <button
+                            class="btn btn-info"
+                            type="submit"
+                            name="add-scheduler">
+                        Add
+                    </button>
+                </div>
+            </div>
+
+            <div class="card border-0" th:if="${modificationType.value == 'update'}">
+                <div class="card-body">
+                    <button
+                            class="btn btn-info"
+                            type="submit"
+                            name="update-scheduler">
+                        Update
+                    </button>
+                </div>
+            </div>
+            <div th:include="fragments/validation :: field-errors"></div>
+        </form>
+
+        <div th:include="fragments/hints :: job-parameter-description"></div>
+
+    </div>
+</div>
+</div>
+</body>
+</html>

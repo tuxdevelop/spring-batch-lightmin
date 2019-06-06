@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- TODO: remove head -->
+<head th:fragment="header">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Marcel Becker"/>
+
+    <title>Spring Batch Lightmin</title>
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{vendor/bootstrap/css/bootstrap.min.css}" href="../static/vendor/bootstrap/css/bootstrap.min.css"
+          rel="stylesheet"/>
+    <!-- Custom styles for this template -->
+    <link th:href="@{css/lightmin.css}" href="../static/css/lightmin.css"
+          rel="stylesheet" rel="stylesheet"/>
+    <link th:href="@{css/all.min.css}" href="../static/css/all.min.css" rel="stylesheet"/>
+</head>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/scheduler-navigation :: nav"></div>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand text-info" href="#" th:href="@{scheduler}">Scheduler</a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{scheduler-configurations}">Scheduler Configurations<span
+                            class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </nav>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Scheduler Configurations</li>
+            </ol>
+        </nav>
+
+        <div class="row-fluid content">
+            <div class="card">
+                <div class="card-header bg-light text-info">
+                    <div class="dropdown" style="display: inline;">
+                        <a class=" btn btn-sm btn-info dropdown-toggle" href="#" role="button"
+                           id="serverSchedulerDropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add
+                        </a>
+                        <div class="dropdown-menu bg-info" aria-labelledby="serverSchedulerDropdownMenuLink">
+                            <ul>
+                                <li class="dropdown-item-info">
+                                    Application1
+                                </li>
+                                <li class="dropdown-item-info">
+                                    Application2
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-sm">
+                    <tbody>
+                    <tr>
+                        <td class="font-weight-bold text-info">Application1</td>
+                        <td>
+                            <table class="table table-sm">
+                                <thead class="table-text-sm text-secondary">
+                                <tr>
+                                    <th>Job Name</th>
+                                    <th>Cron Expression</th>
+                                    <th>Instance Execution Count</th>
+                                    <th>Retryable</th>
+                                    <th>Max Retries</th>
+                                    <th>Incrementer</th>
+                                    <th>Parameters</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody class="text-muted table-text-sm">
+                                <tr>
+                                    <td>Test Job</td>
+                                    <td>0 0/2 0 ? * * *</td>
+                                    <td>2</td>
+                                    <td>true</td>
+                                    <td>3</td>
+                                    <td>date</td>
+                                    <td>
+                                        <table class="table-sm">
+                                            <tbody>
+                                            <tr>
+                                                <td>param1</td>
+                                                <td>value1</td>
+                                            </tr>
+                                            <tr>
+                                                <td>param2</td>
+                                                <td>value2</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td>Active</td>
+                                    <td>
+                                        <form id="stop-scheduler-form" method="post"
+                                              style="display: inline;"
+                                              th:if="${scheduler.config.isStoppable}"
+                                              th:action="@{job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                            <button class="text-danger btn-sm btn-primary-outline btn-hover"
+                                                    type="submit"
+                                                    name="stop-scheduler" style="display: inline;">
+                                                <i class="far fa-stop-circle"></i>
+                                            </button>
+                                        </form>
+                                        <form id="start-scheduler-form" method="post"
+                                              style="display: inline;"
+                                              th:if="${scheduler.config.isStartable}"
+                                              th:action="@{job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                            <button class="text-info btn-sm btn-primary-outline btn-hover"
+                                                    type="submit"
+                                                    name="start-scheduler" style="display: inline;">
+                                                <i class="far fa-play-circle"></i>
+                                            </button>
+                                        </form>
+                                        <a href="#"
+                                           name="init-edit-scheduler"
+                                           class="text-muted btn-sm btn-primary-outline nounderline"
+                                           th:href="@{job-scheduler(init-edit-scheduler='init-edit-scheduler',job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                            <i class="far fa-edit"></i>
+                                        </a>
+                                        <form id="delete-scheduler-form" method="post"
+                                              style="display: inline;"
+                                              th:action="@{job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                            <button class="text-danger btn-sm btn-primary-outline btn-hover"
+                                                    type="submit"
+                                                    name="delete-scheduler" style="display: inline;">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

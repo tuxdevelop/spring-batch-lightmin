@@ -1,5 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.server.scheduler.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobLaunch;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
@@ -10,6 +11,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 
 import java.util.Collection;
 
+@Slf4j
 public class ExecutionRunnerService {
 
     private final SchedulerConfigurationService schedulerConfigurationService;
@@ -33,7 +35,11 @@ public class ExecutionRunnerService {
 
     public void createNextExecution(final SchedulerExecution schedulerExecution,
                                     final String cronExpression) {
-        this.schedulerExecutionService.createNextExecution(schedulerExecution, cronExpression);
+        if (this.schedulerConfigurationService.schedulerConfigurationExists(schedulerExecution.getSchedulerConfigurationId())) {
+            this.schedulerExecutionService.createNextExecution(schedulerExecution, cronExpression);
+        } else {
+            log.warn("Could not create next execution for SchedulerExecution: {} , SchedulerConfiguration not present", schedulerExecution);
+        }
     }
 
     public Collection<LightminClientApplication> findLightminApplicationsByName(final String name) {
@@ -47,4 +53,5 @@ public class ExecutionRunnerService {
     public SchedulerConfiguration findSchedulerConfigurationById(final Long id) throws SchedulerConfigurationNotFoundException {
         return this.schedulerConfigurationService.findById(id);
     }
+
 }

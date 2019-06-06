@@ -16,6 +16,7 @@ public class SchedulerConfiguration {
     private Boolean retriable;
     private Integer maxRetries;
     private JobIncrementer jobIncrementer;
+    private ServerSchedulerStatus status;
     private Map<String, Object> jobParameters;
 
 
@@ -40,6 +41,10 @@ public class SchedulerConfiguration {
         }
         if (this.jobIncrementer == null) {
             throw new SchedulerValidationException("jobIncrementer must not be null");
+        }
+        if (this.status == null) {
+            throw new SchedulerValidationException("status must not be null");
+
         }
     }
 }
