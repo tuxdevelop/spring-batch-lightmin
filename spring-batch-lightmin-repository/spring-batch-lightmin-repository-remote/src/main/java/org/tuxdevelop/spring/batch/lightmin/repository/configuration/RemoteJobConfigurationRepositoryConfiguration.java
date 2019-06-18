@@ -30,7 +30,7 @@ public class RemoteJobConfigurationRepositoryConfiguration extends LightminJobCo
     public RemoteJobConfigurationRepositoryConfiguration(final RemoteJobConfigurationRepositoryConfigurationProperties properties) {
         this.properties = properties;
     }
-    
+
     @Override
     protected void configureJobConfigurationRepository() {
         this.configureRestTemplate();

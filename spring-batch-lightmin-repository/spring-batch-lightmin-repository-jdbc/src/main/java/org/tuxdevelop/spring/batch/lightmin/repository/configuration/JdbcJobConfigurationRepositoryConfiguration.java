@@ -3,8 +3,11 @@ package org.tuxdevelop.spring.batch.lightmin.repository.configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.tuxdevelop.spring.batch.lightmin.repository.JdbcJobConfigurationRepository;
 
 import javax.sql.DataSource;
@@ -28,10 +31,19 @@ public class JdbcJobConfigurationRepositoryConfiguration extends LightminJobConf
         if (this.jdbcTemplate != null) {
             log.info("JdbcTemplate already configured for JdbcJobConfigurationRepository");
         } else {
-            final DataSource dataSource =
-                    this.getApplicationContext().getBean(this.properties.getDataSourceName(), DataSource.class);
+            final DataSource dataSource = this.getDataSource();
             this.jdbcTemplate = new JdbcTemplate(dataSource);
         }
+    }
+
+    protected DataSource getDataSource() {
+        return this.getApplicationContext().getBean(this.properties.getDataSourceName(), DataSource.class);
+    }
+
+    @Bean(name = "lightminTransactionManager")
+    public PlatformTransactionManager lightminTransactionManager() {
+        final DataSource dataSource = this.getDataSource();
+        return new DataSourceTransactionManager(dataSource);
     }
 
     protected JdbcTemplate getJdbcTemplate() {

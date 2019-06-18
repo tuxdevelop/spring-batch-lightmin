@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.tuxdevelop.spring.batch.lightmin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
@@ -90,6 +92,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, transactionManager = "lightminTransactionManager")
     public JobConfiguration add(final JobConfiguration jobConfiguration, final String applicationName) {
         final Long jobConfigurationId = this.jobConfigurationDAO.add(jobConfiguration, applicationName);
         jobConfiguration.setJobConfigurationId(jobConfigurationId);
@@ -99,6 +102,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, transactionManager = "lightminTransactionManager")
     public JobConfiguration update(final JobConfiguration jobConfiguration, final String applicationName) throws NoSuchJobConfigurationException {
         final Long jobConfigurationId = jobConfiguration.getJobConfigurationId();
         if (this.checkJobConfigurationExists(jobConfigurationId, applicationName)) {
@@ -115,6 +119,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, transactionManager = "lightminTransactionManager")
     public void delete(final JobConfiguration jobConfiguration, final String applicationName) throws NoSuchJobConfigurationException {
         final Long jobConfigurationId = jobConfiguration.getJobConfigurationId();
         if (this.checkJobConfigurationExists(jobConfigurationId, applicationName)) {

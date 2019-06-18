@@ -6,11 +6,13 @@ import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.tuxdevelop.spring.batch.lightmin.batch.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.event.listener.JobExecutionFinishedJobExecutionListener;
 import org.tuxdevelop.spring.batch.lightmin.repository.JobConfigurationRepository;
@@ -109,6 +111,12 @@ public class SpringBatchLightminServiceConfiguration {
     public JobExecutionListenerRegisterBean jobExecutionListenerRegisterBean(
             @Qualifier("jobExecutionFinishedJobExecutionListener") final JobExecutionListener jobExecutionFinishedJobExecutionListener) {
         return new JobExecutionListenerRegisterBean(jobExecutionFinishedJobExecutionListener);
+    }
+
+    @Bean(name = "lightminTransactionManager")
+    @ConditionalOnMissingBean(name = "lightminTransactionManager")
+    public PlatformTransactionManager lightminTransactionManager() {
+        return new ResourcelessTransactionManager();
     }
 
 }
