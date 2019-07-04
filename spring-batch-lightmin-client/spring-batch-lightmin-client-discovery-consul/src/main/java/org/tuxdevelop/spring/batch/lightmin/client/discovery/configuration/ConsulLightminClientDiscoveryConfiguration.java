@@ -8,6 +8,7 @@ import org.springframework.cloud.consul.discovery.ConsulDiscoveryClient;
 import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 import org.springframework.cloud.consul.discovery.HeartbeatProperties;
 import org.springframework.cloud.consul.serviceregistry.ConsulAutoRegistration;
+import org.springframework.cloud.consul.serviceregistry.ConsulManagementRegistrationCustomizer;
 import org.springframework.cloud.consul.serviceregistry.ConsulRegistrationCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,7 @@ public class ConsulLightminClientDiscoveryConfiguration {
             final ConsulDiscoveryProperties consulDiscoveryProperties,
             final ApplicationContext applicationContext,
             final List<ConsulRegistrationCustomizer> consulRegistrationCustomizers,
+            final List<ConsulManagementRegistrationCustomizer> managementRegistrationCustomizers,
             final HeartbeatProperties heartbeatProperties) {
 
         metaDataExtender.extendMetaData();
@@ -45,6 +47,7 @@ public class ConsulLightminClientDiscoveryConfiguration {
                 consulDiscoveryProperties,
                 applicationContext,
                 consulRegistrationCustomizers,
+                managementRegistrationCustomizers,
                 heartbeatProperties);
     }
 }
