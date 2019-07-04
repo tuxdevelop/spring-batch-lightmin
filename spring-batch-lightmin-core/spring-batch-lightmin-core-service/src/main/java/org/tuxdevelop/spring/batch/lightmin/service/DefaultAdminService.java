@@ -1,6 +1,8 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminCoreConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
@@ -38,6 +40,7 @@ public class DefaultAdminService implements AdminService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, transactionManager = "lightminTransactionManager")
     public void saveJobConfiguration(final JobConfiguration jobConfiguration) {
         jobConfiguration.validateForSave();
         if (jobConfiguration.getJobSchedulerConfiguration() != null) {
@@ -81,6 +84,7 @@ public class DefaultAdminService implements AdminService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, transactionManager = "lightminTransactionManager")
     public void updateJobConfiguration(final JobConfiguration jobConfiguration) {
         jobConfiguration.validateForUpdate();
         try {
@@ -112,6 +116,7 @@ public class DefaultAdminService implements AdminService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, transactionManager = "lightminTransactionManager")
     public void deleteJobConfiguration(final Long jobConfigurationId) {
         try {
             final JobConfiguration jobConfiguration = this.jobConfigurationRepository.getJobConfiguration(jobConfigurationId,
@@ -186,6 +191,7 @@ public class DefaultAdminService implements AdminService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, transactionManager = "lightminTransactionManager")
     public void stopJobConfiguration(final Long jobConfigurationId) {
         try {
             final JobConfiguration jobConfiguration = this.jobConfigurationRepository.getJobConfiguration(jobConfigurationId,
@@ -211,6 +217,7 @@ public class DefaultAdminService implements AdminService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, transactionManager = "lightminTransactionManager")
     public void startJobConfiguration(final Long jobConfigurationId) {
         try {
             final JobConfiguration jobConfiguration = this.jobConfigurationRepository.getJobConfiguration(jobConfigurationId,

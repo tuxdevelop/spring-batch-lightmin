@@ -19,5 +19,4 @@ public class MapJobConfigurationRepositoryConfiguration extends LightminJobConfi
         this.setJobConfigurationRepository(this.jobConfigurationRepository());
     }
 
-
 }
