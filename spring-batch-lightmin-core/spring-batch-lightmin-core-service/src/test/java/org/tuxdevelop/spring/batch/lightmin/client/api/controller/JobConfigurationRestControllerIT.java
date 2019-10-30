@@ -1,21 +1,22 @@
 package org.tuxdevelop.spring.batch.lightmin.client.api.controller;
 
 
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.SchedulerStatus;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
-import org.tuxdevelop.spring.batch.lightmin.client.api.DomainToResourceMapper;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.SchedulerStatus;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
+import org.tuxdevelop.spring.batch.lightmin.client.api.DomainToResourceMapper;
 
 
 public class JobConfigurationRestControllerIT extends CommonControllerIT {
@@ -53,6 +54,25 @@ public class JobConfigurationRestControllerIT extends CommonControllerIT {
         assertThat(jobConfiguration).isNotNull();
         assertThat(jobConfiguration.getJobConfigurationId()).isEqualTo(this.addedJobConfigurationId);
     }
+
+    @Test(expected = HttpClientErrorException.BadRequest.class)
+    public void testCreationOfFalsyConfigOnAddJobConfiguration() {
+        final String uri = LOCALHOST + ":" + this.getServerPort() + AbstractRestController
+                .JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS;
+
+        final JobConfiguration jobConfiguration = DomainToResourceMapper.map(this.createJobConfigurationWithFalsyConfig());
+        final ResponseEntity<Void> responseEntity = this.restTemplate.postForEntity(uri, jobConfiguration, Void.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        final String uriGet = LOCALHOST + ":" + this.getServerPort() + AbstractRestController
+                .JobConfigurationRestControllerAPI.JOB_CONFIGURATIONS_JOB_NAME;
+        final ResponseEntity<JobConfigurations> result = this.restTemplate.getForEntity(uriGet, JobConfigurations.class,
+                "simpleJob");
+        assertThat(result).isNotNull();
+        final JobConfigurations jobConfigurations = result.getBody();
+        final Collection<JobConfiguration> jobConfigurationsCollection = jobConfigurations.getJobConfigurations();
+        assertThat(jobConfigurationsCollection).hasSize(2);
+    }
+
 
     @Test
     public void testAddJobConfiguration() {

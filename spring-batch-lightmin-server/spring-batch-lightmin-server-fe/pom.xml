@@ -39,6 +39,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-validation</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+
         <!-- spring boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.quartz.CronExpression;
+import org.tuxdevelop.spring.batch.lightmin.validation.annotation.IsCronExpression;
 
 /**
  * @author Marcel Becker
@@ -15,6 +16,7 @@ import org.quartz.CronExpression;
 public class JobSchedulerConfiguration extends AbstractConfiguration {
 
     private JobSchedulerType jobSchedulerType;
+    @IsCronExpression
     private String cronExpression;
     private Long initialDelay;
     private Long fixedDelay;

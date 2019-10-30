@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.util.StringUtils;
+import org.tuxdevelop.spring.batch.lightmin.validation.annotation.PathExists;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -11,6 +12,7 @@ import org.springframework.util.StringUtils;
 public class JobListenerConfiguration extends AbstractConfiguration {
 
     private JobListenerType jobListenerType;
+    @PathExists
     private String sourceFolder;
     private String filePattern;
     private Long pollerPeriod;

@@ -4,6 +4,7 @@ package org.tuxdevelop.spring.batch.lightmin.api.resource.admin;
 import lombok.Data;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 
+import javax.validation.Valid;
 import java.io.Serializable;
 
 /**
@@ -18,6 +19,7 @@ public class JobConfiguration implements Serializable {
     private Long jobConfigurationId;
     private String jobName;
     private JobSchedulerConfiguration jobSchedulerConfiguration;
+    @Valid
     private JobListenerConfiguration jobListenerConfiguration;
     private JobParameters jobParameters;
     private JobIncrementer jobIncrementer;

@@ -46,6 +46,7 @@
         <module>spring-batch-lightmin-test</module>
         <module>spring-batch-lightmin-util</module>
         <module>spring-batch-lightmin-embedded</module>
+        <module>spring-batch-lightmin-validation</module>
     </modules>
 
     <properties>

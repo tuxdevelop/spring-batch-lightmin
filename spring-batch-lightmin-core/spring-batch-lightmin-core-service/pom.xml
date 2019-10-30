@@ -69,6 +69,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-validation</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- spring boot-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -86,8 +92,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <scope>test</scope>
         </dependency>
-
-
+        <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-core</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

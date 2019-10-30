@@ -104,6 +104,22 @@ public abstract class CommonControllerIT {
         return jobConfiguration;
     }
 
+
+    protected JobConfiguration createJobConfigurationWithFalsyConfig() {
+        JobListenerConfiguration jobListenerConfiguration = new JobListenerConfiguration();
+        jobListenerConfiguration.setFilePattern("*");
+        jobListenerConfiguration.setSourceFolder("someNonExistingPath//.@//src");
+        jobListenerConfiguration.setJobListenerType(JobListenerType.LOCAL_FOLDER_LISTENER);
+        jobListenerConfiguration.setPollerPeriod(Long.valueOf(12l));
+        jobListenerConfiguration.setListenerStatus(ListenerStatus.ACTIVE);
+        jobListenerConfiguration.setTaskExecutorType(TaskExecutorType.ASYNCHRONOUS);
+        final JobConfiguration jobConfiguration = new JobConfiguration();
+        jobConfiguration.setJobName("simpleJob");
+        jobConfiguration.setJobIncrementer(JobIncrementer.DATE);
+        jobConfiguration.setJobListenerConfiguration(jobListenerConfiguration);
+        return jobConfiguration;
+    }
+
     protected void cleanUp() {
         final Collection<JobConfiguration> allJobConfigurations = this.jobConfigurationRepository.getAllJobConfigurations(this.springBatchLightminCoreConfigurationProperties.getApplicationName());
         for (final JobConfiguration jobConfiguration : allJobConfigurations) {

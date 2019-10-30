@@ -9,11 +9,12 @@ import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationExce
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 import org.tuxdevelop.spring.batch.lightmin.repository.JobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.validation.validator.CronExpressionValidator;
+import org.tuxdevelop.spring.batch.lightmin.validation.validator.PathValidator;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import javax.validation.Valid;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Marcel Becker
@@ -32,7 +33,8 @@ public class DefaultAdminService implements AdminService {
     public DefaultAdminService(final JobConfigurationRepository jobConfigurationRepository,
                                final SchedulerService schedulerService,
                                final ListenerService listenerService,
-                               final SpringBatchLightminCoreConfigurationProperties springBatchLightminCoreConfigurationProperties) {
+                               final SpringBatchLightminCoreConfigurationProperties springBatchLightminCoreConfigurationProperties
+    ) {
         this.jobConfigurationRepository = jobConfigurationRepository;
         this.schedulerService = schedulerService;
         this.listenerService = listenerService;
@@ -41,7 +43,7 @@ public class DefaultAdminService implements AdminService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, transactionManager = "lightminTransactionManager")
-    public void saveJobConfiguration(final JobConfiguration jobConfiguration) {
+    public void saveJobConfiguration(@Valid final JobConfiguration jobConfiguration) {
         jobConfiguration.validateForSave();
         if (jobConfiguration.getJobSchedulerConfiguration() != null) {
             jobConfiguration.getJobSchedulerConfiguration().setBeanName(TEMP_BEAN_NAME + "_SCHEDULER_" + jobConfiguration.getJobConfigurationId());
@@ -172,10 +174,34 @@ public class DefaultAdminService implements AdminService {
         return jobConfigurationMap;
     }
 
+    /**
+     * Returns all Jobconfiguration, which:
+     * 1.) Are period
+     * 2.) Have a valid Cron expression (Non-Null, 6 config params, expression valid)
+     *
+     * @param jobNames names of the {@link org.springframework.batch.core.Job}s, to get the configurations for
+     * @return
+     */
     @Override
     public Collection<JobConfiguration> getJobConfigurations(final Collection<String> jobNames) {
-        return this.jobConfigurationRepository.getAllJobConfigurationsByJobNames(jobNames,
+        Collection<JobConfiguration> allJobConfigurationsByJobNames = this.jobConfigurationRepository.getAllJobConfigurationsByJobNames(jobNames,
                 this.springBatchLightminCoreConfigurationProperties.getApplicationName());
+        allJobConfigurationsByJobNames = allJobConfigurationsByJobNames.stream().filter(DefaultAdminService::validateJobConfiguration).collect(Collectors.toCollection(LinkedList::new));
+        return allJobConfigurationsByJobNames;
+    }
+
+    private static boolean validateJobConfiguration(JobConfiguration jobConfiguration) {
+        if (jobConfiguration.getJobListenerConfiguration() != null) {
+            PathValidator validator = new PathValidator();
+            String sourceFolder = jobConfiguration.getJobListenerConfiguration().getSourceFolder();
+            return validator.isValid(sourceFolder, null);
+        } else {
+            if (jobConfiguration.getJobSchedulerConfiguration().getJobSchedulerType().equals(org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerType.CRON)) {
+                CronExpressionValidator cronExpressionValidator = new CronExpressionValidator();
+                String cronExpression = jobConfiguration.getJobSchedulerConfiguration().getCronExpression();
+                return cronExpressionValidator.isValid(cronExpression, null);
+            } else return true;
+        }
     }
 
     @Override
