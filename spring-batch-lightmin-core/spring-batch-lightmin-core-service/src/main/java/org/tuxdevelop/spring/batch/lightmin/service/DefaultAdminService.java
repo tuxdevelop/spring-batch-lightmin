@@ -8,6 +8,7 @@ import org.tuxdevelop.spring.batch.lightmin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.validation.validator.CronExpressionValidator;
 import org.tuxdevelop.spring.batch.lightmin.validation.validator.PathValidator;
@@ -24,7 +25,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DefaultAdminService implements AdminService {
 
-    private static final String TEMP_BEAN_NAME = "TEMP";
     private final JobConfigurationRepository jobConfigurationRepository;
     private final SchedulerService schedulerService;
     private final ListenerService listenerService;
@@ -46,42 +46,51 @@ public class DefaultAdminService implements AdminService {
     public void saveJobConfiguration(@Valid final JobConfiguration jobConfiguration) {
         jobConfiguration.validateForSave();
         if (jobConfiguration.getJobSchedulerConfiguration() != null) {
-            jobConfiguration.getJobSchedulerConfiguration().setBeanName(TEMP_BEAN_NAME + "_SCHEDULER_" + jobConfiguration.getJobConfigurationId());
+            saveSchedulerConfiguration(jobConfiguration);
         } else if (jobConfiguration.getJobListenerConfiguration() != null) {
-            jobConfiguration.getJobListenerConfiguration().setBeanName(TEMP_BEAN_NAME + "_LISTENER_" + jobConfiguration
-                    .getJobConfigurationId());
+            saveListenerConfiguration(jobConfiguration);
         }
-        final JobConfiguration addedJobConfiguration = this.jobConfigurationRepository.add(jobConfiguration,
-                this.springBatchLightminCoreConfigurationProperties.getApplicationName());
-        if (addedJobConfiguration.getJobSchedulerConfiguration() != null) {
-            addedJobConfiguration.getJobSchedulerConfiguration().setBeanName(null);
-            final String beanName = this.schedulerService.registerSchedulerForJob(addedJobConfiguration);
-            addedJobConfiguration.getJobSchedulerConfiguration().setBeanName(beanName);
-            try {
-                this.jobConfigurationRepository.update(addedJobConfiguration,
-                        this.springBatchLightminCoreConfigurationProperties.getApplicationName());
-                if (SchedulerStatus.RUNNING.equals(addedJobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus())) {
+    }
+
+    private void saveSchedulerConfiguration(final JobConfiguration addedJobConfiguration) {
+        final String beanName = this.schedulerService.registerSchedulerForJob(addedJobConfiguration);
+        addedJobConfiguration.getJobSchedulerConfiguration().setBeanName(beanName);
+        try {
+            this.jobConfigurationRepository.add(addedJobConfiguration,
+                    this.springBatchLightminCoreConfigurationProperties.getApplicationName());
+            if (SchedulerStatus.RUNNING.equals(addedJobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus())) {
+                try {
                     this.schedulerService.schedule(beanName, Boolean.TRUE);
-                } else {
-                    log.info("Scheduler not started, no scheduling triggered!");
+                } catch (Exception e) {
+                    this.schedulerService.unregisterSchedulerForJob(beanName);
+                    throw new SpringBatchLightminConfigurationException(e, "The Application could not register bean with name " + beanName + ".\n Please check configuration of the Scheduler.");
                 }
-            } catch (final NoSuchJobConfigurationException e) {
-                log.error(e.getMessage());
-                throw new SpringBatchLightminApplicationException(e, e.getMessage());
+            } else {
+                log.info("Scheduler not started, no scheduling triggered!");
             }
-        } else if (addedJobConfiguration.getJobListenerConfiguration() != null) {
-            final String beanName = this.listenerService.registerListenerForJob(addedJobConfiguration);
-            addedJobConfiguration.getJobListenerConfiguration().setBeanName(beanName);
-            if (ListenerStatus.ACTIVE.equals(addedJobConfiguration.getJobListenerConfiguration().getListenerStatus())) {
-                this.listenerService.activateListener(beanName, Boolean.TRUE);
-            }
+        } catch (final Exception e) {
+            log.error(e.getMessage());
+            throw new SpringBatchLightminApplicationException(e, e.getMessage());
+        }
+    }
+
+    private void saveListenerConfiguration(final JobConfiguration addedJobConfiguration) {
+        final String beanName = this.listenerService.registerListenerForJob(addedJobConfiguration);
+        addedJobConfiguration.getJobListenerConfiguration().setBeanName(beanName);
+        if (ListenerStatus.ACTIVE.equals(addedJobConfiguration.getJobListenerConfiguration().getListenerStatus())) {
             try {
-                this.jobConfigurationRepository.update(addedJobConfiguration,
-                        this.springBatchLightminCoreConfigurationProperties.getApplicationName());
-            } catch (final NoSuchJobConfigurationException e) {
-                log.error(e.getMessage());
-                throw new SpringBatchLightminApplicationException(e, e.getMessage());
+                this.listenerService.activateListener(beanName, Boolean.TRUE);
+            } catch (Exception e) {
+                this.listenerService.unregisterListenerForJob(beanName);
+                throw new SpringBatchLightminConfigurationException(e, "The Application could not register bean with name " + beanName + ".\n Please check configuration of the Listener.");
             }
+        }
+        try {
+            this.jobConfigurationRepository.add(addedJobConfiguration,
+                    this.springBatchLightminCoreConfigurationProperties.getApplicationName());
+        } catch (final Exception e) {
+            log.error(e.getMessage());
+            throw new SpringBatchLightminApplicationException(e, e.getMessage());
         }
     }
 
