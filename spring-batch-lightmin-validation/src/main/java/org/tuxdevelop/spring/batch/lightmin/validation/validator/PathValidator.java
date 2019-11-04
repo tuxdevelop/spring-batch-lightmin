@@ -21,7 +21,7 @@ public class PathValidator implements ConstraintValidator<PathExists, String> {
 
     public boolean isValid(String obj, ConstraintValidatorContext context) {
 
-        if (constraint.ignoreNull() && obj == null) {
+        if ((constraint == null ||constraint.ignoreNull()) && obj == null) {
             return Boolean.TRUE;
         } else if (obj == null) {
             return Boolean.FALSE;

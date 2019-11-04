@@ -18,6 +18,7 @@ public class JobConfiguration implements Serializable {
 
     private Long jobConfigurationId;
     private String jobName;
+    @Valid
     private JobSchedulerConfiguration jobSchedulerConfiguration;
     @Valid
     private JobListenerConfiguration jobListenerConfiguration;
