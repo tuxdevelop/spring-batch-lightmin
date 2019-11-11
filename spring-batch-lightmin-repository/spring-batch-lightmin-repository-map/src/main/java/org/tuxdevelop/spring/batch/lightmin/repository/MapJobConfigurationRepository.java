@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Marcel Becker
  * @since 0.1
  */
+// TODO ADE: Think about refactoring this one
 @Slf4j
 public class MapJobConfigurationRepository implements JobConfigurationRepository {
 
@@ -57,7 +58,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     @Override
     public Collection<JobConfiguration> getJobConfigurations(final String jobName, final String applicationName) throws NoSuchJobException, NoSuchJobConfigurationException {
         final Map<String, Map<Long, JobConfiguration>> applicationJobConfigurations = this.getJobConfigurationsForApplicationName(applicationName);
-        if (applicationJobConfigurations.containsKey(jobName)) {
+        if (applicationJobConfigurations.containsKey(jobName) && !applicationJobConfigurations.get(jobName).values().isEmpty()) {
             final Collection<JobConfiguration> jcs = applicationJobConfigurations.get(jobName).values();
             return new ArrayList<>(jcs);
         } else {

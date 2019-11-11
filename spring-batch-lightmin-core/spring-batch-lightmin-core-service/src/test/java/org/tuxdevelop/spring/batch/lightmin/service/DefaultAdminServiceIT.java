@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
@@ -20,7 +19,6 @@ import org.tuxdevelop.test.configuration.ITConfiguration;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -35,6 +33,7 @@ public class DefaultAdminServiceIT {
     @Autowired
     private ApplicationContext applicationContext;
 
+
     @Test
     public void testDeleteJobConfiguration() {
         final JobSchedulerConfiguration jobSchedulerConfiguration =
@@ -47,20 +46,16 @@ public class DefaultAdminServiceIT {
         jobNames.add(JOB_NAME);
         final Collection<JobConfiguration> fetchedJobConfigurations = this.adminService.getJobConfigurations(jobNames);
         assertThat(fetchedJobConfigurations).hasSize(1);
-        Long jobConfigurationId = null;
-        for (final JobConfiguration fetchedJobConfiguration : fetchedJobConfigurations) {
-            jobConfigurationId = fetchedJobConfiguration.getJobConfigurationId();
-        }
+
+        final Long jobConfigurationId = fetchedJobConfigurations.stream().findFirst().get().getJobConfigurationId();
+
         assertThat(jobConfigurationId).isNotNull();
         final JobConfiguration fetchedJobConfiguration = this.adminService.getJobConfigurationById(jobConfigurationId);
         assertThat(fetchedJobConfiguration).isNotNull();
         this.adminService.deleteJobConfiguration(jobConfigurationId);
-        try {
-            this.adminService.getJobConfigurationById(jobConfigurationId);
-            fail("Should not be here");
-        } catch (final SpringBatchLightminApplicationException e) {
-            //OK
-        }
+        BDDAssertions.assertThatExceptionOfType(SpringBatchLightminApplicationException.class)
+                .as("Job shouldn't be managed by Entity Manager. We are awaiting an Exception.")
+                .isThrownBy(() -> this.adminService.getJobConfigurationById(jobConfigurationId));
     }
 
     @Test
@@ -139,8 +134,17 @@ public class DefaultAdminServiceIT {
 
 
     @Test
-    public void testScarryPathSaveConfigurationWithListener() {
-        // Set Up happy Path
+    public void testScaryPathSaveConfigurationWithListener() {
+        // Set Up scary Path
+        try {
+            Collection<JobConfiguration> jobConfigurationsByJobName = adminService.getJobConfigurationsByJobName(JOB_NAME);
+
+            System.out.print("DB wurde nicht ordnungsgemäß abgeräumt");
+            jobConfigurationsByJobName.stream().map(jobConfiguration -> jobConfiguration.toString()).forEach(System.out::println);
+
+        } catch (Exception e) {
+            System.out.print("DB ist leer und wir können weitermachen!");
+        }
         final JobListenerConfiguration jobListenerConfiguration = DomainTestHelper.createJobListenerConfiguration("/pathXY", "*", JobListenerType.LOCAL_FOLDER_LISTENER);
         final JobConfiguration jobConfiguration = DomainTestHelper.createJobConfiguration(jobListenerConfiguration);
         jobConfiguration.setJobName(JOB_NAME);
