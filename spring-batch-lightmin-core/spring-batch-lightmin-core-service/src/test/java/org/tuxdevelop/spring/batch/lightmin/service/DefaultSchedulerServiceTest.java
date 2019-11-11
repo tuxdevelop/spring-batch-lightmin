@@ -56,7 +56,7 @@ public class DefaultSchedulerServiceTest {
         final JobConfiguration jobConfiguration = DomainTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobConfigurationId(1L);
         final String beanName = this.schedulerService.registerSchedulerForJob(jobConfiguration);
-        assertThat(beanName).startsWith("sampleJobPERIOD");
+        assertThat(beanName).startsWith("sampleJob-PERIOD");
     }
 
     @Test
@@ -69,7 +69,7 @@ public class DefaultSchedulerServiceTest {
         final JobConfiguration jobConfiguration = DomainTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobConfigurationId(1L);
         final String beanName = this.schedulerService.registerSchedulerForJob(jobConfiguration);
-        assertThat(beanName).startsWith("sampleJobCRON");
+        assertThat(beanName).startsWith("sampleJob-CRON");
     }
 
     @Test
