@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Marcel Becker
  * @since 0.1
  */
-// TODO ADE: Think about refactoring this one
 @Slf4j
 public class MapJobConfigurationRepository implements JobConfigurationRepository {
 
@@ -58,7 +57,7 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     @Override
     public Collection<JobConfiguration> getJobConfigurations(final String jobName, final String applicationName) throws NoSuchJobException, NoSuchJobConfigurationException {
         final Map<String, Map<Long, JobConfiguration>> applicationJobConfigurations = this.getJobConfigurationsForApplicationName(applicationName);
-        if (applicationJobConfigurations.containsKey(jobName) && !applicationJobConfigurations.get(jobName).values().isEmpty()) {
+        if (applicationJobConfigurations.containsKey(jobName)) {
             final Collection<JobConfiguration> jcs = applicationJobConfigurations.get(jobName).values();
             return new ArrayList<>(jcs);
         } else {
@@ -126,6 +125,10 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
             jobConfigurationToDelete = this.getJobConfiguration(jobConfigurationId, applicationName);
             jobConfigurationMap.remove(jobConfigurationToDelete.getJobConfigurationId());
             log.debug("Removed JobConfiguration with id: " + jobConfiguration.getJobConfigurationId());
+            if (jobConfigurationMap.values().isEmpty()) {
+                Map<Long, JobConfiguration> removedFromRepresentation = applicationJobConfigurations.remove(jobName);
+                log.debug("Removed Map for {} from Repository, because there where no mappings left.", removedFromRepresentation.keySet());
+            }
         } else {
             final String message = "No configuration found for job: " + jobName + ". Nothing to delete";
             log.error(message);
