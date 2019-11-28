@@ -17,7 +17,7 @@ public class SchedulerConfigurationService {
         this.schedulerConfigurationRepository = schedulerConfigurationRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(transactionManager = "lightminServerSchedulerTransactionManager", propagation = Propagation.REQUIRED)
     public SchedulerConfiguration save(final SchedulerConfiguration schedulerConfiguration) {
         if (schedulerConfiguration == null) {
             throw new SchedulerValidationException("schedulerConfiguration must not be null");
@@ -26,7 +26,7 @@ public class SchedulerConfigurationService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(transactionManager = "lightminServerSchedulerTransactionManager", propagation = Propagation.REQUIRED)
     public void delete(final SchedulerConfiguration schedulerConfiguration) {
         if (schedulerConfiguration == null) {
             throw new SchedulerValidationException("schedulerConfiguration must not be null");
@@ -35,7 +35,7 @@ public class SchedulerConfigurationService {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(transactionManager = "lightminServerSchedulerTransactionManager", readOnly = true)
     public SchedulerConfiguration findById(final Long id) throws SchedulerConfigurationNotFoundException {
         return this.schedulerConfigurationRepository.findById(id);
     }

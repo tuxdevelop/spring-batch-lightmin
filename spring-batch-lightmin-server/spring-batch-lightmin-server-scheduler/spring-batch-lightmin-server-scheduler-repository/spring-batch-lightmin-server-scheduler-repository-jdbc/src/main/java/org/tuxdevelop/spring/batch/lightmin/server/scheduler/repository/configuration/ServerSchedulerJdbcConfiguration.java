@@ -7,6 +7,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.JdbcSchedulerConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.JdbcSchedulerExecutionRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerConfigurationRepository;
@@ -27,8 +29,12 @@ public class ServerSchedulerJdbcConfiguration {
 
     @Bean(name = "serverSchedulerJdbcTemplate")
     public JdbcTemplate serverSchedulerJdbcTemplate(final ServerSchedulerJdbcConfigurationProperties properties) {
-        final DataSource dataSource = this.applicationContext.getBean(properties.getDatasourceName(), DataSource.class);
+        final DataSource dataSource = getDataSource(properties);
         return new JdbcTemplate(dataSource);
+    }
+
+    protected DataSource getDataSource(final ServerSchedulerJdbcConfigurationProperties properties) {
+        return this.applicationContext.getBean(properties.getDatasourceName(), DataSource.class);
     }
 
     @Bean
@@ -43,5 +49,12 @@ public class ServerSchedulerJdbcConfiguration {
             @Qualifier("serverSchedulerJdbcTemplate") final JdbcTemplate serverSchedulerJdbcTemplate,
             final ServerSchedulerJdbcConfigurationProperties properties) throws Exception {
         return new JdbcSchedulerExecutionRepository(serverSchedulerJdbcTemplate, properties);
+    }
+
+    @Bean(name = "lightminServerSchedulerTransactionManager")
+    public PlatformTransactionManager lightminServerSchedulerTransactionManager(
+            final ServerSchedulerJdbcConfigurationProperties properties) {
+        final DataSource dataSource = getDataSource(properties);
+        return new DataSourceTransactionManager(dataSource);
     }
 }

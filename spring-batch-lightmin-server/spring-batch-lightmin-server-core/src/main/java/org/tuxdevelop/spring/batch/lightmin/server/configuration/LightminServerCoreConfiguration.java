@@ -1,10 +1,12 @@
 package org.tuxdevelop.spring.batch.lightmin.server.configuration;
 
+import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.*;
 import org.tuxdevelop.spring.batch.lightmin.server.service.EventService;
@@ -62,6 +64,12 @@ public class LightminServerCoreConfiguration {
     @ConditionalOnMissingBean(name = "clientRestTemplate")
     public RestTemplate clientRestTemplate(final LightminServerCoreProperties lightminServerCoreProperties) {
         return RestTemplateFactory.getRestTemplate(lightminServerCoreProperties);
+    }
+
+    @Bean(name = "lightminServerSchedulerTransactionManager")
+    @ConditionalOnMissingBean(name = "lightminServerSchedulerTransactionManager")
+    public PlatformTransactionManager lightminServerSchedulerTransactionManager() {
+        return new ResourcelessTransactionManager();
     }
 
     static class RestTemplateFactory {

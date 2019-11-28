@@ -23,7 +23,7 @@ public class SchedulerExecutionService {
         this.schedulerExecutionRepository = schedulerExecutionRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(transactionManager = "lightminServerSchedulerTransactionManager", propagation = Propagation.REQUIRED)
     public SchedulerExecution save(final SchedulerExecution schedulerExecution) {
         if (schedulerExecution == null) {
             throw new SchedulerValidationException("schedulerExecution must not be null");
@@ -33,7 +33,7 @@ public class SchedulerExecutionService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(transactionManager = "lightminServerSchedulerTransactionManager", propagation = Propagation.REQUIRED)
     public void createNextExecution(final SchedulerExecution schedulerExecution, final String cronExpression) {
         if (schedulerExecution != null) {
             //1. set the id to null, so a new entry will be created
