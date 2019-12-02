@@ -32,6 +32,7 @@
     </developers>
 
 
+
     <properties>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
@@ -231,6 +232,13 @@
             <dependency>
                 <groupId>org.tuxdevelop</groupId>
                 <artifactId>spring-batch-lightmin-util</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- validation -->
+            <dependency>
+                <groupId>org.tuxdevelop</groupId>
+                <artifactId>spring-batch-lightmin-validation</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

@@ -9,12 +9,10 @@
         <version>2.0.3-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.tuxdevelop</groupId>
     <artifactId>spring-batch-lightmin-validation</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>spring-batch-lightmin-validation</name>
-    <description>Validationbase for Spring Batch Lightmin Modules</description>
 
+    <description>Validationbase for Spring Batch Lightmin Modules</description>
 
     <dependencies>
         <dependency>
