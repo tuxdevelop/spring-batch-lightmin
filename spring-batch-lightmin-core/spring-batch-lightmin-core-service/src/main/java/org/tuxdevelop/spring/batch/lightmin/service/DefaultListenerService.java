@@ -19,6 +19,7 @@ import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Default implementation of {@link ListenerService}
@@ -124,7 +125,7 @@ public class DefaultListenerService implements ListenerService, InitializingBean
             listenerConstructorWrapper.setJobIncrementer(jobConfiguration.getJobIncrementer());
             if (!StringUtils.hasText(jobListenerConfiguration.getBeanName())) {
                 beanName = this.generateSchedulerBeanName(jobConfiguration.getJobName(),
-                        jobConfiguration.getJobConfigurationId(), jobListenerConfiguration.getJobListenerType());
+                        jobListenerConfiguration.getJobListenerType());
             } else {
                 beanName = jobListenerConfiguration.getBeanName();
             }
@@ -138,9 +139,8 @@ public class DefaultListenerService implements ListenerService, InitializingBean
     }
 
     private String generateSchedulerBeanName(final String jobName,
-                                             final Long id,
                                              final JobListenerType listenerType) {
-        return jobName + listenerType.name() + id;
+        return jobName + "-" + listenerType.name() + "-" + UUID.randomUUID();
     }
 
 }

@@ -1,11 +1,13 @@
 package org.tuxdevelop.spring.batch.lightmin.server.fe.model.listener;
 
-import lombok.Data;
-import org.tuxdevelop.spring.batch.lightmin.server.fe.model.common.TaskExecutorTypeModel;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import org.tuxdevelop.spring.batch.lightmin.server.fe.model.common.TaskExecutorTypeModel;
+
+import lombok.Data;
+import org.tuxdevelop.spring.batch.lightmin.validation.annotation.PathExists;
 
 @Data
 public class JobListenerModel {
@@ -14,6 +16,7 @@ public class JobListenerModel {
     private ListenerTypeModel typeRead;
     @NotNull(message = "Source Folder must not be null or empty")
     @NotBlank(message = "Source Folder must not be null or empty")
+    @PathExists
     private String sourceFolder;
     @NotNull(message = "File Pattern must not be null or empty")
     @NotBlank(message = "File Pattern must not be null or empty")
@@ -45,5 +48,4 @@ public class JobListenerModel {
         }
         return startable;
     }
-
 }

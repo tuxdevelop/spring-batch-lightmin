@@ -1,4 +1,7 @@
-package org.tuxdevelop.spring.batch.lightmin.server.fe.model.validator;
+package org.tuxdevelop.spring.batch.lightmin.validation.validator;
+
+import org.springframework.util.StringUtils;
+import org.tuxdevelop.spring.batch.lightmin.validation.annotation.IsCronExpression;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -14,15 +17,13 @@ public class CronExpressionValidator implements ConstraintValidator<IsCronExpres
 
     @Override
     public boolean isValid(final String value, final ConstraintValidatorContext context) {
-        final Boolean isValid;
+        Boolean isValid = Boolean.FALSE;
+        if (this.isCronExpression.ignoreNull() && value == null) {
+            return Boolean.TRUE;
+        }
         if (value != null) {
-            isValid = org.quartz.CronExpression.isValidExpression(value);
-        } else {
-            if (this.isCronExpression.ignoreNull()) {
-                isValid = Boolean.TRUE;
-            } else {
-                isValid = Boolean.FALSE;
-            }
+            String[] fields = StringUtils.tokenizeToStringArray(value, " ");
+            isValid = org.quartz.CronExpression.isValidExpression(value) && fields != null && fields.length == 6;
         }
         return isValid;
     }

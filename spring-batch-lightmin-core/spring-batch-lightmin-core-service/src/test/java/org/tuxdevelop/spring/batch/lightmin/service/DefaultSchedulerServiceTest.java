@@ -23,6 +23,7 @@ import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -49,12 +50,13 @@ public class DefaultSchedulerServiceTest {
     @Test
     public void registerSchedulerForJobPeriodTest() throws NoSuchJobException {
         when(this.jobRegistry.getJob("sampleJob")).thenReturn(this.sampleJob);
+
         final JobSchedulerConfiguration jobSchedulerConfiguration = DomainTestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
         final JobConfiguration jobConfiguration = DomainTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobConfigurationId(1L);
         final String beanName = this.schedulerService.registerSchedulerForJob(jobConfiguration);
-        assertThat(beanName).isEqualTo("sampleJobPERIOD1");
+        assertThat(beanName).startsWith("sampleJob-PERIOD");
     }
 
     @Test
@@ -63,10 +65,11 @@ public class DefaultSchedulerServiceTest {
         final JobSchedulerConfiguration jobSchedulerConfiguration = DomainTestHelper.createJobSchedulerConfiguration("* * *" +
                         " * * *",
                 null, null, JobSchedulerType.CRON);
+
         final JobConfiguration jobConfiguration = DomainTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobConfigurationId(1L);
         final String beanName = this.schedulerService.registerSchedulerForJob(jobConfiguration);
-        assertThat(beanName).isEqualTo("sampleJobCRON1");
+        assertThat(beanName).startsWith("sampleJob-CRON");
     }
 
     @Test

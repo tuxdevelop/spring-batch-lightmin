@@ -70,23 +70,6 @@ public class DefaultAdminServiceTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    @Test(expected = SpringBatchLightminApplicationException.class)
-    public void saveJobConfigurationErrorTest() {
-        final JobSchedulerConfiguration jobSchedulerConfiguration = DomainTestHelper.createJobSchedulerConfiguration(
-                "0 0/5 * * * ?", null, null, JobSchedulerType.CRON);
-        final JobConfiguration jobConfiguration = DomainTestHelper.createJobConfiguration(jobSchedulerConfiguration);
-        when(this.properties.getApplicationName()).thenReturn(APPLICATION_NAME);
-        when(this.jobConfigurationRepository.add(jobConfiguration, APPLICATION_NAME)).thenReturn(jobConfiguration);
-        try {
-            when(this.jobConfigurationRepository.update(any(JobConfiguration.class), anyString()))
-                    .thenThrow(NoSuchJobConfigurationException.class);
-        } catch (final NoSuchJobConfigurationException e) {
-            fail(e.getMessage());
-        }
-        this.defaultAdminService.saveJobConfiguration(jobConfiguration);
-    }
-
     @Test
     public void updateJobConfigurationTest() throws NoSuchJobConfigurationException {
         final JobSchedulerConfiguration jobSchedulerConfiguration = DomainTestHelper.createJobSchedulerConfiguration(
@@ -267,6 +250,7 @@ public class DefaultAdminServiceTest {
         final Collection<JobConfiguration> result = this.defaultAdminService.getJobConfigurations(jobNames);
         assertThat(result).hasSize(2);
     }
+
 
     @Test
     public void getJobConfigurationByIdTest() {

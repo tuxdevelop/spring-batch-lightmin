@@ -125,6 +125,10 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
             jobConfigurationToDelete = this.getJobConfiguration(jobConfigurationId, applicationName);
             jobConfigurationMap.remove(jobConfigurationToDelete.getJobConfigurationId());
             log.debug("Removed JobConfiguration with id: " + jobConfiguration.getJobConfigurationId());
+            if (jobConfigurationMap.values().isEmpty()) {
+                Map<Long, JobConfiguration> removedFromRepresentation = applicationJobConfigurations.remove(jobName);
+                log.debug("Removed Map for {} from Repository, because there where no mappings left.", removedFromRepresentation.keySet());
+            }
         } else {
             final String message = "No configuration found for job: " + jobName + ". Nothing to delete";
             log.error(message);
