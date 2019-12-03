@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.tuxdevelop.spring.batch.lightmin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
@@ -298,13 +299,17 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
         List<JobConfigurationJdbcWrapper> getAllByJobNames(final Collection<String> jobNames, final String applicationName) {
             final String inParameters = this.parseInCollection(jobNames);
-            final String sql = String.format(GET_ALL_JOB_CONFIGURATION_BY_JOB_NAMES_QUERY, this.tableName, inParameters);
-            final Object[] parameters = new Object[jobNames.size() + 1];
-            parameters[0] = applicationName;
-            final Object[] jobNamesArray = jobNames.toArray();
-            System.arraycopy(jobNamesArray, 0, parameters, 1, jobNamesArray.length);
-            return this.jdbcTemplate
-                    .query(sql, this.jobConfigurationJdbcWrapperRowMapper, parameters);
+            if (StringUtils.hasText(inParameters)) {
+                final String sql = String.format(GET_ALL_JOB_CONFIGURATION_BY_JOB_NAMES_QUERY, this.tableName, inParameters);
+                final Object[] parameters = new Object[jobNames.size() + 1];
+                parameters[0] = applicationName;
+                final Object[] jobNamesArray = jobNames.toArray();
+                System.arraycopy(jobNamesArray, 0, parameters, 1, jobNamesArray.length);
+                return this.jdbcTemplate
+                        .query(sql, this.jobConfigurationJdbcWrapperRowMapper, parameters);
+            } else {
+                return Collections.emptyList();
+            }
         }
 
         private Map<String, Object> map(final JobConfiguration jobConfiguration, final String applicationName) {
