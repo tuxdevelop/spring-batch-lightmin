@@ -83,7 +83,7 @@ public class FolderListener extends AbstractListener implements Listener {
     private void initTransformer() {
         this.transformer = new AbstractFilePayloadTransformer<JobLaunchRequest>() {
             @Override
-            protected JobLaunchRequest transformFile(final File file) throws Exception {
+            protected JobLaunchRequest transformFile(final File file) {
                 FolderListener.this.attachFileSourceToJobParameters(file);
                 return new JobLaunchRequest(FolderListener.this.job, FolderListener.this.jobParameters);
             }
