@@ -1,4 +1,6 @@
-package org.tuxdevelop.spring.batch.lightmin.server.fe.model.validator;
+package org.tuxdevelop.spring.batch.lightmin.validation.annotation;
+
+import org.tuxdevelop.spring.batch.lightmin.validation.validator.CronExpressionValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

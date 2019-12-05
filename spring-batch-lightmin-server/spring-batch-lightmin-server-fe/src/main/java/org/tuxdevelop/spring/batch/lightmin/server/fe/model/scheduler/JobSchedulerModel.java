@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.common.TaskExecutorTypeModel;
+import org.tuxdevelop.spring.batch.lightmin.validation.annotation.IsCronExpression;
 
 import javax.validation.constraints.AssertTrue;
 
@@ -12,6 +13,7 @@ public class JobSchedulerModel {
 
     private String type;
     private SchedulerTypeModel typeRead;
+    @IsCronExpression
     private String cronExpression;
     private Long initialDelay;
     private Long fixedDelay;
@@ -90,21 +92,4 @@ public class JobSchedulerModel {
 
         return result;
     }
-
-    @AssertTrue(message = "Not a valid CRON expression")
-    public boolean isCronExpressionValid() {
-        final Boolean result;
-        if (SchedulerTypeModel.JobSchedulerType.CRON.name().equals(this.type)) {
-            if (this.cronExpression == null) {
-                result = Boolean.FALSE;
-            } else {
-                result = org.quartz.CronExpression.isValidExpression(this.cronExpression);
-            }
-        } else {
-            result = Boolean.TRUE;
-        }
-
-        return result;
-    }
-
 }

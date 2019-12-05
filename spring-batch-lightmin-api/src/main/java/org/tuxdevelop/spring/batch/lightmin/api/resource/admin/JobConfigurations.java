@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.api.resource.admin;
 
 import lombok.Data;
 
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -14,7 +15,7 @@ import java.util.LinkedList;
 public class JobConfigurations implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    @Valid
     private Collection<JobConfiguration> jobConfigurations;
 
     public JobConfigurations() {

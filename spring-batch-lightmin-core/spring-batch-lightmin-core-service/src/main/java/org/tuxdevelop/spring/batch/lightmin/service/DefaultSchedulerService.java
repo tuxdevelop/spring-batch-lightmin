@@ -18,6 +18,7 @@ import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Default implementation of {@link SchedulerService}
@@ -143,8 +144,7 @@ public class DefaultSchedulerService implements SchedulerService {
             final String beanName;
             if (jobSchedulerConfiguration.getBeanName() == null || jobSchedulerConfiguration.getBeanName().isEmpty()) {
                 beanName = this.generateSchedulerBeanName(jobConfiguration.getJobName(),
-                        jobConfiguration.getJobConfigurationId(), jobConfiguration.getJobSchedulerConfiguration()
-                                .getJobSchedulerType());
+                        jobConfiguration.getJobSchedulerConfiguration().getJobSchedulerType());
             } else {
                 beanName = jobSchedulerConfiguration.getBeanName();
             }
@@ -171,9 +171,9 @@ public class DefaultSchedulerService implements SchedulerService {
         }
     }
 
-    private String generateSchedulerBeanName(final String jobName, final Long id,
+    private String generateSchedulerBeanName(final String jobName,
                                              final JobSchedulerType jobSchedulerType) {
-        return jobName + jobSchedulerType.name() + id;
+        return jobName + "-" + jobSchedulerType.name() + "-" + UUID.randomUUID();
     }
 
     private ThreadPoolTaskScheduler registerThreadPoolTaskScheduler(final String jobConfigurationBeanName) {

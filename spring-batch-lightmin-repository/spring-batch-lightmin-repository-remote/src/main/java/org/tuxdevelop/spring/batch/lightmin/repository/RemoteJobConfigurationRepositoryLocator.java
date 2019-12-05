@@ -7,7 +7,7 @@ package org.tuxdevelop.spring.batch.lightmin.repository;
 public interface RemoteJobConfigurationRepositoryLocator {
 
     /**
-     * This methode has to return a uniqzue url string for the Remote Repository Server.
+     * This methode has to return a unique url string for the Remote Repository Server.
      * <p>
      * Implementations
      * <ul>

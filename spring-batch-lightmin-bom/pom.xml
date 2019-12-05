@@ -6,7 +6,7 @@
 
     <groupId>org.tuxdevelop</groupId>
     <artifactId>spring-batch-lightmin-bom</artifactId>
-    <version>2.0.3-SNAPSHOT</version>
+    <version>2.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Spring Batch Lightmin BOM</name>
@@ -30,6 +30,7 @@
             <email>tuxdevelop@gmail.com</email>
         </developer>
     </developers>
+
 
 
     <properties>
@@ -231,6 +232,13 @@
             <dependency>
                 <groupId>org.tuxdevelop</groupId>
                 <artifactId>spring-batch-lightmin-util</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- validation -->
+            <dependency>
+                <groupId>org.tuxdevelop</groupId>
+                <artifactId>spring-batch-lightmin-validation</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

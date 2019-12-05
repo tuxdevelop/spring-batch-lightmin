@@ -593,7 +593,8 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="_about">About</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><em>Spring Batch Lightmin</em> is a client/server batch and scheduling platform for the <em>Spring Boot</em> stack. The batch stack based on <em>Spring Batch</em>.</p>
+<p><em>Spring Batch Lightmin</em> is a client/server batch and scheduling platform for the <em>Spring Boot</em> stack.
+The batch stack based on <em>Spring Batch</em>.</p>
 </div>
 </div>
 </div>
@@ -616,13 +617,16 @@ table.CodeRay td.code>pre{padding:0}
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/2.0.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html">2.x</a> (Spring Boot 2.1.x)</p>
+<p><a href="http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/2.1.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html">2.1.x</a> (Spring Boot 2.2.x)</p>
 </li>
 <li>
-<p><a href="http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/1.0.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html">1.x</a> (Spring Boot 1.5.x)</p>
+<p><a href="http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/2.0.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html">2.0.x</a> (Spring Boot 2.1.x)</p>
 </li>
 <li>
-<p><a href="http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/0.5.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html">0.5.x</a> (old design - Spring Boot 1.5.x)</p>
+<p><a href="http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/1.0.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html">1.x</a> (Spring Boot 1.5.x) - End of life</p>
+</li>
+<li>
+<p><a href="http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/0.5.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html">0.5.x</a> (old design - Spring Boot 1.5.x) - End of life</p>
 </li>
 </ul>
 </div>
@@ -682,7 +686,8 @@ The getting started guide for the <em>Embedded Mode</em> can be found in the sec
 <div class="sect2">
 <h3 id="_setting_up_the_server">Setting up the Server</h3>
 <div class="paragraph">
-<p>The server component is currently only available in a standalone mode. This means, the servers do not sync the state between each other.
+<p>The server component is currently only available in a standalone mode.
+This means, the servers do not sync the state between each other.
 A cluster mode will be added in a future release.</p>
 </div>
 <div class="paragraph">
@@ -724,8 +729,7 @@ A cluster mode will be added in a future release.</p>
 <p>Depending on the clients, the server is also able to find the clients via service discovery.</p>
 </div>
 <div class="paragraph">
-<p>To enable the feature, a <em>DiscoveryClient</em> implementation has to added and configured(e.g. Consul, Eureka, etc&#8230;&#8203;)
-and the following property has to set to true</p>
+<p>To enable the feature, a <em>DiscoveryClient</em> implementation has to added and configured(e.g. Consul, Eureka, etc&#8230;&#8203;) and the following property has to set to true</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -740,12 +744,12 @@ and the following property has to set to true</p>
 <div class="sect3">
 <h4 id="_server_behind_a_proxy">Server behind a Proxy</h4>
 <div class="paragraph">
-<p>The server frontend  uses redirects and the <em>HOST</em> header is taken to create the redirect urls. This is the default behaviour of Spring MVC.
+<p>The server frontend uses redirects and the <em>HOST</em> header is taken to create the redirect urls.
+This is the default behaviour of Spring MVC.
 If the server frontend is running behind a proxy, the implementation of the server takes care, that the <em>X-FORWARD-PREFIX</em> header is used as well.</p>
 </div>
 <div class="paragraph">
-<p>If the proxy cannot pass the <em>HOST</em> header or you do not want to change the defaults, e.g. <em>Zuul</em>, the following property can force the server
-to use the <em>X-FORWARDED-HOST</em> header to build the redirect urls.</p>
+<p>If the proxy cannot pass the <em>HOST</em> header or you do not want to change the defaults, e.g. <em>Zuul</em>, the following property can force the server to use the <em>X-FORWARDED-HOST</em> header to build the redirect urls.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -761,12 +765,14 @@ to use the <em>X-FORWARDED-HOST</em> header to build the redirect urls.</p>
 <div class="sect2">
 <h3 id="_setting_up_a_client">Setting up a Client</h3>
 <div class="paragraph">
-<p>The client applications are responsible to provide <em>Spring Batch Job</em> definitions. The <em>Spring Batch Lightmin</em> client framework provides all the configurations to set up <em>Spring Batch</em> and the communication with the server.</p>
+<p>The client applications are responsible to provide <em>Spring Batch Job</em> definitions.
+The <em>Spring Batch Lightmin</em> client framework provides all the configurations to set up <em>Spring Batch</em> and the communication with the server.</p>
 </div>
 <div class="sect3">
 <h4 id="_step_one_client_type">Step one - Client type</h4>
 <div class="paragraph">
-<p>The type of the client decides how the registration to the server should be done. Currently to types are supported, classic and via service discovery.</p>
+<p>The type of the client decides how the registration to the server should be done.
+Currently to types are supported, classic and via service discovery.</p>
 </div>
 <div class="sect4">
 <h5 id="_classic">Classic</h5>
@@ -864,8 +870,7 @@ Both implementations add a tags to the underlying service discovery technology, 
 <p>The configuration options for Consul can be found in the <em>Spring Cloud Consul</em> documentation.</p>
 </div>
 <div class="paragraph">
-<p>The client is sending per default events to the server, in order to find the server via service discovery,
- the following property has to be set.</p>
+<p>The client is sending per default events to the server, in order to find the server via service discovery, the following property has to be set.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -918,8 +923,7 @@ Both implementations add a tags to the underlying service discovery technology, 
 <p>The configuration options for Eureka can be found in the <em>Spring Cloud Netflix</em> documentation.</p>
 </div>
 <div class="paragraph">
-<p>The client is sending per default events to the server, in order to find the server via service discovery,
- the following property has to be set.</p>
+<p>The client is sending per default events to the server, in order to find the server via service discovery, the following property has to be set.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1022,8 +1026,7 @@ This configurations are loaded at start time and can be managed with the server 
 <p>The jdbc repository requires a configured datasource bean with the name <em>dataSource</em>.</p>
 </div>
 <div class="paragraph">
-<p>If the project configuration requires a specific datasource for the lightmin repository,
- the bean name can set via configuration property.
+<p>If the project configuration requires a specific datasource for the lightmin repository, the bean name can set via configuration property.
 More configuration options can be found in the documentation.</p>
 </div>
 <div class="listingblock">
@@ -1134,7 +1137,8 @@ More configuration options can be found in the documentation.</p>
 <div class="sect3">
 <h4 id="_step_three_configure_spring_batch">Step three - Configure Spring Batch</h4>
 <div class="paragraph">
-<p>The client configurations are enabling the <em>Spring Batch</em> stack as well. <em>Spring Batch</em> itself has to have a configured <em>JobRepository</em>.
+<p>The client configurations are enabling the <em>Spring Batch</em> stack as well.
+<em>Spring Batch</em> itself has to have a configured <em>JobRepository</em>.
 This <em>JobRepository</em> can be in memory via map or jdbc.</p>
 </div>
 <div class="paragraph">
@@ -1170,7 +1174,8 @@ This <em>JobRepository</em> can be in memory via map or jdbc.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Properties like dataSource name, table prefix etc. can be overridden as well. Please check the documentation for more details.</p>
+<p>Properties like dataSource name, table prefix etc. can be overridden as well.
+Please check the documentation for more details.</p>
 </div>
 </div>
 </div>
@@ -1200,7 +1205,8 @@ For this use case, a property is available.</p>
 <p>The <em>Remote Repository Server</em> is a <em>Spring Boot</em> application which provides a REST API for clients.</p>
 </div>
 <div class="paragraph">
-<p>The server itself needs a job configuration repository itself. The server supports map and jdbc.</p>
+<p>The server itself needs a job configuration repository itself.
+The server supports map and jdbc.</p>
 </div>
 <div class="sect2">
 <h3 id="_maven">Maven</h3>
@@ -1268,7 +1274,8 @@ For this use case, a property is available.</p>
 <div class="sect2">
 <h3 id="_configuration_2">Configuration</h3>
 <div class="paragraph">
-<p>In this case, a specific client does not have to be configured. The <em>Job Configuration Repository</em> and <em>Spring Batch</em> have to be configured like for a regular client.</p>
+<p>In this case, a specific client does not have to be configured.
+The <em>Job Configuration Repository</em> and <em>Spring Batch</em> have to be configured like for a regular client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1301,7 +1308,8 @@ For this use case, a property is available.</p>
 <div class="sect2">
 <h3 id="_applications">Applications</h3>
 <div class="paragraph">
-<p>The start page of the <em>SpringBatchLightmin</em> shows all register applications. The status icon shows the current health status of the application.</p>
+<p>The start page of the <em>SpringBatchLightmin</em> shows all register applications.
+The status icon shows the current health status of the application.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1312,7 +1320,8 @@ For this use case, a property is available.</p>
 <div class="sect2">
 <h3 id="_application_instance_dashboard">Application Instance Dashboard</h3>
 <div class="paragraph">
-<p>The application dashboard is the entry point to the monitoring and administration of a client application instance. The overview shows the important endpoints, all known <em>Spring Batch Jobs</em> and configured external links of the client application.</p>
+<p>The application dashboard is the entry point to the monitoring and administration of a client application instance.
+The overview shows the important endpoints, all known <em>Spring Batch Jobs</em> and configured external links of the client application.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1334,8 +1343,8 @@ For this use case, a property is available.</p>
 <div class="sect2">
 <h3 id="_batch_job_executions">Batch Job Executions</h3>
 <div class="paragraph">
-<p>The view  shows an overview of all executions for the selected job. To get details of the job execution,
-click on the desired id.</p>
+<p>The view shows an overview of all executions for the selected job.
+To get details of the job execution, click on the desired id.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -2459,8 +2468,8 @@ If the application will be restarted, all stored <em>JobConfigurations</em> will
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications' -i -X POST \
-    -H 'Content-Type: application/json; charset=UTF-8' \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{
   &quot;id&quot; : null,
   &quot;name&quot; : &quot;it-application&quot;,
@@ -2488,10 +2497,10 @@ If the application will be restarted, all stored <em>JobConfigurations</em> will
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/applications HTTP/1.1
-Content-Length: 790
-Content-Type: application/json; charset=UTF-8
 Accept: application/json, application/javascript, text/javascript, text/json
+Content-Type: application/json; charset=UTF-8
 Host: localhost
+Content-Length: 790
 
 {
   &quot;id&quot; : null,
@@ -2521,19 +2530,19 @@ Host: localhost
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 870
-Date: Wed, 10 Jul 2019 14:41:39 GMT
 Transfer-Encoding: chunked
+Date: Thu, 05 Dec 2019 08:17:56 GMT
+Content-Length: 870
 
 {
-  &quot;id&quot; : &quot;0c74637a&quot;,
+  &quot;id&quot; : &quot;0574fbc1&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:65419/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:65419/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:65419&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:63154/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:63154/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:63154&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1562769698587
+    &quot;timeInMills&quot; : 1575533875508
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2557,9 +2566,9 @@ Transfer-Encoding: chunked
 <h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/0c74637a' -i -X DELETE \
-    -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/0574fbc1' -i -X DELETE \
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -2567,9 +2576,9 @@ Transfer-Encoding: chunked
 <h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/0c74637a HTTP/1.1
-Content-Type: application/json; charset=UTF-8
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/0574fbc1 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript, text/json
+Content-Type: application/json; charset=UTF-8
 Host: localhost</code></pre>
 </div>
 </div>
@@ -2579,20 +2588,20 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 870
-Date: Wed, 10 Jul 2019 14:41:39 GMT
+Content-Type: application/json
 Transfer-Encoding: chunked
+Date: Thu, 05 Dec 2019 08:17:56 GMT
+Content-Length: 870
 
 {
-  &quot;id&quot; : &quot;0c74637a&quot;,
+  &quot;id&quot; : &quot;0574fbc1&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:65419/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:65419/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:65419&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:63154/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:63154/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:63154&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1562769698587
+    &quot;timeInMills&quot; : 1575533875508
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2617,8 +2626,8 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications' -i -X GET \
-    -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
+    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -2627,8 +2636,8 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/applications HTTP/1.1
-Content-Type: application/json; charset=UTF-8
 Accept: application/json, application/javascript, text/javascript, text/json
+Content-Type: application/json; charset=UTF-8
 Host: localhost</code></pre>
 </div>
 </div>
@@ -2638,20 +2647,20 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Length: 874
 Content-Type: application/json;charset=UTF-8
-Date: Wed, 10 Jul 2019 14:41:38 GMT
 Transfer-Encoding: chunked
+Date: Thu, 05 Dec 2019 08:17:56 GMT
+Content-Length: 874
 
 [ {
-  &quot;id&quot; : &quot;0c74637a&quot;,
+  &quot;id&quot; : &quot;0574fbc1&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:65419/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:65419/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:65419&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:63154/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:63154/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:63154&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1562769698587
+    &quot;timeInMills&quot; : 1575533875508
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2676,8 +2685,8 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/events/jobexecutions' -i -X POST \
-    -H 'Content-Type: application/json; charset=UTF-8' \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{
   &quot;applicationName&quot; : &quot;testApplication&quot;,
   &quot;jobName&quot; : &quot;sampleJob&quot;,
@@ -2686,8 +2695,8 @@ Transfer-Encoding: chunked
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1562769700055,
-  &quot;endDate&quot; : 1562769710055
+  &quot;startDate&quot; : 1575533877456,
+  &quot;endDate&quot; : 1575533887456
 }'</code></pre>
 </div>
 </div>
@@ -2697,10 +2706,10 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/events/jobexecutions HTTP/1.1
-Content-Type: application/json; charset=UTF-8
-Content-Length: 247
 Accept: application/json, application/javascript, text/javascript, text/json
+Content-Type: application/json; charset=UTF-8
 Host: localhost
+Content-Length: 247
 
 {
   &quot;applicationName&quot; : &quot;testApplication&quot;,
@@ -2710,8 +2719,8 @@ Host: localhost
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1562769700055,
-  &quot;endDate&quot; : 1562769710055
+  &quot;startDate&quot; : 1575533877456,
+  &quot;endDate&quot; : 1575533887456
 }</code></pre>
 </div>
 </div>
@@ -2721,7 +2730,7 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Wed, 10 Jul 2019 14:41:39 GMT</code></pre>
+Date: Thu, 05 Dec 2019 08:17:56 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -2757,10 +2766,10 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Wed, 10 Jul 2019 14:41:41 GMT
-Content-Length: 1542
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
+Date: Thu, 05 Dec 2019 08:18:00 GMT
+Content-Length: 1542
 
 {
   &quot;startIndex&quot; : 0,
@@ -2774,7 +2783,7 @@ Transfer-Encoding: chunked
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : &quot;2019/07/10 16:41:42:279[date]&quot;,
+          &quot;parameter&quot; : &quot;2019/12/05 09:18:00:372[date]&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -2797,9 +2806,9 @@ Transfer-Encoding: chunked
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : &quot;2019-07-10T14:41:42.285+0000&quot;,
-      &quot;endTime&quot; : &quot;2019-07-10T14:41:42.287+0000&quot;,
-      &quot;lastUpdated&quot; : &quot;2019-07-10T14:41:42.287+0000&quot;,
+      &quot;startTime&quot; : &quot;2019-12-05T08:18:00.392+0000&quot;,
+      &quot;endTime&quot; : &quot;2019-12-05T08:18:00.398+0000&quot;,
+      &quot;lastUpdated&quot; : &quot;2019-12-05T08:18:00.398+0000&quot;,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -2809,10 +2818,10 @@ Transfer-Encoding: chunked
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : &quot;2019-07-10T14:41:42.282+0000&quot;,
-    &quot;createTime&quot; : &quot;2019-07-10T14:41:42.281+0000&quot;,
-    &quot;endTime&quot; : &quot;2019-07-10T14:41:42.288+0000&quot;,
-    &quot;lastUpdated&quot; : &quot;2019-07-10T14:41:42.293+0000&quot;,
+    &quot;startTime&quot; : &quot;2019-12-05T08:18:00.384+0000&quot;,
+    &quot;createTime&quot; : &quot;2019-12-05T08:18:00.380+0000&quot;,
+    &quot;endTime&quot; : &quot;2019-12-05T08:18:00.410+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2019-12-05T08:18:00.424+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2851,10 +2860,10 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Length: 879
-Date: Wed, 10 Jul 2019 14:41:41 GMT
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
+Date: Thu, 05 Dec 2019 08:18:00 GMT
+Content-Length: 879
 
 {
   &quot;startIndex&quot; : 0,
@@ -2868,7 +2877,7 @@ Transfer-Encoding: chunked
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : &quot;2019/07/10 16:41:42:219[date]&quot;,
+          &quot;parameter&quot; : &quot;2019/12/05 09:18:00:197[date]&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -2880,10 +2889,10 @@ Transfer-Encoding: chunked
     },
     &quot;stepExecutions&quot; : [ ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : &quot;2019-07-10T14:41:42.222+0000&quot;,
-    &quot;createTime&quot; : &quot;2019-07-10T14:41:42.221+0000&quot;,
-    &quot;endTime&quot; : &quot;2019-07-10T14:41:42.228+0000&quot;,
-    &quot;lastUpdated&quot; : &quot;2019-07-10T14:41:42.234+0000&quot;,
+    &quot;startTime&quot; : &quot;2019-12-05T08:18:00.200+0000&quot;,
+    &quot;createTime&quot; : &quot;2019-12-05T08:18:00.200+0000&quot;,
+    &quot;endTime&quot; : &quot;2019-12-05T08:18:00.214+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2019-12-05T08:18:00.225+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2922,10 +2931,10 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Length: 1291
-Date: Wed, 10 Jul 2019 14:41:41 GMT
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
+Date: Thu, 05 Dec 2019 08:18:00 GMT
+Content-Length: 1291
 
 {
   &quot;id&quot; : 20,
@@ -2933,7 +2942,7 @@ Transfer-Encoding: chunked
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2019/07/10 16:41:42:450[date]&quot;,
+        &quot;parameter&quot; : &quot;2019/12/05 09:18:00:718[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2956,9 +2965,9 @@ Transfer-Encoding: chunked
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : &quot;2019-07-10T14:41:42.455+0000&quot;,
-    &quot;endTime&quot; : &quot;2019-07-10T14:41:42.457+0000&quot;,
-    &quot;lastUpdated&quot; : &quot;2019-07-10T14:41:42.457+0000&quot;,
+    &quot;startTime&quot; : &quot;2019-12-05T08:18:00.723+0000&quot;,
+    &quot;endTime&quot; : &quot;2019-12-05T08:18:00.725+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2019-12-05T08:18:00.725+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2968,10 +2977,10 @@ Transfer-Encoding: chunked
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2019-07-10T14:41:42.452+0000&quot;,
-  &quot;createTime&quot; : &quot;2019-07-10T14:41:42.452+0000&quot;,
-  &quot;endTime&quot; : &quot;2019-07-10T14:41:42.458+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2019-07-10T14:41:42.463+0000&quot;,
+  &quot;startTime&quot; : &quot;2019-12-05T08:18:00.720+0000&quot;,
+  &quot;createTime&quot; : &quot;2019-12-05T08:18:00.719+0000&quot;,
+  &quot;endTime&quot; : &quot;2019-12-05T08:18:00.726+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2019-12-05T08:18:00.731+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -2990,12 +2999,12 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/query?jobname=simpleJob&amp;resultsize=4' -i -X POST \
-    -H 'Content-Type: application/json; charset=UTF-8' \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1562769801867,
-  &quot;START_DATE&quot; : 1562769601867
+  &quot;END_DATE&quot; : 1575533979518,
+  &quot;START_DATE&quot; : 1575533779518
 }'</code></pre>
 </div>
 </div>
@@ -3005,15 +3014,15 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/jobexecutions/query?jobname=simpleJob&amp;resultsize=4 HTTP/1.1
-Content-Type: application/json; charset=UTF-8
-Content-Length: 95
 Accept: application/json, application/javascript, text/javascript, text/json
+Content-Type: application/json; charset=UTF-8
 Host: localhost
+Content-Length: 95
 
 {
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1562769801867,
-  &quot;START_DATE&quot; : 1562769601867
+  &quot;END_DATE&quot; : 1575533979518,
+  &quot;START_DATE&quot; : 1575533779518
 }</code></pre>
 </div>
 </div>
@@ -3023,10 +3032,10 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Length: 2692
-Date: Wed, 10 Jul 2019 14:41:41 GMT
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
+Date: Thu, 05 Dec 2019 08:17:59 GMT
+Content-Length: 2692
 
 [ {
   &quot;id&quot; : 10,
@@ -3034,7 +3043,7 @@ Transfer-Encoding: chunked
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2019/07/10 16:41:41:851[date]&quot;,
+        &quot;parameter&quot; : &quot;2019/12/05 09:17:59:487[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3046,10 +3055,10 @@ Transfer-Encoding: chunked
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2019-07-10T14:41:41.854+0000&quot;,
-  &quot;createTime&quot; : &quot;2019-07-10T14:41:41.853+0000&quot;,
-  &quot;endTime&quot; : &quot;2019-07-10T14:41:41.861+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2019-07-10T14:41:41.867+0000&quot;,
+  &quot;startTime&quot; : &quot;2019-12-05T08:17:59.493+0000&quot;,
+  &quot;createTime&quot; : &quot;2019-12-05T08:17:59.490+0000&quot;,
+  &quot;endTime&quot; : &quot;2019-12-05T08:17:59.507+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2019-12-05T08:17:59.516+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3062,7 +3071,7 @@ Transfer-Encoding: chunked
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2019/07/10 16:41:41:851[date]&quot;,
+        &quot;parameter&quot; : &quot;2019/12/05 09:17:59:487[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3074,10 +3083,10 @@ Transfer-Encoding: chunked
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2019-07-10T14:41:41.799+0000&quot;,
-  &quot;createTime&quot; : &quot;2019-07-10T14:41:41.798+0000&quot;,
-  &quot;endTime&quot; : &quot;2019-07-10T14:41:41.803+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2019-07-10T14:41:41.808+0000&quot;,
+  &quot;startTime&quot; : &quot;2019-12-05T08:17:59.322+0000&quot;,
+  &quot;createTime&quot; : &quot;2019-12-05T08:17:59.319+0000&quot;,
+  &quot;endTime&quot; : &quot;2019-12-05T08:17:59.334+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2019-12-05T08:17:59.342+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3090,7 +3099,7 @@ Transfer-Encoding: chunked
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2019/07/10 16:41:41:851[date]&quot;,
+        &quot;parameter&quot; : &quot;2019/12/05 09:17:59:487[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3102,10 +3111,10 @@ Transfer-Encoding: chunked
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2019-07-10T14:41:40.379+0000&quot;,
-  &quot;createTime&quot; : &quot;2019-07-10T14:41:40.374+0000&quot;,
-  &quot;endTime&quot; : &quot;2019-07-10T14:41:40.403+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2019-07-10T14:41:40.408+0000&quot;,
+  &quot;startTime&quot; : &quot;2019-12-05T08:17:57.746+0000&quot;,
+  &quot;createTime&quot; : &quot;2019-12-05T08:17:57.740+0000&quot;,
+  &quot;endTime&quot; : &quot;2019-12-05T08:17:57.799+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2019-12-05T08:17:57.812+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3118,7 +3127,7 @@ Transfer-Encoding: chunked
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2019/07/10 16:41:41:851[date]&quot;,
+        &quot;parameter&quot; : &quot;2019/12/05 09:17:59:487[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3130,10 +3139,10 @@ Transfer-Encoding: chunked
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2019-07-10T14:41:40.297+0000&quot;,
-  &quot;createTime&quot; : &quot;2019-07-10T14:41:40.279+0000&quot;,
-  &quot;endTime&quot; : &quot;2019-07-10T14:41:40.318+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2019-07-10T14:41:40.323+0000&quot;,
+  &quot;startTime&quot; : &quot;2019-12-05T08:17:57.636+0000&quot;,
+  &quot;createTime&quot; : &quot;2019-12-05T08:17:57.630+0000&quot;,
+  &quot;endTime&quot; : &quot;2019-12-05T08:17:57.662+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2019-12-05T08:17:57.668+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3155,8 +3164,8 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/joblaunches' -i -X POST \
-    -H 'Content-Type: application/json; charset=UTF-8' \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;jobParameters&quot; : {
@@ -3176,10 +3185,10 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/joblaunches HTTP/1.1
-Content-Type: application/json; charset=UTF-8
 Accept: application/json, application/javascript, text/javascript, text/json
-Content-Length: 205
+Content-Type: application/json; charset=UTF-8
 Host: localhost
+Content-Length: 205
 
 {
   &quot;jobName&quot; : &quot;simpleJob&quot;,
@@ -3200,7 +3209,7 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Wed, 10 Jul 2019 14:41:39 GMT</code></pre>
+Date: Thu, 05 Dec 2019 08:17:56 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -3234,10 +3243,10 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Length: 412
 Content-Type: application/json;charset=UTF-8
-Date: Wed, 10 Jul 2019 14:41:42 GMT
 Transfer-Encoding: chunked
+Date: Thu, 05 Dec 2019 08:18:01 GMT
+Content-Length: 412
 
 {
   &quot;jobConfigurationId&quot; : 41,
@@ -3286,10 +3295,10 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Length: 951
 Content-Type: application/json;charset=UTF-8
-Date: Wed, 10 Jul 2019 14:41:42 GMT
 Transfer-Encoding: chunked
+Date: Thu, 05 Dec 2019 08:18:02 GMT
+Content-Length: 951
 
 {
   &quot;jobConfigurations&quot; : [ {
@@ -3356,10 +3365,10 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Length: 951
 Content-Type: application/json;charset=UTF-8
-Date: Wed, 10 Jul 2019 14:41:42 GMT
 Transfer-Encoding: chunked
+Date: Thu, 05 Dec 2019 08:18:01 GMT
+Content-Length: 951
 
 {
   &quot;jobConfigurations&quot; : [ {
@@ -3407,8 +3416,8 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X POST \
-    -H 'Content-Type: application/json; charset=UTF-8' \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{
   &quot;jobConfigurationId&quot; : null,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
@@ -3432,10 +3441,10 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/jobconfigurations HTTP/1.1
-Content-Type: application/json; charset=UTF-8
 Accept: application/json, application/javascript, text/javascript, text/json
-Content-Length: 424
+Content-Type: application/json; charset=UTF-8
 Host: localhost
+Content-Length: 424
 
 {
   &quot;jobConfigurationId&quot; : null,
@@ -3460,7 +3469,7 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Wed, 10 Jul 2019 14:41:42 GMT</code></pre>
+Date: Thu, 05 Dec 2019 08:18:02 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -3472,8 +3481,8 @@ Date: Wed, 10 Jul 2019 14:41:42 GMT</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations' -i -X PUT \
-    -H 'Content-Type: application/json; charset=UTF-8' \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{
   &quot;jobConfigurationId&quot; : 36,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
@@ -3499,8 +3508,8 @@ Date: Wed, 10 Jul 2019 14:41:42 GMT</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">PUT /api/jobconfigurations HTTP/1.1
-Content-Type: application/json; charset=UTF-8
 Accept: application/json, application/javascript, text/javascript, text/json
+Content-Type: application/json; charset=UTF-8
 Host: localhost
 Content-Length: 441
 
@@ -3529,7 +3538,7 @@ Content-Length: 441
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Wed, 10 Jul 2019 14:41:41 GMT</code></pre>
+Date: Thu, 05 Dec 2019 08:18:00 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -3560,7 +3569,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Wed, 10 Jul 2019 14:41:41 GMT</code></pre>
+Date: Thu, 05 Dec 2019 08:18:00 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -3591,7 +3600,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Wed, 10 Jul 2019 14:41:42 GMT</code></pre>
+Date: Thu, 05 Dec 2019 08:18:01 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -3622,7 +3631,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Wed, 10 Jul 2019 14:41:42 GMT</code></pre>
+Date: Thu, 05 Dec 2019 08:18:01 GMT</code></pre>
 </div>
 </div>
 </div>
