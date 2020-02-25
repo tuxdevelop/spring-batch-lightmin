@@ -20,7 +20,7 @@ public class OnJobExecutionFinishedEventListener implements ApplicationListener<
     public OnJobExecutionFinishedEventListener(final JobExecutionEventPublisher jobExecutionEventPublisher) {
         this.jobExecutionEventPublisher = jobExecutionEventPublisher;
     }
-
+// TODO ADE: Here Metrics
     @Override
     public void onApplicationEvent(final JobExecutionEvent jobExecutionEvent) {
         final JobExecution jobExecution = jobExecutionEvent.getJobExecution();
