@@ -1,5 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.client.configuration;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -7,6 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminCore;
 import org.tuxdevelop.spring.batch.lightmin.client.api.controller.LightminClientApplicationRestController;
@@ -15,6 +17,7 @@ import org.tuxdevelop.spring.batch.lightmin.client.event.RemoteJobExecutionEvent
 import org.tuxdevelop.spring.batch.lightmin.client.listener.OnJobExecutionFinishedEventListener;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminClientApplicationService;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminServerLocatorService;
+import org.tuxdevelop.spring.batch.lightmin.configuration.LightminMetricsConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.util.BasicAuthHttpRequestInterceptor;
 
 import java.util.Collections;
@@ -26,6 +29,7 @@ import java.util.Collections;
 @Configuration
 @EnableLightminCore
 @EnableConfigurationProperties(value = {LightminClientProperties.class})
+@Import(value = LightminMetricsConfiguration.class)
 public class LightminClientConfiguration {
 
     @Bean
@@ -67,8 +71,9 @@ public class LightminClientConfiguration {
 
         @Bean
         public OnJobExecutionFinishedEventListener onJobExecutionFinishedEventListener(
-                final JobExecutionEventPublisher jobExecutionEventPublisher) {
-            return new OnJobExecutionFinishedEventListener(jobExecutionEventPublisher);
+                final JobExecutionEventPublisher jobExecutionEventPublisher,
+                final MeterRegistry registry) {
+            return new OnJobExecutionFinishedEventListener(jobExecutionEventPublisher, registry);
         }
     }
 
