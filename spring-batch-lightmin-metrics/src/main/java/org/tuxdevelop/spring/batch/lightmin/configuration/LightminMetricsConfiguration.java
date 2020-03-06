@@ -19,9 +19,8 @@ public class LightminMetricsConfiguration {
         } else {
             appName = applicationName;
         }
+        return registry -> registry.config()
+                .commonTags("lightmin-app-name", appName);
 
-        return registry -> {
-            registry.config().commonTags("lightmin-app-name", appName);
-        };
     }
 }
