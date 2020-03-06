@@ -12,5 +12,5 @@ public class LightminMetricName {
     public static final String LIGHTMIN_STEP_DATA_READ = LIGHTMIN_STEP_DATA_BASE + "read";
     public static final String LIGHTMIN_STEP_DATA_ROLLBACK = LIGHTMIN_STEP_DATA_BASE + "rollback";
 
-
+    private LightminMetricName(){}
 }
