@@ -9,7 +9,8 @@
             <h5 class="card-title text-info" th:text="${applicationCluster.name}"></h5>
             <h6 data-toggle="collapse"
                 id="applications-toggle"
-                class="card-subtitle mb-2 text-muted clickable"
+                class="card-subtitle mb-2 text-muted clickable btn btn-light"
+                th:title="#{tooltip.applications.instances}"
                 th:attr="data-target='#accordion_' + ${applicationCluster.name}"
                 th:text="${applicationCluster.size} + ' Instance(s)'"></h6>
             <div th:id="'accordion_' + ${applicationCluster.name}" class="collapse">
@@ -33,7 +34,8 @@
                                     <div th:if="${applicationInstance.isUp}">
                                         <a href="#" class="text-info nounderline"
                                            th:href="@{application-instance(application-instance-id=${applicationInstance.id})}">
-                                            <i class="fas fa-2x fa-cloud-upload-alt" style="display: inline;"></i>
+                                            <i th:title="#{tooltip.applications.up}"
+                                               class="fas fa-2x fa-cloud-upload-alt" style="display: inline;"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -66,7 +68,8 @@
                                                 type="submit"
                                                 class="btn btn-primary-outline btn-sm"
                                                 name="delete-application-instance">
-                                            <i class="far fa-2x fa-trash-alt text-danger"
+                                            <i th:title="#{tooltip.applications.removeIcon}"
+                                               class="far fa-2x fa-trash-alt text-danger"
                                                style="display: inline;"></i>
                                         </button>
                                     </div>
