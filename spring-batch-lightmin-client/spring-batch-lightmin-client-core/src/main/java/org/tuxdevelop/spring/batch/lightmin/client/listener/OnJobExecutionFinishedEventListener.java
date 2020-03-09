@@ -99,7 +99,7 @@ public class OnJobExecutionFinishedEventListener implements ApplicationListener<
         // We only want to update the Status when the Job Exited the status
         if (!jobExecution.getExitStatus().equals(ExitStatus.UNKNOWN)) {
 
-            Gauge.builder(LIGHTMIN_STEP_DATA_COMMIT, jobExecution.getExitStatus().getExitCode(),
+            Gauge.builder(LIGHTMIN_JOB_STATUS, jobExecution.getExitStatus().getExitCode(),
                     (exitCode) -> {
                         return (double) LightminExitStatus.getLightminMetricExitIdByExitStatus(exitCode);
                     })
