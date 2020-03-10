@@ -45,6 +45,21 @@
             <form id="listenerConfigurationForm" method="post" class="text-secondary"
                   th:object="${listenerConfiguration}">
                 <div class="card border-0">
+                    <div class="row">
+                        <div th:with="varModType=${modificationType.value}"
+                             class="col-md-6 col-lg-6 h3 text-info border-bottom">
+                            <div    th:text="${#strings.capitalize(varModType)}+ ' ' + ${listenerConfiguration.config.type} + ' Listener'"
+                                    th:remove="tag">
+                            </div>
+                            <button type="button"
+                                    th:title="#{tooltip.listener.info}"
+                                    data-toggle="collapse" data-target=".multi-collapse" aria-expanded="true"
+                                    aria-controls="batchJobHelpText statusHelpText sourceFolderHelpText filePatternHelpText pollerPeriodHelpText executorHelpText"
+                                    class="btn btn-sm btn-info collapsed float-right col-lg-1 col-md-1">
+                                <i class="fas fa-info"></i>
+                            </button>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="form-group row" th:if="${modificationType.value == 'add'}">
                             <label class="col-sm-2 col-form-label">Batch Job</label>
@@ -59,7 +74,7 @@
                                             th:value="${job}">
                                     </option>
                                 </select>
-                                <small id="batchJobHelpText" class="form-text text-muted"
+                                <small id="batchJobHelpText" class="form-text text-muted collapse multi-collapse show"
                                        th:text="#{helptext.listener.batch_job}">
                                 </small>
                             </div>
@@ -82,7 +97,7 @@
                                             th:value="${status.value}">
                                     </option>
                                 </select>
-                                <small id="statusHelpText" class="form-text text-muted"
+                                <small id="statusHelpText" class="form-text text-muted collapse multi-collapse show"
                                        th:text="#{helptext.listener.status}">
                                 </small>
                             </div>
@@ -99,11 +114,11 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Source Folder</label>
                             <div class="col-sm-4">
-                                <input class="text-muted text-sm-left w-100"
+                                <input class="text-muted text-sm-left w-100 form-control"
                                        aria-describedby="sourceFolderHelpText"
                                        th:value="*{config.sourceFolder}"
                                        th:field="*{config.sourceFolder}"/>
-                                <small id="sourceFolderHelpText" class="form-text text-muted"
+                                <small id="sourceFolderHelpText" class="form-text text-muted collapse multi-collapse show"
                                        th:text="#{helptext.listener.source_folder}">
                                 </small>
                             </div>
@@ -111,11 +126,11 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">File Pattern</label>
                             <div class="col-sm-2">
-                                <input class="text-muted text-sm-left"
+                                <input class="text-muted text-sm-left form-control"
                                        aria-describedby="filePatternHelpText"
                                        th:value="*{config.filePattern}"
                                        th:field="*{config.FilePattern}"/>
-                                <small id="filePatternHelpText" class="form-text text-muted"
+                                <small id="filePatternHelpText" class="form-text text-muted collapse multi-collapse show"
                                        th:text="#{helptext.listener.file_pattern}">
                                 </small>
                             </div>
@@ -123,11 +138,11 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Poller Period</label>
                             <div class="col-sm-2">
-                                <input class="text-muted text-sm-left"
+                                <input class="text-muted text-sm-left form-control"
                                        aria-describedby="pollerPeriodHelpText"
                                        th:value="*{config.pollerPeriod}"
                                        th:field="*{config.pollerPeriod}"/>
-                                <small id="pollerPeriodHelpText" class="form-text text-muted"
+                                <small id="pollerPeriodHelpText" class="form-text text-muted collapse multi-collapse show"
                                        th:text="#{helptext.listener.poller_period}">
                                 </small>
                             </div>
@@ -145,7 +160,7 @@
                                             th:text="${executor.displayText}">
                                     </option>
                                 </select>
-                                <small id="executorHelpText" class="form-text text-muted"
+                                <small id="executorHelpText" class="form-text text-muted collapse multi-collapse show"
                                        th:text="#{helptext.listener.executor}">
                                 </small>
                             </div>
@@ -212,7 +227,8 @@
                 <div th:include="fragments/validation :: field-errors"></div>
             </form>
 
-            <div th:include="fragments/hints :: job-parameter-description"></div>
+            <div id="paramHint" class="collapse multi-collapse show"
+                    th:include="fragments/hints :: job-parameter-description"></div>
 
         </div>
     </div>
