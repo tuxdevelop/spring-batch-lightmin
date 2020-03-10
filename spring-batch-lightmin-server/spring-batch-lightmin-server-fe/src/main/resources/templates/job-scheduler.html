@@ -45,11 +45,28 @@
             <form id="schedulerConfiguration form" method="post" class="text-secondary"
                   th:object="${schedulerConfiguration}">
                 <div class="card border-0">
+                    <div class="row">
+                        <div th:with="varModType=${modificationType.value}"
+                                class="col-md-6 col-lg-6 h3 text-info border-bottom">
+                            <div    th:text="${#strings.capitalize(varModType)}+ ' ' + ${schedulerConfiguration.config.type} + ' Scheduler'"
+                                    th:remove="tag">
+                            </div>
+                            <button type="button"
+                                    th:title="#{tooltip.scheduler.info}"
+                                    data-toggle="collapse" data-target=".multi-collapse" aria-expanded="true"
+                                    aria-controls="batchJobHelpText statusHelpText cronExpressionHelpText initialDelayHelpText fixedDelayHelpText executorHelpText paramHint"
+                                    class="btn btn-sm btn-info collapsed float-right col-lg-1 col-md-1">
+                                <i class="fas fa-info"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="card-body">
                         <div class="form-group row" th:if="${modificationType.value == 'add'}">
                             <label class="col-sm-2 col-form-label">Batch Job</label>
                             <div class="col-sm-2">
                                 <select class="form-control form-control-sm"
+                                        aria-describedby="batchJobHelpText"
                                         th:field=" *{jobName}"
                                         th:value="*{jobName}">
                                     <option class="text-muted"
@@ -58,6 +75,9 @@
                                             th:value="${job}">
                                     </option>
                                 </select>
+                                <small id="batchJobHelpText" class="form-text text-muted collapse multi-collapse show"
+                                       th:text="#{helptext.scheduler.batch_job}">
+                                </small>
                             </div>
                         </div>
                         <div th:if="${modificationType.value == 'update'}">
@@ -69,6 +89,7 @@
                             <label class="col-sm-2 col-form-label">Status</label>
                             <div class="col-sm-2">
                                 <select class="form-control form-control-sm"
+                                        aria-describedby="statusHelpText"
                                         th:value=" *{config.status}"
                                         th:field="*{config.status}">
                                     <option class="text-muted"
@@ -77,6 +98,9 @@
                                             th:value="${status.value}">
                                     </option>
                                 </select>
+                                <small id="statusHelpText" class="form-text text-muted collapse multi-collapse show"
+                                       th:text="#{helptext.scheduler.status}">
+                                </small>
                             </div>
                         </div>
                         <div th:if="${modificationType.value == 'update'}">
@@ -91,23 +115,39 @@
                         <div class="form-group row" th:if="${schedulerConfiguration.config.isCron}">
                             <label class="col-sm-2 col-form-label">Cron Expression</label>
                             <div class="col-sm-3">
-                                <input class="text-muted text-sm-left" th:value="*{config.cronExpression}"
+                                <input class="text-muted text-sm-left form-control"
+                                       aria-describedby="cronExpressionHelpText"
+                                       th:value="*{config.cronExpression}"
                                        th:field="*{config.cronExpression}"/>
+                                <small id="cronExpressionHelpText" class="form-text text-muted collapse multi-collapse show"
+                                       th:text="#{helptext.scheduler.cron_expression}">
+                                </small>
                             </div>
                         </div>
                         <div th:if="${schedulerConfiguration.config.isPeriod}">
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Initial Delay</label>
                                 <div class="col-sm-2">
-                                    <input class="text-muted text-sm-left" th:value="*{config.initialDelay}"
+                                    <input class="text-muted text-sm-left"
+                                           aria-describedby="initialDelayHelpText"
+                                           th:value="*{config.initialDelay}"
                                            th:field="*{config.initialDelay}"/>
+                                    <small id="initialDelayHelpText"
+                                           class="form-text text-muted collapse multi-collapse show"
+                                           th:text="#{helptext.scheduler.initial_delay}">
+                                    </small>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Fixed Delay</label>
                                 <div class="col-sm-2">
-                                    <input class="text-muted text-sm-left" th:value="*{config.fixedDelay}"
+                                    <input class="text-muted text-sm-left"
+                                           aria-describedby="fixedDelayHelpText"
+                                           th:value="*{config.fixedDelay}"
                                            th:field="*{config.fixedDelay}"/>
+                                    <small id="fixedDelayHelpText" class="form-text text-muted collapse multi-collapse show"
+                                           th:text="#{helptext.scheduler.fixed_delay}">
+                                    </small>
                                 </div>
                             </div>
                         </div>
@@ -115,6 +155,7 @@
                             <label class="col-sm-2 col-form-label">Executor</label>
                             <div class="col-sm-2">
                                 <select class="form-control form-control-sm"
+                                        aria-describedby="executorHelpText"
                                         th:value="*{config.taskExecutor}"
                                         th:field="*{config.taskExecutor}">
                                     <option class="text-muted"
@@ -123,6 +164,9 @@
                                             th:text="${executor.displayText}">
                                     </option>
                                 </select>
+                                <small id="executorHelpText" class="form-text text-muted collapse multi-collapse show"
+                                       th:text="#{helptext.scheduler.executor}">
+                                </small>
                             </div>
                         </div>
                     </div>
@@ -187,7 +231,8 @@
                 <div th:include="fragments/validation :: field-errors"></div>
             </form>
 
-            <div th:include="fragments/hints :: job-parameter-description"></div>
+            <div   id="paramHint" class="collapse multi-collapse show"
+                    th:include="fragments/hints :: job-parameter-description"></div>
 
         </div>
     </div>

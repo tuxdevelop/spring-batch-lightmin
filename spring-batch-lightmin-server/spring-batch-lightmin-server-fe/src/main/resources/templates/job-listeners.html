@@ -101,7 +101,9 @@
                                                           th:action="@{job-listeners(job-configuration-id=${listener.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
                                                         <button class="text-danger btn-sm btn-primary-outline btn-hover"
                                                                 type="submit"
-                                                                name="stop-listener" style="display: inline;">
+                                                                name="stop-listener" style="display: inline;"
+                                                                th:title="#{tooltip.job_listeners.stopBtn}"
+                                                        >
                                                             <i class="far fa-stop-circle"></i>
                                                         </button>
                                                     </form>
@@ -111,14 +113,17 @@
                                                           th:action="@{job-listeners(job-configuration-id=${listener.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
                                                         <button class="text-info btn-sm btn-primary-outline btn-hover"
                                                                 type="submit"
-                                                                name="start-listener" style="display: inline;">
+                                                                name="start-listener" style="display: inline;"
+                                                        th:title="#{tooltip.job_listeners.startBtn}">
                                                             <i class="far fa-play-circle"></i>
                                                         </button>
                                                     </form>
                                                     <a href="#"
                                                        name="init-edit-listener"
                                                        class="text-muted btn-sm btn-primary-outline nounderline"
-                                                       th:href="@{job-listener(init-edit-listener='init-edit-listener',job-configuration-id=${listener.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                                       th:href="@{job-listener(init-edit-listener='init-edit-listener',job-configuration-id=${listener.id},application-instance-id=${applicationContextModel.applicationInstanceId})}"
+                                                       th:title="#{tooltip.job_listeners.updateBtn}"
+                                                    >
                                                         <i class="far fa-edit"></i>
                                                     </a>
                                                     <form id="delete-listener-form" method="post"
@@ -126,7 +131,8 @@
                                                           th:action="@{job-listeners(job-configuration-id=${listener.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
                                                         <button class="text-danger btn-sm btn-primary-outline btn-hover"
                                                                 type="submit"
-                                                                name="delete-listener" style="display: inline;">
+                                                                name="delete-listener" style="display: inline;"
+                                                                th:title="#{tooltip.job_listeners.removeBtn}">
                                                             <i class="far fa-trash-alt"></i>
                                                         </button>
                                                     </form>
