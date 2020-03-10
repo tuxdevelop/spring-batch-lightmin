@@ -47,6 +47,7 @@
         <module>spring-batch-lightmin-util</module>
         <module>spring-batch-lightmin-embedded</module>
         <module>spring-batch-lightmin-validation</module>
+        <module>spring-batch-lightmin-metrics</module>
     </modules>
 
     <properties>
