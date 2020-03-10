@@ -10,6 +10,7 @@ import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServe
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
 import java.net.InetAddress;
@@ -60,10 +61,15 @@ public class LightminClientProperties {
     @Autowired
     public LightminClientProperties(final ManagementServerProperties managementServerProperties,
                                     final ServerProperties serverProperties,
-                                    @Value("${spring.application.name:spring-boot-application}") final String name,
+                                    @Value("${spring.batch.lightmin.application-name:null}") final String name,
                                     @Value("${endpoints.health.id:health}") final String healthEndpointId,
-                                    final WebEndpointProperties webEndpointProperties) {
-        this.name = name;
+                                    final WebEndpointProperties webEndpointProperties,
+                                    final Environment environment) {
+        if (name == null) {
+            this.name = environment.getProperty("spring.application.name", "spring-boot-application");
+        } else {
+            this.name = name;
+        }
         this.healthEndpointId = healthEndpointId;
         this.managementServerProperties = managementServerProperties;
         this.serverProperties = serverProperties;

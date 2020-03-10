@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.util;
 
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,19 +57,23 @@ public class DurationHelperTest {
         assertThat(durationValue).isEqualTo(expectedValue);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void createDurationValueStarTimeNullTest() {
         final Long duration = 5000199L;
         final Date endTime = new Date(duration);
-        DurationHelper.createDurationValue(null, endTime);
+        final String expectedDurationString = new SimpleDateFormat("SSS").format(new Date(0)) + " ms";
+        String durationValue = DurationHelper.createDurationValue(null, endTime);
+        assertThat(durationValue.equals(expectedDurationString)).isTrue();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void createDurationValueStarTimeAfterEndTimeTest() {
         final Long duration = 5000199L;
         final Date startTime = new Date(5000200L);
         final Date endTime = new Date(duration);
-        DurationHelper.createDurationValue(startTime, endTime);
+        final String expectedDurationString = new SimpleDateFormat("SSS").format(new Date(0)) + " ms";
+        String durationValue = DurationHelper.createDurationValue(startTime, endTime);
+        assertThat(durationValue.equals(expectedDurationString)).isTrue();
     }
 
 }
