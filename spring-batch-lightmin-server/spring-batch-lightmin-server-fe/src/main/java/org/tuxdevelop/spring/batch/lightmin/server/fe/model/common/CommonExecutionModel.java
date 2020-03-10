@@ -27,12 +27,12 @@ public abstract class CommonExecutionModel {
     }
 
     public Boolean getIsCompleted() {
-        return StringUtils.hasText(this.exitStatus) ? this.exitStatus.toLowerCase().equals(COMPLETED) : Boolean.FALSE;
+        return StringUtils.hasText(this.exitStatus) ? this.COMPLETED.equalsIgnoreCase(this.exitStatus) : Boolean.FALSE;
     }
 
     public Boolean getIsFinished() {
         return StringUtils.hasText(this.exitStatus) ?
-                this.exitStatus.toLowerCase().equals(COMPLETED) || this.exitStatus.toLowerCase().equals(FAILED) :
+                this.COMPLETED.equalsIgnoreCase(this.exitStatus) || this.FAILED.equalsIgnoreCase(this.exitStatus) :
                 Boolean.FALSE;
     }
 
@@ -47,9 +47,9 @@ public abstract class CommonExecutionModel {
     private String getStatusClassInternal(final String status) {
         final String cssClass;
         if (StringUtils.hasText(status)) {
-            if (status.toLowerCase().equals(COMPLETED) || status.toLowerCase().equals(EXECUTING)) {
+            if (this.COMPLETED.equalsIgnoreCase(status) || this.EXECUTING.equalsIgnoreCase(status)) {
                 cssClass = "text-info";
-            } else if (status.toLowerCase().equals(UNKNOWN) || status.toLowerCase().equals(STARTED)) {
+            } else if (this.UNKNOWN.equalsIgnoreCase(status) || this.STARTED.equalsIgnoreCase(status)) {
                 cssClass = "text-warning";
             } else {
                 cssClass = "text-danger";

@@ -25,16 +25,11 @@ public class OnJobExecutionFinishedEventListener implements ApplicationListener<
     public void onApplicationEvent(final JobExecutionEvent jobExecutionEvent) {
         final JobExecution jobExecution = jobExecutionEvent.getJobExecution();
         if (jobExecution != null) {
-            final ExitStatus exitStatus = jobExecution.getExitStatus();
-            if (exitStatus != null) {
-                final JobExecutionEventInfo jobExecutionEventInfo =
-                        EventTransformer.transformToJobExecutionEventInfo(
-                                jobExecution,
-                                jobExecutionEvent.getApplicationName());
-                this.jobExecutionEventPublisher.publishJobExecutionEvent(jobExecutionEventInfo);
-            } else {
-                log.debug("could not fire JobExcutionEvent, exitStatus was null");
-            }
+            final JobExecutionEventInfo jobExecutionEventInfo =
+                    EventTransformer.transformToJobExecutionEventInfo(
+                            jobExecution,
+                            jobExecutionEvent.getApplicationName());
+            this.jobExecutionEventPublisher.publishJobExecutionEvent(jobExecutionEventInfo);
         } else {
             log.debug("could not fire JobExcutionEvent, jobExecution was null");
         }

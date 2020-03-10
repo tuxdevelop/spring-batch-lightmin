@@ -21,7 +21,7 @@ public class PageModel implements Serializable {
 
     public Integer getNextStartIndex() {
         int nextIndex = this.currentIndex;
-        if (this.getHasMore()) {
+        if (this.getHasMore().booleanValue()) {
             nextIndex = this.currentIndex + this.pageSize;
         }
 

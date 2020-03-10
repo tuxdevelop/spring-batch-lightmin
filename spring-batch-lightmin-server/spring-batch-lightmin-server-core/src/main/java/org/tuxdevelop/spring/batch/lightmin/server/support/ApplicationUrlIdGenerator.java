@@ -28,6 +28,8 @@ import java.security.NoSuchAlgorithmException;
 public final class ApplicationUrlIdGenerator {
     private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
+    private ApplicationUrlIdGenerator(){}
+
     public static String generateId(final LightminClientApplication lightminClientApplication) {
         try {
             final MessageDigest digest = MessageDigest.getInstance("SHA-1");

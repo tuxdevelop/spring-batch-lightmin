@@ -73,7 +73,7 @@ public class LightminApplicationDiscoveryListener {
     }
 
     private void register(final ServiceInstance serviceInstance) {
-        if (this.checkIsLightminInstance(serviceInstance)) {
+        if (this.checkIsLightminInstance(serviceInstance).booleanValue()) {
             try {
                 this.discoveryRegistrationBean.register(serviceInstance);
             } catch (final SpringBatchLightminApplicationException ex) {

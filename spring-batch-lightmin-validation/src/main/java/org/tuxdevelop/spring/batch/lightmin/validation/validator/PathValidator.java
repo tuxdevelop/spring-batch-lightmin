@@ -12,8 +12,9 @@ public class PathValidator implements ConstraintValidator<PathExists, String> {
 
     private PathExists constraint;
 
-    private final String PATH_PATTERN = "(^\\/|[a-z])([A-z0-9-_+]+\\/)*([A-z0-9]+)$";
+    private final static String PATH_PATTERN = "(^\\/|[a-z])([A-z0-9-_+]+\\/)*([A-z0-9]+)$";
 
+    @Override
     public void initialize(PathExists constraint) {
         this.constraint = constraint;
     }

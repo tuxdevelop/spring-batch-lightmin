@@ -69,7 +69,7 @@ public class LightminJobConfigurationRepositoryConfigurer implements Application
     }
 
     private Optional<JobConfigurationRepository> findSinglePrimary(final Set<String> jobConfigurationRepositoryBeans) {
-        final Optional<JobConfigurationRepository> jobConfigurationRepository;
+        final Optional<JobConfigurationRepository> jobConfigurationRepositoryOptional;
         final AutowireCapableBeanFactory factory = this.applicationContext.getAutowireCapableBeanFactory();
         final ConfigurableListableBeanFactory clbf = (ConfigurableListableBeanFactory) factory;
         final List<JobConfigurationRepository> primaryRepositories = new ArrayList<>();
@@ -84,22 +84,22 @@ public class LightminJobConfigurationRepositoryConfigurer implements Application
             }
         }
         if (primaryRepositories.isEmpty()) {
-            jobConfigurationRepository = Optional.empty();
+            jobConfigurationRepositoryOptional = Optional.empty();
             log.debug("No primary JobConfigurationRepository found");
         } else {
             if (primaryRepositories.size() > 1) {
-                jobConfigurationRepository = Optional.empty();
+                jobConfigurationRepositoryOptional = Optional.empty();
                 log.warn("Multiple primary JobConfigurationRepository found ! Can not provide a unique bean.");
             } else {
                 final Optional<JobConfigurationRepository> firstEntry = primaryRepositories
                         .stream()
                         .findFirst();
-                jobConfigurationRepository = Optional.of(firstEntry.orElseThrow(
+                jobConfigurationRepositoryOptional = Optional.of(firstEntry.orElseThrow(
                         () -> new SpringBatchLightminConfigurationException(
                                 "Required JobConfigurationRepository not present")));
             }
         }
-        return jobConfigurationRepository;
+        return jobConfigurationRepositoryOptional;
     }
 
     @PostConstruct

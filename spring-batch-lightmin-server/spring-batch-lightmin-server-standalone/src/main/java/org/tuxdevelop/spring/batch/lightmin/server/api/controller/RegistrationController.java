@@ -27,8 +27,8 @@ public class RegistrationController {
 
     @RequestMapping(
             method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LightminClientApplication> register(
             @RequestBody final LightminClientApplication lightminClientApplication) {
         log.debug("Register LightminClientApplication {}", lightminClientApplication);
@@ -50,7 +50,7 @@ public class RegistrationController {
 
     @RequestMapping(
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LightminClientApplication[]> getAll() {
         final Collection<LightminClientApplication> lightminClientApplications = this.registrationBean.findAll();
         return ResponseEntity.ok(

@@ -76,6 +76,8 @@ public class LightminClientConfiguration {
 
         private static RestTemplate restTemplate;
 
+        private  LightminServerRestTemplateFactory(){}
+
         public static RestTemplate getRestTemplate(
                 final LightminClientProperties.ClientServerProperties lightminProperties) {
 

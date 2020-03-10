@@ -7,6 +7,8 @@ import java.util.*;
 
 public class DomainTestHelper {
 
+    private DomainTestHelper(){}
+
     public static Job createJob(final String jobName) {
         return new Job() {
             @Override
