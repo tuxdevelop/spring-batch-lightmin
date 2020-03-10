@@ -49,11 +49,8 @@ public final class DurationHelper {
             endTime = current;
             log.info("endTime was null, set to current date");
         }
-        final Long duration = endTime.getTime() - startTime.getTime();
-        if (duration < 0) {
-            throw new IllegalArgumentException("The duration may not be negative! Values [startTime:" + startTime
-                    + "], [endTime:" + endTime + "], [duration:" + duration + "]");
-        }
+        final Long duration = endTime.getTime() - startTime.getTime() < 0 ? 0 : endTime.getTime() - startTime.getTime();
+
         return format(new Date(duration));
     }
 
