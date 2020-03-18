@@ -3,6 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.server.fe.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.Validator;
+import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminMetrics;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.controller.*;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.service.*;
 

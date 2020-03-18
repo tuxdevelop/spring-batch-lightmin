@@ -11,13 +11,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminCore;
+import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminMetrics;
 import org.tuxdevelop.spring.batch.lightmin.client.api.controller.LightminClientApplicationRestController;
 import org.tuxdevelop.spring.batch.lightmin.client.event.JobExecutionEventPublisher;
+import org.tuxdevelop.spring.batch.lightmin.client.event.MetricEventPublisher;
 import org.tuxdevelop.spring.batch.lightmin.client.event.RemoteJobExecutionEventPublisher;
+import org.tuxdevelop.spring.batch.lightmin.client.event.RemoteMetricEventPublisher;
 import org.tuxdevelop.spring.batch.lightmin.client.listener.OnJobExecutionFinishedEventListener;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminClientApplicationService;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminServerLocatorService;
 import org.tuxdevelop.spring.batch.lightmin.configuration.LightminMetricsConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.service.MetricService;
 import org.tuxdevelop.spring.batch.lightmin.util.BasicAuthHttpRequestInterceptor;
 
 import java.util.Collections;
@@ -28,8 +32,8 @@ import java.util.Collections;
  */
 @Configuration
 @EnableLightminCore
+@EnableLightminMetrics
 @EnableConfigurationProperties(value = {LightminClientProperties.class})
-@Import(value = LightminMetricsConfiguration.class)
 public class LightminClientConfiguration {
 
     @Bean
@@ -69,11 +73,23 @@ public class LightminClientConfiguration {
             return new RemoteJobExecutionEventPublisher(restTemplate, lightminServerLocatorService);
         }
 
+
+        @Bean
+        @ConditionalOnMissingBean(value = {MetricEventPublisher.class})
+        public MetricEventPublisher metricEventPublisher(
+                final LightminServerLocatorService lightminServerLocatorService,
+                final LightminClientProperties lightminClientProperties,
+                @Qualifier("serverRestTemplate") final RestTemplate restTemplate) {
+            return new RemoteMetricEventPublisher(restTemplate, lightminServerLocatorService);
+        }
+
+
         @Bean
         public OnJobExecutionFinishedEventListener onJobExecutionFinishedEventListener(
                 final JobExecutionEventPublisher jobExecutionEventPublisher,
-                final MeterRegistry registry) {
-            return new OnJobExecutionFinishedEventListener(jobExecutionEventPublisher, registry);
+                final MetricEventPublisher metricEventPublisher,
+                final MetricService metricService) {
+            return new OnJobExecutionFinishedEventListener(jobExecutionEventPublisher, metricEventPublisher, metricService);
         }
     }
 

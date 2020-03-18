@@ -3,9 +3,12 @@ package org.tuxdevelop.spring.batch.lightmin.configuration;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.tuxdevelop.spring.batch.lightmin.service.MetricService;
+import org.tuxdevelop.spring.batch.lightmin.service.MetricServiceBean;
 
 @Configuration
 public class LightminMetricsConfiguration {
@@ -22,5 +25,11 @@ public class LightminMetricsConfiguration {
         return registry -> registry.config()
                 .commonTags("lightmin-app-name", appName);
 
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(MetricServiceBean.class)
+    public MetricServiceBean metricService(final MeterRegistry registry) {
+        return new MetricServiceBean(registry);
     }
 }

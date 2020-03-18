@@ -22,7 +22,7 @@ public class JobExecutionEventFeService extends CommonFeService {
     public ContentPageModel<List<JobExecutionEventModel>> getJobExecutionEventModels(final Integer startIndex,
                                                                                      final Integer pageSize) {
 
-        final List<JobExecutionEventInfo> events = this.eventService.getAllEvents(startIndex, pageSize);
+        final List<JobExecutionEventInfo> events = this.eventService.getAllJobExecutionEvents(startIndex, pageSize);
         final Integer totalCount = this.eventService.getJobExecutionEventInfoCount();
 
         final ContentPageModel<List<JobExecutionEventModel>> contentPageModel =

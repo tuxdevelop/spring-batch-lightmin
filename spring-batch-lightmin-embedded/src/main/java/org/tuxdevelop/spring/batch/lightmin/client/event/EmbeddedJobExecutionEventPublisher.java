@@ -12,7 +12,7 @@ public class EmbeddedJobExecutionEventPublisher implements JobExecutionEventPubl
     }
 
     @Override
-    public void publishJobExecutionEvent(final JobExecutionEventInfo jobExecutionEventInfo) {
+    public void publishEvent(final JobExecutionEventInfo jobExecutionEventInfo) {
         this.eventService.handleJobExecutionEvent(jobExecutionEventInfo);
     }
 }

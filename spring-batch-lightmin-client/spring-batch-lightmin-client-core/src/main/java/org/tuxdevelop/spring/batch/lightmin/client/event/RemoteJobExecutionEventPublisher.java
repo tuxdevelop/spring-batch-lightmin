@@ -27,7 +27,7 @@ public class RemoteJobExecutionEventPublisher implements JobExecutionEventPublis
     }
 
     @Override
-    public void publishJobExecutionEvent(final JobExecutionEventInfo jobExecutionEventInfo) {
+    public void publishEvent(final JobExecutionEventInfo jobExecutionEventInfo) {
         final HttpEntity<JobExecutionEventInfo> entity = RequestUtil.createApplicationJsonEntity(jobExecutionEventInfo);
         final List<String> lightminUrls = this.getLightminServerUrls();
         log.debug("Sending JobExecutionInfos to Servers {}", lightminUrls);

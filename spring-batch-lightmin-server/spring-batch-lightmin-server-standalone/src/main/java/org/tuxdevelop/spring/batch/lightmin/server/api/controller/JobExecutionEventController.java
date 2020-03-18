@@ -36,7 +36,7 @@ public class JobExecutionEventController {
             @RequestParam("start-index") final int startIndex,
             @RequestParam("count") final int count) {
         final List<JobExecutionEventInfo> jobExecutionEventInfos =
-                this.eventService.getAllEvents(startIndex, count);
+                this.eventService.getAllJobExecutionEvents(startIndex, count);
         return ResponseEntity.ok(jobExecutionEventInfos);
     }
 

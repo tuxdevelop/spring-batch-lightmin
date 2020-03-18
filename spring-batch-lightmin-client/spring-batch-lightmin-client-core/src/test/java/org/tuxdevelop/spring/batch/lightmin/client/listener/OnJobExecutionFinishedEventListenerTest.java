@@ -15,7 +15,9 @@ import org.springframework.batch.core.JobInstance;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.JobExecutionEventInfo;
 import org.tuxdevelop.spring.batch.lightmin.client.event.RemoteJobExecutionEventPublisher;
+import org.tuxdevelop.spring.batch.lightmin.client.event.RemoteMetricEventPublisher;
 import org.tuxdevelop.spring.batch.lightmin.event.JobExecutionEvent;
+import org.tuxdevelop.spring.batch.lightmin.service.MetricService;
 
 import static org.mockito.Mockito.any;
 
@@ -29,7 +31,10 @@ public class OnJobExecutionFinishedEventListenerTest {
     private RemoteJobExecutionEventPublisher jobExecutionEventPublisher;
 
     @Mock
-    private  MeterRegistry registry;
+    private RemoteMetricEventPublisher remoteMetricEventPublisher;
+
+    @Mock
+    private MetricService metricService;
 
     @Test
     public void testOnApplicationEventJobExecution() {
@@ -41,13 +46,13 @@ public class OnJobExecutionFinishedEventListenerTest {
 
         this.onJobExecutionFinishedEventListener.onApplicationEvent(jobExecutionEvent);
         Mockito.verify(this.jobExecutionEventPublisher, Mockito.times(1))
-                .publishJobExecutionEvent(any(JobExecutionEventInfo.class));
+                .publishEvent(any(JobExecutionEventInfo.class));
     }
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        this.onJobExecutionFinishedEventListener = new OnJobExecutionFinishedEventListener(this.jobExecutionEventPublisher, this.registry);
+        this.onJobExecutionFinishedEventListener = new OnJobExecutionFinishedEventListener(this.jobExecutionEventPublisher, this.remoteMetricEventPublisher, this.metricService);
     }
 
 }
