@@ -26,6 +26,8 @@ public class MetricServiceBean implements MetricService {
 
     @Override
     public void measureStepExecution(LightminMetricSource source, StepExecutionEventInfo stepExecutionEventInfo) {
+        requireNonNull(registry, "registry");
+
         // ExitStatus of Job is UNKNOWN while steps are in Execution
         Tags tags = Tags.of(
                 Tag.of("name", stepExecutionEventInfo.getStepName()),
@@ -81,6 +83,7 @@ public class MetricServiceBean implements MetricService {
     @Override
     public void measureJobExecution(LightminMetricSource source, JobExecutionEventInfo jobExecutionEventInfo) {
         requireNonNull(registry, "registry");
+
         if (!jobExecutionEventInfo.getExitStatus().getExitCode().equals(LightminExitStatus.UNKNOWN.getExitCode())) {
             String metricName = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_JOB_STATUS);
             if (!isNull(metricName)) {
@@ -96,4 +99,5 @@ public class MetricServiceBean implements MetricService {
             // We only want to update the Status when the Job Exited the status
         }
     }
+
 }

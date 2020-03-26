@@ -3,25 +3,22 @@ package org.tuxdevelop.spring.batch.lightmin.client.configuration;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminCore;
-import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminMetrics;
 import org.tuxdevelop.spring.batch.lightmin.client.api.controller.LightminClientApplicationRestController;
-import org.tuxdevelop.spring.batch.lightmin.client.event.JobExecutionEventPublisher;
-import org.tuxdevelop.spring.batch.lightmin.client.event.MetricEventPublisher;
-import org.tuxdevelop.spring.batch.lightmin.client.event.RemoteJobExecutionEventPublisher;
-import org.tuxdevelop.spring.batch.lightmin.client.event.RemoteMetricEventPublisher;
+import org.tuxdevelop.spring.batch.lightmin.client.listener.LightminMetricClientListenerBean;
 import org.tuxdevelop.spring.batch.lightmin.client.listener.OnJobExecutionFinishedEventListener;
+import org.tuxdevelop.spring.batch.lightmin.client.publisher.*;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminClientApplicationService;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminServerLocatorService;
-import org.tuxdevelop.spring.batch.lightmin.configuration.LightminMetricsConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.service.MetricService;
+import org.tuxdevelop.spring.batch.lightmin.service.MetricServiceBean;
 import org.tuxdevelop.spring.batch.lightmin.util.BasicAuthHttpRequestInterceptor;
 
 import java.util.Collections;
@@ -32,7 +29,6 @@ import java.util.Collections;
  */
 @Configuration
 @EnableLightminCore
-@EnableLightminMetrics
 @EnableConfigurationProperties(value = {LightminClientProperties.class})
 public class LightminClientConfiguration {
 
@@ -42,6 +38,7 @@ public class LightminClientConfiguration {
             final LightminClientProperties lightminClientProperties) {
         return new LightminClientApplicationService(jobRegistry, lightminClientProperties);
     }
+
 
     @Bean
     public LightminClientApplicationRestController lightminClientApplicationRestController(
@@ -65,31 +62,54 @@ public class LightminClientConfiguration {
     public static class LightminClientPublishEventsConfiguration {
 
         @Bean
+        @ConditionalOnMissingBean(value = {StepExecutionEventPublisher.class})
+        public StepExecutionEventPublisher stepExecutionEventPublisher(
+                final LightminServerLocatorService lightminServerLocator,
+                @Qualifier("serverRestTemplate") final RestTemplate restTemplate) {
+            return new RemoteStepExecutionEventPublisher(restTemplate, lightminServerLocator);
+        }
+
+        @Bean
         @ConditionalOnMissingBean(value = {JobExecutionEventPublisher.class})
         public JobExecutionEventPublisher jobExecutionEventPublisher(
                 final LightminServerLocatorService lightminServerLocatorService,
-                final LightminClientProperties lightminClientProperties,
                 @Qualifier("serverRestTemplate") final RestTemplate restTemplate) {
             return new RemoteJobExecutionEventPublisher(restTemplate, lightminServerLocatorService);
         }
 
-
         @Bean
-        @ConditionalOnMissingBean(value = {MetricEventPublisher.class})
-        public MetricEventPublisher metricEventPublisher(
-                final LightminServerLocatorService lightminServerLocatorService,
-                final LightminClientProperties lightminClientProperties,
-                @Qualifier("serverRestTemplate") final RestTemplate restTemplate) {
-            return new RemoteMetricEventPublisher(restTemplate, lightminServerLocatorService);
+        public MetricEventPublisher metricEventPublisher() {
+            return new MetricEventPublisher();
         }
-
 
         @Bean
         public OnJobExecutionFinishedEventListener onJobExecutionFinishedEventListener(
                 final JobExecutionEventPublisher jobExecutionEventPublisher,
-                final MetricEventPublisher metricEventPublisher,
-                final MetricService metricService) {
-            return new OnJobExecutionFinishedEventListener(jobExecutionEventPublisher, metricEventPublisher, metricService);
+                final StepExecutionEventPublisher stepExecutionEventPublisher,
+                final MetricEventPublisher metricEventPublisher) {
+            return new OnJobExecutionFinishedEventListener(jobExecutionEventPublisher, stepExecutionEventPublisher, metricEventPublisher);
+        }
+
+        @Configuration
+        @ConditionalOnProperty(prefix = "spring.batch.lightmin.client", name = "metrics-enabled", havingValue = "true")
+        static class ServerMetricsConfiguration {
+
+            @Bean
+            @ConditionalOnMissingBean(value = MeterRegistryCustomizer.class)
+            public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+                return registry -> registry.config();
+            }
+
+            @Bean("clientMetricService")
+            @ConditionalOnMissingBean(name = "clientMetricService")
+            public MetricService metricService(final MeterRegistry registry) {
+                return new MetricServiceBean(registry);
+            }
+
+            @Bean
+            public LightminMetricClientListenerBean lightminClientMetricListener(@Qualifier("clientMetricService") final MetricService metricService) {
+                return new LightminMetricClientListenerBean(metricService);
+            }
         }
     }
 

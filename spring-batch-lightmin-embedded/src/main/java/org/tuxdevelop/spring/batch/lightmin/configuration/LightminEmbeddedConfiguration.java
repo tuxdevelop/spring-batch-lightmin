@@ -1,16 +1,15 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminCore;
 import org.tuxdevelop.spring.batch.lightmin.client.annotation.EnableLightminClientCore;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.event.EmbeddedJobExecutionEventPublisher;
-import org.tuxdevelop.spring.batch.lightmin.client.event.EmbeddedMetricEventPublisher;
-import org.tuxdevelop.spring.batch.lightmin.client.event.JobExecutionEventPublisher;
-import org.tuxdevelop.spring.batch.lightmin.client.event.MetricEventPublisher;
+import org.tuxdevelop.spring.batch.lightmin.client.event.EmbeddedStepJobExecutionEventPublisher;
+import org.tuxdevelop.spring.batch.lightmin.client.publisher.JobExecutionEventPublisher;
+import org.tuxdevelop.spring.batch.lightmin.client.publisher.StepExecutionEventPublisher;
 import org.tuxdevelop.spring.batch.lightmin.event.listener.OnApplicationReadyEventEmbeddedListener;
 import org.tuxdevelop.spring.batch.lightmin.server.annotation.EnableLightminServerCore;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.annotation.EnableLightminServerFrontend;
@@ -51,15 +50,15 @@ public class LightminEmbeddedConfiguration {
         return new OnApplicationReadyEventEmbeddedListener(registrationBean, jobRegistry, lightminClientProperties);
     }
 
+
     @Bean
     public JobExecutionEventPublisher jobExecutionEventPublisher(final EventService eventService) {
         return new EmbeddedJobExecutionEventPublisher(eventService);
     }
 
     @Bean
-    @ConditionalOnMissingBean(value = EmbeddedJobExecutionEventPublisher.class)
-    public MetricEventPublisher metricEventPublisher(final EventService eventService) {
-        return new EmbeddedMetricEventPublisher(eventService);
-
+    public StepExecutionEventPublisher stepExecutionEventPublisher(final EventService eventService) {
+        return new EmbeddedStepJobExecutionEventPublisher(eventService);
     }
 }
+

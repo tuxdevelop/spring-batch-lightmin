@@ -8,8 +8,8 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.server.annotation.EnableLightminServerCore;
 import org.tuxdevelop.spring.batch.lightmin.server.api.controller.JobExecutionEventController;
-import org.tuxdevelop.spring.batch.lightmin.server.api.controller.MetricEventController;
 import org.tuxdevelop.spring.batch.lightmin.server.api.controller.RegistrationController;
+import org.tuxdevelop.spring.batch.lightmin.server.api.controller.StepExecutionEventController;
 import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnApplicationReadyEventListener;
 import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnLightminClientApplicationRegisteredEventListener;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.annotation.EnableLightminServerFrontend;
@@ -39,8 +39,8 @@ public class LightminServerStandaloneConfiguration {
     }
 
     @Bean
-    public MetricEventController metricEventController(final EventService eventService) {
-        return new MetricEventController(eventService);
+    public StepExecutionEventController stepExecutionEventController(final EventService eventService) {
+        return new StepExecutionEventController(eventService);
     }
 
     @Bean

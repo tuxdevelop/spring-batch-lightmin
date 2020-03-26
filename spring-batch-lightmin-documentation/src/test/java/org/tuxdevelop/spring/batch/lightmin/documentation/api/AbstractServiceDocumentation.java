@@ -21,7 +21,6 @@ import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication
 import org.tuxdevelop.spring.batch.lightmin.client.classic.configuration.LightminClientClassicConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.classic.service.LightminClientRegistratorService;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
-import org.tuxdevelop.spring.batch.lightmin.configuration.LightminMetricsConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 import org.tuxdevelop.spring.batch.lightmin.server.configuration.LightminServerCoreProperties;
@@ -41,7 +40,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(
-        classes = {ITConfigurationApplication.class, ITJobConfiguration.class, LightminMetricsConfiguration.class},
+        classes = {ITConfigurationApplication.class, ITJobConfiguration.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractServiceDocumentation {
 

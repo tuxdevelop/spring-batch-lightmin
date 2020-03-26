@@ -2,7 +2,6 @@ package org.tuxdevelop.spring.batch.lightmin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminMetrics;
 import org.tuxdevelop.spring.batch.lightmin.client.classic.annotation.EnableLightminClientClassic;
 import org.tuxdevelop.spring.batch.lightmin.repository.annotation.EnableLightminMapConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.annotation.EnableLightminServer;

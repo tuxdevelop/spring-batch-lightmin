@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.client.event;
+package org.tuxdevelop.spring.batch.lightmin.client.publisher;
 
 public interface EventPublisher<T> {
 

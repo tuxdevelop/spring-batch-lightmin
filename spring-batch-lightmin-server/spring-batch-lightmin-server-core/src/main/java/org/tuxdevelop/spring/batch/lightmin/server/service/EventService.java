@@ -14,9 +14,7 @@ public interface EventService {
 
     void handleJobExecutionEvent(final JobExecutionEventInfo jobExecutionEventInfo);
 
-    void handleMetricEvent(final JobExecutionEventInfo jobExecutionEventInfo);
-
-    void handleMetricEvent(final StepExecutionEventInfo jobExecutionEventInfo);
+    void handleStepExecutionEvent(final StepExecutionEventInfo stepExecutionEventInfo);
 
     List<JobExecutionEventInfo> getAllJobExecutionEvents(int start, int count);
 

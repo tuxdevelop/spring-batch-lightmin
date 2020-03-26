@@ -10,7 +10,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminMetrics;
 import org.tuxdevelop.spring.batch.lightmin.batch.annotation.EnableLightminBatch;
 
 import java.util.List;

@@ -1,9 +1,12 @@
 package org.tuxdevelop.spring.batch.lightmin.server.service;
 
-import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.ExitStatus;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.JobExecutionEventInfo;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.StepExecutionEventInfo;
+import org.tuxdevelop.spring.batch.lightmin.server.domain.JobExecutionPublishEvent;
+import org.tuxdevelop.spring.batch.lightmin.server.domain.StepExecutionPublishEvent;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.JobExecutionEventRepository;
 import org.tuxdevelop.spring.batch.lightmin.service.MetricServiceBean;
 import org.tuxdevelop.spring.batch.lightmin.utils.LightminMetricSource;
@@ -14,30 +17,26 @@ import java.util.List;
  * @author Marcel Becker
  * @since 0.5
  */
-public class EventServiceBean implements EventService {
+public class EventServiceBean implements EventService, ApplicationEventPublisherAware {
 
     private final JobExecutionEventRepository jobExecutionEventRepository;
 
-    private final MetricServiceBean metricServiceBean;
+    private ApplicationEventPublisher applicationEventPublisher;
 
-    public EventServiceBean(final JobExecutionEventRepository jobExecutionEventRepository, final MetricServiceBean metricServiceBean) {
+    public EventServiceBean(final JobExecutionEventRepository jobExecutionEventRepository) {
         this.jobExecutionEventRepository = jobExecutionEventRepository;
-        this.metricServiceBean = metricServiceBean;
     }
+
 
     @Override
     public void handleJobExecutionEvent(final JobExecutionEventInfo jobExecutionEventInfo) {
         this.jobExecutionEventRepository.save(jobExecutionEventInfo);
+        this.applicationEventPublisher.publishEvent(new JobExecutionPublishEvent(jobExecutionEventInfo));
     }
 
     @Override
-    public void handleMetricEvent(JobExecutionEventInfo jobExecutionEventInfo) {
-        this.metricServiceBean.measureJobExecution(LightminMetricSource.SERVER, jobExecutionEventInfo);
-    }
-
-    @Override
-    public void handleMetricEvent(StepExecutionEventInfo stepExecutionEventInfo) {
-        this.metricServiceBean.measureStepExecution(LightminMetricSource.SERVER, stepExecutionEventInfo);
+    public void handleStepExecutionEvent(final StepExecutionEventInfo stepExecutionEventInfo) {
+        this.applicationEventPublisher.publishEvent(new StepExecutionPublishEvent(stepExecutionEventInfo));
     }
 
     @Override
@@ -56,5 +55,10 @@ public class EventServiceBean implements EventService {
     @Override
     public int getJobExecutionEventInfoCount() {
         return this.jobExecutionEventRepository.getTotalCount();
+    }
+
+    @Override
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 }

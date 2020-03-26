@@ -1,17 +1,22 @@
 package org.tuxdevelop.spring.batch.lightmin.server.configuration;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminMetrics;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.*;
 import org.tuxdevelop.spring.batch.lightmin.server.service.EventService;
 import org.tuxdevelop.spring.batch.lightmin.server.service.EventServiceBean;
 import org.tuxdevelop.spring.batch.lightmin.server.service.JournalServiceBean;
+import org.tuxdevelop.spring.batch.lightmin.server.service.LightminMetricServerEventListenerBean;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
+import org.tuxdevelop.spring.batch.lightmin.service.MetricService;
 import org.tuxdevelop.spring.batch.lightmin.service.MetricServiceBean;
 import org.tuxdevelop.spring.batch.lightmin.util.BasicAuthHttpRequestInterceptor;
 
@@ -22,7 +27,6 @@ import java.util.Collections;
  * @since 0.3
  */
 @Configuration
-@EnableLightminMetrics
 @EnableConfigurationProperties(value = {LightminServerCoreProperties.class})
 public class LightminServerCoreConfiguration {
 
@@ -38,9 +42,9 @@ public class LightminServerCoreConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(EventService.class)
-    public EventService eventService(@Qualifier("jobExecutionEventRepository") final JobExecutionEventRepository jobExecutionEventRepository, final MetricServiceBean metricServiceBean) {
-        return new EventServiceBean(jobExecutionEventRepository, metricServiceBean);
+    @ConditionalOnMissingBean(value = {EventService.class})
+    public EventService eventService(@Qualifier("jobExecutionEventRepository") final JobExecutionEventRepository jobExecutionEventRepository) {
+        return new EventServiceBean(jobExecutionEventRepository);
     }
 
     @Bean
@@ -66,6 +70,32 @@ public class LightminServerCoreConfiguration {
     public RestTemplate clientRestTemplate(final LightminServerCoreProperties lightminServerCoreProperties) {
         return RestTemplateFactory.getRestTemplate(lightminServerCoreProperties);
     }
+
+    @Configuration
+    @ConditionalOnProperty(prefix = "spring.batch.lightmin.server", name = "metrics-enabled", havingValue = "true")
+    static class ServerMetricsConfiguration {
+        @Bean
+        @ConditionalOnMissingBean(value = MeterRegistryCustomizer.class)
+        public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+            return registry -> registry.config();
+        }
+
+        @Bean("serverMetricService")
+        @ConditionalOnMissingBean(name = "serverMetricService")
+        public MetricService metricService(final MeterRegistry registry) {
+            return new MetricServiceBean(registry);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean(value = LightminMetricServerEventListenerBean.class)
+        //  @ConditionalOnBean(name = "serverMetricService")
+        public LightminMetricServerEventListenerBean metricEventServiceListenerBean(@Qualifier("serverMetricService") final MetricService metricService) {
+            return new LightminMetricServerEventListenerBean(metricService);
+        }
+
+
+    }
+
 
     static class RestTemplateFactory {
 
