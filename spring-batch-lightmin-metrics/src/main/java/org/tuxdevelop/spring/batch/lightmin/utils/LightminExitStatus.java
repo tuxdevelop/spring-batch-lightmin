@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.client.util;
+package org.tuxdevelop.spring.batch.lightmin.utils;
 
 import lombok.Getter;
 import org.springframework.batch.core.ExitStatus;

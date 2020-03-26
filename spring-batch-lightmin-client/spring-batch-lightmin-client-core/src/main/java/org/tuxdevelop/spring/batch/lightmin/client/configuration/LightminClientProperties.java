@@ -38,6 +38,9 @@ public class LightminClientProperties {
     private Integer managementPort;
     @Getter
     @Setter
+    private Boolean metricsEnabled = Boolean.FALSE;
+    @Getter
+    @Setter
     private Boolean publishJobEvents = Boolean.TRUE;
     @Getter
     @Setter

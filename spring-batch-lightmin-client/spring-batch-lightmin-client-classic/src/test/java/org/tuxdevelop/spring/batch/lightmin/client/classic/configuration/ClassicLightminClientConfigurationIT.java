@@ -10,7 +10,7 @@ import org.tuxdevelop.spring.batch.lightmin.client.classic.event.OnClientApplica
 import org.tuxdevelop.spring.batch.lightmin.client.classic.event.OnContextClosedEventListener;
 import org.tuxdevelop.spring.batch.lightmin.client.classic.service.LightminClientApplicationRegistrationService;
 import org.tuxdevelop.spring.batch.lightmin.client.classic.service.LightminClientRegistratorService;
-import org.tuxdevelop.spring.batch.lightmin.client.event.RemoteJobExecutionEventPublisher;
+import org.tuxdevelop.spring.batch.lightmin.client.publisher.RemoteJobExecutionEventPublisher;
 import org.tuxdevelop.test.configuration.ITConfigurationApplication;
 
 import static org.assertj.core.api.Assertions.assertThat;

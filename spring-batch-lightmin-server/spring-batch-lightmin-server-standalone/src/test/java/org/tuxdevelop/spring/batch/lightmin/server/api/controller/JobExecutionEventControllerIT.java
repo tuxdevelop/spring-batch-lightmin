@@ -46,7 +46,7 @@ public class JobExecutionEventControllerIT {
         final ResponseEntity<Void> response = this.restTemplate.postForEntity(
                 LOCALHOST + ":" + this.getServerPort() + "/api/events/jobexecutions", jobExecutionEventInfo, Void.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        final List<JobExecutionEventInfo> events = this.eventService.getAllEvents(0, 10);
+        final List<JobExecutionEventInfo> events = this.eventService.getAllJobExecutionEvents(0, 10);
         assertThat(events).isNotEmpty();
     }
 
