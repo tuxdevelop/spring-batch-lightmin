@@ -35,27 +35,25 @@ public class OnJobExecutionFinishedEventListener implements ApplicationListener<
     public void onApplicationEvent(final JobExecutionEvent jobExecutionEvent) {
         final JobExecution jobExecution = jobExecutionEvent.getJobExecution();
         if (jobExecution != null) {
-                log.info(jobExecution.getJobInstance().getJobName() + ", Status: " + jobExecution.getStatus().getBatchStatus() +
-                        ", Exit: " + jobExecution.getExitStatus().getExitCode());
-                final JobExecutionEventInfo jobExecutionEventInfo =
-                        EventTransformer.transformToJobExecutionEventInfo(
-                                jobExecution,
-                                jobExecutionEvent.getApplicationName());
-                this.jobExecutionEventPublisher.publishEvent(jobExecutionEventInfo);
-                this.metricEventPublisher.publishMetricEvent(jobExecutionEventInfo);
-                jobExecution.getStepExecutions()
-                        .stream()
-                        .map(step -> EventTransformer.transformToStepExecutionEventInfo(step, jobExecutionEvent.getApplicationName()))
-                        .forEach(stepInfo -> {
-                            this.stepExecutionEventPublisher.publishEvent(stepInfo);
-                            this.metricEventPublisher.publishMetricEvent(stepInfo);
-                        });
-            } else {
-                log.debug("could not fire JobExcutionEvent, exitStatus was null");
-            }
+            log.info(jobExecution.getJobInstance().getJobName() + ", Status: " + jobExecution.getStatus().getBatchStatus() +
+                    ", Exit: " + jobExecution.getExitStatus().getExitCode());
+            final JobExecutionEventInfo jobExecutionEventInfo =
+                    EventTransformer.transformToJobExecutionEventInfo(
+                            jobExecution,
+                            jobExecutionEvent.getApplicationName());
+            this.jobExecutionEventPublisher.publishEvent(jobExecutionEventInfo);
+            this.metricEventPublisher.publishMetricEvent(jobExecutionEventInfo);
+            jobExecution.getStepExecutions()
+                    .stream()
+                    .map(step -> EventTransformer.transformToStepExecutionEventInfo(step, jobExecutionEvent.getApplicationName()))
+                    .forEach(stepInfo -> {
+                        this.stepExecutionEventPublisher.publishEvent(stepInfo);
+                        this.metricEventPublisher.publishMetricEvent(stepInfo);
+                    });
         } else {
-            log.debug("could not fire JobExcutionEvent, jobExecution was null");
+            log.debug("could not fire JobExcutionEvent, exitStatus was null");
         }
+
     }
 
 }
