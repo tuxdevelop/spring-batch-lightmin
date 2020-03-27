@@ -57,6 +57,7 @@
         <openpojo.version>0.8.13</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
         <datafactory.version>0.8</datafactory.version>
+        <jacoco.version>0.8.5</jacoco.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
         <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
@@ -224,6 +225,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
