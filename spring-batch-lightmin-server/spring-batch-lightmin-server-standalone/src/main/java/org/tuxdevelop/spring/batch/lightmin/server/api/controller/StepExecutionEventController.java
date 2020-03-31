@@ -26,7 +26,9 @@ public class StepExecutionEventController {
         this.eventService = eventService;
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> consumeStepExecutionEvent(@RequestBody final StepExecutionEventInfo stepExecutionEventInfo) {
         this.eventService.handleStepExecutionEvent(stepExecutionEventInfo);
         return ResponseEntity.status(HttpStatus.CREATED).build();

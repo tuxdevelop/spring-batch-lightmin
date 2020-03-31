@@ -12,32 +12,18 @@
     <artifactId>spring-batch-lightmin-metrics</artifactId>
 
     <dependencies>
+
+        <!-- micrometer core -->
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-core</artifactId>
         </dependency>
 
-        <!-- Micrometer Prometheus registry  -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
-
-        <!-- Spring Boot Actuator -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator-autoconfigure</artifactId>
-        </dependency>
-        <!-- Spring Boot web -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
+        <!-- lightmin api -->
         <dependency>
             <groupId>org.tuxdevelop</groupId>
             <artifactId>spring-batch-lightmin-api</artifactId>
-            <scope>compile</scope>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

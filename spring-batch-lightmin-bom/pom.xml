@@ -133,6 +133,7 @@
                 <artifactId>spring-batch-lightmin-embedded</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <!-- metrics -->
             <dependency>
                 <groupId>org.tuxdevelop</groupId>
