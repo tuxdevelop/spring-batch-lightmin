@@ -10,33 +10,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>spring-batch-lightmin-metrics</artifactId>
-    <packaging>pom</packaging>
 
     <dependencies>
+
+        <!-- micrometer core -->
 
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-core</artifactId>
         </dependency>
 
-        <!-- Micrometer Prometheus registry  -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
-
-        <!-- Spring Boot Actuator -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator-autoconfigure</artifactId>
-        </dependency>
-
-        <!-- Spring Batch Core -->
-        <dependency>
-            <groupId>org.springframework.batch</groupId>
-            <artifactId>spring-batch-core</artifactId>
-        </dependency>
-
+        <!-- lightmin api -->
         <dependency>
             <groupId>org.tuxdevelop</groupId>
             <artifactId>spring-batch-lightmin-api</artifactId>

@@ -15,17 +15,17 @@ public enum LightminExitStatus {
     STOPPED(ExitStatus.STOPPED.getExitCode(), 5);
 
     @Getter
-    private String exitCode;
+    private final String exitCode;
     @Getter
-    private int metricExitId;
+    private final int metricExitId;
 
-    LightminExitStatus(String exitCode, int metricExitId) {
+    LightminExitStatus(final String exitCode, final int metricExitId) {
         this.exitCode = exitCode;
         this.metricExitId = metricExitId;
     }
 
-    public static int getLightminMetricExitIdByExitStatus(String exitCode) {
-        return Arrays.asList(values()).stream().filter(les -> les.getExitCode().equals(exitCode))
+    public static int getLightminMetricExitIdByExitStatus(final String exitCode) {
+        return Arrays.stream(values()).filter(les -> les.getExitCode().equals(exitCode))
                 .map(LightminExitStatus::getMetricExitId)
                 .findFirst()
                 .orElse(UNKNOWN.getMetricExitId());

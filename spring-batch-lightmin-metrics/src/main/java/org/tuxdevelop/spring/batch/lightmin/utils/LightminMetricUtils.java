@@ -26,7 +26,6 @@ public class LightminMetricUtils {
 
         LIGHTMIN_STEP_DATA_ROLLBACK(LIGHTMIN_STEP_DATA_BASE + "rollback");
 
-
         String lightminMetricName;
 
         LightminMetrics(final String lightminMetricName) {
@@ -37,9 +36,9 @@ public class LightminMetricUtils {
     private LightminMetricUtils() {
     }
 
-    public static String getMetricName(LightminMetricSource source, LightminMetrics lightminMetricName) {
+    public static String getMetricName(final LightminMetricSource source, final LightminMetrics lightminMetricName) {
         if (!Arrays.asList(LightminMetrics.values()).contains(lightminMetricName)) {
-            log.info(lightminMetricName.getLightminMetricName() + " is no METRIC known by Lightmin context with this name.");
+            log.info("{} is no METRIC known by Lightmin context with this name.", lightminMetricName.getLightminMetricName());
         } else {
             switch (source) {
                 case CLIENT:
@@ -47,9 +46,10 @@ public class LightminMetricUtils {
                 case SERVER:
                     return LIGHTMIN_BASE + LIGHTMIN_SERVER + lightminMetricName.getLightminMetricName();
                 default:
-                    log.info(source.name() + " is no SOURCE known by Lightmin context with this name.");
+                    log.info("{} is no SOURCE known by Lightmin context with this name.", source.name());
             }
         }
+        //TODO adeister: why null and why multiple returns?
         return null;
     }
 }

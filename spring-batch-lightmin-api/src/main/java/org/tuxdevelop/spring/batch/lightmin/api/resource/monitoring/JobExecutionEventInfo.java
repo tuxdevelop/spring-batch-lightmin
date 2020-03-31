@@ -11,6 +11,7 @@ import java.util.Date;
  */
 @Data
 public class JobExecutionEventInfo {
+
     private String applicationName;
     private String jobName;
     private Long jobExecutionId;

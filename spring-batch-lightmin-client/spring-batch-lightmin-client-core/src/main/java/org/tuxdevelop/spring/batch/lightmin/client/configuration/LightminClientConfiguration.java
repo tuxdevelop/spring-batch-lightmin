@@ -92,7 +92,7 @@ public class LightminClientConfiguration {
 
         @Configuration
         @ConditionalOnProperty(prefix = "spring.batch.lightmin.client", name = "metrics-enabled", havingValue = "true")
-        static class ServerMetricsConfiguration {
+        static class ClientMetricsConfiguration {
 
             @Bean
             @ConditionalOnMissingBean(value = MeterRegistryCustomizer.class)
@@ -117,7 +117,8 @@ public class LightminClientConfiguration {
 
         private static RestTemplate restTemplate;
 
-        private  LightminServerRestTemplateFactory(){}
+        private LightminServerRestTemplateFactory() {
+        }
 
         public static RestTemplate getRestTemplate(
                 final LightminClientProperties.ClientServerProperties lightminProperties) {

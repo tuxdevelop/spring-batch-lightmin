@@ -64,7 +64,7 @@ public abstract class PojoPackageTestBase {
 
     @Test
     public void ensureExpectedPojoCount() {
-        if (this.withExpectedCount.booleanValue()) {
+        if (this.withExpectedCount) {
             final List<PojoClass> pojoClasses = PojoClassFactory.getPojoClasses(this.pojoPackage,
                     new FilterPackageInfo());
             Affirm.affirmEquals("Classes added / removed?", this.expectedClassCount, pojoClasses.size());
@@ -75,7 +75,7 @@ public abstract class PojoPackageTestBase {
 
     @Test
     public void testEquals() {
-        if (this.withEquals.booleanValue()) {
+        if (this.withEquals) {
             final List<PojoClass> pojoClasses = PojoClassFactory.getPojoClasses(this.pojoPackage, this.filterChain);
             for (final PojoClass pojoClass : pojoClasses) {
                 final Class<?> clazz = pojoClass.getClazz();
@@ -103,7 +103,7 @@ public abstract class PojoPackageTestBase {
         validator.validate(this.pojoPackage, this.filterChain);
     }
 
-    public class FilterAbstractClasses implements PojoClassFilter {
+    public static class FilterAbstractClasses implements PojoClassFilter {
 
         @Override
         public boolean include(final PojoClass pojoClass) {

@@ -3,7 +3,6 @@ package org.tuxdevelop.spring.batch.lightmin.server.configuration;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -88,12 +87,9 @@ public class LightminServerCoreConfiguration {
 
         @Bean
         @ConditionalOnMissingBean(value = LightminMetricServerEventListenerBean.class)
-        //  @ConditionalOnBean(name = "serverMetricService")
         public LightminMetricServerEventListenerBean metricEventServiceListenerBean(@Qualifier("serverMetricService") final MetricService metricService) {
             return new LightminMetricServerEventListenerBean(metricService);
         }
-
-
     }
 
 

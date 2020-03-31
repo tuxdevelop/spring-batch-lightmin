@@ -17,6 +17,11 @@ import static java.util.Objects.requireNonNull;
 @Slf4j
 public class MetricServiceBean implements MetricService {
 
+    public static final String TAG_NAME = "name";
+    public static final String TAG_STATUS = "status";
+    public static final String TAG_JOBNAME = "jobname";
+    public static final String TAG_APPNAME = "appname";
+
     private final MeterRegistry registry;
 
     public MetricServiceBean(final MeterRegistry registry) {
@@ -25,78 +30,84 @@ public class MetricServiceBean implements MetricService {
 
 
     @Override
-    public void measureStepExecution(LightminMetricSource source, StepExecutionEventInfo stepExecutionEventInfo) {
-        requireNonNull(registry, "registry");
+    public void measureStepExecution(final LightminMetricSource source, final StepExecutionEventInfo stepExecutionEventInfo) {
+        requireNonNull(this.registry, "registry");
 
         // ExitStatus of Job is UNKNOWN while steps are in Execution
-        Tags tags = Tags.of(
-                Tag.of("name", stepExecutionEventInfo.getStepName()),
-                Tag.of("status", stepExecutionEventInfo.getExitStatus().getExitCode()),
-                Tag.of("jobname", stepExecutionEventInfo.getJobName()),
-                Tag.of("appname", stepExecutionEventInfo.getApplicationName()));
+        final Tags tags = Tags.of(
+                Tag.of(TAG_NAME, stepExecutionEventInfo.getStepName()),
+                Tag.of(TAG_STATUS, stepExecutionEventInfo.getExitStatus().getExitCode()),
+                Tag.of(TAG_JOBNAME, stepExecutionEventInfo.getJobName()),
+                Tag.of(TAG_APPNAME, stepExecutionEventInfo.getApplicationName()));
 
-        if (stepExecutionEventInfo.getExitStatus().getExitCode().equals(LightminExitStatus.FAILED)) {
+        //Case FAILED
 
-            String dataRollback = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_ROLLBACK);
+        if (LightminExitStatus.FAILED.getExitCode().equals(stepExecutionEventInfo.getExitStatus().getExitCode())) {
+
+            final String dataRollback = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_ROLLBACK);
 
             if (!isNull(dataRollback)) {
                 Gauge.builder(dataRollback, stepExecutionEventInfo.getRollbackCount(), Integer::doubleValue)
                         .tags(tags)
                         .strongReference(true)
-                        .register(registry);
+                        .register(this.registry);
             } else {
-                log.info(source + "_" + LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_ROLLBACK + "  is unknown by Lightmin Context and is therefore not created.");
+                log.info("{}_{} is unknown by Lightmin Context and is therefore not created.", source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_ROLLBACK);
             }
+        } else {
+            log.trace("Nothing to handle for ExitCode FAILED");
         }
 
-        String dataRead = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_READ);
+        final String dataRead = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_READ);
 
         if (!isNull(dataRead)) {
             Gauge.builder(dataRead, stepExecutionEventInfo.getReadCount(), Integer::doubleValue)
                     .tags(tags)
                     .strongReference(true)
-                    .register(registry);
+                    .register(this.registry);
         } else {
-            log.info(source + "_" + LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_READ + "  is unknown by Lightmin Context and is therefore not created.");
+            log.info("{}_{} is unknown by Lightmin Context and is therefore not created.", source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_READ);
         }
-        String dataWrite = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE);
+        final String dataWrite = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE);
 
         if (!isNull(dataWrite)) {
             Gauge.builder(dataWrite, stepExecutionEventInfo.getWriteCount(), Integer::doubleValue)
                     .tags(tags)
                     .strongReference(true)
-                    .register(registry);
+                    .register(this.registry);
         } else {
-            log.info(source + "_" + LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE + "  is unknown by Lightmin Context and is therefore not created.");
+            log.info("{}_{} is unknown by Lightmin Context and is therefore not created.", source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE);
         }
-        String dataCommit = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE);
+        final String dataCommit = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE);
+
         if (!isNull(dataCommit)) {
             Gauge.builder(dataCommit, stepExecutionEventInfo.getCommitCount(), Integer::doubleValue)
                     .tags(tags)
                     .strongReference(true)
-                    .register(registry);
+                    .register(this.registry);
         } else {
-            log.info(source + "_" + LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE + " is unknown by Lightmin Context and is therefore not created.");
+            log.info("{}_{} is unknown by Lightmin Context and is therefore not created.", source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE);
         }
     }
 
     @Override
-    public void measureJobExecution(LightminMetricSource source, JobExecutionEventInfo jobExecutionEventInfo) {
-        requireNonNull(registry, "registry");
+    public void measureJobExecution(final LightminMetricSource source, final JobExecutionEventInfo jobExecutionEventInfo) {
+        requireNonNull(this.registry, "registry");
 
-        if (!jobExecutionEventInfo.getExitStatus().getExitCode().equals(LightminExitStatus.UNKNOWN.getExitCode())) {
-            String metricName = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_JOB_STATUS);
+        if (!LightminExitStatus.UNKNOWN.getExitCode().equals(jobExecutionEventInfo.getExitStatus().getExitCode())) {
+            final String metricName = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_JOB_STATUS);
             if (!isNull(metricName)) {
                 Gauge.builder(metricName, jobExecutionEventInfo.getExitStatus().getExitCode(),
                         (exitCode) -> (double) LightminExitStatus.getLightminMetricExitIdByExitStatus(exitCode))
-                        .tags(Tags.of("name", jobExecutionEventInfo.getJobName()))
+                        .tags(Tags.of(TAG_NAME, jobExecutionEventInfo.getJobName()))
                         .strongReference(true)
-                        .register(registry);
+                        .register(this.registry);
             } else {
-                log.info(source + "_" + LightminMetricUtils.LightminMetrics.LIGHTMIN_JOB_STATUS + " is unknown by Lightmin Context and is therefore not created.");
+                log.info("{}_{} is unknown by Lightmin Context and is therefore not created.", source, LightminMetricUtils.LightminMetrics.LIGHTMIN_JOB_STATUS);
             }
         } else {
             // We only want to update the Status when the Job Exited the status
+            log.trace("nothing to update, JobExecution not finished, status UNKNOWN");
         }
     }
 

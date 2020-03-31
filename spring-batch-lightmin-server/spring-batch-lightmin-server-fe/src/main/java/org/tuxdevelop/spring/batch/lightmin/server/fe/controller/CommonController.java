@@ -24,7 +24,7 @@ public abstract class CommonController implements ApplicationContextAware {
     protected RedirectView createRedirectView(final String path, final HttpServletRequest request) {
         final String completePath = this.createPath(path, request);
         final RedirectView redirectView = new RedirectView(completePath);
-        if (this.useXForwardedHeaders.booleanValue()) {
+        if (this.useXForwardedHeaders) {
             this.prepareRedirectViewForXForwadedFor(redirectView, request);
         } else {
             log.debug("Using HOST header");
