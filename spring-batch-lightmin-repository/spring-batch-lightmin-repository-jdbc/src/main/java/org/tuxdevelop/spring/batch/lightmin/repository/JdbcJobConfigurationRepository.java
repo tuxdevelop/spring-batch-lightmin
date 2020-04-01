@@ -237,7 +237,6 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
         private final JdbcTemplate jdbcTemplate;
         private final SimpleJdbcInsert simpleJdbcInsert;
         private final String tableName;
-        private final JobConfigurationRowMapper jobConfigurationRowMapper;
         private final JobConfigurationJdbcWrapperRowMapper jobConfigurationJdbcWrapperRowMapper;
 
         JobConfigurationDAO(final JdbcTemplate jdbcTemplate, final String tableName, final String schema) {
@@ -247,8 +246,8 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
                     .withSchemaName(schema)
                     .withTableName(String.format(TABLE_NAME, tableName)).usingGeneratedKeyColumns(
                             JobConfigurationDomain.JOB_CONFIGURATION_ID);
-            this.jobConfigurationRowMapper = new JobConfigurationRowMapper();
-            this.jobConfigurationJdbcWrapperRowMapper = new JobConfigurationJdbcWrapperRowMapper(this.jobConfigurationRowMapper);
+            final JobConfigurationRowMapper jobConfigurationRowMapper = new JobConfigurationRowMapper();
+            this.jobConfigurationJdbcWrapperRowMapper = new JobConfigurationJdbcWrapperRowMapper(jobConfigurationRowMapper);
         }
 
         public Long add(final JobConfiguration jobConfiguration, final String applicationName) {
@@ -299,17 +298,17 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
         List<JobConfigurationJdbcWrapper> getAllByJobNames(final Collection<String> jobNames, final String applicationName) {
             final String inParameters = this.parseInCollection(jobNames);
-            if(StringUtils.hasText(inParameters)) {
-	            final String sql = String.format(GET_ALL_JOB_CONFIGURATION_BY_JOB_NAMES_QUERY, this.tableName, inParameters);
-	            final Object[] parameters = new Object[jobNames.size() + 1];
-	            parameters[0] = applicationName;
-	            final Object[] jobNamesArray = jobNames.toArray();
-	            System.arraycopy(jobNamesArray, 0, parameters, 1, jobNamesArray.length);
-	            return this.jdbcTemplate
-	                    .query(sql, this.jobConfigurationJdbcWrapperRowMapper, parameters);
-        	} else {
-        		return Collections.emptyList();
-        	}
+            if (StringUtils.hasText(inParameters)) {
+                final String sql = String.format(GET_ALL_JOB_CONFIGURATION_BY_JOB_NAMES_QUERY, this.tableName, inParameters);
+                final Object[] parameters = new Object[jobNames.size() + 1];
+                parameters[0] = applicationName;
+                final Object[] jobNamesArray = jobNames.toArray();
+                System.arraycopy(jobNamesArray, 0, parameters, 1, jobNamesArray.length);
+                return this.jdbcTemplate
+                        .query(sql, this.jobConfigurationJdbcWrapperRowMapper, parameters);
+            } else {
+                return Collections.emptyList();
+            }
         }
 
         private Map<String, Object> map(final JobConfiguration jobConfiguration, final String applicationName) {
@@ -339,7 +338,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             return stringBuilder.toString();
         }
 
-        private class JobConfigurationJdbcWrapperRowMapper implements RowMapper<JobConfigurationJdbcWrapper> {
+        private static class JobConfigurationJdbcWrapperRowMapper implements RowMapper<JobConfigurationJdbcWrapper> {
 
             private final JobConfigurationRowMapper jobConfigurationRowMapper;
 
@@ -385,7 +384,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
 
         @Data
-        class JobConfigurationJdbcWrapper {
+        static class JobConfigurationJdbcWrapper {
             private final JobConfiguration jobConfiguration;
             private final Integer jobConfigurationType;
         }
@@ -682,7 +681,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
             }
         }
 
-        private final class JobSchedulerConfigurationKey {
+        private static final class JobSchedulerConfigurationKey {
 
             private JobSchedulerConfigurationKey() {
             }
@@ -697,7 +696,7 @@ public class JdbcJobConfigurationRepository implements JobConfigurationRepositor
 
         }
 
-        private final class JobListenerConfigurationKey {
+        private static final class JobListenerConfigurationKey {
 
             private JobListenerConfigurationKey() {
             }
