@@ -25,18 +25,18 @@ public class JobExecutionEventController {
         this.eventService = eventService;
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> consumeJobExecutionEvent(@RequestBody final JobExecutionEventInfo jobExecutionEventInfo) {
         this.eventService.handleJobExecutionEvent(jobExecutionEventInfo);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<JobExecutionEventInfo>> getAll(
             @RequestParam("start-index") final int startIndex,
             @RequestParam("count") final int count) {
         final List<JobExecutionEventInfo> jobExecutionEventInfos =
-                this.eventService.getAllEvents(startIndex, count);
+                this.eventService.getAllJobExecutionEvents(startIndex, count);
         return ResponseEntity.ok(jobExecutionEventInfos);
     }
 

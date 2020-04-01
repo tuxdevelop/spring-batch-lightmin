@@ -46,6 +46,13 @@
                 <div class="card-body">
                     <div class="card">
                         <div class="card-body">
+                            <button type="button" data-toggle="collapse" data-target=".multi-collapse"
+                                    th:title="#{tooltip.batch_job_execution.info}"
+                                    aria-expanded="false"
+                                    aria-controls="redoHelpText"
+                                    class="float-right btn btn-sm btn-info collapsed">
+                                <i class="fas fa-info"></i>
+                            </button>
                             <h5 class="card-title text-info">Execution Summary</h5>
                             <table class="table table-text-sm">
                                 <tbody class="text-muted">
@@ -62,12 +69,17 @@
                                                             job-name=${applicationContextModel.jobName},
                                                             application-instance-id=${applicationContextModel.applicationInstanceId},
                                                             job-execution-id=${jobExecution.id})}">
-                                            <button
+                                            <button th:title="#{tooltip.batch_job_execution.redo}"
+                                                    aria-describedby="redoHelpText"
                                                     class="text-info btn-sm btn-primary-outline btn-hover"
                                                     type="submit"
                                                     name="stop-scheduler" style="display: inline;">
                                                 <i class="fas fa-redo-alt"></i>
                                             </button>
+                                            <small id="redoHelpText"
+                                                   class="collapse multi-collapse form-text text-muted"
+                                                   th:text="#{helptext.batch_job_execution.redo}">
+                                            </small>
                                         </form>
                                         <form id="stop-jobexecution-form" method="post"
                                               style="display: inline;"

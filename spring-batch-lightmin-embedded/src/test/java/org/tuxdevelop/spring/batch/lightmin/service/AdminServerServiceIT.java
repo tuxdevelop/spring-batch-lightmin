@@ -89,7 +89,7 @@ public abstract class AdminServerServiceIT {
         final Collection<String> jobNames = new LinkedList<>();
         jobNames.add("simpleJob");
         final Map<String, JobConfigurations> result = this.getAdminServerService().getJobConfigurationsMap(lightminClientApplication);
-        assertThat(result.containsKey("simpleJob"));
+        assertThat(result.containsKey("simpleJob")).isTrue();
         final JobConfigurations jobConfigurations = result.get("simpleJob");
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
         assertThat(fetchedJobConfigurations).isNotEmpty();

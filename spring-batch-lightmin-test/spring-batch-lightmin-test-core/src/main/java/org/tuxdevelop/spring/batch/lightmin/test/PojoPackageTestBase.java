@@ -103,7 +103,7 @@ public abstract class PojoPackageTestBase {
         validator.validate(this.pojoPackage, this.filterChain);
     }
 
-    public class FilterAbstractClasses implements PojoClassFilter {
+    public static class FilterAbstractClasses implements PojoClassFilter {
 
         @Override
         public boolean include(final PojoClass pojoClass) {

@@ -101,7 +101,8 @@
                                                           th:action="@{job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
                                                         <button class="text-danger btn-sm btn-primary-outline btn-hover"
                                                                 type="submit"
-                                                                name="stop-scheduler" style="display: inline;">
+                                                                name="stop-scheduler" style="display: inline;"
+                                                        th:title="#{tooltip.job_schedulers.stopBtn}">
                                                             <i class="far fa-stop-circle"></i>
                                                         </button>
                                                     </form>
@@ -111,14 +112,16 @@
                                                           th:action="@{job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
                                                         <button class="text-info btn-sm btn-primary-outline btn-hover"
                                                                 type="submit"
-                                                                name="start-scheduler" style="display: inline;">
+                                                                name="start-scheduler" style="display: inline;"
+                                                                th:title="#{tooltip.job_schedulers.startBtn}">
                                                             <i class="far fa-play-circle"></i>
                                                         </button>
                                                     </form>
                                                     <a href="#"
                                                        name="init-edit-scheduler"
                                                        class="text-muted btn-sm btn-primary-outline nounderline"
-                                                       th:href="@{job-scheduler(init-edit-scheduler='init-edit-scheduler',job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                                       th:href="@{job-scheduler(init-edit-scheduler='init-edit-scheduler',job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}"
+                                                       th:title="#{tooltip.job_schedulers.updateBtn}">
                                                         <i class="far fa-edit"></i>
                                                     </a>
                                                     <form id="delete-scheduler-form" method="post"
@@ -126,7 +129,8 @@
                                                           th:action="@{job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
                                                         <button class="text-danger btn-sm btn-primary-outline btn-hover"
                                                                 type="submit"
-                                                                name="delete-scheduler" style="display: inline;">
+                                                                name="delete-scheduler" style="display: inline;"
+                                                                th:title="#{tooltip.job_schedulers.removeBtn}">
                                                             <i class="far fa-trash-alt"></i>
                                                         </button>
                                                     </form>

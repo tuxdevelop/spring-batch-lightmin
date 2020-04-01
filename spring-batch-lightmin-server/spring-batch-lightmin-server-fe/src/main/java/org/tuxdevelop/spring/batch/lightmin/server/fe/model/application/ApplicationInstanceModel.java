@@ -31,15 +31,15 @@ public class ApplicationInstanceModel {
     }
 
     public Boolean getIsUp() {
-        return this.status != null && UP.equals(this.status.toUpperCase());
+        return this.status != null && UP.equalsIgnoreCase(this.status);
     }
 
     public Boolean getIsDown() {
-        return this.status != null && DOWN.equals(this.status.toUpperCase());
+        return this.status != null && DOWN.equalsIgnoreCase(this.status);
     }
 
     public Boolean getIsOffline() {
-        return this.status != null && OFFLINE.equals(this.status.toUpperCase());
+        return this.status != null && OFFLINE.equalsIgnoreCase(this.status);
     }
 
     public Boolean getIsUnknown() {

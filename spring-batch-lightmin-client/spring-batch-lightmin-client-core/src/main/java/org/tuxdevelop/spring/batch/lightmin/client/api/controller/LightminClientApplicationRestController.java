@@ -18,7 +18,7 @@ public class LightminClientApplicationRestController {
         this.lightminClientApplicationService = lightminClientApplicationService;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LightminClientApplication> getLightminClientApplication() {
         final LightminClientApplication lightminClientApplication = this.lightminClientApplicationService
                 .getLightminClientApplication();

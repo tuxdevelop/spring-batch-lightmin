@@ -1,9 +1,11 @@
 package org.tuxdevelop.spring.batch.lightmin.server.fe.configuration;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.service.*;
 import org.tuxdevelop.spring.batch.lightmin.server.service.AdminServerService;
@@ -74,5 +76,14 @@ public class LightminServerFeConfiguration {
     @Bean
     public MethodValidationPostProcessor methodValidationPostProcessor() {
         return new MethodValidationPostProcessor();
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        final ReloadableResourceBundleMessageSource messageSource
+                = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasenames("classpath:tooltip", "classpath:helptext", "classpath:ValidationMessages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
     }
 }

@@ -10,6 +10,9 @@ import java.util.*;
 
 public class ApiTestHelper {
 
+    public static String TEST_JOB_NAME = "test_job";
+
+    private ApiTestHelper(){}
 
     public static JobConfiguration createJobConfiguration(final JobSchedulerConfiguration jobSchedulerConfiguration) {
         final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration jobConfiguration =
@@ -101,7 +104,7 @@ public class ApiTestHelper {
     public static JobInstancePage createJobInstancePage(final int pageSize) {
         final JobInstancePage jobInstancePage = new JobInstancePage();
         jobInstancePage.setJobInstances(createJobInstances(pageSize));
-        jobInstancePage.setJobName("test_job");
+        jobInstancePage.setJobName(TEST_JOB_NAME);
         jobInstancePage.setPageSize(pageSize);
         jobInstancePage.setStartIndex(0);
         jobInstancePage.setTotalJobInstanceCount(pageSize);
@@ -111,7 +114,7 @@ public class ApiTestHelper {
     public static List<JobInstance> createJobInstances(final int count) {
         final List<JobInstance> jobInstances = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
-            final JobInstance jobInstance = createJobInstance((long) i, "test_job");
+            final JobInstance jobInstance = createJobInstance((long) i, TEST_JOB_NAME);
             jobInstances.add(jobInstance);
         }
         return jobInstances;
@@ -124,7 +127,7 @@ public class ApiTestHelper {
         jobExecutionPage.setJobExecutions(jobExecutions);
         jobExecutionPage.setPageSize(pageSize);
         jobExecutionPage.setStartIndex(0);
-        jobExecutionPage.setJobName("test_job");
+        jobExecutionPage.setJobName(TEST_JOB_NAME);
         jobExecutionPage.setTotalJobExecutionCount(pageSize);
         jobExecutionPage.setJobInstanceId(1L);
         return jobExecutionPage;
@@ -149,7 +152,7 @@ public class ApiTestHelper {
         jobExecution.setJobParameters(new JobParameters());
         jobExecution.setLastUpdated(new Date());
         jobExecution.setStepExecutions(createStepExecutions(jobExecutionId));
-        jobExecution.setJobInstance(createJobInstance(jobExecutionId, "test_job"));
+        jobExecution.setJobInstance(createJobInstance(jobExecutionId, TEST_JOB_NAME));
         jobExecution.setStatus(BatchStatus.COMPLETED);
         return jobExecution;
 

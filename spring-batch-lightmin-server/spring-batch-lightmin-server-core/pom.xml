@@ -19,6 +19,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-metrics</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- spring boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -31,7 +31,7 @@ public class JobExecutionEventFeServiceTest {
         final int pageSize = 5;
         final List<JobExecutionEventInfo> jobExecutionEventInfos =
                 ServiceTestHelper.createJobExecutionEvents(pageSize, "test_application");
-        when(this.eventService.getAllEvents(0, pageSize)).thenReturn(jobExecutionEventInfos);
+        when(this.eventService.getAllJobExecutionEvents(0, pageSize)).thenReturn(jobExecutionEventInfos);
 
         final ContentPageModel<List<JobExecutionEventModel>> result =
                 this.jobExecutionEventFeService.getJobExecutionEventModels(0, pageSize);
