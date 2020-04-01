@@ -110,5 +110,4 @@ public class MetricServiceBean implements MetricService {
             log.trace("nothing to update, JobExecution not finished, status UNKNOWN");
         }
     }
-
 }
