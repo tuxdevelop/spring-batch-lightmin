@@ -22,6 +22,7 @@ public class SchedulerConfigurationService {
         if (schedulerConfiguration == null) {
             throw new SchedulerValidationException("schedulerConfiguration must not be null");
         } else {
+            schedulerConfiguration.validate();
             return this.schedulerConfigurationRepository.save(schedulerConfiguration);
         }
     }

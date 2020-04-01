@@ -119,8 +119,14 @@ public class MapSchedulerConfigurationRepository implements SchedulerConfigurati
         copy.setMaxRetries(schedulerConfiguration.getMaxRetries());
         copy.setJobName(schedulerConfiguration.getJobName());
         copy.setApplication(schedulerConfiguration.getApplication());
-        copy.setStatus(ServerSchedulerStatus.getByValue(schedulerConfiguration.getStatus().getValue()));
+        copy.setStatus(this.getStatusValue(schedulerConfiguration));
         return copy;
+    }
+
+    private ServerSchedulerStatus getStatusValue(final SchedulerConfiguration schedulerConfiguration) {
+
+        return schedulerConfiguration.getStatus() != null ?
+                ServerSchedulerStatus.getByValue(schedulerConfiguration.getStatus().getValue()) : null;
     }
 
     private List<SchedulerConfiguration> subset(final List<SchedulerConfiguration> schedulerConfigurations,

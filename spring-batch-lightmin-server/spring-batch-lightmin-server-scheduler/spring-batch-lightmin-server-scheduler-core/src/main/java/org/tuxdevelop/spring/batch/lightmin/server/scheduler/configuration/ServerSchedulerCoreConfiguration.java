@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.server.scheduler.configuration;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 
 @Configuration
 @EnableScheduling
+@ConditionalOnProperty(prefix = "spring.batch.lightmin.server.scheduler", name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableServerSchedulerMapRepository
 @EnableConfigurationProperties(value = {ServerSchedulerCoreConfigurationProperties.class})
 public class ServerSchedulerCoreConfiguration {
@@ -40,6 +42,11 @@ public class ServerSchedulerCoreConfiguration {
     public SchedulerExecutionService schedulerExecutionService(
             final SchedulerExecutionRepository schedulerExecutionRepository) {
         return new SchedulerExecutionService(schedulerExecutionRepository);
+    }
+
+    @Bean
+    public ServerPollerService serverPollerService(final ExecutionPollerService executionPollerService) {
+        return new ServerPollerService(executionPollerService);
     }
 
     @Bean

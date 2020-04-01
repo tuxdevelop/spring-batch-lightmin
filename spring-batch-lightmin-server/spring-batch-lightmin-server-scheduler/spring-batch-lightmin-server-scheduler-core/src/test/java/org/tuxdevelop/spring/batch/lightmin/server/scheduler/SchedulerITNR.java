@@ -1,5 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.server.scheduler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,11 +12,12 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.configuration.ServerSchedulerCoreConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerExecutionRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ExecutionStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ServerSchedulerStatus;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.SchedulerConfigurationService;
 import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 
 import java.util.Collections;
@@ -25,6 +27,7 @@ import java.util.Map;
 
 import static org.mockito.Mockito.when;
 
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {ServerSchedulerCoreConfiguration.class})
 public class SchedulerITNR {
@@ -36,7 +39,7 @@ public class SchedulerITNR {
     @MockBean
     private LightminApplicationRepository lightminApplicationRepository;
     @Autowired
-    private SchedulerConfigurationRepository schedulerConfigurationRepository;
+    private SchedulerConfigurationService schedulerConfigurationService;
     @Autowired
     private SchedulerExecutionRepository schedulerExecutionRepository;
 
@@ -44,7 +47,18 @@ public class SchedulerITNR {
     public void testNR() {
         this.setup();
 
-        while (true) ;
+        while (true) {
+            final StringBuilder builder = new StringBuilder();
+            this.schedulerExecutionRepository.findAll().forEach(
+                    schedulerExecution -> builder.append(schedulerExecution).append("\n")
+            );
+            log.info("----> {}", builder.toString());
+            try {
+                Thread.sleep(5000L);
+            } catch (final InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 
@@ -72,12 +86,12 @@ public class SchedulerITNR {
         schedulerConfiguration.setRetriable(Boolean.TRUE);
         schedulerConfiguration.setCronExpression("0/5 * * * * ? *");
         schedulerConfiguration.setJobIncrementer(JobIncrementer.DATE);
+        schedulerConfiguration.setStatus(ServerSchedulerStatus.ACTIVE);
         final Map<String, Object> jobParameters = new HashMap<>();
         jobParameters.put("LONG", 200L);
         jobParameters.put("STRING", "hello");
         schedulerConfiguration.setJobParameters(jobParameters);
-        final SchedulerConfiguration result = this.schedulerConfigurationRepository.save(schedulerConfiguration);
-        return result;
+        return this.schedulerConfigurationService.save(schedulerConfiguration);
     }
 
     protected SchedulerExecution createSchedulerExecution(final Long schedulerConfigurationId,
@@ -88,8 +102,6 @@ public class SchedulerITNR {
         schedulerExecution.setState(state);
         schedulerExecution.setNextFireTime(nextExecution);
         schedulerExecution.setSchedulerConfigurationId(schedulerConfigurationId);
-        final SchedulerExecution result = this.schedulerExecutionRepository.save(schedulerExecution);
-
-        return result;
+        return this.schedulerExecutionRepository.save(schedulerExecution);
     }
 }

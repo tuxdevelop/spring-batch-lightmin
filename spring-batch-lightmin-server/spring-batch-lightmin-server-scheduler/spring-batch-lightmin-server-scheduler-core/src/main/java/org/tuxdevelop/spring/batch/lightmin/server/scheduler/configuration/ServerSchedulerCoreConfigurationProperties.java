@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.batch.lightmin.server.scheduler")
 public class ServerSchedulerCoreConfigurationProperties {
 
+    private Boolean enabled = Boolean.TRUE;
     private Integer threadPoolSize = 30;
     private Integer threadPoolCoreSize = 10;
     private Integer pollerPeriod = 1000;
