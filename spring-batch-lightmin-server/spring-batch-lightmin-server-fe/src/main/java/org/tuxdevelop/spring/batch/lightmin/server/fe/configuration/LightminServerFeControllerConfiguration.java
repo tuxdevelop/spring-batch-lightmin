@@ -101,4 +101,11 @@ public class LightminServerFeControllerConfiguration {
     public AboutController aboutController() {
         return new AboutController();
     }
+
+    //Server Schedulers
+
+    @Bean
+    public ServerSchedulerController serverSchedulerController() {
+        return new ServerSchedulerController();
+    }
 }

@@ -56,4 +56,10 @@ public class ServerSchedulerCoreConfiguration {
                                                          final ServerSchedulerCoreConfigurationProperties properties) {
         return new StandaloneExecutionPollerService(executionRunnerService, schedulerExecutionService, properties);
     }
+
+    @Bean
+    public ExecutionInfoService executionInfoService(final SchedulerExecutionService schedulerExecutionService,
+                                                     final SchedulerConfigurationService schedulerConfigurationService) {
+        return new ExecutionInfoService(schedulerExecutionService, schedulerConfigurationService);
+    }
 }
