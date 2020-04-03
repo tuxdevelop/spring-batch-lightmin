@@ -14,6 +14,7 @@
     <dependencies>
 
         <!-- micrometer core -->
+
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-core</artifactId>

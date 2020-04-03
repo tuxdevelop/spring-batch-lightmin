@@ -554,7 +554,6 @@ spring:
       batch:
         repository-type: map
 ----
-
 == Server User Interface
 
 === Applications

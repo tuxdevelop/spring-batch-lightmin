@@ -1,0 +1,72 @@
+= Spring Lightmin Metrics
+
+Lightmin Metrics introduces some custom metrics for the Lightmin-Platform.
+It uses a Prometheus actuator to publish the measurements to any monitoring solution.
+---
+
+== Enabling Metrics for Lightmin
+
+Lightmin Metrics uses the build in job events to measure its jobs.
+To use metrics you need to activate event publications:
+[source,yaml]
+----
+spring:
+    batch:
+        lightmin:
+            client:
+                publish-job-events: true
+----
+You can activate metrics for Lightmin by enabling the corresponding configuration for client and server:
+
+[source,yaml]
+----
+spring:
+    batch:
+        lightmin:
+            client:
+                metrics-enabled: true
+            server:
+                metrics-enabled: true
+----
+Metrics will be published over prometheus actuator and can be modified by adding MeterFilter into the metrics configuration.
+Refer to Micrometer Documentation for more information.
+
+[source,java]
+----
+
+import org.springframework.context.annotation.Configuration;
+@Configuration
+public class Config{
+
+final static String name = "EXAMPLE";
+
+@Bean
+public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+        return registry -> {
+            if (name != null) {
+                registry.config().meterFilter(
+                        new MeterFilter() {
+                            @Override
+                            public DistributionStatisticConfig configure(Meter.Id id, DistributionStatisticConfig config) {
+                                if (id.getName().startsWith("lightmin")) {
+                                    // Example Filter - Activating histogram on all lightmin metrics
+                                    return DistributionStatisticConfig.builder().percentilesHistogram(true)
+                                            .percentiles(0.95)
+                                            .build()
+                                            .merge(config);
+                                }
+                                return config;
+                            }
+                        })
+                        .commonTags("example_tag", name);
+            }
+        };
+    }
+}
+----
+== Grafana Dashboard
+
+Lightmin Metrics introduces a prebuild Grafana Dashboard.
+Please install the following Plugins:
+
+* Statusmap by Flant JSC
