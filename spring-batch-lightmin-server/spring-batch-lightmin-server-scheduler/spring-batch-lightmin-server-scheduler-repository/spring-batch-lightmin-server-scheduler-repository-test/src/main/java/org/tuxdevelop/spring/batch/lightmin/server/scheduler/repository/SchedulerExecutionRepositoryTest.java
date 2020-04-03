@@ -183,6 +183,8 @@ public abstract class SchedulerExecutionRepositoryTest extends SchedulerTest {
         BDDAssertions.then(result).contains(schedulerExecution);
     }
 
+    //TODO: write test for count
+
     @After
     public void cleanUp() {
         getCleanUpRepository().cleanUp();

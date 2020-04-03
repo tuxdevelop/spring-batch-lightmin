@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"/>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/server-schedulers-navigation :: nav"/>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" th:href="@{server-scheduler-executions}" class="text-info">Executions</a>
+                </li>
+                <li class="breadcrumb-item text-muted" th:text="${pageModel.value.displayFilterState}">
+                    all
+                </li>
+            </ol>
+        </nav>
+
+        <div th:include="fragments/scheduler-executions.html:: scheduler-executions"/>
+
+        <span class="text-left" th:if="${pageModel.hasPrevious}">
+                        <a href="#"
+                           th:href="@{server-scheduler-executions(start-index=${pageModel.previousStartIndex},state=${state})}"
+                           class="text-info table-text-sm">&laquo; prev</a>
+                    </span>
+        <span class="text-right" th:if="${pageModel.hasMore}">
+                        <a href="#"
+                           th:href="@{server-scheduler-executions(start-index=${pageModel.nextStartIndex},state=${state})}"
+                           class="text-info table-text-sm">next &raquo;</a>
+                     </span>
+    </div>
+
+</div>
+
+</body>
+</html>

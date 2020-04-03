@@ -25,7 +25,7 @@ public final class SchedulerConfigurationTestHelper {
         schedulerConfiguration.setJobParameters(new HashMap<>());
         schedulerConfiguration.setMaxRetries(3);
         schedulerConfiguration.setStatus(ServerSchedulerStatus.ACTIVE);
-        schedulerConfiguration.setRetriable(Boolean.TRUE);
+        schedulerConfiguration.setRetryable(Boolean.TRUE);
 
         return schedulerConfiguration;
 

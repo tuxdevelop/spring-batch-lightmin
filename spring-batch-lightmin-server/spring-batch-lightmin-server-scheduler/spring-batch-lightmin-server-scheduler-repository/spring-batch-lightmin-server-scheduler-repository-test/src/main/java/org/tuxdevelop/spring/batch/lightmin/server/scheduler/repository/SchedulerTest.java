@@ -16,7 +16,7 @@ public abstract class SchedulerTest {
         schedulerConfiguration.setJobName("testJob");
         schedulerConfiguration.setMaxRetries(5);
         schedulerConfiguration.setInstanceExecutionCount(0);
-        schedulerConfiguration.setRetriable(Boolean.TRUE);
+        schedulerConfiguration.setRetryable(Boolean.TRUE);
         schedulerConfiguration.setCronExpression("* * * * * *");
         schedulerConfiguration.setJobIncrementer(JobIncrementer.DATE);
         final Map<String, Object> jobParameters = new HashMap<>();

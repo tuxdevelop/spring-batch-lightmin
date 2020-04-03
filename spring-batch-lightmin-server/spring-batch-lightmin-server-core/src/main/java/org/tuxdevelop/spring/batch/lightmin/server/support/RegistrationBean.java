@@ -136,6 +136,10 @@ public class RegistrationBean implements ApplicationEventPublisherAware {
         return lightminClientApplication.getName();
     }
 
+    public Set<String> getAllApplicationNames() {
+        return this.findAllasMap().keySet();
+    }
+
     private LightminClientApplicationStatus getExistingStatusInfo(final String applicationId) {
         final LightminClientApplication lightminClientApplication = this.findById(applicationId);
         if (lightminClientApplication != null) {

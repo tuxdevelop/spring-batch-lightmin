@@ -83,7 +83,7 @@ public class SchedulerITNR {
         schedulerConfiguration.setJobName("testJob");
         schedulerConfiguration.setMaxRetries(5);
         schedulerConfiguration.setInstanceExecutionCount(1);
-        schedulerConfiguration.setRetriable(Boolean.TRUE);
+        schedulerConfiguration.setRetryable(Boolean.TRUE);
         schedulerConfiguration.setCronExpression("0/5 * * * * ? *");
         schedulerConfiguration.setJobIncrementer(JobIncrementer.DATE);
         schedulerConfiguration.setStatus(ServerSchedulerStatus.ACTIVE);

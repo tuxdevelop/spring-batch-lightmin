@@ -147,6 +147,17 @@ public class MapSchedulerExecutionRepository implements SchedulerExecutionReposi
     }
 
     @Override
+    public Integer getExecutionCount(final Integer state) {
+        final int result;
+        if (state != null) {
+            result = this.findByState(state).size();
+        } else {
+            result = this.store.size();
+        }
+        return result;
+    }
+
+    @Override
     public void deleteByState(final Integer state) {
         final List<SchedulerExecution> schedulerExecutions = new ArrayList<>();
         for (final SchedulerExecution schedulerExecution : this.store.values()) {

@@ -8,6 +8,8 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.S
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerValidationException;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 
+import java.util.List;
+
 @Slf4j
 public class SchedulerConfigurationService {
 
@@ -34,6 +36,11 @@ public class SchedulerConfigurationService {
         } else {
             this.schedulerConfigurationRepository.delete(schedulerConfiguration.getId());
         }
+    }
+
+    @Transactional(transactionManager = "lightminServerSchedulerTransactionManager", readOnly = true)
+    public List<SchedulerConfiguration> findAll() {
+        return this.schedulerConfigurationRepository.findAll();
     }
 
     @Transactional(transactionManager = "lightminServerSchedulerTransactionManager", readOnly = true)

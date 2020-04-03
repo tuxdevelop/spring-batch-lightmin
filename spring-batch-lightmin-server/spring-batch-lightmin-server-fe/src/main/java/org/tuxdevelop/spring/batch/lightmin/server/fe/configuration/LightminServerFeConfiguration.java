@@ -8,6 +8,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.service.*;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.annotation.EnableServerSchedulerCore;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.ExecutionInfoService;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.ExecutionRunnerService;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.SchedulerConfigurationService;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.SchedulerExecutionService;
 import org.tuxdevelop.spring.batch.lightmin.server.service.AdminServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.service.EventService;
 import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
@@ -15,6 +20,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.service.JournalServiceBean;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 
 @Configuration
+@EnableServerSchedulerCore
 @EnableConfigurationProperties(value = {LightminServerFeConfigurationProperties.class})
 @Import(value = {LightminServerFeControllerConfiguration.class})
 public class LightminServerFeConfiguration {
@@ -71,6 +77,22 @@ public class LightminServerFeConfiguration {
     public JournalsFeService journalsFeService(
             final JournalServiceBean journalServiceBean) {
         return new JournalsFeService(journalServiceBean);
+    }
+
+    @Bean
+    public ServerSchedulerFeService serverSchedulerFeService(
+            final SchedulerExecutionService schedulerExecutionService,
+            final SchedulerConfigurationService schedulerConfigurationService,
+            final ExecutionInfoService executionInfoService,
+            final ExecutionRunnerService executionRunnerService,
+            final RegistrationBean registrationBean) {
+
+        return new ServerSchedulerFeService(
+                schedulerExecutionService,
+                schedulerConfigurationService,
+                executionInfoService,
+                executionRunnerService,
+                registrationBean);
     }
 
     @Bean

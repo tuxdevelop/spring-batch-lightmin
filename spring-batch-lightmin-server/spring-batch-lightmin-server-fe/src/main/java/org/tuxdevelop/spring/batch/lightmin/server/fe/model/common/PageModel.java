@@ -1,5 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.server.fe.model.common;
 
+import lombok.Getter;
+
 import java.io.Serializable;
 
 /**
@@ -9,6 +11,7 @@ import java.io.Serializable;
 public class PageModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @Getter
     private final Integer currentIndex;
     private final Integer pageSize;
     private final Integer totalSize;

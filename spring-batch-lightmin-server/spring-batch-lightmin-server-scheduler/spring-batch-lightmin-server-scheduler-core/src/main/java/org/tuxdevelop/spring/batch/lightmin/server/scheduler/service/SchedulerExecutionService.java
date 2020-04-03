@@ -68,6 +68,10 @@ public class SchedulerExecutionService {
         return this.schedulerExecutionRepository.findByState(state, startIndex, pageSize);
     }
 
+    public Integer getExecutionCount(final Integer state) {
+        return this.schedulerExecutionRepository.getExecutionCount(state);
+    }
+
     public Date getNextFireTime(final String cronExpression) {
         final CronTriggerImpl cronTrigger = new CronTriggerImpl();
         try {

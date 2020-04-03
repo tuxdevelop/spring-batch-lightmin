@@ -66,6 +66,12 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
                     + SchedulerExecutionDomain.EXECUTION_COUNT + " = ? "
                     + " WHERE " + SchedulerExecutionDomain.ID + " = ?";
 
+    private static final String GET_COUNT =
+            "SELECT COUNT(1) FROM %s";
+
+    private static final String GET_COUNT_BY_STATE =
+            GET_COUNT + " WHERE "
+                    + SchedulerExecutionDomain.STATE + " = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
@@ -222,6 +228,28 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
                 new int[]{Types.NUMERIC},
                 this.rowMapper
         );
+    }
+
+    @Override
+    public Integer getExecutionCount(final Integer state) {
+        final String sql;
+        final Integer result;
+        if (state != null) {
+            sql = String.format(GET_COUNT_BY_STATE, this.tableName);
+            result = this.jdbcTemplate.queryForObject(
+                    sql,
+                    new Object[]{state},
+                    new int[]{Types.NUMERIC},
+                    Integer.class
+            );
+        } else {
+            sql = String.format(GET_COUNT, this.tableName);
+            result = this.jdbcTemplate.queryForObject(
+                    sql,
+                    Integer.class
+            );
+        }
+        return result;
     }
 
     @Override

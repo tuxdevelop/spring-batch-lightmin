@@ -43,7 +43,7 @@ public class ExecutionRunner implements Runnable {
                 this.updateExecution(ExecutionStatus.FINISHED, Boolean.FALSE);
             } catch (final Exception e) {
                 log.error("Execution for {} failed ", this.schedulerExecution, e);
-                if (schedulerConfiguration.getRetriable() &&
+                if (schedulerConfiguration.getRetryable() &&
                         this.schedulerExecution.getExecutionCount() <= schedulerConfiguration.getMaxRetries()) {
                     this.updateExecution(ExecutionStatus.FAILED, Boolean.FALSE);
                 } else {

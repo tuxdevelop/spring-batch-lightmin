@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.*;
-import org.tuxdevelop.spring.batch.lightmin.server.scheduler.annotation.EnableServerSchedulerCore;
 import org.tuxdevelop.spring.batch.lightmin.server.service.EventService;
 import org.tuxdevelop.spring.batch.lightmin.server.service.EventServiceBean;
 import org.tuxdevelop.spring.batch.lightmin.server.service.JournalServiceBean;
@@ -29,7 +28,6 @@ import java.util.Collections;
  * @since 0.3
  */
 @Configuration
-@EnableServerSchedulerCore
 @EnableConfigurationProperties(value = {LightminServerCoreProperties.class})
 public class LightminServerCoreConfiguration {
 

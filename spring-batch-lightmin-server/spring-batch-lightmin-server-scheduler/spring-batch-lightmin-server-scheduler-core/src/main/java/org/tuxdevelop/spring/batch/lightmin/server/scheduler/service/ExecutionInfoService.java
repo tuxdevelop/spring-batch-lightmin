@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.server.scheduler.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.domain.ExecutionInfo;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.domain.ExecutionInfoPage;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
@@ -21,7 +22,7 @@ public class ExecutionInfoService {
         this.schedulerConfigurationService = schedulerConfigurationService;
     }
 
-    final List<ExecutionInfo> findAll(final Integer state, final int startIndex, final int count) {
+    public ExecutionInfoPage findAll(final Integer state, final int startIndex, final int count) {
 
         final List<SchedulerExecution> executions;
 
@@ -31,7 +32,7 @@ public class ExecutionInfoService {
             executions = this.schedulerExecutionService.findAll(startIndex, count);
         }
 
-        return executions.stream()
+        final List<ExecutionInfo> executionInfos = executions.stream()
                 .map(execution -> {
                     final ExecutionInfo info = new ExecutionInfo();
                     try {
@@ -46,6 +47,16 @@ public class ExecutionInfoService {
                     }
                     return info;
                 }).collect(Collectors.toList());
+
+        final ExecutionInfoPage executionInfoPage = new ExecutionInfoPage();
+        executionInfoPage.setExecutionInfos(executionInfos);
+        executionInfoPage.setStartIndex(startIndex);
+        executionInfoPage.setPageSize(executionInfos.size());
+        executionInfoPage.setTotalCount(this.getTotalExecutionCount(state));
+        return executionInfoPage;
     }
 
+    public Integer getTotalExecutionCount(final Integer status) {
+        return this.schedulerExecutionService.getExecutionCount(status);
+    }
 }

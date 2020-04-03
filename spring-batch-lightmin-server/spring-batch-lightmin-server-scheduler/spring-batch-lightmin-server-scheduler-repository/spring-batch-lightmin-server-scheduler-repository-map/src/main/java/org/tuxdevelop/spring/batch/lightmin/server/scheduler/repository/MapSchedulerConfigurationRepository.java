@@ -114,7 +114,7 @@ public class MapSchedulerConfigurationRepository implements SchedulerConfigurati
         copy.setCronExpression(schedulerConfiguration.getCronExpression());
         copy.setJobParameters(schedulerConfiguration.getJobParameters());
         copy.setJobIncrementer(schedulerConfiguration.getJobIncrementer());
-        copy.setRetriable(schedulerConfiguration.getRetriable());
+        copy.setRetryable(schedulerConfiguration.getRetryable());
         copy.setInstanceExecutionCount(schedulerConfiguration.getInstanceExecutionCount());
         copy.setMaxRetries(schedulerConfiguration.getMaxRetries());
         copy.setJobName(schedulerConfiguration.getJobName());

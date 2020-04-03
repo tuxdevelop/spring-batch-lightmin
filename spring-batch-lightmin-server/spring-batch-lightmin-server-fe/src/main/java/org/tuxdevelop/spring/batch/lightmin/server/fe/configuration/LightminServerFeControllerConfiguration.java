@@ -105,7 +105,7 @@ public class LightminServerFeControllerConfiguration {
     //Server Schedulers
 
     @Bean
-    public ServerSchedulerController serverSchedulerController() {
-        return new ServerSchedulerController();
+    public ServerSchedulerController serverSchedulerController(final ServerSchedulerFeService serverSchedulerFeService) {
+        return new ServerSchedulerController(serverSchedulerFeService);
     }
 }

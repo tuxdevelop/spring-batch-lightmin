@@ -6,3 +6,6 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: embedded-test-app
+  batch:
+    lightmin:
+      application-name: ${spring.application.name}

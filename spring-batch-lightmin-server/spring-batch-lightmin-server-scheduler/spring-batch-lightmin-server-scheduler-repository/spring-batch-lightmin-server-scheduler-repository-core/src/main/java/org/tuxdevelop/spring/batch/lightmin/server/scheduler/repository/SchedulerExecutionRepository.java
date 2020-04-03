@@ -30,6 +30,8 @@ public interface SchedulerExecutionRepository {
 
     List<SchedulerExecution> findBySchedulerConfigurationId(Long schedulerConfigurationId);
 
+    Integer getExecutionCount(Integer state);
+
     void deleteByState(Integer state);
 
 }

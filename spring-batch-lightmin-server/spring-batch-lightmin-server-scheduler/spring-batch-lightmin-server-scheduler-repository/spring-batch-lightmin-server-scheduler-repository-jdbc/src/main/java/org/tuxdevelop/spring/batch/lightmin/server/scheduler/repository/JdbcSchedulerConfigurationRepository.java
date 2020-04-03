@@ -401,13 +401,13 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
 
             values.add(instanceCountValue);
 
-            //retriable
-            final SchedulerConfigurationValue retriableValue = new SchedulerConfigurationValue();
-            retriableValue.setType(TypeDomain.RETRIABLE);
-            retriableValue.setSchedulerConfigurationid(schedulerConfiguration.getId());
-            retriableValue.setValue(String.valueOf(schedulerConfiguration.getRetriable()));
+            //retryable
+            final SchedulerConfigurationValue retryableValue = new SchedulerConfigurationValue();
+            retryableValue.setType(TypeDomain.RETRYABLE);
+            retryableValue.setSchedulerConfigurationid(schedulerConfiguration.getId());
+            retryableValue.setValue(String.valueOf(schedulerConfiguration.getRetryable()));
 
-            values.add(retriableValue);
+            values.add(retryableValue);
 
             //max retries
             final SchedulerConfigurationValue maxRetriesValue = new SchedulerConfigurationValue();
@@ -465,8 +465,8 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                         schedulerConfiguration.setInstanceExecutionCount(Integer.parseInt(value.getValue()));
                         break;
                     }
-                    case TypeDomain.RETRIABLE: {
-                        schedulerConfiguration.setRetriable(Boolean.parseBoolean(value.getValue()));
+                    case TypeDomain.RETRYABLE: {
+                        schedulerConfiguration.setRetryable(Boolean.parseBoolean(value.getValue()));
                         break;
                     }
                     case TypeDomain.MAX_RETRIES: {
@@ -526,7 +526,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
 
             static final String JOB_PARAMETER = "JOB_PARAMETER";
             static final String CRON_EXPRESSION = "CRON_EXPRESSION";
-            static final String RETRIABLE = "RETRIABLE";
+            static final String RETRYABLE = "RETRYABLE";
             static final String MAX_RETRIES = "MAX_RETRIES";
             static final String INSTANCE_EXECUTION_COUNT = "INSTANCE_EXECUTION_COUNT";
             static final String INCREMENTER = "INCREMENTER";

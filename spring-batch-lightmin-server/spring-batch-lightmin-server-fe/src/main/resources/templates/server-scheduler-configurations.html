@@ -1,24 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-
-<!-- TODO: remove head -->
-<head th:fragment="header">
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <meta name="description" content=""/>
-    <meta name="author" content="Marcel Becker"/>
-
-    <title>Spring Batch Lightmin</title>
-
-    <!-- Bootstrap core CSS -->
-    <link th:href="@{vendor/bootstrap/css/bootstrap.min.css}" href="../static/vendor/bootstrap/css/bootstrap.min.css"
-          rel="stylesheet"/>
-    <!-- Custom styles for this template -->
-    <link th:href="@{css/lightmin.css}" href="../static/css/lightmin.css"
-          rel="stylesheet" rel="stylesheet"/>
-    <link th:href="@{css/all.min.css}" href="../static/css/all.min.css" rel="stylesheet"/>
-</head>
+<head th:include="fragments/global-layout :: header"/>
 
 <body>
 
@@ -29,23 +12,7 @@
 
     <!-- sidebar content wrapper-->
     <div id="page-content-wrapper">
-        <div th:include="fragments/scheduler-navigation :: nav"></div>
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand text-info" href="#" th:href="@{scheduler}">Scheduler</a>
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{scheduler-configurations}">Scheduler Configurations<span
-                            class="sr-only">(current)</span></a>
-                </li>
-            </ul>
-        </nav>
-
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">Scheduler Configurations</li>
-            </ol>
-        </nav>
+        <div th:include="fragments/server-schedulers-navigation :: nav"/>
 
         <div class="row-fluid content">
             <div class="card">
@@ -57,11 +24,15 @@
                         </a>
                         <div class="dropdown-menu bg-info" aria-labelledby="serverSchedulerDropdownMenuLink">
                             <ul>
-                                <li class="dropdown-item-info">
-                                    Application1
-                                </li>
-                                <li class="dropdown-item-info">
-                                    Application2
+                                <li class="dropdown-item-info"
+                                    th:each="applicationName : ${schedulerConfigurations.registeredApplications}">
+                                    <a href="#"
+                                       class="dropdown-item-info"
+                                       name="init-add-listener"
+                                       th:text="${applicationName}"
+                                       th:href="@{server-scheduler-configuration(init-add-configuration='init-add-configuration',application=${applicationName})}">
+                                        application
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -69,8 +40,8 @@
                 </div>
                 <table class="table table-sm">
                     <tbody>
-                    <tr>
-                        <td class="font-weight-bold text-info">Application1</td>
+                    <tr th:each="appConfigs : ${schedulerConfigurations.schedulers.entrySet()}">
+                        <td class="font-weight-bold text-info" th:text="${appConfigs.key}">Application</td>
                         <td>
                             <table class="table table-sm">
                                 <thead class="table-text-sm text-secondary">
@@ -87,33 +58,29 @@
                                 </tr>
                                 </thead>
                                 <tbody class="text-muted table-text-sm">
-                                <tr>
-                                    <td>Test Job</td>
-                                    <td>0 0/2 0 ? * * *</td>
-                                    <td>2</td>
-                                    <td>true</td>
-                                    <td>3</td>
-                                    <td>date</td>
+                                <tr th:each="config : ${appConfigs.value}">
+                                    <td th:text="${config.jobName}">job name</td>
+                                    <td th:text="${config.cronExpression}">cron expression</td>
+                                    <td th:text="${config.instanceExecutionCount}">instance execution count</td>
+                                    <td th:text="${config.retryable}">retryable</td>
+                                    <td th:text="${config.maxRetries}">max retries</td>
+                                    <td th:text="${config.incrementerRead.displayText}">incrementer</td>
                                     <td>
                                         <table class="table-sm">
                                             <tbody>
-                                            <tr>
-                                                <td>param1</td>
-                                                <td>value1</td>
-                                            </tr>
-                                            <tr>
-                                                <td>param2</td>
-                                                <td>value2</td>
+                                            <tr th:each="parameter : ${config.parametersRead}">
+                                                <td th:text="${parameter.key}"></td>
+                                                <td th:text="${parameter.value}"></td>
                                             </tr>
                                             </tbody>
                                         </table>
                                     </td>
-                                    <td>Active</td>
+                                    <td th:text="${config.statusRead.displayText}">status</td>
                                     <td>
                                         <form id="stop-scheduler-form" method="post"
                                               style="display: inline;"
-                                              th:if="${scheduler.config.isStoppable}"
-                                              th:action="@{job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                              th:if="${config.statusRead.isStoppable}"
+                                              th:action="@{server-scheduler-configuration(configuration-id=${config.id})}">
                                             <button class="text-danger btn-sm btn-primary-outline btn-hover"
                                                     type="submit"
                                                     name="stop-scheduler" style="display: inline;">
@@ -122,8 +89,8 @@
                                         </form>
                                         <form id="start-scheduler-form" method="post"
                                               style="display: inline;"
-                                              th:if="${scheduler.config.isStartable}"
-                                              th:action="@{job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                              th:if="${config.statusRead.isStartable}"
+                                              th:action="@{server-scheduler-configuration(configuration-id=${config.id})}">
                                             <button class="text-info btn-sm btn-primary-outline btn-hover"
                                                     type="submit"
                                                     name="start-scheduler" style="display: inline;">
@@ -133,12 +100,12 @@
                                         <a href="#"
                                            name="init-edit-scheduler"
                                            class="text-muted btn-sm btn-primary-outline nounderline"
-                                           th:href="@{job-scheduler(init-edit-scheduler='init-edit-scheduler',job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                           th:href="@{server-scheduler-configuration(configuration-id=${config.id},init-edit-scheduler='init-edit-scheduler')}">
                                             <i class="far fa-edit"></i>
                                         </a>
                                         <form id="delete-scheduler-form" method="post"
                                               style="display: inline;"
-                                              th:action="@{job-schedulers(job-configuration-id=${scheduler.id},application-instance-id=${applicationContextModel.applicationInstanceId})}">
+                                              th:action="@{server-scheduler-configuration(configuration-id=${config.id},init-edit-scheduler='delete-scheduler')}">
                                             <button class="text-danger btn-sm btn-primary-outline btn-hover"
                                                     type="submit"
                                                     name="delete-scheduler" style="display: inline;">

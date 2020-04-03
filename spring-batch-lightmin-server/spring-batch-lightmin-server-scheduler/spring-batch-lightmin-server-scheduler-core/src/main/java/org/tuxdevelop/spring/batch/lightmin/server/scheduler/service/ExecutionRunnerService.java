@@ -1,9 +1,12 @@
 package org.tuxdevelop.spring.batch.lightmin.server.scheduler.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobLaunch;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ExecutionStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
@@ -27,6 +30,18 @@ public class ExecutionRunnerService {
         this.schedulerExecutionService = schedulerExecutionService;
         this.jobServerService = jobServerService;
         this.lightminApplicationRepository = lightminApplicationRepository;
+    }
+
+    @Transactional(transactionManager = "lightminServerSchedulerTransactionManager", propagation = Propagation.REQUIRED)
+    public void initSchedulerExecution(final SchedulerConfiguration schedulerConfiguration) {
+        final SchedulerConfiguration savedConfiguration =
+                this.schedulerConfigurationService.save(schedulerConfiguration);
+        final SchedulerExecution execution = new SchedulerExecution();
+        execution.setState(ExecutionStatus.NEW);
+        execution.setNextFireTime(this.schedulerExecutionService.getNextFireTime(savedConfiguration.getCronExpression()));
+        execution.setSchedulerConfigurationId(savedConfiguration.getId());
+        execution.setExecutionCount(0);
+        this.schedulerExecutionService.save(execution);
     }
 
     public void saveSchedulerExecution(final SchedulerExecution schedulerExecution) {

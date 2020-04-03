@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"/>
+
+<body>
+
+<div th:fragment="scheduler-executions">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="#" th:href="@{server-scheduler-executions}">all
+                    <span
+                            class="sr-only">(current)
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-success" href="#" th:href="@{server-scheduler-executions(state=20)}">finished
+                    <span
+                            class="sr-only">(current)
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-info" href="#" th:href="@{server-scheduler-executions(state=10)}">running
+                    <span
+                            class="sr-only">(current)
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-primary" href="#" th:href="@{server-scheduler-executions(state=1)}">new
+                    <span
+                            class="sr-only">(current)
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-danger" href="#" th:href="@{server-scheduler-executions(state=30)}">failed
+                    <span
+                            class="sr-only">(current)
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-warning" href="#" th:href="@{server-scheduler-executions(state=40)}">lost
+                    <span
+                            class="sr-only">(current)
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="row-fluid content">
+        <div class="card ">
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead class="text-secondary">
+                    <tr class="bg-light">
+                        <th>Execution Id</th>
+                        <th>Status</th>
+                        <th>Job Name</th>
+                        <th>Application Name</th>
+                        <th>Execution Date</th>
+                        <th>Execution Count</th>
+                        <th>Configuration</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="execution : ${pageModel.value.schedulerInfos}">
+                        <td th:text="${execution.execution.id}"/>
+                        <td th:text="${execution.execution.statusRead.displayText}"/>
+                        <td th:text="${execution.config.jobName}"/>
+                        <td th:text="${execution.config.applicationName}"/>
+                        <td th:text="${execution.execution.nextFireTime}"/>
+                        <td th:text="${execution.execution.executionCount}"/>
+                        <td th:text="${execution.execution.schedulerConfigurationId}"/>
+                        <td>
+                            <form id="stop-server-execution-form" method="post"
+                                  style="display: inline;"
+                                  th:if="${execution.execution.statusRead.isKillable}"
+                                  th:action="@{server-scheduler-executions(execution-id=${execution.execution.id},status-filter=${pageModel.value.filterState},start-index=${pageModel.currentIndex})}">
+                                <button class="text-danger btn-sm btn-primary-outline btn-hover"
+                                        type="submit"
+                                        name="stop-execution" style="display: inline;"
+                                        th:title="#{tooltip.server-scheduler-stop-execution.stopBtn}">
+                                    <i class="far fa-stop-circle"></i>
+                                </button>
+                            </form>
+                            <form id="delete-server-execution-form" method="post"
+                                  style="display: inline;"
+                                  th:if="${execution.execution.statusRead.isDeletable}"
+                                  th:action="@{server-scheduler-executions(execution-id=${execution.execution.id},status-filter=${pageModel.value.filterState},start-index=${pageModel.currentIndex}))}">
+                                <button class="text-danger btn-sm btn-primary-outline btn-hover"
+                                        type="submit"
+                                        name="delete-execution" style="display: inline;"
+                                        th:title="#{tooltip.server-scheduler-stop-execution.removeBtn}">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

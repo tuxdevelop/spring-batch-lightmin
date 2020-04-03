@@ -13,7 +13,7 @@ public class SchedulerConfiguration {
     private String cronExpression;
     private String application;
     private String jobName;
-    private Boolean retriable;
+    private Boolean retryable;
     private Integer maxRetries;
     private JobIncrementer jobIncrementer;
     private ServerSchedulerStatus status;
@@ -33,10 +33,10 @@ public class SchedulerConfiguration {
         if (this.jobName == null) {
             throw new SchedulerValidationException("jobName must not be null");
         }
-        if (this.retriable == null) {
+        if (this.retryable == null) {
             throw new SchedulerValidationException("retriable must not be null");
         }
-        if ((this.maxRetries == null || this.maxRetries < 0) && Boolean.TRUE.equals(this.retriable)) {
+        if ((this.maxRetries == null || this.maxRetries < 0) && Boolean.TRUE.equals(this.retryable)) {
             throw new SchedulerValidationException("maxRetries must not be null or lower than 1 if retriable is true");
         }
         if (this.jobIncrementer == null) {
