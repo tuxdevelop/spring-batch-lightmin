@@ -51,6 +51,6 @@ public class ServerSchedulerExecutionStatusModel {
     }
 
     public Boolean getIsDeletable() {
-        return this.value.equals(ServerSchedulerExecutionType.RUNNING.value);
+        return !this.value.equals(ServerSchedulerExecutionType.RUNNING.value);
     }
 }

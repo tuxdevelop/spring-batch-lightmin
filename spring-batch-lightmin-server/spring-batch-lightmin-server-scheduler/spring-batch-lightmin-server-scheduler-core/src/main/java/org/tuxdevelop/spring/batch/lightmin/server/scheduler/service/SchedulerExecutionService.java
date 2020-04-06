@@ -9,6 +9,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.Schedule
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ExecutionStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerValidationException;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerExecutionNotFoundException;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -52,6 +53,24 @@ public class SchedulerExecutionService {
         }
     }
 
+    @Transactional(transactionManager = "lightminServerSchedulerTransactionManager", propagation = Propagation.REQUIRED)
+    public void deleteExecution(final Long executionId) {
+        final SchedulerExecution execution = this.findById(executionId);
+        if (ExecutionStatus.RUNNING.equals(execution.getState())) {
+            throw new SchedulerRuntimException("SchedulerExecution is with id " + execution + " is running, cannot delete execution");
+        } else {
+            this.schedulerExecutionRepository.delete(executionId);
+        }
+    }
+
+    public SchedulerExecution findById(final Long executionId) {
+        try {
+            return this.schedulerExecutionRepository.findById(executionId);
+        } catch (final SchedulerExecutionNotFoundException e) {
+            throw new SchedulerRuntimException(e);
+        }
+    }
+
     public List<SchedulerExecution> findScheduledExecutions(final Integer state, final Date date) {
         return this.schedulerExecutionRepository.findByStateAndDate(state, date);
     }
@@ -66,6 +85,10 @@ public class SchedulerExecutionService {
 
     public List<SchedulerExecution> findByState(final Integer state, final Integer startIndex, final Integer pageSize) {
         return this.schedulerExecutionRepository.findByState(state, startIndex, pageSize);
+    }
+
+    public void deleteByConfigurationIdAndState(final Long configurationId, final Integer state) {
+        this.schedulerExecutionRepository.deleteByConfigurationAndState(configurationId, state);
     }
 
     public Integer getExecutionCount(final Integer state) {

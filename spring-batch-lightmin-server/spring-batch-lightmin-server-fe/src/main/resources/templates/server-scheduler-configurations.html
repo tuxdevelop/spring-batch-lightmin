@@ -77,20 +77,20 @@
                                     </td>
                                     <td th:text="${config.statusRead.displayText}">status</td>
                                     <td>
-                                        <form id="stop-scheduler-form" method="post"
+                                        <form id="disable-scheduler-form" method="post"
                                               style="display: inline;"
                                               th:if="${config.statusRead.isStoppable}"
-                                              th:action="@{server-scheduler-configuration(configuration-id=${config.id})}">
+                                              th:action="@{server-scheduler-configurations(configuration-id=${config.id},disable-scheduler='disable-scheduler')}">
                                             <button class="text-danger btn-sm btn-primary-outline btn-hover"
                                                     type="submit"
-                                                    name="stop-scheduler" style="display: inline;">
+                                                    name="disable-scheduler" style="display: inline;">
                                                 <i class="far fa-stop-circle"></i>
                                             </button>
                                         </form>
                                         <form id="start-scheduler-form" method="post"
                                               style="display: inline;"
                                               th:if="${config.statusRead.isStartable}"
-                                              th:action="@{server-scheduler-configuration(configuration-id=${config.id})}">
+                                              th:action="@{server-scheduler-configurations(configuration-id=${config.id},start-scheduler='start-scheduler')}">
                                             <button class="text-info btn-sm btn-primary-outline btn-hover"
                                                     type="submit"
                                                     name="start-scheduler" style="display: inline;">
@@ -100,12 +100,12 @@
                                         <a href="#"
                                            name="init-edit-scheduler"
                                            class="text-muted btn-sm btn-primary-outline nounderline"
-                                           th:href="@{server-scheduler-configuration(configuration-id=${config.id},init-edit-scheduler='init-edit-scheduler')}">
+                                           th:href="@{server-scheduler-configuration(configuration-id=${config.id},init-edit-configuration='init-edit-configuration')}">
                                             <i class="far fa-edit"></i>
                                         </a>
                                         <form id="delete-scheduler-form" method="post"
                                               style="display: inline;"
-                                              th:action="@{server-scheduler-configuration(configuration-id=${config.id},init-edit-scheduler='delete-scheduler')}">
+                                              th:action="@{server-scheduler-configurations(configuration-id=${config.id},delete-scheduler='delete-scheduler')}">
                                             <button class="text-danger btn-sm btn-primary-outline btn-hover"
                                                     type="submit"
                                                     name="delete-scheduler" style="display: inline;">

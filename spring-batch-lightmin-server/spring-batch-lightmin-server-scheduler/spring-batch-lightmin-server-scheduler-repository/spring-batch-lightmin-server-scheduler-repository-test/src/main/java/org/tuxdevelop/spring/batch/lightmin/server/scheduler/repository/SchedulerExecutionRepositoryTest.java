@@ -185,9 +185,11 @@ public abstract class SchedulerExecutionRepositoryTest extends SchedulerTest {
 
     //TODO: write test for count
 
+    //TODO: write test for delete by sc id and state
+
     @After
     public void cleanUp() {
-        getCleanUpRepository().cleanUp();
+        this.getCleanUpRepository().cleanUp();
     }
 
     protected SchedulerExecution createSchedulerExecution(final Long schedulerConfigurationId, final Date nextExecution, final Integer state) {
@@ -205,15 +207,15 @@ public abstract class SchedulerExecutionRepositoryTest extends SchedulerTest {
     }
 
     protected SchedulerExecution createSchedulerExecution(final Long schedulerConfigurationId, final Date date) {
-        return createSchedulerExecution(schedulerConfigurationId, date, 1);
+        return this.createSchedulerExecution(schedulerConfigurationId, date, 1);
     }
 
     protected SchedulerExecution createSchedulerExecution(final Long schedulerConfigurationId, final Integer state) {
-        return createSchedulerExecution(schedulerConfigurationId, new Date(), state);
+        return this.createSchedulerExecution(schedulerConfigurationId, new Date(), state);
     }
 
     protected SchedulerExecution createSchedulerExecution(final Long schedulerConfigurationId) {
-        return createSchedulerExecution(schedulerConfigurationId, new Date());
+        return this.createSchedulerExecution(schedulerConfigurationId, new Date());
     }
 
     public abstract SchedulerExecutionRepository getSchedulerExecutionRepository();

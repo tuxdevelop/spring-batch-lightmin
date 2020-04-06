@@ -16,6 +16,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.S
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerValidationException;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ServerSchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerRepositoryException;
 import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
 
 import java.sql.PreparedStatement;
@@ -43,8 +44,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                             this.schedulerConfigurationValueDAO,
                             properties.getDatabaseSchema());
         } catch (final Exception e) {
-            //TODO: throw runtime exception
-            throw new RuntimeException(e);
+            throw new SchedulerRepositoryException(e);
         }
     }
 
@@ -478,8 +478,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                         break;
                     }
                     default: {
-                        //TODO: add specific Exception
-                        throw new RuntimeException("");
+                        throw new SchedulerRepositoryException("could not map data base domain type: " + value.getType());
                     }
                 }
             }

@@ -5,10 +5,10 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.configuration.Serve
 public class StandaloneExecutionPollerService extends AbstractExecutionPollerService implements ExecutionPollerService {
 
 
-    public StandaloneExecutionPollerService(final ExecutionRunnerService executionRunnerService,
+    public StandaloneExecutionPollerService(final ServerSchedulerService serverSchedulerService,
                                             final SchedulerExecutionService schedulerExecutionService,
                                             final ServerSchedulerCoreConfigurationProperties properties) {
-        super(executionRunnerService, schedulerExecutionService, properties);
+        super(serverSchedulerService, schedulerExecutionService, properties);
     }
 
     @Override

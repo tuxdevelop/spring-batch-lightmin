@@ -8,6 +8,8 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.util.ApiParameterParser;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.configuration.ServerSchedulerCoreConfigurationProperties;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.exception.SchedulerRuntimException;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ExecutionStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
@@ -22,37 +24,61 @@ import java.util.Map;
 public class ExecutionRunner implements Runnable {
 
     private final SchedulerExecution schedulerExecution;
-    private final ExecutionRunnerService executionRunnerService;
+    private final ServerSchedulerService serverSchedulerService;
+    private final ServerSchedulerCoreConfigurationProperties properties;
 
     public ExecutionRunner(
             final SchedulerExecution schedulerExecution,
-            final ExecutionRunnerService executionRunnerService) {
+            final ServerSchedulerService serverSchedulerService,
+            final ServerSchedulerCoreConfigurationProperties properties) {
         this.schedulerExecution = schedulerExecution;
-        this.executionRunnerService = executionRunnerService;
+        this.serverSchedulerService = serverSchedulerService;
+        this.properties = properties;
     }
 
     @Override
     public void run() {
         try {
             final SchedulerConfiguration schedulerConfiguration =
-                    this.executionRunnerService.findSchedulerConfigurationById(
+                    this.serverSchedulerService.findSchedulerConfigurationById(
                             this.schedulerExecution.getSchedulerConfigurationId());
             this.updateExecution(ExecutionStatus.RUNNING, Boolean.TRUE);
+            Integer finalStatus;
             try {
                 this.fireJobLaunch(schedulerConfiguration);
                 this.updateExecution(ExecutionStatus.FINISHED, Boolean.FALSE);
+                finalStatus = ExecutionStatus.FINISHED;
             } catch (final Exception e) {
                 log.error("Execution for {} failed ", this.schedulerExecution, e);
                 if (schedulerConfiguration.getRetryable() &&
                         this.schedulerExecution.getExecutionCount() <= schedulerConfiguration.getMaxRetries()) {
                     this.updateExecution(ExecutionStatus.FAILED, Boolean.FALSE);
+                    finalStatus = ExecutionStatus.FAILED;
                 } else {
                     this.updateExecution(ExecutionStatus.LOST, Boolean.FALSE);
+                    finalStatus = ExecutionStatus.LOST;
                 }
             }
-            this.createNextExecution(schedulerConfiguration.getCronExpression());
+            if (ExecutionStatus.FINISHED.equals(finalStatus)) {
+                this.createNextExecution(schedulerConfiguration.getCronExpression());
+            } else if (ExecutionStatus.FAILED.equals(finalStatus)) {
+                if (this.properties.getCreateNewExecutionsOnFailure()) {
+                    this.createNextExecution(schedulerConfiguration.getCronExpression());
+                } else {
+                    log.info("Not creating new execution for SchedulerConfiguration with the id " + schedulerConfiguration.getId() + " ! Reason: Execution status is FAILED!");
+                }
+            } else if (ExecutionStatus.LOST.equals(finalStatus)) {
+                if (this.properties.getCreateNewExecutionsOnLost()) {
+                    this.createNextExecution(schedulerConfiguration.getCronExpression());
+                } else {
+                    log.info("Not creating new execution for SchedulerConfiguration with the id " + schedulerConfiguration.getId() + " ! Reason: Execution status is LOST!");
+                }
+            } else {
+                log.warn("Execution Status for SchedulerExecution with the id " + this.schedulerExecution.getId() + "of SchedulerConfiguration with the id " + schedulerConfiguration.getId() + " is " + finalStatus + " ! No new execution created!");
+            }
         } catch (final Exception e) {
             log.error("Error while processing scheduled job state {} ", this.schedulerExecution, e);
+            this.updateExecution(ExecutionStatus.FAILED, Boolean.TRUE);
         }
     }
 
@@ -67,14 +93,13 @@ public class ExecutionRunner implements Runnable {
             log.trace("Count of the execution will not be increased");
         }
         this.schedulerExecution.setState(status);
-        this.executionRunnerService.saveSchedulerExecution(this.schedulerExecution);
+        this.serverSchedulerService.saveSchedulerExecution(this.schedulerExecution);
     }
 
     private void createNextExecution(final String cronExpression) {
         try {
-            this.executionRunnerService.createNextExecution(this.schedulerExecution, cronExpression);
+            this.serverSchedulerService.createNextExecution(this.schedulerExecution, cronExpression);
         } catch (final Exception e) {
-            //TODO: log and what to do?
             log.error("Error while creating next execution for {}", this.schedulerExecution, e);
         }
     }
@@ -111,9 +136,15 @@ public class ExecutionRunner implements Runnable {
                                                                           final String applicationName) {
         final List<LightminClientApplication> lightminClientApplications = new ArrayList<>();
         final Collection<LightminClientApplication> foundInstances =
-                this.executionRunnerService.findLightminApplicationsByName(applicationName);
+                this.serverSchedulerService.findLightminApplicationsByName(applicationName);
         if (count > foundInstances.size()) {
-            //TODO: decide how to handle
+            if (this.properties.getFailOnInstanceExecutionCount()) {
+                throw new SchedulerRuntimException("Desired Instance Execution Count: " + count + " Found: "
+                        + foundInstances.size() + "! spring.batch.lightmin.server.scheduler.failOnInstanceExecutionCount is set to TRUE. Failing!");
+            } else {
+                log.warn("Desired Instance Execution Count: " + count + " Found: "
+                        + foundInstances.size() + "! Executing on available instances");
+            }
         } else {
             for (int i = 0; i < count; i++) {
                 final LightminClientApplication clientApplication = foundInstances.iterator().next();
@@ -126,7 +157,7 @@ public class ExecutionRunner implements Runnable {
 
     private void launchJob(final JobLaunch jobLaunch, final LightminClientApplication lightminClientApplication) {
         log.debug("Launching {} for client instance {}", jobLaunch, lightminClientApplication);
-        this.executionRunnerService.launchJob(jobLaunch, lightminClientApplication);
+        this.serverSchedulerService.launchJob(jobLaunch, lightminClientApplication);
     }
 
     private JobLaunch getJobLaunch(final String jobName, final JobParameters jobParameters) {
@@ -140,11 +171,11 @@ public class ExecutionRunner implements Runnable {
         final Map<String, Object> parametersMap = schedulerConfiguration.getJobParameters();
         final String parametersString = DomainParameterParser.parseParameterMapToString(parametersMap);
         final JobParameters jobParameters = ApiParameterParser.parseParametersToJobParameters(parametersString);
-        this.attachIncremeter(schedulerConfiguration.getJobIncrementer(), jobParameters);
+        this.attachIncrementer(schedulerConfiguration.getJobIncrementer(), jobParameters);
         return jobParameters;
     }
 
-    private void attachIncremeter(final JobIncrementer jobIncrementer, final JobParameters jobParameters) {
+    private void attachIncrementer(final JobIncrementer jobIncrementer, final JobParameters jobParameters) {
         if (JobIncrementer.DATE.equals(jobIncrementer)) {
             final JobParameter jobParameter = new JobParameter();
             jobParameter.setParameter(System.currentTimeMillis());

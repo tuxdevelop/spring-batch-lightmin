@@ -42,6 +42,10 @@ public class LightminServerCoreProperties {
     @Setter
     private Boolean useXForwardedHeaders = Boolean.FALSE;
 
+    @Getter
+    @Setter
+    private Boolean removeOfflineClients = Boolean.TRUE;
+
     public void setContextPath(final String pathPrefix) {
         if (!pathPrefix.startsWith("/") || pathPrefix.endsWith("/")) {
             throw new IllegalArgumentException(

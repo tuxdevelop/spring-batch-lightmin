@@ -68,7 +68,7 @@ public class LightminClientProperties {
                                     @Value("${endpoints.health.id:health}") final String healthEndpointId,
                                     final WebEndpointProperties webEndpointProperties,
                                     final Environment environment) {
-        if (name == null) {
+        if (name == null || "null".equals(name)) {
             this.name = environment.getProperty("spring.application.name", "spring-boot-application");
         } else {
             this.name = name;

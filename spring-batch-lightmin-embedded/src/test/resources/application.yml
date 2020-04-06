@@ -9,3 +9,6 @@ spring:
   batch:
     lightmin:
       application-name: ${spring.application.name}
+      server:
+        scheduler:
+          poller-period-retry: 1000

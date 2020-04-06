@@ -21,11 +21,11 @@ import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 public class ServerSchedulerCoreConfiguration {
 
     @Bean
-    public ExecutionRunnerService executionRunnerService(final SchedulerConfigurationService schedulerConfigurationService,
+    public ServerSchedulerService executionRunnerService(final SchedulerConfigurationService schedulerConfigurationService,
                                                          final SchedulerExecutionService schedulerExecutionService,
                                                          final JobServerService jobServerService,
                                                          final LightminApplicationRepository lightminApplicationRepository) {
-        return new ExecutionRunnerService(
+        return new ServerSchedulerService(
                 schedulerConfigurationService,
                 schedulerExecutionService,
                 jobServerService,
@@ -51,10 +51,10 @@ public class ServerSchedulerCoreConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ExecutionPollerService.class)
-    public ExecutionPollerService executionPollerService(final ExecutionRunnerService executionRunnerService,
+    public ExecutionPollerService executionPollerService(final ServerSchedulerService serverSchedulerService,
                                                          final SchedulerExecutionService schedulerExecutionService,
                                                          final ServerSchedulerCoreConfigurationProperties properties) {
-        return new StandaloneExecutionPollerService(executionRunnerService, schedulerExecutionService, properties);
+        return new StandaloneExecutionPollerService(serverSchedulerService, schedulerExecutionService, properties);
     }
 
     @Bean

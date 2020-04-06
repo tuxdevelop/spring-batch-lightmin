@@ -37,7 +37,7 @@ public class SchedulerConfiguration {
             throw new SchedulerValidationException("retriable must not be null");
         }
         if ((this.maxRetries == null || this.maxRetries < 0) && Boolean.TRUE.equals(this.retryable)) {
-            throw new SchedulerValidationException("maxRetries must not be null or lower than 1 if retriable is true");
+            throw new SchedulerValidationException("maxRetries must not be null or lower than 1 if retryable is true");
         }
         if (this.jobIncrementer == null) {
             throw new SchedulerValidationException("jobIncrementer must not be null");

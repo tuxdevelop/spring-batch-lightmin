@@ -8,15 +8,23 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminEmbedded;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.repository.annotation.EnableLightminMapConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ServerSchedulerStatus;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.ServerSchedulerService;
 import org.tuxdevelop.test.configuration.ITJobConfiguration;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootApplication
 @EnableLightminEmbedded
@@ -26,6 +34,30 @@ public class EmbeddedTestApplication {
 
     public static void main(final String[] args) {
         SpringApplication.run(EmbeddedTestApplication.class);
+    }
+
+    @Bean
+    public ApplicationRunner applicationRunner(final Environment environment,
+                                               final ServerSchedulerService serverSchedulerService) {
+        return args -> {
+            final SchedulerConfiguration schedulerConfiguration = new SchedulerConfiguration();
+            schedulerConfiguration.setApplication(environment.getProperty("spring.application.name"));
+            schedulerConfiguration.setJobName("simpleJob");
+            schedulerConfiguration.setMaxRetries(3);
+            schedulerConfiguration.setInstanceExecutionCount(1);
+            schedulerConfiguration.setRetryable(Boolean.TRUE);
+            schedulerConfiguration.setCronExpression("0/30 * * * * ?");
+            schedulerConfiguration.setJobIncrementer(JobIncrementer.DATE);
+            schedulerConfiguration.setStatus(ServerSchedulerStatus.ACTIVE);
+            final Map<String, Object> jobParameters = new HashMap<>();
+            jobParameters.put("my-long-value", 200L);
+            jobParameters.put("my-string", "hello");
+            schedulerConfiguration.setJobParameters(jobParameters);
+
+            serverSchedulerService.initSchedulerExecution(schedulerConfiguration);
+
+
+        };
     }
 
     @Slf4j

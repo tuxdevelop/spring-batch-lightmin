@@ -16,31 +16,56 @@
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">Configurations</li>
-                <li class="breadcrumb-item" th:text="${schedulerConfiguration.applicationName}">Application</li>
-                <li class="breadcrumb-item" th:text="${modificationType.value}">Add</li>
+                <li class="breadcrumb-item">configurations</li>
+                <li class="breadcrumb-item" th:text="${schedulerConfiguration.applicationName}">application</li>
+                <li class="breadcrumb-item" th:if="${modificationType.value == 'update'}"
+                    th:text="${schedulerConfiguration.jobName}">job name
+                </li>
+                <li class="breadcrumb-item" th:text="${modificationType.value}">add</li>
             </ol>
         </nav>
 
         <form id="serverSchedulerConfiguration form" method="post" class="text-secondary"
               th:object="${schedulerConfiguration}">
             <div class="card border-0">
+                <div class="row">
+                    <div th:with="varModType=${modificationType.value}"
+                         class="col-md-6 col-lg-6 h3 text-info border-bottom">
+                        <div th:text="${#strings.capitalize(varModType)}+ ' Scheduler'"
+                             th:remove="tag">
+                        </div>
+                        <button type="button"
+                                th:title="#{tooltip.scheduler.info}"
+                                data-toggle="collapse" data-target=".multi-collapse" aria-expanded="true"
+                                aria-controls="batchJobHelpText statusHelpText cronExpressionHelpText instanceExecutionCountHelpText retraybleHelpText maxRetriesHelpText paramHint"
+                                class="btn btn-sm btn-info collapsed float-right col-lg-1 col-md-1">
+                            <i class="fas fa-info"></i>
+                        </button>
+                    </div>
+                </div>
+
+
                 <div class="card-body">
                     <div class="form-group row" th:if="${modificationType.value == 'add'}">
                         <label class="col-sm-2 col-form-label">Batch Job</label>
                         <div class="col-sm-2">
                             <select class="form-control form-control-sm"
                                     th:field=" *{jobName}"
-                                    th:value="*{jobName}">
+                                    th:value="*{jobName}"
+                                    aria-describedby="batchJobHelpText">
                                 <option class="text-muted"
                                         th:each="job : ${applicationContextModel.registeredJobs}"
                                         th:text="${job}"
                                         th:value="${job}">
                                 </option>
                             </select>
+                            <small id="batchJobHelpText" class="form-text text-muted collapse multi-collapse show"
+                                   th:text="#{helptext.scheduler.batch_job}">
+                            </small>
                         </div>
                     </div>
                     <div th:if="${modificationType.value == 'update'}">
+
                         <input type="hidden"
                                th:value="*{jobName}"
                                th:field="*{jobName}"/>
@@ -50,13 +75,17 @@
                         <div class="col-sm-2">
                             <select class="form-control form-control-sm"
                                     th:value=" *{status}"
-                                    th:field="*{status}">
+                                    th:field="*{status}"
+                                    aria-describedby="statusHelpText">
                                 <option class="text-muted"
                                         th:each="status : ${schedulerStatus}"
                                         th:text="${status.displayText}"
                                         th:value="${status.value}">
                                 </option>
                             </select>
+                            <small id="statusHelpText" class="form-text text-muted collapse multi-collapse show"
+                                   th:text="#{helptext.scheduler.status}">
+                            </small>
                         </div>
                     </div>
                     <div th:if="${modificationType.value == 'update'}">
@@ -73,28 +102,53 @@
                         <label class="col-sm-2 col-form-label">Cron Expression</label>
                         <div class="col-sm-3">
                             <input class="text-muted text-sm-left" th:value="*{cronExpression}"
-                                   th:field="*{cronExpression}"/>
+                                   th:field="*{cronExpression}"
+                                   aria-describedby="cronExpressionHelpText"/>
+                            <small id="cronExpressionHelpText" class="form-text text-muted collapse multi-collapse show"
+                                   th:text="#{helptext.scheduler.cron_expression}">
+                            </small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Instance Execution Count</label>
                         <div class="col-sm-3">
                             <input class="text-muted text-sm-left" th:value="*{instanceExecutionCount}"
-                                   th:field="*{instanceExecutionCount}"/>
+                                   th:field="*{instanceExecutionCount}"
+                                   aria-describedby="instanceExecutionCountHelpText"/>
+                            <small id="instanceExecutionCountHelpText"
+                                   class="form-text text-muted collapse multi-collapse show"
+                                   th:text="#{helptext.server.scheduler.instance_execution_count}">
+                            </small>
                         </div>
+
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Retryable</label>
-                        <div class="col-sm-3">
-                            <input class="text-muted text-sm-left" th:value="*{retryable}"
-                                   th:field="*{retryable}"/>
+                        <div class="col-sm-1">
+                            <select class="form-control form-control-sm"
+                                    th:field=" *{retryable}"
+                                    th:value="*{retryable}"
+                                    aria-describedby="retraybleHelpText">
+                                <option class="text-muted"
+                                        th:each="selector : ${booleanSelector}"
+                                        th:text="${selector.displayText}"
+                                        th:value="${selector.value}">
+                                </option>
+                            </select>
+                            <small id="retraybleHelpText" class="form-text text-muted collapse multi-collapse show"
+                                   th:text="#{helptext.server.scheduler.retryable}">
+                            </small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Max Retries</label>
                         <div class="col-sm-3">
                             <input class="text-muted text-sm-left" th:value="*{maxRetries}"
-                                   th:field="*{maxRetries}"/>
+                                   th:field="*{maxRetries}"
+                                   aria-describedby="maxRetriesHelpText"/>
+                            <small id="maxRetriesHelpText" class="form-text text-muted collapse multi-collapse show"
+                                   th:text="#{helptext.server.scheduler.max_retries}">
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -160,7 +214,8 @@
             <div th:include="fragments/validation :: field-errors"></div>
         </form>
 
-        <div th:include="fragments/hints :: job-parameter-description"></div>
+        <div id="paramHint" class="collapse multi-collapse show"
+             th:include="fragments/hints :: job-parameter-description"></div>
 
     </div>
 </div>

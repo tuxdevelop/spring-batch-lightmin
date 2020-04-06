@@ -12,4 +12,7 @@ public class ServerSchedulerCoreConfigurationProperties {
     private Integer threadPoolCoreSize = 10;
     private Integer pollerPeriod = 1000;
     private Integer pollerPeriodRetry = 10000;
+    private Boolean failOnInstanceExecutionCount = Boolean.TRUE;
+    private Boolean createNewExecutionsOnFailure = Boolean.FALSE;
+    private Boolean createNewExecutionsOnLost = Boolean.FALSE;
 }

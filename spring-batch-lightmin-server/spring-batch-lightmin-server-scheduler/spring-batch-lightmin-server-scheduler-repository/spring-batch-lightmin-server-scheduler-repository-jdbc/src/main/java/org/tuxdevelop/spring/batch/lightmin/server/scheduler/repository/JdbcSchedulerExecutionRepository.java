@@ -54,6 +54,10 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
             "DELETE FROM %s WHERE "
                     + SchedulerExecutionDomain.SCHEDULER_CONFIGURATION_ID + " = ?";
 
+    private static final String DELETE_BY_SC_ID_AND_STATE =
+            DELETE_BY_SC_ID
+                    + " AND " + SchedulerExecutionDomain.STATE + " = ?";
+
     private static final String DELETE_BY_STATE =
             "DELETE FROM %s WHERE "
                     + SchedulerExecutionDomain.STATE + " = ?";
@@ -89,8 +93,8 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
                 .usingGeneratedKeyColumns(SchedulerExecutionDomain.ID);
         this.tableName = properties.getExecutionTable();
         this.rowMapper = new SchedulerExecutionRowMapper();
-        this.byStatePagingQueryProvider = getPagingQueryProvider("S.state = ?");
-        this.findAllPagingQueryProvider = getPagingQueryProvider(null);
+        this.byStatePagingQueryProvider = this.getPagingQueryProvider("S.state = ?");
+        this.findAllPagingQueryProvider = this.getPagingQueryProvider(null);
     }
 
     @Override
@@ -100,9 +104,9 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
         if (schedulerExecution != null) {
 
             if (schedulerExecution.getId() == null) {
-                result = create(schedulerExecution);
+                result = this.create(schedulerExecution);
             } else {
-                result = update(schedulerExecution);
+                result = this.update(schedulerExecution);
             }
             return result;
         } else {
@@ -262,6 +266,20 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
         );
     }
 
+    @Override
+    public void deleteByConfigurationAndState(final Long configurationId, final Integer state) {
+        final String sql = String.format(DELETE_BY_SC_ID_AND_STATE, this.tableName);
+        this.jdbcTemplate.update(
+                sql,
+                new Object[]{
+                        configurationId,
+                        state},
+                new int[]{
+                        Types.NUMERIC,
+                        Types.NUMERIC}
+        );
+    }
+
     private SchedulerExecution create(final SchedulerExecution schedulerExecution) {
 
         final Map<String, Object> keys = new HashMap<>();
@@ -308,7 +326,7 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
         factory.setFromClause(String.format(fromClause, this.tableName));
         factory.setSelectClause(FIELDS);
         final Map<String, Order> sortKeys = new HashMap<>();
-        sortKeys.put("id", Order.ASCENDING);
+        sortKeys.put("id", Order.DESCENDING);
         factory.setSortKeys(sortKeys);
         whereClause = whereClause == null ? "" : whereClause;
         factory.setWhereClause(whereClause);

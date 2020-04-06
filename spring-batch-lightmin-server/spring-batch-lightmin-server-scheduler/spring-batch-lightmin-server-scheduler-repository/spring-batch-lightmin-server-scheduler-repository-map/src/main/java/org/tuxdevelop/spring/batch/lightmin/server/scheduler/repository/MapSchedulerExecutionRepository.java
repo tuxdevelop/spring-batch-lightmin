@@ -21,10 +21,10 @@ public class MapSchedulerExecutionRepository implements SchedulerExecutionReposi
             if (schedulerExecution.getId() != null) {
                 id = schedulerExecution.getId();
             } else {
-                id = getNextId();
+                id = this.getNextId();
                 schedulerExecution.setId(id);
             }
-            this.store.put(id, copy(schedulerExecution));
+            this.store.put(id, this.copy(schedulerExecution));
             return schedulerExecution;
         } else {
             throw new SchedulerValidationException("schedulerExecution must not be null");
@@ -36,7 +36,7 @@ public class MapSchedulerExecutionRepository implements SchedulerExecutionReposi
     public SchedulerExecution findById(final Long id) throws SchedulerExecutionNotFoundException {
         final SchedulerExecution schedulerExecution;
         if (this.store.containsKey(id)) {
-            schedulerExecution = copy(this.store.get(id));
+            schedulerExecution = this.copy(this.store.get(id));
         } else {
             throw new SchedulerExecutionNotFoundException("Could not find a SchedulerExecution for id " + id);
         }
@@ -75,7 +75,7 @@ public class MapSchedulerExecutionRepository implements SchedulerExecutionReposi
         if (this.store.isEmpty()) {
             log.debug("No SchedulerExecutions available");
         } else {
-            schedulerExecutions.addAll(copy(this.store.values()));
+            schedulerExecutions.addAll(this.copy(this.store.values()));
             this.sort(schedulerExecutions);
         }
         return schedulerExecutions;
@@ -83,8 +83,8 @@ public class MapSchedulerExecutionRepository implements SchedulerExecutionReposi
 
     @Override
     public List<SchedulerExecution> findAll(final int startIndex, final int pageSize) {
-        final List<SchedulerExecution> schedulerExecutions = findAll();
-        return subset(schedulerExecutions, startIndex, pageSize);
+        final List<SchedulerExecution> schedulerExecutions = this.findAll();
+        return this.subset(schedulerExecutions, startIndex, pageSize);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class MapSchedulerExecutionRepository implements SchedulerExecutionReposi
     @Override
     public List<SchedulerExecution> findByState(final Integer state, final int startIndex, final int pageSize) {
         final List<SchedulerExecution> schedulerExecutions = this.findByState(state);
-        return subset(schedulerExecutions, startIndex, pageSize);
+        return this.subset(schedulerExecutions, startIndex, pageSize);
     }
 
     @Override
@@ -172,6 +172,19 @@ public class MapSchedulerExecutionRepository implements SchedulerExecutionReposi
         }
     }
 
+    @Override
+    public void deleteByConfigurationAndState(final Long configurationId, final Integer state) {
+        final List<SchedulerExecution> executions = this.findBySchedulerConfigurationId(configurationId);
+        executions.stream()
+                .filter(
+                        execution -> execution.getState().equals(state)
+                ).forEach(
+                execution -> {
+                    this.delete(execution.getId());
+                }
+        );
+    }
+
     private synchronized Long getNextId() {
         return this.currentId.getAndIncrement();
     }
@@ -188,7 +201,7 @@ public class MapSchedulerExecutionRepository implements SchedulerExecutionReposi
     private void sort(final List<SchedulerExecution> schedulerExecutions) {
         if (schedulerExecutions != null && !schedulerExecutions.isEmpty() && schedulerExecutions.size() > 1) {
             schedulerExecutions.sort((schedulerExecution, schedulerExecutionToCompare)
-                    -> Long.signum(schedulerExecution.getId() - schedulerExecutionToCompare.getId()));
+                    -> Long.signum(schedulerExecutionToCompare.getId() - schedulerExecution.getId()));
         } else {
             log.trace("Empty Collection, nothing to sort");
         }
@@ -197,7 +210,7 @@ public class MapSchedulerExecutionRepository implements SchedulerExecutionReposi
     private List<SchedulerExecution> copy(final Collection<SchedulerExecution> schedulerExecutions) {
         final List<SchedulerExecution> copy = new ArrayList<>();
         for (final SchedulerExecution schedulerExecution : schedulerExecutions) {
-            copy.add(copy(schedulerExecution));
+            copy.add(this.copy(schedulerExecution));
         }
         return copy;
     }

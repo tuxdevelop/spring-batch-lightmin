@@ -34,7 +34,7 @@ public class ServerSchedulerConfigurationStatusModel {
     }
 
     public Boolean getIsStartable() {
-        return ServerSchedulerConfigurationStatusType.ACTIVE.value.equalsIgnoreCase(this.value);
+        return ServerSchedulerConfigurationStatusType.STOPPED.value.equalsIgnoreCase(this.value);
     }
 
 

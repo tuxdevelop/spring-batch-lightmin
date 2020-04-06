@@ -10,16 +10,18 @@ import java.util.List;
 
 public abstract class AbstractExecutionPollerService {
 
-    private final ExecutionRunnerService executionRunnerService;
+    private final ServerSchedulerService serverSchedulerService;
     private final SchedulerExecutionService schedulerExecutionService;
     private final ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    private final ServerSchedulerCoreConfigurationProperties properties;
 
-    protected AbstractExecutionPollerService(final ExecutionRunnerService executionRunnerService,
+    protected AbstractExecutionPollerService(final ServerSchedulerService serverSchedulerService,
                                              final SchedulerExecutionService schedulerExecutionService,
                                              final ServerSchedulerCoreConfigurationProperties properties) {
-        this.executionRunnerService = executionRunnerService;
+        this.serverSchedulerService = serverSchedulerService;
         this.schedulerExecutionService = schedulerExecutionService;
         this.threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        this.properties = properties;
         this.threadPoolTaskExecutor.setCorePoolSize(properties.getThreadPoolCoreSize());
         this.threadPoolTaskExecutor.setMaxPoolSize(properties.getThreadPoolSize());
         this.threadPoolTaskExecutor.afterPropertiesSet();
@@ -44,7 +46,7 @@ public abstract class AbstractExecutionPollerService {
                             final ExecutionRunner runner =
                                     new ExecutionRunner(
                                             schedulerExecution,
-                                            this.executionRunnerService);
+                                            this.serverSchedulerService, this.properties);
                             this.threadPoolTaskExecutor.execute(runner);
                         }
                 );

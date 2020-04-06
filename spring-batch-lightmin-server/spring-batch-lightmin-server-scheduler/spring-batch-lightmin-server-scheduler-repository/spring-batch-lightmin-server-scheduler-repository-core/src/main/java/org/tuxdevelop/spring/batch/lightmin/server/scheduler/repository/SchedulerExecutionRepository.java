@@ -34,4 +34,6 @@ public interface SchedulerExecutionRepository {
 
     void deleteByState(Integer state);
 
+    void deleteByConfigurationAndState(Long configurationId, Integer state);
+
 }

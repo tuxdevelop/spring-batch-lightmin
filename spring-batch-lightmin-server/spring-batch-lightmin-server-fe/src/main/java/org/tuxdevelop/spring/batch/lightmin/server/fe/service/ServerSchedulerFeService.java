@@ -11,9 +11,9 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.S
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ServerSchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.ExecutionInfoService;
-import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.ExecutionRunnerService;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.SchedulerConfigurationService;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.SchedulerExecutionService;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.ServerSchedulerService;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
 
@@ -26,28 +26,30 @@ public class ServerSchedulerFeService extends CommonFeService {
     private final SchedulerExecutionService schedulerExecutionService;
     private final SchedulerConfigurationService schedulerConfigurationService;
     private final ExecutionInfoService executionInfoService;
-    private final ExecutionRunnerService executionRunnerService;
+    private final ServerSchedulerService serverSchedulerService;
     private final RegistrationBean registrationBean;
 
 
     public ServerSchedulerFeService(final SchedulerExecutionService schedulerExecutionService,
                                     final SchedulerConfigurationService schedulerConfigurationService,
                                     final ExecutionInfoService executionInfoService,
-                                    final ExecutionRunnerService executionRunnerService, final RegistrationBean registrationBean) {
+                                    final ServerSchedulerService serverSchedulerService, final RegistrationBean registrationBean) {
         super(registrationBean);
         this.schedulerExecutionService = schedulerExecutionService;
         this.schedulerConfigurationService = schedulerConfigurationService;
         this.executionInfoService = executionInfoService;
-        this.executionRunnerService = executionRunnerService;
+        this.serverSchedulerService = serverSchedulerService;
         this.registrationBean = registrationBean;
     }
+
+    //Execution
 
     public ContentPageModel<ServerSchedulerInfoPageModel> getServerSchedulerInfos(final Integer state,
                                                                                   final Integer startIndex,
                                                                                   final Integer pageSize) {
 
         final ExecutionInfoPage executions = this.executionInfoService.findAll(state, startIndex, pageSize);
-        final List<ServerSchedulerInfoModel> schedulerInfos = map(executions.getExecutionInfos());
+        final List<ServerSchedulerInfoModel> schedulerInfos = this.map(executions.getExecutionInfos());
 
         final ContentPageModel<ServerSchedulerInfoPageModel> pageModel
                 = new ContentPageModel<>(executions.getStartIndex(), executions.getPageSize(), executions.getTotalCount());
@@ -55,12 +57,22 @@ public class ServerSchedulerFeService extends CommonFeService {
         final ServerSchedulerInfoPageModel pageContent = new ServerSchedulerInfoPageModel();
         pageContent.setSchedulerInfos(schedulerInfos);
         pageContent.setFilterState(state);
-        pageContent.setDisplayFilterState(mapStateToDisplayText(state));
+        pageContent.setDisplayFilterState(this.mapStateToDisplayText(state));
 
         pageModel.setValue(pageContent);
 
         return pageModel;
     }
+
+    public void deleteExecution(final Long executionId) {
+        this.schedulerExecutionService.deleteExecution(executionId);
+    }
+
+    public void stopExecution(final Long executionId) {
+        this.serverSchedulerService.stopExecution(executionId);
+    }
+
+    //Configuration
 
     public ServerSchedulerConfigurationsModel getServerSchedulerConfigurations() {
         final ServerSchedulerConfigurationsModel model = new ServerSchedulerConfigurationsModel();
@@ -80,13 +92,26 @@ public class ServerSchedulerFeService extends CommonFeService {
     }
 
     public void saveSchedulerConfiguration(final ServerSchedulerConfigurationModel model) {
-        final SchedulerConfiguration config = map(model);
-        //TODO: handle update better
-        if (config.getId() != null) {
-            this.schedulerConfigurationService.save(config);
-        } else {
-            this.executionRunnerService.initSchedulerExecution(config);
-        }
+        final SchedulerConfiguration config = this.map(model);
+        this.serverSchedulerService.saveSchedulerConfiguration(config);
+    }
+
+    public ServerSchedulerConfigurationModel findById(final Long id) {
+        final SchedulerConfiguration configuration;
+        configuration = this.serverSchedulerService.findSchedulerConfigurationById(id);
+        return this.map(configuration);
+    }
+
+    public void disableConfiguration(final Long configurationId) {
+        this.serverSchedulerService.disableServerSchedulerConfiguration(configurationId);
+    }
+
+    public void startConfiguration(final Long configurationId) {
+        this.serverSchedulerService.startServerSchedulerConfiguration(configurationId);
+    }
+
+    public void deleteConfiguration(final Long configurationId) {
+        this.serverSchedulerService.deleteServerSchedulerConfiguration(configurationId);
     }
 
 
@@ -104,8 +129,8 @@ public class ServerSchedulerFeService extends CommonFeService {
 
     private ServerSchedulerInfoModel map(final ExecutionInfo executionInfo) {
         final ServerSchedulerInfoModel model = new ServerSchedulerInfoModel();
-        model.setExecution(map(executionInfo.getExecution()));
-        model.setConfig(map(executionInfo.getConfiguration()));
+        model.setExecution(this.map(executionInfo.getExecution()));
+        model.setConfig(this.map(executionInfo.getConfiguration()));
         return model;
     }
 
@@ -171,7 +196,7 @@ public class ServerSchedulerFeService extends CommonFeService {
         model.setInstanceExecutionCount(configuration.getInstanceExecutionCount());
         model.setJobName(configuration.getJobName());
         model.setParametersRead(configuration.getJobParameters());
-        model.setParameters(mapParameters(configuration.getJobParameters()));
+        model.setParameters(this.mapParameters(configuration.getJobParameters()));
         model.setMaxRetries(configuration.getMaxRetries());
         model.setRetryable(configuration.getRetryable());
         model.setStatusRead(new ServerSchedulerConfigurationStatusModel(ServerSchedulerConfigurationStatusModel.map(configuration.getStatus().getValue())));

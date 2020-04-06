@@ -11,5 +11,9 @@ public class SchedulerRuntimException extends RuntimeException {
     public SchedulerRuntimException(final String message) {
         super(message);
     }
+
+    public SchedulerRuntimException(final Throwable t) {
+        super(t);
+    }
 }
 

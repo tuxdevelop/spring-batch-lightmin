@@ -51,6 +51,7 @@ public class ClientApplicationStatusUpdater implements ApplicationEventPublisher
     public void updateStatusForAllApplications() {
         final long now = System.currentTimeMillis();
         for (final LightminClientApplication lightminClientApplication : this.lightminApplicationRepository.findAll()) {
+            //TODO: check the if condition if it makes sense
             if (now - this.heartBeatPeriod > lightminClientApplication.getLightminClientApplicationStatus().getTimeInMills()) {
                 this.updateStatus(lightminClientApplication);
             }

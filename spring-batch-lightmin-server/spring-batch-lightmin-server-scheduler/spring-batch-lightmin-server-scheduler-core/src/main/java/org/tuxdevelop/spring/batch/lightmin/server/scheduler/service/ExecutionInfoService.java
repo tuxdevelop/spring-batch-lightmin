@@ -1,12 +1,15 @@
 package org.tuxdevelop.spring.batch.lightmin.server.scheduler.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.domain.ExecutionInfo;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.domain.ExecutionInfoPage;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ServerSchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,9 +44,12 @@ public class ExecutionInfoService {
                                 configuration = this.schedulerConfigurationService.findById(execution.getSchedulerConfigurationId());
                         info.setConfiguration(configuration);
                     } catch (SchedulerConfigurationNotFoundException e) {
-                        log.error("could not find SchedulerConfiguration with id {} for SchedulerExecution with the id {}",
+                        log.info("could not find SchedulerConfiguration with id {} for SchedulerExecution with the id {}",
                                 execution.getSchedulerConfigurationId(), execution.getId());
-                        info.setConfiguration(new SchedulerConfiguration());
+                        final SchedulerConfiguration configuration = new SchedulerConfiguration();
+                        this.createSchedulerConfigurationForUnknowConfigurationId(configuration);
+                        info.getExecution().setSchedulerConfigurationId(configuration.getId());
+                        info.setConfiguration(configuration);
                     }
                     return info;
                 }).collect(Collectors.toList());
@@ -58,5 +64,18 @@ public class ExecutionInfoService {
 
     public Integer getTotalExecutionCount(final Integer status) {
         return this.schedulerExecutionService.getExecutionCount(status);
+    }
+
+    private void createSchedulerConfigurationForUnknowConfigurationId(final SchedulerConfiguration configuration) {
+        configuration.setStatus(ServerSchedulerStatus.STOPPED);
+        configuration.setApplication("UNKNOWN");
+        configuration.setCronExpression("");
+        configuration.setId(-1L);
+        configuration.setInstanceExecutionCount(0);
+        configuration.setJobName("UNKNOWN");
+        configuration.setJobParameters(new HashMap<>());
+        configuration.setMaxRetries(0);
+        configuration.setRetryable(Boolean.FALSE);
+        configuration.setJobIncrementer(JobIncrementer.NONE);
     }
 }

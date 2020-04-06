@@ -78,7 +78,14 @@
                         <td th:text="${execution.config.applicationName}"/>
                         <td th:text="${execution.execution.nextFireTime}"/>
                         <td th:text="${execution.execution.executionCount}"/>
-                        <td th:text="${execution.execution.schedulerConfigurationId}"/>
+                        <td th:if="${execution.execution.schedulerConfigurationId != -1}">
+                            <a href="#" class="text-info"
+                               th:text="${execution.execution.schedulerConfigurationId}"
+                               th:href="@{server-scheduler-configuration-view(id=${execution.execution.schedulerConfigurationId})}">
+                            </a>
+                        </td>
+                        <td th:if="${execution.execution.schedulerConfigurationId == -1}" class="text-danger">Deleted
+                        </td>
                         <td>
                             <form id="stop-server-execution-form" method="post"
                                   style="display: inline;"
@@ -94,7 +101,7 @@
                             <form id="delete-server-execution-form" method="post"
                                   style="display: inline;"
                                   th:if="${execution.execution.statusRead.isDeletable}"
-                                  th:action="@{server-scheduler-executions(execution-id=${execution.execution.id},status-filter=${pageModel.value.filterState},start-index=${pageModel.currentIndex}))}">
+                                  th:action="@{server-scheduler-executions(execution-id=${execution.execution.id},status-filter=${pageModel.value.filterState},start-index=${pageModel.currentIndex})}">
                                 <button class="text-danger btn-sm btn-primary-outline btn-hover"
                                         type="submit"
                                         name="delete-execution" style="display: inline;"

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/global-layout :: header"/>
+
+<body>
+
+<div id="wrapper" class="toggled">
+
+    <!-- sidebar -->
+    <div th:include="fragments/global-layout :: sidebar"></div>
+
+    <!-- sidebar content wrapper-->
+    <div id="page-content-wrapper">
+        <div th:include="fragments/server-schedulers-navigation :: nav"/>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item text-muted">configurations</li>
+                <li class="breadcrumb-item text-muted" th:text="${schedulerConfiguration.applicationName}">Application
+                </li>
+                <li class="breadcrumb-item text-info" th:text="${schedulerConfiguration.id}">id</li>
+                <li class="breadcrumb-item text-muted">overview</li>
+            </ol>
+        </nav>
+
+        <div class="card border-0">
+            <div class="card-body">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <table class="table-sm border-0">
+                            <tbody>
+                            <tr>
+                                <td class="text-info">Id</td>
+                                <td class="text-muted text-right" th:text="${schedulerConfiguration.id}"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-info">Application Name</td>
+                                <td class="text-muted text-right"
+                                    th:text="${schedulerConfiguration.applicationName}"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-info">Job Name</td>
+                                <td class="text-muted text-right" th:text="${schedulerConfiguration.jobName}"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-info">Status</td>
+                                <td class="text-muted text-right"
+                                    th:text="${schedulerConfiguration.statusRead.displayText}"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="text-info">Cron Expression</td>
+                                <td class="text-muted text-right"
+                                    th:text="${schedulerConfiguration.cronExpression}"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-info">Instance Execution Count</td>
+                                <td class="text-muted text-right"
+                                    th:text="${schedulerConfiguration.instanceExecutionCount}"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-info">Retryable</td>
+                                <td class="text-muted text-right" th:text="${schedulerConfiguration.retryable}"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-info">Max Retries</td>
+                                <td class="text-muted text-right"
+                                    th:text="${schedulerConfiguration.maxRetries}"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-info">Incrementer</td>
+                                <td class="text-muted text-right"
+                                    th:text="${schedulerConfiguration.incrementerRead.displayText}"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="text-info">Parameters (key value)</td>
+                                <td>
+                                    <table class="table-sm">
+                                        <tbody>
+                                        <tr class="text-right"
+                                            th:each="parameter : ${schedulerConfiguration.parametersRead}">
+                                            <td class="text-muted text-right" th:text="${parameter.key}"></td>
+                                            <td class="text-muted text-right" th:text="${parameter.value}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card border-0">
+                    <div class="card-body">
+                        <a href="#"
+                           name="init-edit-scheduler"
+                           class="btn btn-info"
+                           th:href="@{server-scheduler-configuration(configuration-id=${schedulerConfiguration.id},init-edit-configuration='init-edit-configuration')}">
+                            Edit
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
