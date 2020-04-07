@@ -78,38 +78,37 @@ public class LightminClientConfiguration {
         }
 
         @Bean
-        public MetricEventPublisher metricEventPublisher() {
-            return new MetricEventPublisher();
+        public OnJobExecutionFinishedEventListener onJobExecutionFinishedEventListener(
+                final JobExecutionEventPublisher jobExecutionEventPublisher,
+                final StepExecutionEventPublisher stepExecutionEventPublisher) {
+            return new OnJobExecutionFinishedEventListener(jobExecutionEventPublisher, stepExecutionEventPublisher);
+        }
+    }
+
+    @Configuration
+    @ConditionalOnProperty(prefix = "spring.batch.lightmin.client", name = "metrics-enabled", havingValue = "true")
+    static class ClientMetricsConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(value = MeterRegistryCustomizer.class)
+        public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+            return registry -> registry.config();
+        }
+
+        @Bean("clientMetricService")
+        @ConditionalOnMissingBean(name = "clientMetricService")
+        public MetricService metricService(final MeterRegistry registry) {
+            return new MetricServiceBean(registry);
         }
 
         @Bean
-        public OnJobExecutionFinishedEventListener onJobExecutionFinishedEventListener(
-                final JobExecutionEventPublisher jobExecutionEventPublisher,
-                final StepExecutionEventPublisher stepExecutionEventPublisher,
-                final MetricEventPublisher metricEventPublisher) {
-            return new OnJobExecutionFinishedEventListener(jobExecutionEventPublisher, stepExecutionEventPublisher, metricEventPublisher);
+        public LightminMetricClientListenerBean lightminClientMetricListener(@Qualifier("clientMetricService") final MetricService metricService) {
+            return new LightminMetricClientListenerBean(metricService);
         }
 
-        @Configuration
-        @ConditionalOnProperty(prefix = "spring.batch.lightmin.client", name = "metrics-enabled", havingValue = "true")
-        static class ClientMetricsConfiguration {
-
-            @Bean
-            @ConditionalOnMissingBean(value = MeterRegistryCustomizer.class)
-            public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
-                return registry -> registry.config();
-            }
-
-            @Bean("clientMetricService")
-            @ConditionalOnMissingBean(name = "clientMetricService")
-            public MetricService metricService(final MeterRegistry registry) {
-                return new MetricServiceBean(registry);
-            }
-
-            @Bean
-            public LightminMetricClientListenerBean lightminClientMetricListener(@Qualifier("clientMetricService") final MetricService metricService) {
-                return new LightminMetricClientListenerBean(metricService);
-            }
+        @Bean
+        public MetricEventPublisher metricEventPublisher() {
+            return new MetricEventPublisher();
         }
     }
 

@@ -1,13 +1,28 @@
-= Spring Lightmin Metrics
+== Spring Batch Lightmin Metrics
 
 Lightmin Metrics introduces some custom metrics for the Lightmin-Platform.
-It uses a Prometheus actuator to publish the measurements to any monitoring solution.
----
+It uses Micrometer to collect metrics.
+The metrics are available for client and server applications.
 
-== Enabling Metrics for Lightmin
+=== Enabling Client Metrics
 
-Lightmin Metrics uses the build in job events to measure its jobs.
-To use metrics you need to activate event publications:
+In order to collect metrics of a _Lightmin_ client application, the following property has to be to _true_.
+
+[source,yaml]
+----
+spring:
+    batch:
+        lightmin:
+            client:
+                metrics-enabled: true
+----
+
+[IMPORTANT]
+====
+If you want to use runtime information of a client on a server, the following property has to be set to true.
+The send information will be transformed to metrics on the server, if the sever metrics feature is enabled.
+====
+
 [source,yaml]
 ----
 spring:
@@ -16,25 +31,48 @@ spring:
             client:
                 publish-job-events: true
 ----
-You can activate metrics for Lightmin by enabling the corresponding configuration for client and server:
+
+=== Enabling Server Metrics
+
+In order to collect metrics of a _Lightmin_ server , the following property has to be to _true_.
 
 [source,yaml]
 ----
 spring:
     batch:
         lightmin:
-            client:
-                metrics-enabled: true
             server:
                 metrics-enabled: true
 ----
+
+=== Exposing Metrics via actuator
+
+In order to expose the collected metrics, a _Micrometer_ registry dependencies has to be added to the client and the server.
+
+For prometheus, the following dependencies has to be added
+
+[source,xml]
+----
+<dependency>
+  <groupId>io.micrometer</groupId>
+  <artifactId>micrometer-registry-prometheus</artifactId>
+  <version>${micrometer.version}</version>
+</dependency>
+----
+
+[IMPORTANT]
+====
+The lightmin dependencies do not provide any registries out of the box
+====
+
+=== Modifying Lighmin Metrics
+
 Metrics will be published over prometheus actuator and can be modified by adding MeterFilter into the metrics configuration.
 Refer to Micrometer Documentation for more information.
 
 [source,java]
 ----
 
-import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Config{
 
@@ -64,9 +102,16 @@ public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
     }
 }
 ----
-== Grafana Dashboard
+
+=== Grafana Dashboard
 
 Lightmin Metrics introduces a prebuild Grafana Dashboard.
-Please install the following Plugins:
+The json file is available in the resources folder of the lightmin-metrics project.
+In order to use the plugin, please install the following Plugins:
 
 * Statusmap by Flant JSC
+
+[IMPORTANT]
+====
+The board requires a Prometheus datasource.
+====
