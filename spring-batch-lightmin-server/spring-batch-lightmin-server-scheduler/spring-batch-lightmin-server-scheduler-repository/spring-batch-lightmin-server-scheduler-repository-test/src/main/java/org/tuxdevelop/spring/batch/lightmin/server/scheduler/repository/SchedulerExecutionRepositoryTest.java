@@ -4,10 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.BDDAssertions;
 import org.junit.After;
 import org.junit.Test;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ExecutionStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerExecutionNotFoundException;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -173,8 +175,9 @@ public abstract class SchedulerExecutionRepositoryTest extends SchedulerTest {
     @Test
     public void testDeleteByState() {
         final SchedulerConfiguration schedulerConfiguration = this.createSchedulerConfiguration("findDeleteByStateApp");
-        final SchedulerExecution schedulerExecution = this.createSchedulerExecution(schedulerConfiguration.getId(), 1);
-        this.createSchedulerExecution(schedulerConfiguration.getId(), 20);
+        final SchedulerExecution schedulerExecution = this.createSchedulerExecution(schedulerConfiguration.getId(), ExecutionStatus.NEW);
+
+        this.createSchedulerExecution(schedulerConfiguration.getId(), ExecutionStatus.FINISHED);
 
         this.getSchedulerExecutionRepository().deleteByState(20);
 
@@ -183,13 +186,99 @@ public abstract class SchedulerExecutionRepositoryTest extends SchedulerTest {
         BDDAssertions.then(result).contains(schedulerExecution);
     }
 
-    //TODO: write test for count
+    @Test
+    public void testGetExecutionCount() {
+        final List<SchedulerConfiguration> configurations = new ArrayList<>();
+        final int count = 10;
+        final SchedulerConfiguration schedulerConfiguration = this.createSchedulerConfiguration("findDeleteByStateApp");
+        for (int i = 0; i < count; i++) {
+            final SchedulerExecution schedulerExecution = this.createSchedulerExecution(schedulerConfiguration.getId(), ExecutionStatus.NEW);
+            this.getSchedulerExecutionRepository().save(schedulerExecution);
+        }
+        final Integer resultNew = this.getSchedulerExecutionRepository().getExecutionCount(ExecutionStatus.NEW);
+        BDDAssertions.then(resultNew).isEqualTo(count);
+        final Integer resultFinished = this.getSchedulerExecutionRepository().getExecutionCount(ExecutionStatus.FINISHED);
+        BDDAssertions.then(resultFinished).isEqualTo(0);
+        final Integer result = this.getSchedulerExecutionRepository().getExecutionCount(null);
+        BDDAssertions.then(result).isEqualTo(count);
+    }
 
-    //TODO: write test for delete by sc id and state
+    @Test
+    public void testDeleteBySchedulerConfigurationAndState() {
+        final SchedulerConfiguration schedulerConfiguration1 = this.createSchedulerConfiguration("findDeleteByStateApp");
+        final SchedulerConfiguration schedulerConfiguration2 = this.createSchedulerConfiguration("findDeleteByStateApp");
+
+        final Long scId1 = schedulerConfiguration1.getId();
+        final Long scId2 = schedulerConfiguration2.getId();
+
+        final int countNew1 = 5;
+        final int countFailed1 = 3;
+        this.createAndSaveSchedulerConfigurations(schedulerConfiguration1, countNew1, ExecutionStatus.NEW);
+        this.createAndSaveSchedulerConfigurations(schedulerConfiguration1, countFailed1, ExecutionStatus.FAILED);
+
+        final int countNew2 = 3;
+        final int countFailed2 = 13;
+        this.createAndSaveSchedulerConfigurations(schedulerConfiguration2, countNew2, ExecutionStatus.NEW);
+        this.createAndSaveSchedulerConfigurations(schedulerConfiguration2, countFailed2, ExecutionStatus.FAILED);
+
+        final List<SchedulerExecution> allSc1Before = this.getBySCId(scId1);
+        final List<SchedulerExecution> allSc2Before = this.getBySCId(scId2);
+
+        BDDAssertions.then(this.countOfState(allSc1Before, ExecutionStatus.NEW)).isEqualTo(countNew1);
+        BDDAssertions.then(this.countOfState(allSc1Before, ExecutionStatus.FAILED)).isEqualTo(countFailed1);
+
+        BDDAssertions.then(this.countOfState(allSc2Before, ExecutionStatus.NEW)).isEqualTo(countNew2);
+        BDDAssertions.then(this.countOfState(allSc2Before, ExecutionStatus.FAILED)).isEqualTo(countFailed2);
+
+        //1. delete state new  for sc1
+        this.getSchedulerExecutionRepository().deleteByConfigurationAndState(scId1, ExecutionStatus.NEW);
+
+        final List<SchedulerExecution> allSc1After1Deletion = this.getBySCId(scId1);
+        final List<SchedulerExecution> allSc2After1Deletion = this.getBySCId(scId2);
+
+        BDDAssertions.then(this.countOfState(allSc1After1Deletion, ExecutionStatus.NEW)).isEqualTo(0);
+        BDDAssertions.then(this.countOfState(allSc1After1Deletion, ExecutionStatus.FAILED)).isEqualTo(countFailed1);
+
+        BDDAssertions.then(this.countOfState(allSc2After1Deletion, ExecutionStatus.NEW)).isEqualTo(countNew2);
+        BDDAssertions.then(this.countOfState(allSc2After1Deletion, ExecutionStatus.FAILED)).isEqualTo(countFailed2);
+
+        //2. delete state failed  for sc1 and sc2
+        this.getSchedulerExecutionRepository().deleteByConfigurationAndState(scId2, ExecutionStatus.FAILED);
+        this.getSchedulerExecutionRepository().deleteByConfigurationAndState(scId1, ExecutionStatus.FAILED);
+
+
+        final List<SchedulerExecution> allSc1After2Deletion = this.getBySCId(scId1);
+        final List<SchedulerExecution> allSc2After2Deletion = this.getBySCId(scId2);
+
+        BDDAssertions.then(this.countOfState(allSc1After2Deletion, ExecutionStatus.NEW)).isEqualTo(0);
+        BDDAssertions.then(this.countOfState(allSc1After2Deletion, ExecutionStatus.FAILED)).isEqualTo(0);
+
+        BDDAssertions.then(this.countOfState(allSc2After2Deletion, ExecutionStatus.NEW)).isEqualTo(countNew2);
+        BDDAssertions.then(this.countOfState(allSc2After2Deletion, ExecutionStatus.FAILED)).isEqualTo(0);
+    }
+
 
     @After
     public void cleanUp() {
         this.getCleanUpRepository().cleanUp();
+    }
+
+    protected Integer countOfState(final List<SchedulerExecution> schedulerExecutions, final Integer state) {
+        return schedulerExecutions != null ? (int) schedulerExecutions.stream().filter(
+                schedulerExecution -> schedulerExecution.getState().equals(state)
+        ).count() : 0;
+    }
+
+    protected List<SchedulerExecution> getBySCId(final Long scId) {
+        return this.getSchedulerExecutionRepository().findBySchedulerConfigurationId(scId);
+    }
+
+    protected void createAndSaveSchedulerConfigurations(final SchedulerConfiguration schedulerConfiguration1, final int count, final Integer state) {
+        for (int i = 0; i < count; i++) {
+            final SchedulerExecution schedulerExecution = this.createSchedulerExecution(schedulerConfiguration1.getId(), state);
+            this.getSchedulerExecutionRepository().save(schedulerExecution);
+        }
+
     }
 
     protected SchedulerExecution createSchedulerExecution(final Long schedulerConfigurationId, final Date nextExecution, final Integer state) {

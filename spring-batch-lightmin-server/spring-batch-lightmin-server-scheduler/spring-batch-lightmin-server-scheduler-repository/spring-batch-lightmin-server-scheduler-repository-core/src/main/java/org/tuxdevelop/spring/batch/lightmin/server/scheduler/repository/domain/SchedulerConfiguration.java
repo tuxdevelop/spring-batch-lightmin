@@ -8,6 +8,7 @@ import java.util.Map;
 @Data
 public class SchedulerConfiguration {
 
+    //TODO: add validations
     private Long id;
     private Integer instanceExecutionCount;
     private String cronExpression;

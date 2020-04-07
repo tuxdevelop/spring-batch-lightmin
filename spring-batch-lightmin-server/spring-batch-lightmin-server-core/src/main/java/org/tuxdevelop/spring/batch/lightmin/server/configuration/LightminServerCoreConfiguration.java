@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.client.RestTemplate;
+import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnLightminClientApplicationChangedEventListener;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.*;
 import org.tuxdevelop.spring.batch.lightmin.server.service.EventService;
 import org.tuxdevelop.spring.batch.lightmin.server.service.EventServiceBean;
@@ -100,6 +101,12 @@ public class LightminServerCoreConfiguration {
         }
     }
 
+    @Bean
+    public OnLightminClientApplicationChangedEventListener onLightminClientApplicationChangedEventListener(
+            final LightminApplicationRepository applicationRepository,
+            final LightminServerCoreProperties properties) {
+        return new OnLightminClientApplicationChangedEventListener(applicationRepository, properties);
+    }
 
     static class RestTemplateFactory {
 

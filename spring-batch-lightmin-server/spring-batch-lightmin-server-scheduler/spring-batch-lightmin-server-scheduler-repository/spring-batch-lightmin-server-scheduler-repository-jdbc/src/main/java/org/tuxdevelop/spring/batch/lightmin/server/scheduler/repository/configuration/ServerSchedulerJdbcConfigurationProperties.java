@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
-@ConfigurationProperties(prefix = "spring.batch.lightmin.server.scheduler.jdbc")
+@ConfigurationProperties(prefix = "spring.batch.lightmin.server.scheduler.repository.jdbc")
 public class ServerSchedulerJdbcConfigurationProperties {
 
     private String configurationTable = "SCHEDULER_CONFIGURATION";

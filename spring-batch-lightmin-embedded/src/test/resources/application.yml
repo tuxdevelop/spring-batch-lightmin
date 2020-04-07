@@ -12,3 +12,6 @@ spring:
       server:
         scheduler:
           poller-period-retry: 1000
+          repository:
+            delete-poller-period: PT5S
+            keep-finished: 4s

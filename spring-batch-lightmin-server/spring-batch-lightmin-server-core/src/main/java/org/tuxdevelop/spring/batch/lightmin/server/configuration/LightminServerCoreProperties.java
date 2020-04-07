@@ -44,7 +44,7 @@ public class LightminServerCoreProperties {
 
     @Getter
     @Setter
-    private Boolean removeOfflineClients = Boolean.TRUE;
+    private Boolean removeOfflineClients = Boolean.FALSE;
 
     public void setContextPath(final String pathPrefix) {
         if (!pathPrefix.startsWith("/") || pathPrefix.endsWith("/")) {

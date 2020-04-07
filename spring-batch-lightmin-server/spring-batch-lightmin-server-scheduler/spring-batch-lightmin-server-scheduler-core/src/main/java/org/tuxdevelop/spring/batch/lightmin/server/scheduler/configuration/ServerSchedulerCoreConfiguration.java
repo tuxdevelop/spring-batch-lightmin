@@ -45,8 +45,9 @@ public class ServerSchedulerCoreConfiguration {
     }
 
     @Bean
-    public ServerPollerService serverPollerService(final ExecutionPollerService executionPollerService) {
-        return new ServerPollerService(executionPollerService);
+    public ServerPollerService serverPollerService(final ExecutionPollerService executionPollerService,
+                                                   final ExecutionCleanUpService executionCleanUpService) {
+        return new ServerPollerService(executionPollerService, executionCleanUpService);
     }
 
     @Bean
@@ -55,6 +56,13 @@ public class ServerSchedulerCoreConfiguration {
                                                          final SchedulerExecutionService schedulerExecutionService,
                                                          final ServerSchedulerCoreConfigurationProperties properties) {
         return new StandaloneExecutionPollerService(serverSchedulerService, schedulerExecutionService, properties);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ExecutionCleanUpService.class)
+    public ExecutionCleanUpService executionCleanUpService(final SchedulerExecutionRepository schedulerExecutionRepository,
+                                                           final ServerSchedulerCoreConfigurationProperties properties) {
+        return new StandaloneExecutionCleanupService(schedulerExecutionRepository, properties);
     }
 
     @Bean
