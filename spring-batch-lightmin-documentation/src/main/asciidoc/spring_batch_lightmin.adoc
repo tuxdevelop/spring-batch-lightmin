@@ -12,4 +12,6 @@ include::batch_configuration.adoc[]
 
 include::job_configuration.adoc[]
 
+include::lightmin_metrics.adoc[]
+
 include::rest_api.adoc[]

@@ -554,6 +554,125 @@ spring:
       batch:
         repository-type: map
 ----
+
+== Spring Batch Lightmin Metrics
+
+Lightmin Metrics introduces some custom metrics for the Lightmin-Platform.
+It uses Micrometer to collect metrics.
+The metrics are available for client and server applications.
+
+=== Enabling Client Metrics
+
+In order to collect metrics of a _Lightmin_ client application, the following property has to be to _true_.
+
+[source,yaml]
+----
+spring:
+    batch:
+        lightmin:
+            client:
+                metrics-enabled: true
+----
+
+[IMPORTANT]
+====
+If you want to use runtime information of a client on a server, the following property has to be set to true.
+The send information will be transformed to metrics on the server, if the sever metrics feature is enabled.
+====
+
+[source,yaml]
+----
+spring:
+    batch:
+        lightmin:
+            client:
+                publish-job-events: true
+----
+
+=== Enabling Server Metrics
+
+In order to collect metrics of a _Lightmin_ server , the following property has to be to _true_.
+
+[source,yaml]
+----
+spring:
+    batch:
+        lightmin:
+            server:
+                metrics-enabled: true
+----
+
+=== Exposing Metrics via actuator
+
+In order to expose the collected metrics, a _Micrometer_ registry dependencies has to be added to the client and the server.
+
+For prometheus, the following dependencies has to be added
+
+[source,xml]
+----
+<dependency>
+  <groupId>io.micrometer</groupId>
+  <artifactId>micrometer-registry-prometheus</artifactId>
+  <version>${micrometer.version}</version>
+</dependency>
+----
+
+[IMPORTANT]
+====
+The lightmin dependencies do not provide any registries out of the box
+====
+
+=== Modifying Lighmin Metrics
+
+Metrics will be published over prometheus actuator and can be modified by adding MeterFilter into the metrics configuration.
+Refer to Micrometer Documentation for more information.
+
+[source,java]
+----
+
+@Configuration
+public class Config{
+
+final static String name = "EXAMPLE";
+
+@Bean
+public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+        return registry -> {
+            if (name != null) {
+                registry.config().meterFilter(
+                        new MeterFilter() {
+                            @Override
+                            public DistributionStatisticConfig configure(Meter.Id id, DistributionStatisticConfig config) {
+                                if (id.getName().startsWith("lightmin")) {
+                                    // Example Filter - Activating histogram on all lightmin metrics
+                                    return DistributionStatisticConfig.builder().percentilesHistogram(true)
+                                            .percentiles(0.95)
+                                            .build()
+                                            .merge(config);
+                                }
+                                return config;
+                            }
+                        })
+                        .commonTags("example_tag", name);
+            }
+        };
+    }
+}
+----
+
+=== Grafana Dashboard
+
+Lightmin Metrics introduces a prebuild Grafana Dashboard.
+The json file is available in the resources folder of the lightmin-metrics project.
+In order to use the plugin, please install the following Plugins:
+
+* Statusmap by Flant JSC
+
+[IMPORTANT]
+====
+The board requires a Prometheus datasource.
+====
+
 == Server User Interface
 
 === Applications

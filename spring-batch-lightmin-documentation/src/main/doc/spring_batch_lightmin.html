@@ -529,6 +529,15 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_configuration_2">Configuration</a></li>
 </ul>
 </li>
+<li><a href="#_spring_batch_lightmin_metrics">Spring Batch Lightmin Metrics</a>
+<ul class="sectlevel2">
+<li><a href="#_enabling_client_metrics">Enabling Client Metrics</a></li>
+<li><a href="#_enabling_server_metrics">Enabling Server Metrics</a></li>
+<li><a href="#_exposing_metrics_via_actuator">Exposing Metrics via actuator</a></li>
+<li><a href="#_modifying_lighmin_metrics">Modifying Lighmin Metrics</a></li>
+<li><a href="#_grafana_dashboard">Grafana Dashboard</a></li>
+</ul>
+</li>
 <li><a href="#_server_user_interface">Server User Interface</a>
 <ul class="sectlevel2">
 <li><a href="#_applications">Applications</a></li>
@@ -576,6 +585,15 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel2">
 <li><a href="#_anatomy_of_a_job_configuration">Anatomy of a Job Configuration</a></li>
 <li><a href="#_jobconfiguration_repository">JobConfiguration Repository</a></li>
+</ul>
+</li>
+<li><a href="#_spring_batch_lightmin_metrics_2">Spring Batch Lightmin Metrics</a>
+<ul class="sectlevel2">
+<li><a href="#_enabling_client_metrics_2">Enabling Client Metrics</a></li>
+<li><a href="#_enabling_server_metrics_2">Enabling Server Metrics</a></li>
+<li><a href="#_exposing_metrics_via_actuator_2">Exposing Metrics via actuator</a></li>
+<li><a href="#_modifying_lighmin_metrics_2">Modifying Lighmin Metrics</a></li>
+<li><a href="#_grafana_dashboard_2">Grafana Dashboard</a></li>
 </ul>
 </li>
 <li><a href="#_rest_api">REST API</a>
@@ -1298,6 +1316,170 @@ The <em>Job Configuration Repository</em> and <em>Spring Batch</em> have to be c
       <span class="key">batch</span>:
         <span class="key">repository-type</span>: <span class="string"><span class="content">map</span></span></code></pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_spring_batch_lightmin_metrics">Spring Batch Lightmin Metrics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Lightmin Metrics introduces some custom metrics for the Lightmin-Platform.
+It uses Micrometer to collect metrics.
+The metrics are available for client and server applications.</p>
+</div>
+<div class="sect2">
+<h3 id="_enabling_client_metrics">Enabling Client Metrics</h3>
+<div class="paragraph">
+<p>In order to collect metrics of a <em>Lightmin</em> client application, the following property has to be to <em>true</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+    <span class="key">batch</span>:
+        <span class="key">lightmin</span>:
+            <span class="key">client</span>:
+                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you want to use runtime information of a client on a server, the following property has to be set to true.
+The send information will be transformed to metrics on the server, if the sever metrics feature is enabled.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+    <span class="key">batch</span>:
+        <span class="key">lightmin</span>:
+            <span class="key">client</span>:
+                <span class="key">publish-job-events</span>: <span class="string"><span class="content">true</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_enabling_server_metrics">Enabling Server Metrics</h3>
+<div class="paragraph">
+<p>In order to collect metrics of a <em>Lightmin</em> server , the following property has to be to <em>true</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+    <span class="key">batch</span>:
+        <span class="key">lightmin</span>:
+            <span class="key">server</span>:
+                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exposing_metrics_via_actuator">Exposing Metrics via actuator</h3>
+<div class="paragraph">
+<p>In order to expose the collected metrics, a <em>Micrometer</em> registry dependencies has to be added to the client and the server.</p>
+</div>
+<div class="paragraph">
+<p>For prometheus, the following dependencies has to be added</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.micrometer<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>micrometer-registry-prometheus<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>${micrometer.version}<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The lightmin dependencies do not provide any registries out of the box</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_modifying_lighmin_metrics">Modifying Lighmin Metrics</h3>
+<div class="paragraph">
+<p>Metrics will be published over prometheus actuator and can be modified by adding MeterFilter into the metrics configuration.
+Refer to Micrometer Documentation for more information.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">Config</span>{
+
+<span class="directive">final</span> <span class="directive">static</span> <span class="predefined-type">String</span> name = <span class="string"><span class="delimiter">&quot;</span><span class="content">EXAMPLE</span><span class="delimiter">&quot;</span></span>;
+
+<span class="annotation">@Bean</span>
+<span class="directive">public</span> MeterRegistryCustomizer&lt;MeterRegistry&gt; metricsCommonTags() {
+        <span class="keyword">return</span> registry -&gt; {
+            <span class="keyword">if</span> (name != <span class="predefined-constant">null</span>) {
+                registry.config().meterFilter(
+                        <span class="keyword">new</span> MeterFilter() {
+                            <span class="annotation">@Override</span>
+                            <span class="directive">public</span> DistributionStatisticConfig configure(Meter.Id id, DistributionStatisticConfig config) {
+                                <span class="keyword">if</span> (id.getName().startsWith(<span class="string"><span class="delimiter">&quot;</span><span class="content">lightmin</span><span class="delimiter">&quot;</span></span>)) {
+                                    <span class="comment">// Example Filter - Activating histogram on all lightmin metrics</span>
+                                    <span class="keyword">return</span> DistributionStatisticConfig.builder().percentilesHistogram(<span class="predefined-constant">true</span>)
+                                            .percentiles(<span class="float">0.95</span>)
+                                            .build()
+                                            .merge(config);
+                                }
+                                <span class="keyword">return</span> config;
+                            }
+                        })
+                        .commonTags(<span class="string"><span class="delimiter">&quot;</span><span class="content">example_tag</span><span class="delimiter">&quot;</span></span>, name);
+            }
+        };
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_grafana_dashboard">Grafana Dashboard</h3>
+<div class="paragraph">
+<p>Lightmin Metrics introduces a prebuild Grafana Dashboard.
+The json file is available in the resources folder of the lightmin-metrics project.
+In order to use the plugin, please install the following Plugins:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Statusmap by Flant JSC</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The board requires a Prometheus datasource.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -2457,6 +2639,170 @@ If the application will be restarted, all stored <em>JobConfigurations</em> will
 </div>
 </div>
 <div class="sect1">
+<h2 id="_spring_batch_lightmin_metrics_2">Spring Batch Lightmin Metrics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Lightmin Metrics introduces some custom metrics for the Lightmin-Platform.
+It uses Micrometer to collect metrics.
+The metrics are available for client and server applications.</p>
+</div>
+<div class="sect2">
+<h3 id="_enabling_client_metrics_2">Enabling Client Metrics</h3>
+<div class="paragraph">
+<p>In order to collect metrics of a <em>Lightmin</em> client application, the following property has to be to <em>true</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+    <span class="key">batch</span>:
+        <span class="key">lightmin</span>:
+            <span class="key">client</span>:
+                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you want to use runtime information of a client on a server, the following property has to be set to true.
+The send information will be transformed to metrics on the server, if the sever metrics feature is enabled.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+    <span class="key">batch</span>:
+        <span class="key">lightmin</span>:
+            <span class="key">client</span>:
+                <span class="key">publish-job-events</span>: <span class="string"><span class="content">true</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_enabling_server_metrics_2">Enabling Server Metrics</h3>
+<div class="paragraph">
+<p>In order to collect metrics of a <em>Lightmin</em> server , the following property has to be to <em>true</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+    <span class="key">batch</span>:
+        <span class="key">lightmin</span>:
+            <span class="key">server</span>:
+                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exposing_metrics_via_actuator_2">Exposing Metrics via actuator</h3>
+<div class="paragraph">
+<p>In order to expose the collected metrics, a <em>Micrometer</em> registry dependencies has to be added to the client and the server.</p>
+</div>
+<div class="paragraph">
+<p>For prometheus, the following dependencies has to be added</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+  <span class="tag">&lt;groupId&gt;</span>io.micrometer<span class="tag">&lt;/groupId&gt;</span>
+  <span class="tag">&lt;artifactId&gt;</span>micrometer-registry-prometheus<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;version&gt;</span>${micrometer.version}<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The lightmin dependencies do not provide any registries out of the box</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_modifying_lighmin_metrics_2">Modifying Lighmin Metrics</h3>
+<div class="paragraph">
+<p>Metrics will be published over prometheus actuator and can be modified by adding MeterFilter into the metrics configuration.
+Refer to Micrometer Documentation for more information.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">Config</span>{
+
+<span class="directive">final</span> <span class="directive">static</span> <span class="predefined-type">String</span> name = <span class="string"><span class="delimiter">&quot;</span><span class="content">EXAMPLE</span><span class="delimiter">&quot;</span></span>;
+
+<span class="annotation">@Bean</span>
+<span class="directive">public</span> MeterRegistryCustomizer&lt;MeterRegistry&gt; metricsCommonTags() {
+        <span class="keyword">return</span> registry -&gt; {
+            <span class="keyword">if</span> (name != <span class="predefined-constant">null</span>) {
+                registry.config().meterFilter(
+                        <span class="keyword">new</span> MeterFilter() {
+                            <span class="annotation">@Override</span>
+                            <span class="directive">public</span> DistributionStatisticConfig configure(Meter.Id id, DistributionStatisticConfig config) {
+                                <span class="keyword">if</span> (id.getName().startsWith(<span class="string"><span class="delimiter">&quot;</span><span class="content">lightmin</span><span class="delimiter">&quot;</span></span>)) {
+                                    <span class="comment">// Example Filter - Activating histogram on all lightmin metrics</span>
+                                    <span class="keyword">return</span> DistributionStatisticConfig.builder().percentilesHistogram(<span class="predefined-constant">true</span>)
+                                            .percentiles(<span class="float">0.95</span>)
+                                            .build()
+                                            .merge(config);
+                                }
+                                <span class="keyword">return</span> config;
+                            }
+                        })
+                        .commonTags(<span class="string"><span class="delimiter">&quot;</span><span class="content">example_tag</span><span class="delimiter">&quot;</span></span>, name);
+            }
+        };
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_grafana_dashboard_2">Grafana Dashboard</h3>
+<div class="paragraph">
+<p>Lightmin Metrics introduces a prebuild Grafana Dashboard.
+The json file is available in the resources folder of the lightmin-metrics project.
+In order to use the plugin, please install the following Plugins:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Statusmap by Flant JSC</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The board requires a Prometheus datasource.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_rest_api">REST API</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -2472,7 +2818,7 @@ If the application will be restarted, all stored <em>JobConfigurations</em> will
     -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{
   &quot;id&quot; : null,
-  &quot;name&quot; : &quot;null&quot;,
+  &quot;name&quot; : &quot;it-application&quot;,
   &quot;managementUrl&quot; : &quot;http://localhost/actuator&quot;,
   &quot;healthUrl&quot; : &quot;http://localhost/actuator/health&quot;,
   &quot;serviceUrl&quot; : &quot;http://localhost&quot;,
@@ -2500,11 +2846,11 @@ If the application will be restarted, all stored <em>JobConfigurations</em> will
 Accept: application/json, application/javascript, text/javascript, text/json
 Content-Type: application/json; charset=UTF-8
 Host: localhost
-Content-Length: 780
+Content-Length: 790
 
 {
   &quot;id&quot; : null,
-  &quot;name&quot; : &quot;null&quot;,
+  &quot;name&quot; : &quot;it-application&quot;,
   &quot;managementUrl&quot; : &quot;http://localhost/actuator&quot;,
   &quot;healthUrl&quot; : &quot;http://localhost/actuator/health&quot;,
   &quot;serviceUrl&quot; : &quot;http://localhost&quot;,
@@ -2531,20 +2877,20 @@ Content-Length: 780
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Tue, 31 Mar 2020 07:08:44 GMT
+Date: Tue, 07 Apr 2020 14:45:19 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 860
+Content-Length: 870
 
 {
-  &quot;id&quot; : &quot;2b2f453b&quot;,
-  &quot;name&quot; : &quot;null&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:43625/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:43625/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:43625&quot;,
+  &quot;id&quot; : &quot;57e38582&quot;,
+  &quot;name&quot; : &quot;it-application&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:42305/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:42305/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:42305&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1585638524356
+    &quot;timeInMills&quot; : 1586270718665
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2568,7 +2914,7 @@ Content-Length: 860
 <h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/2b2f453b' -i -X DELETE \
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/57e38582' -i -X DELETE \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
     -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
@@ -2578,7 +2924,7 @@ Content-Length: 860
 <h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/2b2f453b HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/57e38582 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript, text/json
 Content-Type: application/json; charset=UTF-8
 Host: localhost</code></pre>
@@ -2592,20 +2938,20 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Tue, 31 Mar 2020 07:08:44 GMT
+Date: Tue, 07 Apr 2020 14:45:19 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 860
+Content-Length: 870
 
 {
-  &quot;id&quot; : &quot;2b2f453b&quot;,
-  &quot;name&quot; : &quot;null&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:43625/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:43625/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:43625&quot;,
+  &quot;id&quot; : &quot;57e38582&quot;,
+  &quot;name&quot; : &quot;it-application&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:42305/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:42305/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:42305&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1585638524356
+    &quot;timeInMills&quot; : 1586270718665
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2653,20 +2999,20 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Tue, 31 Mar 2020 07:08:44 GMT
+Date: Tue, 07 Apr 2020 14:45:18 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 864
+Content-Length: 874
 
 [ {
-  &quot;id&quot; : &quot;2b2f453b&quot;,
-  &quot;name&quot; : &quot;null&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:43625/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:43625/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:43625&quot;,
+  &quot;id&quot; : &quot;57e38582&quot;,
+  &quot;name&quot; : &quot;it-application&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:42305/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:42305/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:42305&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UP&quot;,
-    &quot;timeInMills&quot; : 1585638524356
+    &quot;timeInMills&quot; : 1586270718665
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2701,8 +3047,8 @@ Content-Length: 864
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1585638525308,
-  &quot;endDate&quot; : 1585638535308
+  &quot;startDate&quot; : 1586270719842,
+  &quot;endDate&quot; : 1586270729842
 }'</code></pre>
 </div>
 </div>
@@ -2725,8 +3071,8 @@ Content-Length: 247
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1585638525308,
-  &quot;endDate&quot; : 1585638535308
+  &quot;startDate&quot; : 1586270719842,
+  &quot;endDate&quot; : 1586270729842
 }</code></pre>
 </div>
 </div>
@@ -2736,7 +3082,7 @@ Content-Length: 247
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Tue, 31 Mar 2020 07:08:45 GMT
+Date: Tue, 07 Apr 2020 14:45:19 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -2776,7 +3122,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Tue, 31 Mar 2020 07:08:46 GMT
+Date: Tue, 07 Apr 2020 14:45:21 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 1542
@@ -2793,7 +3139,7 @@ Content-Length: 1542
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : &quot;2020/03/31 09:08:47:409[date]&quot;,
+          &quot;parameter&quot; : &quot;2020/04/07 16:45:22:099[date]&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -2816,9 +3162,9 @@ Content-Length: 1542
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : &quot;2020-03-31T07:08:47.414+0000&quot;,
-      &quot;endTime&quot; : &quot;2020-03-31T07:08:47.416+0000&quot;,
-      &quot;lastUpdated&quot; : &quot;2020-03-31T07:08:47.416+0000&quot;,
+      &quot;startTime&quot; : &quot;2020-04-07T14:45:22.104+0000&quot;,
+      &quot;endTime&quot; : &quot;2020-04-07T14:45:22.105+0000&quot;,
+      &quot;lastUpdated&quot; : &quot;2020-04-07T14:45:22.105+0000&quot;,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -2828,10 +3174,10 @@ Content-Length: 1542
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : &quot;2020-03-31T07:08:47.412+0000&quot;,
-    &quot;createTime&quot; : &quot;2020-03-31T07:08:47.411+0000&quot;,
-    &quot;endTime&quot; : &quot;2020-03-31T07:08:47.416+0000&quot;,
-    &quot;lastUpdated&quot; : &quot;2020-03-31T07:08:47.428+0000&quot;,
+    &quot;startTime&quot; : &quot;2020-04-07T14:45:22.101+0000&quot;,
+    &quot;createTime&quot; : &quot;2020-04-07T14:45:22.100+0000&quot;,
+    &quot;endTime&quot; : &quot;2020-04-07T14:45:22.106+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2020-04-07T14:45:22.117+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2872,7 +3218,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Tue, 31 Mar 2020 07:08:46 GMT
+Date: Tue, 07 Apr 2020 14:45:21 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 879
@@ -2889,7 +3235,7 @@ Content-Length: 879
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : &quot;2020/03/31 09:08:47:348[date]&quot;,
+          &quot;parameter&quot; : &quot;2020/04/07 16:45:22:034[date]&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -2901,10 +3247,10 @@ Content-Length: 879
     },
     &quot;stepExecutions&quot; : [ ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : &quot;2020-03-31T07:08:47.351+0000&quot;,
-    &quot;createTime&quot; : &quot;2020-03-31T07:08:47.350+0000&quot;,
-    &quot;endTime&quot; : &quot;2020-03-31T07:08:47.355+0000&quot;,
-    &quot;lastUpdated&quot; : &quot;2020-03-31T07:08:47.369+0000&quot;,
+    &quot;startTime&quot; : &quot;2020-04-07T14:45:22.037+0000&quot;,
+    &quot;createTime&quot; : &quot;2020-04-07T14:45:22.036+0000&quot;,
+    &quot;endTime&quot; : &quot;2020-04-07T14:45:22.044+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2020-04-07T14:45:22.059+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2945,7 +3291,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Tue, 31 Mar 2020 07:08:46 GMT
+Date: Tue, 07 Apr 2020 14:45:21 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 1291
@@ -2956,7 +3302,7 @@ Content-Length: 1291
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/03/31 09:08:47:577[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/04/07 16:45:22:262[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -2979,9 +3325,9 @@ Content-Length: 1291
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : &quot;2020-03-31T07:08:47.583+0000&quot;,
-    &quot;endTime&quot; : &quot;2020-03-31T07:08:47.585+0000&quot;,
-    &quot;lastUpdated&quot; : &quot;2020-03-31T07:08:47.585+0000&quot;,
+    &quot;startTime&quot; : &quot;2020-04-07T14:45:22.268+0000&quot;,
+    &quot;endTime&quot; : &quot;2020-04-07T14:45:22.270+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2020-04-07T14:45:22.270+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -2991,10 +3337,10 @@ Content-Length: 1291
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-03-31T07:08:47.579+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-03-31T07:08:47.578+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-03-31T07:08:47.586+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-03-31T07:08:47.596+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-04-07T14:45:22.265+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-04-07T14:45:22.264+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-04-07T14:45:22.271+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-04-07T14:45:22.283+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3017,8 +3363,8 @@ Content-Length: 1291
     -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1585638627082,
-  &quot;START_DATE&quot; : 1585638427082
+  &quot;END_DATE&quot; : 1586270821703,
+  &quot;START_DATE&quot; : 1586270621703
 }'</code></pre>
 </div>
 </div>
@@ -3035,8 +3381,8 @@ Content-Length: 95
 
 {
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1585638627082,
-  &quot;START_DATE&quot; : 1585638427082
+  &quot;END_DATE&quot; : 1586270821703,
+  &quot;START_DATE&quot; : 1586270621703
 }</code></pre>
 </div>
 </div>
@@ -3048,7 +3394,7 @@ Content-Length: 95
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Tue, 31 Mar 2020 07:08:46 GMT
+Date: Tue, 07 Apr 2020 14:45:21 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 2692
@@ -3059,7 +3405,7 @@ Content-Length: 2692
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/03/31 09:08:47:061[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/04/07 16:45:21:678[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3071,10 +3417,10 @@ Content-Length: 2692
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-03-31T07:08:47.064+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-03-31T07:08:47.063+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-03-31T07:08:47.070+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-03-31T07:08:47.081+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-04-07T14:45:21.682+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-04-07T14:45:21.681+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-04-07T14:45:21.690+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-04-07T14:45:21.702+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3087,7 +3433,7 @@ Content-Length: 2692
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/03/31 09:08:47:061[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/04/07 16:45:21:678[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3099,10 +3445,10 @@ Content-Length: 2692
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-03-31T07:08:47.004+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-03-31T07:08:47.003+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-03-31T07:08:47.013+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-03-31T07:08:47.022+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-04-07T14:45:21.611+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-04-07T14:45:21.609+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-04-07T14:45:21.620+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-04-07T14:45:21.632+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3115,7 +3461,7 @@ Content-Length: 2692
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/03/31 09:08:47:061[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/04/07 16:45:21:678[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3127,10 +3473,10 @@ Content-Length: 2692
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-03-31T07:08:45.505+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-03-31T07:08:45.503+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-03-31T07:08:45.519+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-03-31T07:08:45.530+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-04-07T14:45:20.045+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-04-07T14:45:20.043+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-04-07T14:45:20.060+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-04-07T14:45:20.072+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3143,7 +3489,7 @@ Content-Length: 2692
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/03/31 09:08:47:061[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/04/07 16:45:21:678[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3155,10 +3501,10 @@ Content-Length: 2692
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-03-31T07:08:45.457+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-03-31T07:08:45.452+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-03-31T07:08:45.474+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-03-31T07:08:45.486+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-04-07T14:45:19.978+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-04-07T14:45:19.973+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-04-07T14:45:20.009+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-04-07T14:45:20.022+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3225,7 +3571,7 @@ Content-Length: 205
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Tue, 31 Mar 2020 07:08:45 GMT
+Date: Tue, 07 Apr 2020 14:45:19 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3263,7 +3609,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Tue, 31 Mar 2020 07:08:48 GMT
+Date: Tue, 07 Apr 2020 14:45:22 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 412
@@ -3317,7 +3663,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Tue, 31 Mar 2020 07:08:48 GMT
+Date: Tue, 07 Apr 2020 14:45:23 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 951
@@ -3389,7 +3735,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Tue, 31 Mar 2020 07:08:48 GMT
+Date: Tue, 07 Apr 2020 14:45:22 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 951
@@ -3493,7 +3839,7 @@ Content-Length: 424
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Tue, 31 Mar 2020 07:08:48 GMT
+Date: Tue, 07 Apr 2020 14:45:23 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3564,7 +3910,7 @@ Content-Length: 441
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Tue, 31 Mar 2020 07:08:46 GMT
+Date: Tue, 07 Apr 2020 14:45:22 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3597,7 +3943,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Tue, 31 Mar 2020 07:08:46 GMT
+Date: Tue, 07 Apr 2020 14:45:21 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3630,7 +3976,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Tue, 31 Mar 2020 07:08:48 GMT
+Date: Tue, 07 Apr 2020 14:45:22 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3663,7 +4009,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Tue, 31 Mar 2020 07:08:46 GMT
+Date: Tue, 07 Apr 2020 14:45:22 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3681,7 +4027,7 @@ Connection: keep-alive</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-06-05 14:48:02 +02:00
+Last updated 2020-04-07 16:11:00 +02:00
 </div>
 </div>
 </body>
