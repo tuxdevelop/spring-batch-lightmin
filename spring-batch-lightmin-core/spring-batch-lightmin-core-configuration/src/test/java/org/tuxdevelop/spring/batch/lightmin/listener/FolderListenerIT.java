@@ -78,7 +78,7 @@ public class FolderListenerIT {
             e.printStackTrace();
         }
         final List<JobInstance> jobinstances = this.jobExplorer.findJobInstancesByJobName("simpleJob", 0, 10);
-        assertThat(jobinstances).hasSize(1);
+        assertThat(jobinstances.size()).isGreaterThanOrEqualTo(1);
     }
 
 }

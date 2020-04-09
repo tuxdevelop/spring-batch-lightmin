@@ -8,23 +8,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.CleanUpRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfigurationTestHelper;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerValidationException;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 import org.tuxdevelop.spring.batch.lightmin.test.configuration.SchedulerCoreITConfiguration;
+
+import java.util.List;
 
 import static org.assertj.core.api.Fail.fail;
 
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {SchedulerCoreITConfiguration.class})
-public class SchedulerConfigurationServiceIT {
+public class SchedulerConfigurationServiceIT extends CommonServiceIT {
 
     @Autowired
     private SchedulerConfigurationService schedulerConfigurationService;
+    @Autowired
+    private CleanUpRepository cleanUpRepository;
+
     @MockBean
     private JobServerService jobServerService;
+
 
     @Test
     public void testSave() {
@@ -34,6 +42,11 @@ public class SchedulerConfigurationServiceIT {
         final SchedulerConfiguration result = this.schedulerConfigurationService.save(schedulerConfiguration);
         BDDAssertions.then(result).isNotNull();
         BDDAssertions.then(result.getId()).isNotNull();
+    }
+
+    @Test(expected = SchedulerValidationException.class)
+    public void testSaveNull() {
+        this.schedulerConfigurationService.save(null);
     }
 
     @Test
@@ -59,7 +72,44 @@ public class SchedulerConfigurationServiceIT {
         } catch (final SchedulerConfigurationNotFoundException e) {
             log.debug("SchedulerConfiguration deleted, everything is fine");
         }
+    }
+
+    @Test(expected = SchedulerValidationException.class)
+    public void testDeleteNull() {
+        this.schedulerConfigurationService.delete(null);
+    }
+
+    @Test
+    public void testFindAll() {
+        final SchedulerConfiguration config1 = SchedulerConfigurationTestHelper.createSchedulerConfiguration("test", "test-app");
+        final SchedulerConfiguration config2 = SchedulerConfigurationTestHelper.createSchedulerConfiguration("test", "test-app");
+
+        final SchedulerConfiguration savedConfig1 = this.schedulerConfigurationService.save(config1);
+        final SchedulerConfiguration savedConfig2 = this.schedulerConfigurationService.save(config2);
+
+
+        final List<SchedulerConfiguration> found = this.schedulerConfigurationService.findAll();
+        BDDAssertions.then(found).hasSize(2);
+        BDDAssertions.then(found).contains(savedConfig1);
+        BDDAssertions.then(found).contains(savedConfig2);
+    }
+
+    @Test
+    public void testFindById() {
+        final SchedulerConfiguration config1 = SchedulerConfigurationTestHelper.createSchedulerConfiguration("test", "test-app");
+        final SchedulerConfiguration savedConfig1 = this.schedulerConfigurationService.save(config1);
+
+        try {
+            final SchedulerConfiguration found = this.schedulerConfigurationService.findById(savedConfig1.getId());
+            BDDAssertions.then(found).isEqualTo(savedConfig1);
+        } catch (final SchedulerConfigurationNotFoundException e) {
+            fail(e.getMessage());
+        }
 
     }
 
+    @Override
+    protected CleanUpRepository cleanUpRepository() {
+        return this.cleanUpRepository;
+    }
 }

@@ -5,7 +5,7 @@ public class MapSchedulerConfigurationRepositoryTest extends SchedulerConfigurat
     final MapSchedulerConfigurationRepository schedulerConfigurationRepository = new MapSchedulerConfigurationRepository();
     final MapSchedulerExecutionRepository schedulerExecutionRepository = new MapSchedulerExecutionRepository();
     final CleanUpRepository cleanUpRepository =
-            new MapCleanUpRepository(this.schedulerConfigurationRepository, this.schedulerExecutionRepository);
+            new DefaultCleanUpRepository(this.schedulerConfigurationRepository, this.schedulerExecutionRepository);
 
 
     @Override
