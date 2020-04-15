@@ -15,12 +15,12 @@ import java.util.Properties;
 @EnableLightminRemoteConfigurationRepository
 @SpringBootApplication(exclude = {BatchAutoConfiguration.class})
 @PropertySource(value = "classpath:properties/sample/client/client.properties")
-public class AddressMigratorApp {
+public class AddressMigratorApp2 {
 
     public static void main(final String[] args) {
         final SpringApplication application = new SpringApplication(AddressMigratorApp2.class);
         final Properties properties = new Properties();
-        properties.putIfAbsent("server.port", 9009);
+        properties.putIfAbsent("server.port", 9010);
         application.setDefaultProperties(properties);
         application.run(args);
     }

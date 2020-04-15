@@ -2,20 +2,27 @@ package org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain;
 
 import lombok.Data;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
+import org.tuxdevelop.spring.batch.lightmin.validation.annotation.IsCronExpression;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Data
 public class SchedulerConfiguration {
-
-    //TODO: add validations
+    
     private Long id;
+    @NotNull
     private Integer instanceExecutionCount;
+    @IsCronExpression
     private String cronExpression;
+    @NotBlank
     private String application;
+    @NotBlank
     private String jobName;
     private Boolean retryable;
     private Integer maxRetries;
+    @NotNull
     private JobIncrementer jobIncrementer;
     private ServerSchedulerStatus status;
     private Map<String, Object> jobParameters;

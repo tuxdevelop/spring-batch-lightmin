@@ -27,6 +27,10 @@ public class LightminClientApplicationStatus implements Serializable {
         this.timeInMills = timeInMills;
     }
 
+    public static LightminClientApplicationStatus valueOf(final LightminClientApplicationStatus status) {
+        return new LightminClientApplicationStatus(status.getStatus(), status.getTimeInMills());
+    }
+    
     public static LightminClientApplicationStatus valueOf(final String status) {
         return new LightminClientApplicationStatus(status, System.currentTimeMillis());
     }

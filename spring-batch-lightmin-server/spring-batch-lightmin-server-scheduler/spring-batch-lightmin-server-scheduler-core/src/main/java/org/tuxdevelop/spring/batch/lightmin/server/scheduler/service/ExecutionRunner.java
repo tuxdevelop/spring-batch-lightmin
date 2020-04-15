@@ -16,7 +16,6 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.S
 import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -127,16 +126,23 @@ public class ExecutionRunner implements Runnable {
 
     private void launchJobForInstances(final JobLaunch jobLaunch,
                                        final List<LightminClientApplication> lightminClientApplications) {
-        for (final LightminClientApplication lightminClientApplication : lightminClientApplications) {
-            this.launchJob(jobLaunch, lightminClientApplication);
+
+        if (lightminClientApplications != null) {
+            lightminClientApplications.forEach(
+                    application -> {
+                        this.launchJob(jobLaunch, application);
+                    }
+            );
+        } else {
+            log.warn("No lightmin applications availabe, skipping joblauch {}", jobLaunch);
         }
     }
 
     private List<LightminClientApplication> getLightminClientApplications(final Integer count,
                                                                           final String applicationName) {
         final List<LightminClientApplication> lightminClientApplications = new ArrayList<>();
-        final Collection<LightminClientApplication> foundInstances =
-                this.serverSchedulerService.findLightminApplicationsByName(applicationName);
+        final List<LightminClientApplication> foundInstances =
+                new ArrayList<>(this.serverSchedulerService.findLightminApplicationsByName(applicationName));
         if (count > foundInstances.size()) {
             if (this.properties.getFailOnInstanceExecutionCount()) {
                 throw new SchedulerRuntimException("Desired Instance Execution Count: " + count + " Found: "
@@ -147,8 +153,7 @@ public class ExecutionRunner implements Runnable {
             }
         } else {
             for (int i = 0; i < count; i++) {
-                final LightminClientApplication clientApplication = foundInstances.iterator().next();
-                lightminClientApplications.add(clientApplication);
+                lightminClientApplications.add(foundInstances.get(i));
             }
         }
         return lightminClientApplications;
