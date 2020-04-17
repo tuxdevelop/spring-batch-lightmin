@@ -7,8 +7,8 @@ import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientInformation
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Marcel Becker
@@ -65,10 +65,16 @@ public abstract class KVLightminApplicationRepository<T extends Map<String, Ligh
     }
 
     private Collection<LightminClientApplication> copy(final Collection<LightminClientApplication> applications) {
-        return applications.stream()
-                .map(
-                        this::copy
-                ).collect(Collectors.toList());
+        final List<LightminClientApplication> applicationList;
+        if (applications == null || applications.isEmpty()) {
+            applicationList = new ArrayList<>();
+        } else {
+            applicationList = new ArrayList<>();
+            for (final LightminClientApplication application : applications) {
+                applicationList.add(copy(application));
+            }
+        }
+        return applicationList;
     }
 
     private LightminClientApplication copy(final LightminClientApplication application) {
