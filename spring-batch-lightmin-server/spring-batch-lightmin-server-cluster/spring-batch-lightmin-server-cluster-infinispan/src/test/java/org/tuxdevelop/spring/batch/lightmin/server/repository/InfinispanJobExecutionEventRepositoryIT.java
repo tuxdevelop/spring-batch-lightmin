@@ -1,0 +1,28 @@
+package org.tuxdevelop.spring.batch.lightmin.server.repository;
+
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.tuxdevelop.spring.batch.lightmin.server.configuration.LightminServerCoreProperties;
+import org.tuxdevelop.spring.batch.lightmin.test.configuration.InfinispanITConfiguration;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {InfinispanITConfiguration.class})
+public class InfinispanJobExecutionEventRepositoryIT extends JobExecutionEventRepositoryTest {
+
+    @Autowired
+    private JobExecutionEventRepository jobExecutionEventRepository;
+    @Autowired
+    private LightminServerCoreProperties properties;
+
+    @Override
+    protected JobExecutionEventRepository getJobExecutionEventRepository() {
+        return this.jobExecutionEventRepository;
+    }
+
+    @Override
+    protected LightminServerCoreProperties getLightminServerCoreProperties() {
+        return this.properties;
+    }
+}

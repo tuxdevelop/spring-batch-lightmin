@@ -34,7 +34,7 @@ import static org.tuxdevelop.spring.batch.lightmin.server.cluster.lock.Infinispa
 @EnableServerClusterCore
 public class InfinispanServerClusterConfiguration {
 
-    public static final String INFINISPAN_DEFAULT_CACHE_MANAGER_NAME = "infinispanCacheManager";
+    public static final String INFINISPAN_DEFAULT_CACHE_MANAGER_NAME = "lightminInfinispanCacheManager";
 
     @Bean(name = INFINISPAN_DEFAULT_CACHE_MANAGER_NAME)
     @ConditionalOnMissingBean(SpringEmbeddedCacheManager.class)

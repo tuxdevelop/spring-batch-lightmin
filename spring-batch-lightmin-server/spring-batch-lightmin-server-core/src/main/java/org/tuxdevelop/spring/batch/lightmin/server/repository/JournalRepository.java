@@ -7,7 +7,9 @@ import java.util.List;
 public interface JournalRepository {
 
 
-    void add(Journal journal);
+    Journal add(Journal journal);
 
     List<Journal> findAll();
+
+    void clear();
 }

@@ -20,10 +20,11 @@ public abstract class KVJournalRepository<T extends Map<Long, Journal>> implemen
     }
 
     @Override
-    public synchronized void add(final Journal journal) {
+    public synchronized Journal add(final Journal journal) {
         final Long id = this.idStore.getAndIncrement();
         journal.setId(id);
         this.store.put(id, journal);
+        return journal;
     }
 
     @Override
@@ -37,5 +38,9 @@ public abstract class KVJournalRepository<T extends Map<Long, Journal>> implemen
         return result;
     }
 
+    @Override
+    public void clear() {
+        this.store.clear();
+    }
 
 }

@@ -11,11 +11,13 @@ import java.util.List;
  */
 public interface JobExecutionEventRepository {
 
-    void save(final JobExecutionEventInfo jobExecutionEventInfo);
+    JobExecutionEventInfo save(final JobExecutionEventInfo jobExecutionEventInfo);
 
     List<JobExecutionEventInfo> findAll(int start, int count);
 
     List<JobExecutionEventInfo> finalByExitStatus(final ExitStatus exitStatus, int start, int count);
 
     int getTotalCount();
+
+    void clear();
 }

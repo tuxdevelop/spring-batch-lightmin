@@ -5,12 +5,11 @@ import org.infinispan.configuration.global.GlobalConfigurationBuilder;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.tuxdevelop.spring.batch.lightmin.server.cluster.configuration.InfinispanServerClusterConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.cluster.annotation.EnableServerClusterInfinispan;
 import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 
 @Configuration
-@Import(value = {InfinispanServerClusterConfiguration.class})
+@EnableServerClusterInfinispan
 public class InfinispanITConfiguration {
 
     @MockBean

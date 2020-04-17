@@ -19,8 +19,9 @@ public abstract class KVJobExecutionEventRepository<T extends Map<Long, JobExecu
     }
 
     @Override
-    public synchronized void save(final JobExecutionEventInfo jobExecutionEventInfo) {
+    public synchronized JobExecutionEventInfo save(final JobExecutionEventInfo jobExecutionEventInfo) {
         this.store.put(jobExecutionEventInfo.getJobExecutionId(), jobExecutionEventInfo);
+        return jobExecutionEventInfo;
     }
 
     @Override
@@ -47,6 +48,11 @@ public abstract class KVJobExecutionEventRepository<T extends Map<Long, JobExecu
             count = 0;
         }
         return count;
+    }
+
+    @Override
+    public void clear() {
+        this.store.clear();
     }
 
     private void sortByStartDate(final List<JobExecutionEventInfo> jobExecutionEventInfos) {
