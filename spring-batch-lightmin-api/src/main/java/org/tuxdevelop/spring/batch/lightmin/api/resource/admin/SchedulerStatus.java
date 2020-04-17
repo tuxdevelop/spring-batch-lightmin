@@ -2,11 +2,13 @@ package org.tuxdevelop.spring.batch.lightmin.api.resource.admin;
 
 import lombok.Getter;
 
+import java.io.Serializable;
+
 /**
  * @author Marcel Becker
  * @since 0.3
  */
-public enum SchedulerStatus {
+public enum SchedulerStatus implements Serializable {
 
     INITIALIZED("INITIALIZED"),
     RUNNING("RUNNING"),
@@ -14,7 +16,7 @@ public enum SchedulerStatus {
     IN_TERMINATION("IN TERMINATION");
 
     @Getter
-    private String value;
+    private final String value;
 
     SchedulerStatus(final String value) {
         this.value = value;

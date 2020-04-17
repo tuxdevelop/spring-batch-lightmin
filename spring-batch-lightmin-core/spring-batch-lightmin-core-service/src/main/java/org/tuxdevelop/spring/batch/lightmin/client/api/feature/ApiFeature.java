@@ -1,6 +1,8 @@
 package org.tuxdevelop.spring.batch.lightmin.client.api.feature;
 
-public enum ApiFeature {
+import java.io.Serializable;
+
+public enum ApiFeature implements Serializable {
 
     JOB_EXECUTION_QUERY_SERVICE
 }

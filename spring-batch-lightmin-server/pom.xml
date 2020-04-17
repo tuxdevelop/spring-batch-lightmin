@@ -17,6 +17,7 @@
         <module>spring-batch-lightmin-server-standalone</module>
         <module>spring-batch-lightmin-server-fe</module>
         <module>spring-batch-lightmin-server-scheduler</module>
+        <module>spring-batch-lightmin-server-cluster</module>
     </modules>
 
 </project>

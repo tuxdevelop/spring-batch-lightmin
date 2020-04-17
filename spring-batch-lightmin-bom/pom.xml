@@ -32,7 +32,6 @@
     </developers>
 
 
-
     <properties>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
@@ -207,6 +206,71 @@
             <dependency>
                 <groupId>org.tuxdevelop</groupId>
                 <artifactId>spring-batch-lightmin-server-standalone</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <!-- server scheduler -->
+
+            <dependency>
+                <groupId>org.tuxdevelop</groupId>
+                <artifactId>spring-batch-lightmin-server-scheduler</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.tuxdevelop</groupId>
+                <artifactId>spring-batch-lightmin-server-scheduler-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.tuxdevelop</groupId>
+                <artifactId>spring-batch-lightmin-server-scheduler-repository</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.tuxdevelop</groupId>
+                <artifactId>spring-batch-lightmin-server-scheduler-repository-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.tuxdevelop</groupId>
+                <artifactId>spring-batch-lightmin-server-scheduler-repository-jdbc</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.tuxdevelop</groupId>
+                <artifactId>spring-batch-lightmin-server-scheduler-repository-map</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.tuxdevelop</groupId>
+                <artifactId>spring-batch-lightmin-server-scheduler-repository-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- server cluster -->
+
+            <dependency>
+                <groupId>org.tuxdevelop</groupId>
+                <artifactId>spring-batch-lightmin-server-cluster</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.tuxdevelop</groupId>
+                <artifactId>spring-batch-lightmin-server-cluster-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.tuxdevelop</groupId>
+                <artifactId>spring-batch-lightmin-server-cluster-infinispan</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

@@ -3,17 +3,19 @@ package org.tuxdevelop.spring.batch.lightmin.api.resource.admin;
 
 import lombok.Getter;
 
+import java.io.Serializable;
+
 /**
  * @author Marcel Becker
  * @since 0.3
  */
-public enum ListenerStatus {
+public enum ListenerStatus implements Serializable {
 
     ACTIVE("ACTIVE"),
     STOPPED("STOPPED");
 
     @Getter
-    private String value;
+    private final String value;
 
     ListenerStatus(final String value) {
         this.value = value;

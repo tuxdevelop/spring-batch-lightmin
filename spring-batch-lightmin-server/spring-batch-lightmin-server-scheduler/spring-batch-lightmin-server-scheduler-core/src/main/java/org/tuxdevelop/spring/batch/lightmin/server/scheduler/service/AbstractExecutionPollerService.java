@@ -8,7 +8,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.S
 import java.util.Date;
 import java.util.List;
 
-public abstract class AbstractExecutionPollerService {
+public abstract class AbstractExecutionPollerService implements ExecutionPollerService {
 
     private final ServerSchedulerService serverSchedulerService;
     private final SchedulerExecutionService schedulerExecutionService;

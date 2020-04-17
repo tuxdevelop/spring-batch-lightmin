@@ -58,6 +58,7 @@
         <equalsverifier.version>1.7.5</equalsverifier.version>
         <datafactory.version>0.8</datafactory.version>
         <jacoco.version>0.8.5</jacoco.version>
+        <infinispan9.version>9.4.18.Final</infinispan9.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
         <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
@@ -105,6 +106,20 @@
                 <version>${datafactory.version}</version>
                 <scope>test</scope>
             </dependency>
+
+            <!-- infinispan -->
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-spring5-embedded</artifactId>
+                <version>${infinispan9.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-clustered-lock</artifactId>
+                <version>${infinispan9.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
