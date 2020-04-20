@@ -45,6 +45,9 @@ public class LightminClientProperties {
     @Setter
     private String hostname;
     @Getter
+    @Setter
+    private String applicationId;
+    @Getter
     private final String name;
     @Getter
     private final String healthEndpointId;

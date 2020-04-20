@@ -17,6 +17,7 @@ public class LightminClientApplication implements Serializable {
 
     private String id;
     private String name;
+    private String applicationId;
     private String managementUrl;
     private String healthUrl;
     private String serviceUrl;
@@ -39,6 +40,7 @@ public class LightminClientApplication implements Serializable {
         final LightminClientApplication lightminClientApplication = new LightminClientApplication();
         lightminClientApplication.setHealthUrl(lightminClientProperties.getHealthUrl());
         lightminClientApplication.setName(lightminClientProperties.getName());
+        lightminClientApplication.setApplicationId(lightminClientProperties.getApplicationId());
         lightminClientApplication.setServiceUrl(lightminClientProperties.getServiceUrl());
         lightminClientApplication.setManagementUrl(lightminClientProperties.getManagementUrl());
         lightminClientApplication.setLightminClientInformation(lightminClientInformation);
