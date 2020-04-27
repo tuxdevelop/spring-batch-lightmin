@@ -2,12 +2,15 @@ package org.tuxdevelop.spring.batch.lightmin.server.cluster.lock;
 
 import lombok.extern.slf4j.Slf4j;
 import org.infinispan.Cache;
+import org.infinispan.CacheSet;
 import org.infinispan.lock.EmbeddedClusteredLockManagerFactory;
 import org.infinispan.lock.api.ClusteredLock;
 import org.infinispan.lock.api.ClusteredLockManager;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -43,6 +46,12 @@ public class InfinispanLightminServerLockManager implements LightminServerLockMa
     @Override
     public void releaseLock(final String id, final Boolean forceRelease) {
         this.unlock(id, forceRelease);
+    }
+
+    @Override
+    public List<String> getAcquiredLocks() {
+        final CacheSet<String> keys = this.verificationCache.keySet();
+        return new ArrayList<>(keys);
     }
 
     private void unlock(final String id, final Boolean forceRelease) {

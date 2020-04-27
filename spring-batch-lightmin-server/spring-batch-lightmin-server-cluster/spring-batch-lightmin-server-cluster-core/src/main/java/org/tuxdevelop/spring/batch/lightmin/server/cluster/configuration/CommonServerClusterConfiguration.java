@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.server.cluster.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.tuxdevelop.spring.batch.lightmin.server.cluster.actuator.LockEndpoint;
 import org.tuxdevelop.spring.batch.lightmin.server.cluster.lock.LightminServerLockManager;
 import org.tuxdevelop.spring.batch.lightmin.server.cluster.lock.ServerLockAspect;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.annotation.EnableServerSchedulerCore;
@@ -30,6 +31,11 @@ public class CommonServerClusterConfiguration {
     @Bean
     public ServerLockAspect serverLockAspect(final LightminServerLockManager lightminServerLockManager) {
         return new ServerLockAspect(lightminServerLockManager);
+    }
+
+    @Bean
+    public LockEndpoint lockEndpoint(final LightminServerLockManager lightminServerLockManager) {
+        return new LockEndpoint(lightminServerLockManager);
     }
 
 }

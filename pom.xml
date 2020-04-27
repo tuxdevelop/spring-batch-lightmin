@@ -218,6 +218,7 @@
                     <encoding>UTF-8</encoding>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
             <plugin>
