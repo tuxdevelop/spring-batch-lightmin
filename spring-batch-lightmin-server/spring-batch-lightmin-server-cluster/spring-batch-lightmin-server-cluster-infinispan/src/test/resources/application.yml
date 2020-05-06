@@ -1,3 +1,11 @@
 spring:
   main:
     allow-bean-definition-overriding: true
+  batch:
+    lightmin:
+      server:
+        cluster:
+          infinispan:
+            repository:
+              init-scheduler-configuration-repository: true
+              init-scheduler-execution-repository: true

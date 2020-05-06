@@ -9,7 +9,10 @@ import org.infinispan.eviction.EvictionType;
 import org.infinispan.manager.DefaultCacheManager;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.infinispan.spring.embedded.provider.SpringEmbeddedCacheManager;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -18,23 +21,37 @@ import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication
 import org.tuxdevelop.spring.batch.lightmin.server.cluster.annotation.EnableServerClusterCore;
 import org.tuxdevelop.spring.batch.lightmin.server.cluster.lock.InfinispanLightminServerLockManager;
 import org.tuxdevelop.spring.batch.lightmin.server.cluster.lock.LightminServerLockManager;
-import org.tuxdevelop.spring.batch.lightmin.server.cluster.repository.InfinispanJobExecutionEventRepository;
-import org.tuxdevelop.spring.batch.lightmin.server.cluster.repository.InfinispanJournalRepository;
-import org.tuxdevelop.spring.batch.lightmin.server.cluster.repository.InfinispanLightminApplicationRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.cluster.repository.*;
+import org.tuxdevelop.spring.batch.lightmin.server.cluster.service.InfinispanClusterIdService;
 import org.tuxdevelop.spring.batch.lightmin.server.configuration.LightminServerCoreProperties;
 import org.tuxdevelop.spring.batch.lightmin.server.domain.Journal;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.JobExecutionEventRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.JournalRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerExecutionRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerExecution;
 
 import static org.tuxdevelop.spring.batch.lightmin.server.cluster.lock.InfinispanLightminServerLockManager.VERIFICATION_CACHE_NAME;
 
 @Slf4j
 @Configuration
 @EnableServerClusterCore
+@EnableConfigurationProperties(value = {InfinispanServerClusterConfigurationProperties.class})
 public class InfinispanServerClusterConfiguration {
 
     public static final String INFINISPAN_DEFAULT_CACHE_MANAGER_NAME = "lightminInfinispanCacheManager";
+    public static final String REPOSITORY_ID_CACHE_NAME = "lightminInfinispanRepositoryIdCache";
+    public static final String SCHEDULER_EXECUTION_REPOSITORY_CACHE_NAME = "lightminInfinispanServerSchedulerExecutionRepositoryCache";
+    public static final String SCHEDULER_CONFIGURATION_REPOSITORY_CACHE_NAME = "lightminInfinispanServerSchedulerConfigurationRepositoryCache";
+    public static final String INFINISPAN_LIGHTMIN_APPLICATION_REPOSITORY_CACHE_NAME = "infinispanLightminApplicationRepositoryCache";
+    public static final String INFINISPAN_JOB_EXECUTION_EVENT_REPOSITORY_CACHE_NAME = "infinispanJobExecutionEventRepositoryCache";
+    public static final String INFINISPAN_JOURNAL_REPOSITORY_CACHE_NAME = "infinispanJournalRepositoryCache";
+
+    /*
+     * CACHE MANAGER
+     */
 
     @Bean(name = INFINISPAN_DEFAULT_CACHE_MANAGER_NAME)
     @ConditionalOnMissingBean(SpringEmbeddedCacheManager.class)
@@ -43,6 +60,10 @@ public class InfinispanServerClusterConfiguration {
         return new SpringEmbeddedCacheManager(manager);
     }
 
+    /*
+     * INFINISPAN CACHES
+     */
+
     @Bean
     @DependsOn(value = {VERIFICATION_CACHE_NAME})
     public LightminServerLockManager lightminServerLockManager(final SpringEmbeddedCacheManager springEmbeddedCacheManager) {
@@ -50,17 +71,27 @@ public class InfinispanServerClusterConfiguration {
     }
 
     @Bean(name = VERIFICATION_CACHE_NAME)
-    public org.springframework.cache.Cache tydiriumLockCache(final SpringEmbeddedCacheManager springEmbeddedCacheManager) {
+    public org.springframework.cache.Cache lightminLockVerificationCache(final SpringEmbeddedCacheManager springEmbeddedCacheManager) {
 
         final org.infinispan.configuration.cache.Configuration configuration = this.getConfiguration();
 
         return this.getSpringCache(springEmbeddedCacheManager, configuration, VERIFICATION_CACHE_NAME);
     }
 
+    @Bean(name = REPOSITORY_ID_CACHE_NAME)
+    public org.springframework.cache.Cache lightminRepositoryIdCache(final SpringEmbeddedCacheManager springEmbeddedCacheManager) {
+        final org.infinispan.configuration.cache.Configuration configuration = this.getConfiguration();
+        return this.getSpringCache(springEmbeddedCacheManager, configuration, REPOSITORY_ID_CACHE_NAME);
+    }
+
+    /*
+     * INFINISPAN REPOSITORIES
+     */
+
     @Bean
     public LightminApplicationRepository lightminApplicationRepository(final SpringEmbeddedCacheManager embeddedCacheManager) {
         final org.infinispan.configuration.cache.Configuration configuration = this.getLightminApplicationRepositoryConfiguration();
-        final Cache<?, ?> cache = this.getCache(embeddedCacheManager, configuration, "infinispanLightminApplicationRepositoryCache");
+        final Cache<?, ?> cache = this.getCache(embeddedCacheManager, configuration, INFINISPAN_LIGHTMIN_APPLICATION_REPOSITORY_CACHE_NAME);
         return new InfinispanLightminApplicationRepository((Cache<String, LightminClientApplication>) cache);
     }
 
@@ -69,16 +100,54 @@ public class InfinispanServerClusterConfiguration {
                                                                    final LightminServerCoreProperties properties) {
         final org.infinispan.configuration.cache.Configuration configuration =
                 this.getJobExecutionEventRepositoryConfiguration(properties.getEventRepositorySize());
-        final Cache<?, ?> cache = this.getCache(embeddedCacheManager, configuration, "infinispanJobExecutionEventRepositoryCache");
+        final Cache<?, ?> cache = this.getCache(embeddedCacheManager, configuration, INFINISPAN_JOB_EXECUTION_EVENT_REPOSITORY_CACHE_NAME);
         return new InfinispanJobExecutionEventRepository((Cache<Long, JobExecutionEventInfo>) cache);
     }
 
     @Bean
-    public JournalRepository journalRepository(final SpringEmbeddedCacheManager embeddedCacheManager) {
+    public JournalRepository journalRepository(final SpringEmbeddedCacheManager embeddedCacheManager,
+                                               final InfinispanClusterIdService infinispanClusterIdService) {
         final org.infinispan.configuration.cache.Configuration configuration = this.getJournalRepositoryConfiguration();
-        final Cache<?, ?> cache = this.getCache(embeddedCacheManager, configuration, "infinispanJournalRepositoryCache");
-        return new InfinispanJournalRepository((Cache<Long, Journal>) cache);
+        final Cache<?, ?> cache = this.getCache(embeddedCacheManager, configuration, INFINISPAN_JOURNAL_REPOSITORY_CACHE_NAME);
+        return new InfinispanJournalRepository((Cache<Long, Journal>) cache, infinispanClusterIdService);
     }
+
+    @Bean
+    @ConditionalOnProperty(
+            prefix = "spring.batch.lightmin.server.cluster.infinispan.repository",
+            name = "init-scheduler-execution-repository",
+            havingValue = "true")
+    public SchedulerExecutionRepository schedulerExecutionRepository(final SpringEmbeddedCacheManager embeddedCacheManager,
+                                                                     final InfinispanClusterIdService infinispanClusterIdService) {
+        final org.infinispan.configuration.cache.Configuration configuration = this.getConfiguration();
+        final Cache<?, ?> cache = this.getCache(embeddedCacheManager, configuration, SCHEDULER_EXECUTION_REPOSITORY_CACHE_NAME);
+        return new InfinispanSchedulerExecutionRepository((Cache<Long, SchedulerExecution>) cache, infinispanClusterIdService);
+    }
+
+    @Bean
+    @ConditionalOnProperty(
+            prefix = "spring.batch.lightmin.server.cluster.infinispan.repository",
+            name = "init-scheduler-configuration-repository",
+            havingValue = "true")
+    public SchedulerConfigurationRepository schedulerConfigurationRepository(final SpringEmbeddedCacheManager embeddedCacheManager,
+                                                                             final InfinispanClusterIdService infinispanClusterIdService) {
+        final org.infinispan.configuration.cache.Configuration configuration = this.getConfiguration();
+        final Cache<?, ?> cache = this.getCache(embeddedCacheManager, configuration, SCHEDULER_CONFIGURATION_REPOSITORY_CACHE_NAME);
+        return new InfinispanSchedulerConfigurationRepository((Cache<Long, SchedulerConfiguration>) cache, infinispanClusterIdService);
+    }
+
+    /*
+     * SERVICES
+     */
+
+    @Bean
+    public InfinispanClusterIdService infinispanClusterIdService(@Qualifier(REPOSITORY_ID_CACHE_NAME) final org.springframework.cache.Cache cache) {
+        return new InfinispanClusterIdService(cache);
+    }
+
+    /*
+     * HELPERS AND CONFIGURATIONS
+     */
 
     protected org.infinispan.configuration.cache.Configuration getJobExecutionEventRepositoryConfiguration(final long limit) {
         return this.getConfiguration(limit);
