@@ -16,6 +16,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.S
 import org.tuxdevelop.spring.batch.lightmin.util.DomainParameterParser;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ public class ExecutionRunner implements Runnable {
     private final SchedulerExecution schedulerExecution;
     private final ServerSchedulerService serverSchedulerService;
     private final ServerSchedulerCoreConfigurationProperties properties;
+    private final SchedulerConfiguration schedulerConfiguration;
 
     public ExecutionRunner(
             final SchedulerExecution schedulerExecution,
@@ -33,25 +35,24 @@ public class ExecutionRunner implements Runnable {
         this.schedulerExecution = schedulerExecution;
         this.serverSchedulerService = serverSchedulerService;
         this.properties = properties;
+        this.schedulerConfiguration =
+                this.serverSchedulerService.findSchedulerConfigurationById(this.schedulerExecution.getSchedulerConfigurationId());
     }
 
     @Override
     public void run() {
         try {
-            final SchedulerConfiguration schedulerConfiguration =
-                    this.serverSchedulerService.findSchedulerConfigurationById(
-                            this.schedulerExecution.getSchedulerConfigurationId());
             this.updateExecution(ExecutionStatus.RUNNING, Boolean.TRUE);
             Integer finalStatus;
             try {
-                this.fireJobLaunch(schedulerConfiguration);
+                this.fireJobLaunch(this.schedulerConfiguration);
                 this.updateExecution(ExecutionStatus.FINISHED, Boolean.FALSE);
                 finalStatus = ExecutionStatus.FINISHED;
             } catch (final Exception e) {
                 log.error("Execution for {} failed ", this.schedulerExecution, e);
-                if (schedulerConfiguration.getRetryable() &&
-                        this.schedulerExecution.getExecutionCount() <= schedulerConfiguration.getMaxRetries()) {
-                    this.updateExecution(ExecutionStatus.FAILED, Boolean.FALSE);
+                if (this.schedulerConfiguration.getRetryable() &&
+                        this.schedulerExecution.getExecutionCount() <= this.schedulerConfiguration.getMaxRetries()) {
+                    this.updateExecution(ExecutionStatus.FAILED, Boolean.FALSE, Boolean.TRUE);
                     finalStatus = ExecutionStatus.FAILED;
                 } else {
                     this.updateExecution(ExecutionStatus.LOST, Boolean.FALSE);
@@ -59,21 +60,21 @@ public class ExecutionRunner implements Runnable {
                 }
             }
             if (ExecutionStatus.FINISHED.equals(finalStatus)) {
-                this.createNextExecution(schedulerConfiguration.getCronExpression());
+                this.createNextExecution(this.schedulerConfiguration.getCronExpression());
             } else if (ExecutionStatus.FAILED.equals(finalStatus)) {
                 if (this.properties.getCreateNewExecutionsOnFailure()) {
-                    this.createNextExecution(schedulerConfiguration.getCronExpression());
+                    this.createNextExecution(this.schedulerConfiguration.getCronExpression());
                 } else {
-                    log.info("Not creating new execution for SchedulerConfiguration with the id " + schedulerConfiguration.getId() + " ! Reason: Execution status is FAILED!");
+                    log.info("Not creating new execution for SchedulerConfiguration with the id " + this.schedulerConfiguration.getId() + " ! Reason: Execution status is FAILED!");
                 }
             } else if (ExecutionStatus.LOST.equals(finalStatus)) {
                 if (this.properties.getCreateNewExecutionsOnLost()) {
-                    this.createNextExecution(schedulerConfiguration.getCronExpression());
+                    this.createNextExecution(this.schedulerConfiguration.getCronExpression());
                 } else {
-                    log.info("Not creating new execution for SchedulerConfiguration with the id " + schedulerConfiguration.getId() + " ! Reason: Execution status is LOST!");
+                    log.info("Not creating new execution for SchedulerConfiguration with the id " + this.schedulerConfiguration.getId() + " ! Reason: Execution status is LOST!");
                 }
             } else {
-                log.warn("Execution Status for SchedulerExecution with the id " + this.schedulerExecution.getId() + "of SchedulerConfiguration with the id " + schedulerConfiguration.getId() + " is " + finalStatus + " ! No new execution created!");
+                log.warn("Execution Status for SchedulerExecution with the id " + this.schedulerExecution.getId() + "of SchedulerConfiguration with the id " + this.schedulerConfiguration.getId() + " is " + finalStatus + " ! No new execution created!");
             }
         } catch (final Exception e) {
             log.error("Error while processing scheduled job state {} ", this.schedulerExecution, e);
@@ -85,14 +86,41 @@ public class ExecutionRunner implements Runnable {
      * HANDLE EXECUTION
      */
 
-    private void updateExecution(final Integer status, final Boolean incrementCount) {
+    private void updateExecution(final Integer status, final Boolean incrementCount, final Boolean determineNextRetry) {
+
         if (incrementCount) {
             this.schedulerExecution.incrementExecutionCount();
         } else {
             log.trace("Count of the execution will not be increased");
         }
         this.schedulerExecution.setState(status);
+        this.schedulerExecution.setLastUpdate(new Date());
+        if (determineNextRetry) {
+            this.determineNextRetryDate(this.schedulerExecution);
+        } else {
+            log.trace("No next retry will be determined");
+        }
         this.serverSchedulerService.saveSchedulerExecution(this.schedulerExecution);
+
+    }
+
+    private void determineNextRetryDate(final SchedulerExecution schedulerExecution) {
+        if (this.schedulerConfiguration.getRetryable()) {
+            final Long retryInterval = this.schedulerConfiguration.getRetryInterval();
+            if (retryInterval != null) {
+                //TODO: check is this is a good idea
+                final Date nextRetry = new Date(System.currentTimeMillis() + retryInterval);
+                schedulerExecution.setNextRetry(nextRetry);
+            } else {
+                log.debug("No retry interval defined, nothing todo");
+            }
+        } else {
+            log.debug("SchedulerConfiguration {} is not retryable", this.schedulerConfiguration);
+        }
+    }
+
+    private void updateExecution(final Integer status, final Boolean incrementCount) {
+        this.updateExecution(status, incrementCount, Boolean.FALSE);
     }
 
     private void createNextExecution(final String cronExpression) {
@@ -187,7 +215,7 @@ public class ExecutionRunner implements Runnable {
             jobParameter.setParameterType(ParameterType.LONG);
             jobParameters.getParameters().put(jobIncrementer.getIncrementerIdentifier(), jobParameter);
         } else {
-            log.debug("nothing to map for job incremeter: {}", jobIncrementer);
+            log.debug("nothing to map for job incrementer: {}", jobIncrementer);
         }
     }
 

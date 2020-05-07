@@ -28,7 +28,7 @@
             <div class="card-body">
                 <div class="card border-0">
                     <div class="card-body">
-                        <table class="table-sm border-0">
+                        <table class="table-sm">
                             <tbody>
                             <tr>
                                 <td class="text-info">Id</td>
@@ -72,6 +72,11 @@
                                 <td class="text-info">Max Retries</td>
                                 <td class="text-muted text-right"
                                     th:text="${schedulerConfiguration.maxRetries}"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-info">Retry Interval in Millis</td>
+                                <td class="text-muted text-right"
+                                    th:text="${schedulerConfiguration.retryInterval}"></td>
                             </tr>
                             <tr>
                                 <td class="text-info">Incrementer</td>

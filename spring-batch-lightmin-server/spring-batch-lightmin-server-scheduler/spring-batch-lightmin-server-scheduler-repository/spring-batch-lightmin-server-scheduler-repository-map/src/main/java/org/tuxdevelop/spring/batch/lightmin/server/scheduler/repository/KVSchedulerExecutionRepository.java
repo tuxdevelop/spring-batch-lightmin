@@ -222,6 +222,7 @@ public abstract class KVSchedulerExecutionRepository<T extends Map<Long, Schedul
         copy.setState(schedulerExecution.getState());
         copy.setExecutionCount(schedulerExecution.getExecutionCount());
         copy.setId(schedulerExecution.getId());
+        copy.setLastUpdate(schedulerExecution.getLastUpdate());
         return copy;
     }
 }

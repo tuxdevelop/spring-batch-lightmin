@@ -6,11 +6,14 @@ import org.tuxdevelop.spring.batch.lightmin.validation.annotation.IsCronExpressi
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Map;
 
 @Data
-public class SchedulerConfiguration {
-    
+public class SchedulerConfiguration implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     @NotNull
     private Integer instanceExecutionCount;
@@ -22,6 +25,7 @@ public class SchedulerConfiguration {
     private String jobName;
     private Boolean retryable;
     private Integer maxRetries;
+    private Long retryInterval;
     @NotNull
     private JobIncrementer jobIncrementer;
     private ServerSchedulerStatus status;
@@ -42,7 +46,7 @@ public class SchedulerConfiguration {
             throw new SchedulerValidationException("jobName must not be null");
         }
         if (this.retryable == null) {
-            throw new SchedulerValidationException("retriable must not be null");
+            throw new SchedulerValidationException("retryable must not be null");
         }
         if ((this.maxRetries == null || this.maxRetries < 0) && Boolean.TRUE.equals(this.retryable)) {
             throw new SchedulerValidationException("maxRetries must not be null or lower than 1 if retryable is true");

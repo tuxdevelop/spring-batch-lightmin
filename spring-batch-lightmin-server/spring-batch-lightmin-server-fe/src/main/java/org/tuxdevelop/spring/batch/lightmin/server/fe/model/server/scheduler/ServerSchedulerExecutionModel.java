@@ -13,4 +13,5 @@ public class ServerSchedulerExecutionModel {
     private Integer executionCount;
     private ServerSchedulerExecutionStatusModel statusRead;
     private Integer status;
+    private Date lastUpdate;
 }

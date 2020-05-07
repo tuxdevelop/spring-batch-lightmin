@@ -2,16 +2,21 @@ package org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class SchedulerExecution {
+public class SchedulerExecution implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private Long schedulerConfigurationId;
     private Date nextFireTime;
     private Integer executionCount;
     private Integer state;
+    private Date lastUpdate;
+    private Date nextRetry;
 
     public void incrementExecutionCount() {
         if (this.executionCount == null) {
@@ -33,6 +38,9 @@ public class SchedulerExecution {
         }
         if (this.state == null) {
             throw new SchedulerValidationException("state must not be null");
+        }
+        if (this.lastUpdate == null) {
+            throw new SchedulerValidationException("lastUpdate must not be null");
         }
     }
 }

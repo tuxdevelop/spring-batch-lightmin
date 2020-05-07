@@ -141,6 +141,7 @@ public class ServerSchedulerFeService extends CommonFeService {
         model.setNextFireTime(execution.getNextFireTime());
         model.setSchedulerConfigurationId(execution.getSchedulerConfigurationId());
         model.setStatus(execution.getState());
+        model.setLastUpdate(execution.getLastUpdate());
         model.setStatusRead(new ServerSchedulerExecutionStatusModel(ServerSchedulerExecutionStatusModel.map(execution.getState())));
         return model;
     }
@@ -199,6 +200,7 @@ public class ServerSchedulerFeService extends CommonFeService {
         model.setParameters(this.mapParameters(configuration.getJobParameters()));
         model.setMaxRetries(configuration.getMaxRetries());
         model.setRetryable(configuration.getRetryable());
+        model.setRetryInterval(configuration.getRetryInterval());
         model.setStatusRead(new ServerSchedulerConfigurationStatusModel(ServerSchedulerConfigurationStatusModel.map(configuration.getStatus().getValue())));
         model.setStatus(configuration.getStatus().getValue());
         return model;
@@ -215,6 +217,7 @@ public class ServerSchedulerFeService extends CommonFeService {
         scheduler.setJobParameters(DomainParameterParser.parseParameters(model.getParameters()));
         scheduler.setMaxRetries(model.getMaxRetries());
         scheduler.setRetryable(model.getRetryable());
+        scheduler.setRetryInterval(model.getRetryInterval());
         scheduler.setStatus(ServerSchedulerStatus.getByValue(model.getStatus()));
         return scheduler;
     }

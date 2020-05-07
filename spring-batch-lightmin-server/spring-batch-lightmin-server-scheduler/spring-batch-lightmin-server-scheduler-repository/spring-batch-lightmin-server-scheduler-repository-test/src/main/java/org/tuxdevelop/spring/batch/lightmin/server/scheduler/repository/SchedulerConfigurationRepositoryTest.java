@@ -14,12 +14,21 @@ public abstract class SchedulerConfigurationRepositoryTest extends SchedulerTest
 
     @Test
     public void testSaveSchedulerConfiguration() {
-        createSchedulerConfiguration("saveApp");
+        this.createSchedulerConfiguration("saveApp");
     }
 
     @Test
     public void testSaveUpdateSchedulerConfiguration() {
-        final SchedulerConfiguration schedulerConfiguration = createSchedulerConfiguration("saveApp");
+        final SchedulerConfiguration schedulerConfiguration = this.createSchedulerConfiguration("saveApp");
+        schedulerConfiguration.setCronExpression("changed");
+        final SchedulerConfiguration updated = this.getSchedulerConfigurationRepository().save(schedulerConfiguration);
+        BDDAssertions.then(updated.getId()).isEqualTo(schedulerConfiguration.getId());
+        BDDAssertions.then(updated.getCronExpression()).isEqualTo("changed");
+    }
+
+    @Test
+    public void testSaveUpdateSchedulerConfigurationWithOutRetry() {
+        final SchedulerConfiguration schedulerConfiguration = this.createSchedulerConfiguration("saveApp", Boolean.FALSE);
         schedulerConfiguration.setCronExpression("changed");
         final SchedulerConfiguration updated = this.getSchedulerConfigurationRepository().save(schedulerConfiguration);
         BDDAssertions.then(updated.getId()).isEqualTo(schedulerConfiguration.getId());
@@ -28,7 +37,7 @@ public abstract class SchedulerConfigurationRepositoryTest extends SchedulerTest
 
     @Test
     public void testFindAll() {
-        final SchedulerConfiguration schedulerConfiguration = createSchedulerConfiguration("findAllApp");
+        final SchedulerConfiguration schedulerConfiguration = this.createSchedulerConfiguration("findAllApp");
 
         final List<SchedulerConfiguration> result = this.getSchedulerConfigurationRepository().findAll();
         BDDAssertions.then(result).isNotNull();
@@ -40,7 +49,7 @@ public abstract class SchedulerConfigurationRepositoryTest extends SchedulerTest
     @Test
     public void testFindAllPaging() {
         for (int i = 0; i < 10; i++) {
-            createSchedulerConfiguration("findAllPagingApp");
+            this.createSchedulerConfiguration("findAllPagingApp");
         }
 
         final List<SchedulerConfiguration> result = this.getSchedulerConfigurationRepository().findAll(0, 5);
@@ -59,7 +68,7 @@ public abstract class SchedulerConfigurationRepositoryTest extends SchedulerTest
     @Test
     public void testGetCount() {
         for (int i = 0; i < 10; i++) {
-            createSchedulerConfiguration("countApp");
+            this.createSchedulerConfiguration("countApp");
         }
         final List<SchedulerConfiguration> result = this.getSchedulerConfigurationRepository().findAll();
         final Integer count = this.getSchedulerConfigurationRepository().getCount();
@@ -69,17 +78,17 @@ public abstract class SchedulerConfigurationRepositoryTest extends SchedulerTest
 
     @Test
     public void testFindById() throws SchedulerConfigurationNotFoundException {
-        final SchedulerConfiguration schedulerConfiguration = createSchedulerConfiguration("findByIdApp");
-        final SchedulerConfiguration result = getSchedulerConfigurationRepository().findById(schedulerConfiguration.getId());
+        final SchedulerConfiguration schedulerConfiguration = this.createSchedulerConfiguration("findByIdApp");
+        final SchedulerConfiguration result = this.getSchedulerConfigurationRepository().findById(schedulerConfiguration.getId());
         BDDAssertions.then(result).isEqualTo(schedulerConfiguration);
     }
 
     @Test
     public void testFindByApplication() {
-        final SchedulerConfiguration schedulerConfiguration = createSchedulerConfiguration("findByApplicationApp");
-        final SchedulerConfiguration schedulerConfiguration2 = createSchedulerConfiguration("findByApplicationApp");
+        final SchedulerConfiguration schedulerConfiguration = this.createSchedulerConfiguration("findByApplicationApp");
+        final SchedulerConfiguration schedulerConfiguration2 = this.createSchedulerConfiguration("findByApplicationApp");
 
-        final List<SchedulerConfiguration> result = getSchedulerConfigurationRepository().findByApplication("findByApplicationApp");
+        final List<SchedulerConfiguration> result = this.getSchedulerConfigurationRepository().findByApplication("findByApplicationApp");
         BDDAssertions.then(result).hasSize(2);
         BDDAssertions.then(result).contains(schedulerConfiguration);
         BDDAssertions.then(result).contains(schedulerConfiguration2);
@@ -88,8 +97,8 @@ public abstract class SchedulerConfigurationRepositoryTest extends SchedulerTest
 
     @Test
     public void testDeleteById() {
-        final SchedulerConfiguration schedulerConfiguration = createSchedulerConfiguration("deleteIdApp");
-        final SchedulerConfiguration schedulerConfiguration2 = createSchedulerConfiguration("deleteIdApp");
+        final SchedulerConfiguration schedulerConfiguration = this.createSchedulerConfiguration("deleteIdApp");
+        final SchedulerConfiguration schedulerConfiguration2 = this.createSchedulerConfiguration("deleteIdApp");
 
         final List<SchedulerConfiguration> all = this.getSchedulerConfigurationRepository().findAll();
         BDDAssertions.then(all).hasSize(2);
@@ -104,7 +113,7 @@ public abstract class SchedulerConfigurationRepositoryTest extends SchedulerTest
 
     @After
     public void cleanUp() {
-        getCleanUpRepository().cleanUp();
+        this.getCleanUpRepository().cleanUp();
     }
 
 }

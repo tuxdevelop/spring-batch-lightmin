@@ -11,12 +11,23 @@ import java.util.Map;
 public abstract class SchedulerTest {
 
     protected SchedulerConfiguration createSchedulerConfiguration(final String applicationName) {
+        return this.createSchedulerConfiguration(applicationName, Boolean.TRUE);
+    }
+
+    protected SchedulerConfiguration createSchedulerConfiguration(final String applicationName, final Boolean retry) {
         final SchedulerConfiguration schedulerConfiguration = new SchedulerConfiguration();
         schedulerConfiguration.setApplication(applicationName);
         schedulerConfiguration.setJobName("testJob");
-        schedulerConfiguration.setMaxRetries(5);
+
         schedulerConfiguration.setInstanceExecutionCount(0);
-        schedulerConfiguration.setRetryable(Boolean.TRUE);
+        schedulerConfiguration.setRetryable(retry);
+        if (retry) {
+            schedulerConfiguration.setMaxRetries(5);
+            schedulerConfiguration.setRetryInterval(2000L);
+        } else {
+            schedulerConfiguration.setMaxRetries(null);
+            schedulerConfiguration.setRetryInterval(null);
+        }
         schedulerConfiguration.setCronExpression("* * * * * *");
         schedulerConfiguration.setJobIncrementer(JobIncrementer.DATE);
         final Map<String, Object> jobParameters = new HashMap<>();

@@ -316,6 +316,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
     @Slf4j
     private static class SchedulerConfigurationValueDAO {
 
+        private static final String NULL_VALUE = "null";
 
         private static final String FIND_BY_JSC_ID =
                 "SELECT * FROM %s WHERE "
@@ -331,7 +332,6 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
         private static final String DELETE_VALUES_FOR_JSC_ID =
                 "DELETE FROM %s WHERE "
                         + SchedulerConfigurationValueDomain.SCHEDULER_CONFIGURATION_ID + " = ?";
-
 
         private final JdbcTemplate jdbcTemplate;
         private final String tableName;
@@ -417,6 +417,14 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
 
             values.add(maxRetriesValue);
 
+            //retry interval
+            final SchedulerConfigurationValue retryIntervalValue = new SchedulerConfigurationValue();
+            retryIntervalValue.setType(TypeDomain.RETRY_INTERVAL);
+            retryIntervalValue.setSchedulerConfigurationid(schedulerConfiguration.getId());
+            retryIntervalValue.setValue(String.valueOf(schedulerConfiguration.getRetryInterval()));
+
+            values.add(retryIntervalValue);
+
             //incrementer
             final SchedulerConfigurationValue incrementerValue = new SchedulerConfigurationValue();
             incrementerValue.setType(TypeDomain.INCREMENTER);
@@ -462,7 +470,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                         break;
                     }
                     case TypeDomain.INSTANCE_EXECUTION_COUNT: {
-                        schedulerConfiguration.setInstanceExecutionCount(Integer.parseInt(value.getValue()));
+                        schedulerConfiguration.setInstanceExecutionCount(this.mapInputToInteger(value.getValue()));
                         break;
                     }
                     case TypeDomain.RETRYABLE: {
@@ -470,11 +478,15 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                         break;
                     }
                     case TypeDomain.MAX_RETRIES: {
-                        schedulerConfiguration.setMaxRetries(Integer.parseInt(value.getValue()));
+                        schedulerConfiguration.setMaxRetries(this.mapInputToInteger(value.getValue()));
                         break;
                     }
                     case TypeDomain.INCREMENTER: {
                         schedulerConfiguration.setJobIncrementer(JobIncrementer.valueOf(value.getValue()));
+                        break;
+                    }
+                    case TypeDomain.RETRY_INTERVAL: {
+                        schedulerConfiguration.setRetryInterval(this.mapInputToLong(value.getValue()));
                         break;
                     }
                     default: {
@@ -482,6 +494,34 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                     }
                 }
             }
+        }
+
+        private Long mapInputToLong(final String input) {
+            final Long result;
+            if (input == null) {
+                result = null;
+            } else {
+                if (NULL_VALUE.equals(input)) {
+                    result = null;
+                } else {
+                    result = Long.parseLong(input);
+                }
+            }
+            return result;
+        }
+
+        private Integer mapInputToInteger(final String input) {
+            final Integer result;
+            if (input == null) {
+                result = null;
+            } else {
+                if (NULL_VALUE.equals(input)) {
+                    result = null;
+                } else {
+                    result = Integer.parseInt(input);
+                }
+            }
+            return result;
         }
 
         private void attachParameter(final SchedulerConfiguration schedulerConfiguration,
@@ -529,6 +569,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
             static final String MAX_RETRIES = "MAX_RETRIES";
             static final String INSTANCE_EXECUTION_COUNT = "INSTANCE_EXECUTION_COUNT";
             static final String INCREMENTER = "INCREMENTER";
+            static final String RETRY_INTERVAL = "RETRY_INTERVAL";
 
         }
 

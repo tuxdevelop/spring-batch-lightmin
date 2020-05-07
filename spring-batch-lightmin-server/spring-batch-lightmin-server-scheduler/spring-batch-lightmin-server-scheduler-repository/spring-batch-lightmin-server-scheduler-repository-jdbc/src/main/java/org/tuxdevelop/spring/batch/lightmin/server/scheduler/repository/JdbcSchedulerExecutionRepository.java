@@ -14,12 +14,13 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exceptio
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.*;
 
 public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepository {
 
-    private static final String FIELDS = "S.id, S.scheduler_configuration_id, S.next_fire_time, S.execution_count, S.state";
+    private static final String FIELDS = "S.id, S.scheduler_configuration_id, S.next_fire_time, S.execution_count, S.state, S.last_update, S.next_retry";
 
     private static final String FIND_ALL =
             "SELECT * FROM %s";
@@ -66,8 +67,10 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
             "UPDATE %s SET "
                     + SchedulerExecutionDomain.SCHEDULER_CONFIGURATION_ID + " = ? , "
                     + SchedulerExecutionDomain.STATE + " = ? , "
-                    + SchedulerExecutionDomain.NEXT_FIRE_TIME + " = ?, "
-                    + SchedulerExecutionDomain.EXECUTION_COUNT + " = ? "
+                    + SchedulerExecutionDomain.NEXT_FIRE_TIME + " = ? , "
+                    + SchedulerExecutionDomain.EXECUTION_COUNT + " = ? , "
+                    + SchedulerExecutionDomain.LAST_UPDATE + " = ? , "
+                    + SchedulerExecutionDomain.NEXT_RETRY + " = ? "
                     + " WHERE " + SchedulerExecutionDomain.ID + " = ?";
 
     private static final String GET_COUNT =
@@ -287,6 +290,8 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
         keys.put(SchedulerExecutionDomain.NEXT_FIRE_TIME, schedulerExecution.getNextFireTime());
         keys.put(SchedulerExecutionDomain.EXECUTION_COUNT, schedulerExecution.getExecutionCount());
         keys.put(SchedulerExecutionDomain.STATE, schedulerExecution.getState());
+        keys.put(SchedulerExecutionDomain.LAST_UPDATE, schedulerExecution.getLastUpdate());
+        keys.put(SchedulerExecutionDomain.NEXT_RETRY, schedulerExecution.getNextRetry());
 
         final Number id = this.simpleJdbcInsert.executeAndReturnKey(keys);
         schedulerExecution.setId(id.longValue());
@@ -302,12 +307,16 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
                         schedulerExecution.getState(),
                         schedulerExecution.getNextFireTime(),
                         schedulerExecution.getExecutionCount(),
+                        schedulerExecution.getLastUpdate(),
+                        schedulerExecution.getNextRetry(),
                         schedulerExecution.getId()},
                 new int[]{
                         Types.NUMERIC,
                         Types.NUMERIC,
                         Types.TIMESTAMP,
                         Types.NUMERIC,
+                        Types.TIMESTAMP,
+                        Types.TIMESTAMP,
                         Types.NUMERIC
                 }
         );
@@ -344,6 +353,10 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
             schedulerExecution.setNextFireTime(new Date(resultSet.getTimestamp(SchedulerExecutionDomain.NEXT_FIRE_TIME).getTime()));
             schedulerExecution.setState(resultSet.getInt(SchedulerExecutionDomain.STATE));
             schedulerExecution.setExecutionCount(resultSet.getInt(SchedulerExecutionDomain.EXECUTION_COUNT));
+            schedulerExecution.setLastUpdate(new Date(resultSet.getTimestamp(SchedulerExecutionDomain.LAST_UPDATE).getTime()));
+            final Timestamp nextRetryTimestamp = resultSet.getTimestamp(SchedulerExecutionDomain.NEXT_RETRY);
+            final Date nextRetryDate = nextRetryTimestamp != null ? new Date(nextRetryTimestamp.getTime()) : null;
+            schedulerExecution.setNextRetry(nextRetryDate);
             return schedulerExecution;
         }
     }
@@ -359,6 +372,7 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
         static final String NEXT_FIRE_TIME = "next_fire_time";
         static final String EXECUTION_COUNT = "execution_count";
         static final String STATE = "state";
-
+        static final String LAST_UPDATE = "last_update";
+        static final String NEXT_RETRY = "next_retry";
     }
 }

@@ -151,6 +151,17 @@
                             </small>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Retry Interval</label>
+                        <div class="col-sm-3">
+                            <input class="text-muted text-sm-left" th:value="*{retryInterval}"
+                                   th:field="*{retryInterval}"
+                                   aria-describedby="retryIntervalHelpText"/>
+                            <small id="retryIntervalHelpText" class="form-text text-muted collapse multi-collapse show"
+                                   th:text="#{helptext.server.scheduler.retry_interval}">
+                            </small>
+                        </div>
+                    </div>
                 </div>
             </div>
 

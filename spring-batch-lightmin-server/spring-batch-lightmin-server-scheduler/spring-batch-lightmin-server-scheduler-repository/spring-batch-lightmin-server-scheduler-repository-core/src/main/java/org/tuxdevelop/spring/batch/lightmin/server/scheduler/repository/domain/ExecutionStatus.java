@@ -1,6 +1,10 @@
 package org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain;
 
-public final class ExecutionStatus {
+import java.io.Serializable;
+
+public final class ExecutionStatus implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private ExecutionStatus() {
     }

@@ -123,6 +123,7 @@ public abstract class KVSchedulerConfigurationRepository<T extends Map<Long, Sch
         copy.setJobName(schedulerConfiguration.getJobName());
         copy.setApplication(schedulerConfiguration.getApplication());
         copy.setStatus(this.getStatusValue(schedulerConfiguration));
+        copy.setRetryInterval(schedulerConfiguration.getRetryInterval());
         return copy;
     }
 

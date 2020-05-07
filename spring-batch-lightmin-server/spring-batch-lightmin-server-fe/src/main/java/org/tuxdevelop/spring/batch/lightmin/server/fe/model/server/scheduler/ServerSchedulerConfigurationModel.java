@@ -24,6 +24,7 @@ public class ServerSchedulerConfigurationModel {
     @NotNull
     private Boolean retryable;
     private Integer maxRetries;
+    private Long retryInterval;
     private JobIncremeterTypeModel incrementerRead;
     @NotNull
     private String incrementer;

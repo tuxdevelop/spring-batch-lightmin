@@ -287,6 +287,7 @@ public abstract class SchedulerExecutionRepositoryTest extends SchedulerTest {
         schedulerExecution.setState(state);
         schedulerExecution.setNextFireTime(nextExecution);
         schedulerExecution.setSchedulerConfigurationId(schedulerConfigurationId);
+        schedulerExecution.setLastUpdate(new Date());
 
         final SchedulerExecution result = this.getSchedulerExecutionRepository().save(schedulerExecution);
         BDDAssertions.then(result).isNotNull();

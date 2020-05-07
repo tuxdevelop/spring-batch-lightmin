@@ -24,6 +24,8 @@ CREATE TABLE SCHEDULER_EXECUTION
     next_fire_time             TIMESTAMP NOT NULL,
     execution_count            INT       NOT NULL DEFAULT 0,
     state                      INT       NOT NULL,
+    last_update                TIMESTAMP NOT NULL,
+    next_retry                 TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (scheduler_configuration_id) REFERENCES SCHEDULER_CONFIGURATION (id)
 );

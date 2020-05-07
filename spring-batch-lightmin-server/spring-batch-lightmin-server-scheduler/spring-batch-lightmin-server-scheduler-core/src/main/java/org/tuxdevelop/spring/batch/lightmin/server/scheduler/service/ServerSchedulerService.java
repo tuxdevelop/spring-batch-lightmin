@@ -15,6 +15,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exceptio
 import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 
 import java.util.Collection;
+import java.util.Date;
 
 @Slf4j
 public class ServerSchedulerService {
@@ -46,6 +47,7 @@ public class ServerSchedulerService {
             execution.setNextFireTime(this.schedulerExecutionService.getNextFireTime(savedConfiguration.getCronExpression()));
             execution.setSchedulerConfigurationId(savedConfiguration.getId());
             execution.setExecutionCount(0);
+            execution.setLastUpdate(new Date());
             this.schedulerExecutionService.save(execution);
         } else {
             log.info("Status of ServerSchedulerConfiguration with id {}, is STOPPED, nothing to initiate!", schedulerConfiguration.getId());

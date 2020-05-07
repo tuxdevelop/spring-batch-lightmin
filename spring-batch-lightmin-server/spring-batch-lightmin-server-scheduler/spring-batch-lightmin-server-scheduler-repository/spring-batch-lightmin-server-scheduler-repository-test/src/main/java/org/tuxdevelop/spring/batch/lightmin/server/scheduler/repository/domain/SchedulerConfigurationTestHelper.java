@@ -26,6 +26,7 @@ public final class SchedulerConfigurationTestHelper {
         schedulerConfiguration.setMaxRetries(3);
         schedulerConfiguration.setStatus(ServerSchedulerStatus.ACTIVE);
         schedulerConfiguration.setRetryable(Boolean.TRUE);
+        schedulerConfiguration.setRetryInterval(2000L);
 
         return schedulerConfiguration;
 

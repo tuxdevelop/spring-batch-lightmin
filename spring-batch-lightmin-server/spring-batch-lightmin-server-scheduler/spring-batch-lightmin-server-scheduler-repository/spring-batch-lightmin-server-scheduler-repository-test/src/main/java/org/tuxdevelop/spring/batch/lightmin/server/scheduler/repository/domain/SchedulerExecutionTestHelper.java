@@ -17,6 +17,7 @@ public final class SchedulerExecutionTestHelper {
         schedulerExecution.setNextFireTime(nextFireDate);
         schedulerExecution.setState(ExecutionStatus.NEW);
         schedulerExecution.setSchedulerConfigurationId(1L);
+        schedulerExecution.setLastUpdate(new Date());
         return schedulerExecution;
     }
 

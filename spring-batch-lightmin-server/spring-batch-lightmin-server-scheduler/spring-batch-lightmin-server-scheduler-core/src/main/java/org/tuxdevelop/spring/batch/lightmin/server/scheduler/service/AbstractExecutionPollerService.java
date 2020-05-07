@@ -34,8 +34,7 @@ public abstract class AbstractExecutionPollerService implements ExecutionPollerS
     }
 
     public void triggerRetryExecutions() {
-        final List<SchedulerExecution> executions =
-                this.schedulerExecutionService.findScheduledExecutions(ExecutionStatus.FAILED);
+        final List<SchedulerExecution> executions = this.schedulerExecutionService.findSchedulerExecutionsForRetry();
         this.runExecutions(executions);
     }
 
@@ -51,6 +50,4 @@ public abstract class AbstractExecutionPollerService implements ExecutionPollerS
                         }
                 );
     }
-
-
 }

@@ -67,6 +67,7 @@
                         <th>Execution Date</th>
                         <th>Execution Count</th>
                         <th>Configuration</th>
+                        <th>Last Update</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -86,6 +87,7 @@
                         </td>
                         <td th:if="${execution.execution.schedulerConfigurationId == -1}" class="text-danger">Deleted
                         </td>
+                        <td th:text="${execution.execution.lastUpdate}"/>
                         <td>
                             <form id="stop-server-execution-form" method="post"
                                   style="display: inline;"

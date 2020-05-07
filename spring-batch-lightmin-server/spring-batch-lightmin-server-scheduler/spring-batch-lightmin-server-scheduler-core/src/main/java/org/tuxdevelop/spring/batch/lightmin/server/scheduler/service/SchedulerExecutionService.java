@@ -14,6 +14,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exceptio
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class SchedulerExecutionService {
@@ -46,7 +47,9 @@ public class SchedulerExecutionService {
             //4. determine next fire time
             final Date nextFireTime = this.getNextFireTime(cronExpression);
             schedulerExecution.setNextFireTime(nextFireTime);
-            //5. save
+            //5. update last update date
+            schedulerExecution.setLastUpdate(new Date());
+            //6. save
             this.save(schedulerExecution);
         } else {
             throw new SchedulerValidationException("schedulerExecution must not be null");
@@ -93,6 +96,15 @@ public class SchedulerExecutionService {
 
     public Integer getExecutionCount(final Integer state) {
         return this.schedulerExecutionRepository.getExecutionCount(state);
+    }
+
+    public List<SchedulerExecution> findSchedulerExecutionsForRetry() {
+        return this.findScheduledExecutions(ExecutionStatus.FAILED).stream()
+                .filter(schedulerExecution ->
+                        //null because if nothing is specified means immediately
+                        schedulerExecution.getNextRetry() == null ||
+                                schedulerExecution.getNextRetry().before(new Date())
+                ).collect(Collectors.toList());
     }
 
     public Date getNextFireTime(final String cronExpression) {
