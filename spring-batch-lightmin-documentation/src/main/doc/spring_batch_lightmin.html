@@ -560,6 +560,8 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_server_side_auto_discovery">Server Side auto discovery</a></li>
 <li><a href="#_server_behind_a_proxy_2">Server behind a Proxy</a></li>
 <li><a href="#_custom_ui_logo_and_text">Custom UI Logo and Text</a></li>
+<li><a href="#_server_metrics">Server Metrics</a></li>
+<li><a href="#_server_scheduler_2">Server Scheduler</a></li>
 </ul>
 </li>
 <li><a href="#_client_configuration">Client Configuration</a>
@@ -704,15 +706,31 @@ The getting started guide for the <em>Embedded Mode</em> can be found in the sec
 <div class="sect2">
 <h3 id="_setting_up_the_server">Setting up the Server</h3>
 <div class="paragraph">
-<p>The server component is currently only available in a standalone mode.
-This means, the servers do not sync the state between each other.
-A cluster mode will be added in a future release.</p>
+<p>The server is the component which is used to configure clients and schedule jobs.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The server can be operated in standalone and cluster mode.
+The standalone mode does not support any synchronisation between multiple cluster instances.
+Also the server cluster scheduler are working totally independent from each other in standalone mode.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The server itself is also a <em>Spring Boot</em> application.</p>
 </div>
 <div class="sect3">
 <h4 id="_maven_dependencies">Maven Dependencies</h4>
+<div class="sect4">
+<h5 id="_standalone">Standalone</h5>
 <div class="paragraph">
 <p>The following dependency has to added to your project.</p>
 </div>
@@ -723,6 +741,25 @@ A cluster mode will be added in a future release.</p>
     <span class="tag">&lt;artifactId&gt;</span>spring-batch-lightmin-server-standalone<span class="tag">&lt;/artifactId&gt;</span>
     <span class="tag">&lt;version&gt;</span>${spring-batch-lightmin.version}<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_cluster">Cluster</h4>
+<div class="paragraph">
+<p>The project currently provides one cluster implementation based on <em>Infinispan</em>.</p>
+</div>
+<div class="sect4">
+<h5 id="_infinispan">Infinispan</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.tuxdevelop<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>spring-batch-lightmin-server-cluster-infinispan<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>${spring-batch-lightmin.version}<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -738,6 +775,267 @@ A cluster mode will be added in a future release.</p>
 <span class="directive">public</span> <span class="type">class</span> <span class="class">LightminServer</span> {
 
 }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_enable_the_cluster">Enable the Cluster</h4>
+<div class="paragraph">
+<p>If you added the cluster dependencies the following actions have to be done:</p>
+</div>
+<div class="sect4">
+<h5 id="_infinispan_2">Infinispan</h5>
+<div class="paragraph">
+<p>In order to enable the server, the annotation <em>@EnableLightminServer</em> has to added to one of the <em>@Configuration</em> classes.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@EnableLightminServer</span>
+<span class="annotation">@EnableServerClusterInfinispan</span>
+<span class="annotation">@SpringBootApplication</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">LightminServer</span> {
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <em>Infinispan</em> cluster configuration will provide the following clustered features:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Synchronized poller for server scheduler and clean up jobs</p>
+</li>
+<li>
+<p>LightminServerLockManager implenentation for Infinispan</p>
+</li>
+<li>
+<p>Distributed Repositories for</p>
+<div class="ulist">
+<ul>
+<li>
+<p>JobExecutionEventRepository</p>
+</li>
+<li>
+<p>JournalRepository</p>
+</li>
+<li>
+<p>LightminApplicationRepository</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If the following properties are set to true, additional distributed repositories will be provided:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="key">cluster</span>:
+          <span class="key">infinispan</span>:
+            <span class="key">repository</span>:
+              <span class="key">init-scheduler-configuration-repository</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default false </span><b class="conum">(1)</b>
+              <span class="key">init-scheduler-execution-repository</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default false </span> <b class="conum">(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>if true, a distributed <em>SchedulerConfigurationRepository</em> will be provided</p>
+</li>
+<li>
+<p>if true, a distributed <em>SchedulerExecutionRepository</em> will be provided</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>It is highly recommended to use persistent repositories for <em>SchedulerConfigurationRepository</em> and <em>SchedulerExecutionRepository</em> like the <em>JDBC</em> repositories.
+The distributed repositories will contain the stored values as long as one cluster member is up and running.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_infinispan_global_configuration">Infinispan Global Configuration</h6>
+<div class="paragraph">
+<p>In order to use the infinispan cluster, a <em>GlobalConfiguration</em> has to be provided.
+The documentation of <em>Infinispan</em> and <em>jGroups</em> will give you insides how to configure it for your need.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">MyConfiguration</span> {
+
+    <span class="annotation">@Bean</span>
+    <span class="directive">public</span> GlobalConfiguration globalConfiguration() {
+        <span class="keyword">return</span> <span class="keyword">new</span> GlobalConfigurationBuilder()
+                <span class="comment">// Configure the global configuration</span>
+                .build();
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_server_scheduler">Server Scheduler</h4>
+<div class="paragraph">
+<p>Since lightmin version <em>2.1.1</em> the server provides a scheduler to trigger jobs at the clients.
+In order to provide this feature, the scheduler configurations and executions have to stored.</p>
+</div>
+<div class="paragraph">
+<p>The <em>SchedulerConfigurationRepository</em> and <em>SchedulerExecutionRepository</em> are responsible for the doing the job.
+Per dafault, the <em>standalone server</em> will configure inmemory repositories, which are cleared after each restart.</p>
+</div>
+<div class="sect4">
+<h5 id="_configuration_properties">Configuration Properties</h5>
+<div class="paragraph">
+<p>The behavior of the <em>Server Scheduler</em> can be changed via application properties.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="key">scheduler</span>:
+          <span class="key">enabled</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default true </span><b class="conum">(1)</b>
+          <span class="key">create-new-executions-on-failure</span>: <span class="string"><span class="content">false</span></span> <span class="comment"># default false </span><b class="conum">(2)</b>
+          <span class="key">create-new-executions-on-lost</span>: <span class="string"><span class="content">false</span></span> <span class="comment"># default false </span><b class="conum">(3)</b>
+          <span class="key">fail-on-instance-execution-count</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default true </span><b class="conum">(4)</b>
+          <span class="key">poller-period</span>: <span class="string"><span class="content">1000</span></span> <span class="comment"># default 1000 </span><b class="conum">(5)</b>
+          <span class="key">poller-period-retry</span>: <span class="string"><span class="content">1000</span></span> <span class="comment"># default 1000 </span><b class="conum">(6)</b>
+          <span class="key">repository</span>:
+            <span class="key">delete-poller-period</span>: <span class="string"><span class="content">PT10m</span></span> <span class="comment"># default 10 minutes </span><b class="conum">(7)</b>
+            <span class="key">delete-failed</span>:  <span class="string"><span class="content">true</span></span> <span class="comment"># default true </span><b class="conum">(8)</b>
+            <span class="key">delete-finished</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default true </span><b class="conum">(9)</b>
+            <span class="key">delete-lost</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default true </span><b class="conum">(10)</b>
+            <span class="key">keep-failed</span>: <span class="string"><span class="content">PT24h</span></span> <span class="comment"># default 24 hours </span><b class="conum">(11)</b>
+            <span class="key">keep-finished</span>: <span class="string"><span class="content">PT24h</span></span>  <span class="comment"># default 24 hours </span><b class="conum">(12)</b>
+            <span class="key">keep-lost</span>: <span class="string"><span class="content">PT24h</span></span>  <span class="comment"># default 24 hours </span> <b class="conum">(13)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>If set to false, no schedulers will be executed</p>
+</li>
+<li>
+<p>If set to true, a new executions based on the configuration will be created on failure.</p>
+</li>
+<li>
+<p>If set to true, a new executions based on the configuration will be created on lost after configured retries failed.</p>
+</li>
+<li>
+<p>If true, the execution will fail if not enough instances are available.</p>
+</li>
+<li>
+<p>Time in millis to fetch new executions to be executed by the scheduler</p>
+</li>
+<li>
+<p>Time in millis to fetch executions to be retried by the scheduler</p>
+</li>
+<li>
+<p>Duration of the clean up poller for the repositories</p>
+</li>
+<li>
+<p>If set to true, the failed executions will be deleted automatically.</p>
+</li>
+<li>
+<p>If set to true, the finished executions will be deleted automatically.</p>
+</li>
+<li>
+<p>If set to true, the lost executions will be deleted automatically.</p>
+</li>
+<li>
+<p>Duration how long failed executions should be kept before getting deleted automatically.</p>
+</li>
+<li>
+<p>Duration how long finished executions should be kept before getting deleted automatically.</p>
+</li>
+<li>
+<p>Duration how long lost executions should be kept before getting deleted automatically.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The properties</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>create-new-executions-on-failure: false</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>create-new-executions-on-lost: false</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>fail-on-instance-execution-count: true</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>are global properties.
+There is the possibility that future releases will support this configuration option per execution.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_server_scheduler_jdbc_repositories">Server Scheduler Jdbc Repositories</h5>
+<div class="paragraph">
+<p>The database schema for the repositories are available in the dependency at <em>org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository</em></p>
+</div>
+<div class="sect5">
+<h6 id="_maven_dependency">Maven Dependency</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.tuxdevelop<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>spring-batch-lightmin-server-scheduler-repository-jdbc<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>${spring-batch-lightmin.version}<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_enable_the_jdbc_repository">Enable the JDBC Repository</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@EnableLightminServer</span>
+<span class="annotation">@EnableServerSchedulerJdbcRepository</span>
+<span class="annotation">@SpringBootApplication</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">MyApplication</span> {
+    ...
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1627,8 +1925,7 @@ These configurations can be overridden via properties.</p>
 <div class="sect2">
 <h3 id="_context_path">Context Path</h3>
 <div class="paragraph">
-<p>If the server has a concrete context path, which is different from the servlet path,
-the default value can be overridden by the following property.</p>
+<p>If the server has a concrete context path, which is different from the servlet path, the default value can be overridden by the following property.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1660,8 +1957,7 @@ the default value can be overridden by the following property.</p>
 <div class="sect2">
 <h3 id="_credentials">Credentials</h3>
 <div class="paragraph">
-<p>If the server has to pass username and password to the clients, the values can be
-configured via properties.</p>
+<p>If the server has to pass username and password to the clients, the values can be configured via properties.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1692,12 +1988,12 @@ configured via properties.</p>
 <div class="sect2">
 <h3 id="_server_behind_a_proxy_2">Server behind a Proxy</h3>
 <div class="paragraph">
-<p>The server ui uses redirects and the <em>HOST</em> header is taken to create the redirect urls. This is the default behavior of Spring MVC.
+<p>The server ui uses redirects and the <em>HOST</em> header is taken to create the redirect urls.
+This is the default behavior of Spring MVC.
 If the server ui is running behind a proxy, the implementation of the server takes care, that the <em>X-FORWARD-PREFIX</em> header is used as well.</p>
 </div>
 <div class="paragraph">
-<p>If the proxy cannot pass the <em>HOST</em> header or you do not want to change the default, e.g. <em>Zuul</em>, the following property can force the server
-to use the <em>X-FORWARDED-HOST</em> header to build the redirect urls.</p>
+<p>If the proxy cannot pass the <em>HOST</em> header or you do not want to change the default, e.g. <em>Zuul</em>, the following property can force the server to use the <em>X-FORWARDED-HOST</em> header to build the redirect urls.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1726,6 +2022,50 @@ If the logo property is set, the text will be displayed</p>
           <span class="key">label</span>: <span class="string"><span class="content">DEV</span></span>
           <span class="comment">#Displays the image of the given url (local and remote)</span>
           <span class="key">img-path</span>: <span class="string"><span class="content">img/logo.png</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_server_metrics">Server Metrics</h3>
+<div class="paragraph">
+<p>In order to collect metrics of a <em>Lightmin</em> server , the following property has to be to <em>true</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+    <span class="key">batch</span>:
+        <span class="key">lightmin</span>:
+            <span class="key">server</span>:
+                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_server_scheduler_2">Server Scheduler</h3>
+<div class="paragraph">
+<p>The behavior of the <em>Server Scheduler</em> can be changed via application properties.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">spring</span>:
+  <span class="key">batch</span>:
+    <span class="key">lightmin</span>:
+      <span class="key">server</span>:
+        <span class="key">scheduler</span>:
+          <span class="key">enabled</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default true </span><b class="conum">(1)</b>
+          <span class="key">create-new-executions-on-failure</span>: <span class="string"><span class="content">false</span></span> <span class="comment"># default false </span><b class="conum">(2)</b>
+          <span class="key">create-new-executions-on-lost</span>: <span class="string"><span class="content">false</span></span> <span class="comment"># default false </span><b class="conum">(3)</b>
+          <span class="key">fail-on-instance-execution-count</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default true </span><b class="conum">(4)</b>
+          <span class="key">poller-period</span>: <span class="string"><span class="content">1000</span></span> <span class="comment"># default 1000 </span><b class="conum">(5)</b>
+          <span class="key">poller-period-retry</span>: <span class="string"><span class="content">1000</span></span> <span class="comment"># default 1000 </span><b class="conum">(6)</b>
+          <span class="key">repository</span>:
+            <span class="key">delete-poller-period</span>: <span class="string"><span class="content">PT10m</span></span> <span class="comment"># default 10 minutes </span><b class="conum">(7)</b>
+            <span class="key">delete-failed</span>:  <span class="string"><span class="content">true</span></span> <span class="comment"># default true </span><b class="conum">(8)</b>
+            <span class="key">delete-finished</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default true </span><b class="conum">(9)</b>
+            <span class="key">delete-lost</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default true </span><b class="conum">(10)</b>
+            <span class="key">keep-failed</span>: <span class="string"><span class="content">PT24h</span></span> <span class="comment"># default 24 hours </span><b class="conum">(11)</b>
+            <span class="key">keep-finished</span>: <span class="string"><span class="content">PT24h</span></span>  <span class="comment"># default 24 hours </span><b class="conum">(12)</b>
+            <span class="key">keep-lost</span>: <span class="string"><span class="content">PT24h</span></span>  <span class="comment"># default 24 hours </span> <b class="conum">(13)</b></code></pre>
 </div>
 </div>
 </div>
@@ -2877,20 +3217,20 @@ Content-Length: 790
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Mon, 11 May 2020 13:06:31 GMT
+Date: Tue, 12 May 2020 12:01:00 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 875
 
 {
-  &quot;id&quot; : &quot;3452aca9&quot;,
+  &quot;id&quot; : &quot;3c9b12b6&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:37359/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:37359/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:37359&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:36733/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:36733/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:36733&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UNKNOWN&quot;,
-    &quot;timeInMills&quot; : 1589202391761
+    &quot;timeInMills&quot; : 1589284861210
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2914,7 +3254,7 @@ Content-Length: 875
 <h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/3452aca9' -i -X DELETE \
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/3c9b12b6' -i -X DELETE \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
     -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
@@ -2924,7 +3264,7 @@ Content-Length: 875
 <h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/3452aca9 HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/3c9b12b6 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript, text/json
 Content-Type: application/json; charset=UTF-8
 Host: localhost</code></pre>
@@ -2938,20 +3278,20 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Mon, 11 May 2020 13:06:31 GMT
+Date: Tue, 12 May 2020 12:01:01 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 875
 
 {
-  &quot;id&quot; : &quot;3452aca9&quot;,
+  &quot;id&quot; : &quot;3c9b12b6&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:37359/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:37359/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:37359&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:36733/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:36733/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:36733&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UNKNOWN&quot;,
-    &quot;timeInMills&quot; : 1589202391761
+    &quot;timeInMills&quot; : 1589284861210
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -2999,20 +3339,20 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Mon, 11 May 2020 13:06:31 GMT
+Date: Tue, 12 May 2020 12:01:00 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 879
 
 [ {
-  &quot;id&quot; : &quot;3452aca9&quot;,
+  &quot;id&quot; : &quot;3c9b12b6&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:37359/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:37359/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:37359&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:36733/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:36733/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:36733&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UNKNOWN&quot;,
-    &quot;timeInMills&quot; : 1589202391761
+    &quot;timeInMills&quot; : 1589284861210
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -3047,8 +3387,8 @@ Content-Length: 879
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1589202391034,
-  &quot;endDate&quot; : 1589202401034
+  &quot;startDate&quot; : 1589284860411,
+  &quot;endDate&quot; : 1589284870411
 }'</code></pre>
 </div>
 </div>
@@ -3071,8 +3411,8 @@ Content-Length: 247
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1589202391034,
-  &quot;endDate&quot; : 1589202401034
+  &quot;startDate&quot; : 1589284860411,
+  &quot;endDate&quot; : 1589284870411
 }</code></pre>
 </div>
 </div>
@@ -3082,7 +3422,7 @@ Content-Length: 247
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Mon, 11 May 2020 13:06:31 GMT
+Date: Tue, 12 May 2020 12:01:00 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3122,7 +3462,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Mon, 11 May 2020 13:06:34 GMT
+Date: Tue, 12 May 2020 12:01:04 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 1542
@@ -3139,7 +3479,7 @@ Content-Length: 1542
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : &quot;2020/05/11 15:06:34:872[date]&quot;,
+          &quot;parameter&quot; : &quot;2020/05/12 14:01:04:574[date]&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -3162,9 +3502,9 @@ Content-Length: 1542
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : &quot;2020-05-11T13:06:34.878+0000&quot;,
-      &quot;endTime&quot; : &quot;2020-05-11T13:06:34.880+0000&quot;,
-      &quot;lastUpdated&quot; : &quot;2020-05-11T13:06:34.880+0000&quot;,
+      &quot;startTime&quot; : &quot;2020-05-12T12:01:04.581+0000&quot;,
+      &quot;endTime&quot; : &quot;2020-05-12T12:01:04.583+0000&quot;,
+      &quot;lastUpdated&quot; : &quot;2020-05-12T12:01:04.584+0000&quot;,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -3174,10 +3514,10 @@ Content-Length: 1542
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : &quot;2020-05-11T13:06:34.874+0000&quot;,
-    &quot;createTime&quot; : &quot;2020-05-11T13:06:34.874+0000&quot;,
-    &quot;endTime&quot; : &quot;2020-05-11T13:06:34.880+0000&quot;,
-    &quot;lastUpdated&quot; : &quot;2020-05-11T13:06:34.888+0000&quot;,
+    &quot;startTime&quot; : &quot;2020-05-12T12:01:04.577+0000&quot;,
+    &quot;createTime&quot; : &quot;2020-05-12T12:01:04.576+0000&quot;,
+    &quot;endTime&quot; : &quot;2020-05-12T12:01:04.585+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2020-05-12T12:01:04.592+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -3218,7 +3558,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Mon, 11 May 2020 13:06:34 GMT
+Date: Tue, 12 May 2020 12:01:04 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 879
@@ -3235,7 +3575,7 @@ Content-Length: 879
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : &quot;2020/05/11 15:06:34:824[date]&quot;,
+          &quot;parameter&quot; : &quot;2020/05/12 14:01:04:523[date]&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -3247,10 +3587,10 @@ Content-Length: 879
     },
     &quot;stepExecutions&quot; : [ ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : &quot;2020-05-11T13:06:34.826+0000&quot;,
-    &quot;createTime&quot; : &quot;2020-05-11T13:06:34.825+0000&quot;,
-    &quot;endTime&quot; : &quot;2020-05-11T13:06:34.832+0000&quot;,
-    &quot;lastUpdated&quot; : &quot;2020-05-11T13:06:34.839+0000&quot;,
+    &quot;startTime&quot; : &quot;2020-05-12T12:01:04.526+0000&quot;,
+    &quot;createTime&quot; : &quot;2020-05-12T12:01:04.525+0000&quot;,
+    &quot;endTime&quot; : &quot;2020-05-12T12:01:04.537+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2020-05-12T12:01:04.546+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -3291,7 +3631,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Mon, 11 May 2020 13:06:34 GMT
+Date: Tue, 12 May 2020 12:01:04 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 1291
@@ -3302,7 +3642,7 @@ Content-Length: 1291
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/05/11 15:06:34:994[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/05/12 14:01:04:706[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3325,9 +3665,9 @@ Content-Length: 1291
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : &quot;2020-05-11T13:06:35.001+0000&quot;,
-    &quot;endTime&quot; : &quot;2020-05-11T13:06:35.003+0000&quot;,
-    &quot;lastUpdated&quot; : &quot;2020-05-11T13:06:35.003+0000&quot;,
+    &quot;startTime&quot; : &quot;2020-05-12T12:01:04.710+0000&quot;,
+    &quot;endTime&quot; : &quot;2020-05-12T12:01:04.712+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2020-05-12T12:01:04.712+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -3337,10 +3677,10 @@ Content-Length: 1291
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-05-11T13:06:34.995+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-05-11T13:06:34.995+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-05-11T13:06:35.004+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-05-11T13:06:35.011+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-05-12T12:01:04.707+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-05-12T12:01:04.707+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-05-12T12:01:04.713+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-05-12T12:01:04.720+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3363,8 +3703,8 @@ Content-Length: 1291
     -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1589202494597,
-  &quot;START_DATE&quot; : 1589202294597
+  &quot;END_DATE&quot; : 1589284964216,
+  &quot;START_DATE&quot; : 1589284764216
 }'</code></pre>
 </div>
 </div>
@@ -3381,8 +3721,8 @@ Content-Length: 95
 
 {
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1589202494597,
-  &quot;START_DATE&quot; : 1589202294597
+  &quot;END_DATE&quot; : 1589284964216,
+  &quot;START_DATE&quot; : 1589284764216
 }</code></pre>
 </div>
 </div>
@@ -3394,7 +3734,7 @@ Content-Length: 95
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Mon, 11 May 2020 13:06:34 GMT
+Date: Tue, 12 May 2020 12:01:04 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 2698
@@ -3405,7 +3745,7 @@ Content-Length: 2698
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/05/11 15:06:34:581[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/05/12 14:01:04:197[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3417,10 +3757,10 @@ Content-Length: 2698
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-05-11T13:06:34.583+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-05-11T13:06:34.582+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-05-11T13:06:34.589+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-05-11T13:06:34.596+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-05-12T12:01:04.199+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-05-12T12:01:04.198+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-05-12T12:01:04.207+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-05-12T12:01:04.215+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3433,7 +3773,7 @@ Content-Length: 2698
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/05/11 15:06:34:581[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/05/12 14:01:04:197[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3445,10 +3785,10 @@ Content-Length: 2698
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-05-11T13:06:34.536+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-05-11T13:06:34.535+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-05-11T13:06:34.546+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-05-11T13:06:34.554+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-05-12T12:01:04.151+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-05-12T12:01:04.150+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-05-12T12:01:04.159+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-05-12T12:01:04.167+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3461,7 +3801,7 @@ Content-Length: 2698
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/05/11 15:06:34:581[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/05/12 14:01:04:197[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3473,10 +3813,10 @@ Content-Length: 2698
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-05-11T13:06:33.355+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-05-11T13:06:33.353+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-05-11T13:06:33.368+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-05-11T13:06:33.375+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-05-12T12:01:02.912+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-05-12T12:01:02.911+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-05-12T12:01:02.926+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-05-12T12:01:02.936+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3489,7 +3829,7 @@ Content-Length: 2698
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/05/11 15:06:34:581[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/05/12 14:01:04:197[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3501,10 +3841,10 @@ Content-Length: 2698
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-05-11T13:06:33.323+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-05-11T13:06:33.322+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-05-11T13:06:33.336+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-05-11T13:06:33.347+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-05-12T12:01:02.873+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-05-12T12:01:02.871+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-05-12T12:01:02.889+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-05-12T12:01:02.904+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3571,7 +3911,7 @@ Content-Length: 205
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Mon, 11 May 2020 13:06:33 GMT
+Date: Tue, 12 May 2020 12:01:02 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3609,7 +3949,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Mon, 11 May 2020 13:06:32 GMT
+Date: Tue, 12 May 2020 12:01:02 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 412
@@ -3663,7 +4003,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Mon, 11 May 2020 13:06:33 GMT
+Date: Tue, 12 May 2020 12:01:02 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 951
@@ -3735,7 +4075,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Mon, 11 May 2020 13:06:33 GMT
+Date: Tue, 12 May 2020 12:01:02 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 951
@@ -3839,7 +4179,7 @@ Content-Length: 424
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Mon, 11 May 2020 13:06:33 GMT
+Date: Tue, 12 May 2020 12:01:02 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3910,7 +4250,7 @@ Content-Length: 441
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 11 May 2020 13:06:32 GMT
+Date: Tue, 12 May 2020 12:01:01 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3943,7 +4283,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 11 May 2020 13:06:32 GMT
+Date: Tue, 12 May 2020 12:01:01 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3976,7 +4316,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 11 May 2020 13:06:32 GMT
+Date: Tue, 12 May 2020 12:01:01 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -4009,7 +4349,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 11 May 2020 13:06:32 GMT
+Date: Tue, 12 May 2020 12:01:01 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>

@@ -124,11 +124,11 @@ spring:
           poller-period: 1000 # default 1000 <5>
           poller-period-retry: 1000 # default 1000 <6>
           repository:
-            delete-poller-period: 10m # <7>
+            delete-poller-period: PT10m # default 10 minutes <7>
             delete-failed:  true # default true <8>
             delete-finished: true # default true <9>
             delete-lost: true # default true <10>
-            keep-failed: 24h # default 24 hours <11>
-            keep-finished: 24h  # default 24 hours <12>
-            keep-lost: 24h  # default 24 hours <13>
+            keep-failed: PT24h # default 24 hours <11>
+            keep-finished: PT24h  # default 24 hours <12>
+            keep-lost: PT24h  # default 24 hours <13>
 ----
