@@ -15,8 +15,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 8,
-  "iteration": 1585741119556,
+  "id": 1,
+  "iteration": 1589203825801,
   "links": [],
   "panels": [
     {
@@ -30,7 +30,6 @@
       },
       "id": 21,
       "mode": "html",
-      "options": {},
       "timeFrom": null,
       "timeShift": null,
       "title": "",
@@ -46,7 +45,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#299c46"
       ],
-      "datasource": "newPrometheus",
+      "datasource": "Prometheus",
       "description": "Displays the total Job execution Count",
       "format": "none",
       "gauge": {
@@ -79,7 +78,6 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -100,16 +98,18 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(spring_batch_job_seconds_count{status=\"COMPLETED\"})",
+          "expr": "sum(spring_batch_job_seconds_count{APPLICATION_NAME=~\"$service\",status=\"COMPLETED\"})",
           "format": "time_series",
           "hide": false,
           "instant": true,
+          "interval": "",
           "intervalFactor": 1,
+          "legendFormat": "",
           "refId": "A"
         }
       ],
       "thresholds": "0,0",
-      "title": "Job Count - Successfull",
+      "title": "Service Job Count - SUCCESFUL",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -184,17 +184,17 @@
         "show": true
       },
       "nullPointMode": "as empty",
-      "options": {},
       "targets": [
         {
-          "expr": "lightmin_client_job_status",
+          "expr": "{__name__=~\"lightmin_client_job_status\",APPLICATION_NAME=~\"$service\"}",
+          "interval": "",
           "legendFormat": "{{name}}",
           "refId": "A"
         }
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Statusmap Batchjob",
+      "title": "Statusmap Batch Jobs per Service",
       "tooltip": {
         "show": true
       },
@@ -254,7 +254,6 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -275,16 +274,18 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(spring_batch_job_seconds_count{status=\"FAILED\"})",
+          "expr": "sum(spring_batch_job_seconds_count{APPLICATION_NAME=~\"$service\",status=\"FAILED\"})",
           "format": "time_series",
           "hide": false,
           "instant": true,
+          "interval": "",
           "intervalFactor": 1,
+          "legendFormat": "",
           "refId": "A"
         }
       ],
       "thresholds": "1,20",
-      "title": "Job Count - FAILED",
+      "title": "Service Job Count - FAILED",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -307,7 +308,6 @@
       },
       "id": 22,
       "mode": "html",
-      "options": {},
       "timeFrom": null,
       "timeShift": null,
       "title": "",
@@ -319,7 +319,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "newPrometheus",
+      "datasource": "Prometheus",
       "decimals": null,
       "description": "This diagram shows us the last successful item write from the selected Job",
       "fill": 1,
@@ -419,7 +419,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "newPrometheus",
+      "datasource": "Prometheus",
       "decimals": null,
       "fill": 1,
       "fillGradient": 0,
@@ -522,7 +522,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#299c46"
       ],
-      "datasource": "newPrometheus",
+      "datasource": "Prometheus",
       "description": "Displays the total Job execution Count",
       "format": "none",
       "gauge": {
@@ -555,7 +555,6 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -585,7 +584,7 @@
         }
       ],
       "thresholds": "0,0",
-      "title": "Job Count - $jobname - Successfull",
+      "title": "Job Count - $jobname - SUCCESFUL",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -638,7 +637,6 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -691,7 +689,6 @@
       },
       "id": 23,
       "mode": "html",
-      "options": {},
       "timeFrom": null,
       "timeShift": null,
       "title": "",
@@ -998,20 +995,46 @@
       {
         "allValue": null,
         "current": {
-          "isNone": true,
-          "selected": false,
-          "text": "None",
-          "value": ""
+          "text": "hope-batch-test",
+          "value": "hope-batch-test"
         },
-        "datasource": "newPrometheus",
-        "definition": "",
+        "datasource": "Prometheus",
+        "definition": "label_values(APPLICATION_NAME)",
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
+        "index": -1,
+        "label": "Service",
+        "multi": true,
+        "name": "service",
+        "options": [],
+        "query": "label_values(APPLICATION_NAME)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "Prometheus",
+        "definition": "spring_batch_job_seconds_max{APPLICATION_NAME=~\"$service\"}",
+        "hide": 0,
+        "includeAll": true,
+        "index": -1,
         "label": "Job Name",
         "multi": false,
         "name": "jobname",
         "options": [],
-        "query": "spring_batch_job_seconds_max",
+        "query": "spring_batch_job_seconds_max{APPLICATION_NAME=~\"$service\"}",
         "refresh": 1,
         "regex": ".*name=\"(.*?)\".*",
         "skipUrlSync": false,
@@ -1054,7 +1077,10 @@
     ]
   },
   "timezone": "",
-  "title": "Spring Batch Dashboard",
+  "title": "Spring Batch Lightmin Dashboard",
   "uid": "ywiAi3wWz",
-  "version": 42
+  "variables": {
+    "list": []
+  },
+  "version": 1
 }

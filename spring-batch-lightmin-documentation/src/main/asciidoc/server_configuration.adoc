@@ -5,10 +5,9 @@ These configurations can be overridden via properties.
 
 === Context Path
 
-If the server has a concrete context path, which is different from the servlet path,
-the default value can be overridden by the following property.
+If the server has a concrete context path, which is different from the servlet path, the default value can be overridden by the following property.
 
-[source, yaml]
+[source,yaml]
 ----
 spring:
   batch:
@@ -22,7 +21,7 @@ spring:
 
 The _Heartbeat period_ is the time in mills to check the health status of the clients.
 
-[source, yaml]
+[source,yaml]
 ----
 spring:
   batch:
@@ -34,10 +33,9 @@ spring:
 
 === Credentials
 
-If the server has to pass username and password to the clients, the values can be
-configured via properties.
+If the server has to pass username and password to the clients, the values can be configured via properties.
 
-[source, yaml]
+[source,yaml]
 ----
 spring:
   batch:
@@ -51,7 +49,7 @@ spring:
 
 In order to detected lightmin client via service discovery, the following property has to be set to true
 
-[source, yaml]
+[source,yaml]
 -----
 spring:
   batch:
@@ -62,13 +60,13 @@ spring:
 
 === Server behind a Proxy
 
-The server ui uses redirects and the _HOST_ header is taken to create the redirect urls. This is the default behavior of Spring MVC.
+The server ui uses redirects and the _HOST_ header is taken to create the redirect urls.
+This is the default behavior of Spring MVC.
 If the server ui is running behind a proxy, the implementation of the server takes care, that the _X-FORWARD-PREFIX_ header is used as well.
 
-If the proxy cannot pass the _HOST_ header or you do not want to change the default, e.g. _Zuul_, the following property can force the server
-to use the _X-FORWARDED-HOST_ header to build the redirect urls.
+If the proxy cannot pass the _HOST_ header or you do not want to change the default, e.g. _Zuul_, the following property can force the server to use the _X-FORWARDED-HOST_ header to build the redirect urls.
 
-[source, yaml]
+[source,yaml]
 ----
 spring:
   batch:
@@ -82,7 +80,7 @@ spring:
 If you want to place a custom logo or text next to the _Spring Boot_ and _Spring Batch_ logo, the following properties can be used.
 If the logo property is set, the text will be displayed
 
-[source, yaml]
+[source,yaml]
 ----
 spring:
   batch:
@@ -95,3 +93,42 @@ spring:
           img-path: img/logo.png
 ----
 
+=== Server Metrics
+
+In order to collect metrics of a _Lightmin_ server , the following property has to be to _true_.
+
+[source,yaml]
+----
+spring:
+    batch:
+        lightmin:
+            server:
+                metrics-enabled: true
+----
+
+=== Server Scheduler
+
+The behavior of the _Server Scheduler_ can be changed via application properties.
+
+[source,yaml]
+----
+spring:
+  batch:
+    lightmin:
+      server:
+        scheduler:
+          enabled: true # default true <1>
+          create-new-executions-on-failure: false # default false <2>
+          create-new-executions-on-lost: false # default false <3>
+          fail-on-instance-execution-count: true # default true <4>
+          poller-period: 1000 # default 1000 <5>
+          poller-period-retry: 1000 # default 1000 <6>
+          repository:
+            delete-poller-period: 10m # <7>
+            delete-failed:  true # default true <8>
+            delete-finished: true # default true <9>
+            delete-lost: true # default true <10>
+            keep-failed: 24h # default 24 hours <11>
+            keep-finished: 24h  # default 24 hours <12>
+            keep-lost: 24h  # default 24 hours <13>
+----

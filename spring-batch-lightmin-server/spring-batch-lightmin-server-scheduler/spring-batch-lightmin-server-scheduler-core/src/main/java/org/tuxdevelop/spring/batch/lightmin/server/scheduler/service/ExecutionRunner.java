@@ -28,6 +28,7 @@ public class ExecutionRunner implements Runnable {
     private final ServerSchedulerCoreConfigurationProperties properties;
     private final SchedulerConfiguration schedulerConfiguration;
 
+
     public ExecutionRunner(
             final SchedulerExecution schedulerExecution,
             final ServerSchedulerService serverSchedulerService,

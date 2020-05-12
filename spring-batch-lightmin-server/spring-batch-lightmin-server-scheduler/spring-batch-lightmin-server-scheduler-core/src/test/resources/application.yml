@@ -2,3 +2,23 @@ logging:
   level:
     org:
       tuxdevelop: debug
+
+spring:
+  batch:
+    lightmin:
+      server:
+        scheduler:
+          enabled:
+          create-new-executions-on-failure: false # default false
+          create-new-executions-on-lost: false # default false
+          fail-on-instance-execution-count: true # default true
+          poller-period: 1000 # default 1000
+          poller-period-retry: 1000 # default 1000
+          repository:
+            delete-poller-period: 10m #
+            delete-failed:  true # default true
+            delete-finished: true # default true
+            delete-lost: true # default true
+            keep-failed: 24h # default 24 hours
+            keep-finished: 24h  # default 24 hours
+            keep-lost: 24h  # default 24 hours

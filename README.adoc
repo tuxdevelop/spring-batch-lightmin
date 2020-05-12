@@ -55,13 +55,20 @@ Add the _Spring Batch Lightmin BOM_ to the dependency management section of your
 
 === Setting up the Server
 
-The server component is currently only available in a standalone mode.
-This means, the servers do not sync the state between each other.
-A cluster mode will be added in a future release.
+The server is the component which is used to configure clients and schedule jobs.
+
+[IMPORTANT]
+====
+The server can be operated in standalone and cluster mode.
+The standalone mode does not support any synchronisation between multiple cluster instances.
+Also the server cluster scheduler are working totally independent from each other in standalone mode.
+====
 
 The server itself is also a _Spring Boot_ application.
 
 ==== Maven Dependencies
+
+===== Standalone
 
 The following dependency has to added to your project.
 
@@ -70,6 +77,21 @@ The following dependency has to added to your project.
 <dependency>
     <groupId>org.tuxdevelop</groupId>
     <artifactId>spring-batch-lightmin-server-standalone</artifactId>
+    <version>${spring-batch-lightmin.version}</version>
+</dependency>
+----
+
+==== Cluster
+
+The project currently provides one cluster implementation based on _Infinispan_.
+
+===== Infinispan
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-server-cluster-infinispan</artifactId>
     <version>${spring-batch-lightmin.version}</version>
 </dependency>
 ----
@@ -85,6 +107,181 @@ In order to enable the server, the annotation _@EnableLightminServer_ has to add
 public class LightminServer {
 
 }
+----
+
+==== Enable the Cluster
+
+If you added the cluster dependencies the following actions have to be done:
+
+===== Infinispan
+
+In order to enable the server, the annotation _@EnableLightminServer_ has to added to one of the _@Configuration_ classes.
+
+[source,java]
+----
+@EnableLightminServer
+@EnableServerClusterInfinispan
+@SpringBootApplication
+public class LightminServer {
+
+}
+----
+
+The _Infinispan_ cluster configuration will provide the following clustered features:
+
+* Synchronized poller for server scheduler and clean up jobs
+* LightminServerLockManager implenentation for Infinispan
+* Distributed Repositories for
+** JobExecutionEventRepository
+** JournalRepository
+** LightminApplicationRepository
+
+If the following properties are set to true, additional distributed repositories will be provided:
+
+[source,yaml]
+----
+spring:
+  batch:
+    lightmin:
+      server:
+        cluster:
+          infinispan:
+            repository:
+              init-scheduler-configuration-repository: true # default false <1>
+              init-scheduler-execution-repository: true # default false <2>
+----
+
+<1> if true, a distributed _SchedulerConfigurationRepository_ will be provided
+
+<2> if true, a distributed _SchedulerExecutionRepository_ will be provided
+
+[IMPORTANT]
+====
+It is highly recommended to use persistent repositories for _SchedulerConfigurationRepository_ and _SchedulerExecutionRepository_ like the _JDBC_ repositories.
+The distributed repositories will contain the stored values as long as one cluster member is up and running.
+====
+
+====== Infinispan Global Configuration
+
+In order to use the infinispan cluster, a _GlobalConfiguration_ has to be provided.
+The documentation of _Infinispan_ and _jGroups_ will give you insides how to configure it for your need.
+
+[source,java]
+----
+@Configuration
+public class MyConfiguration {
+
+    @Bean
+    public GlobalConfiguration globalConfiguration() {
+        return new GlobalConfigurationBuilder()
+                // Configure the global configuration
+                .build();
+    }
+
+}
+----
+
+==== Server Scheduler
+
+Since lightmin version _2.1.1_ the server provides a scheduler to trigger jobs at the clients.
+In order to provide this feature, the scheduler configurations and executions have to stored.
+
+The _SchedulerConfigurationRepository_ and _SchedulerExecutionRepository_ are responsible for the doing the job.
+Per dafault, the _standalone server_ will configure inmemory repositories, which are cleared after each restart.
+
+===== Configuration Properties
+
+The behavior of the _Server Scheduler_ can be changed via application properties.
+
+[source,yaml]
+----
+spring:
+  batch:
+    lightmin:
+      server:
+        scheduler:
+          enabled: true # default true <1>
+          create-new-executions-on-failure: false # default false <2>
+          create-new-executions-on-lost: false # default false <3>
+          fail-on-instance-execution-count: true # default true <4>
+          poller-period: 1000 # default 1000 <5>
+          poller-period-retry: 1000 # default 1000 <6>
+          repository:
+            delete-poller-period: 10m # <7>
+            delete-failed:  true # default true <8>
+            delete-finished: true # default true <9>
+            delete-lost: true # default true <10>
+            keep-failed: 24h # default 24 hours <11>
+            keep-finished: 24h  # default 24 hours <12>
+            keep-lost: 24h  # default 24 hours <13>
+----
+
+<1> If set to false, no schedulers will be executed
+
+<2> If set to true, a new executions based on the configuration will be created on failure.
+
+<3> If set to true, a new executions based on the configuration will be created on lost after configured retries failed.
+
+<4> If true, the execution will fail if not enough instances are available.
+
+<5> Time in millis to fetch new executions to be executed by the scheduler
+
+<6> Time in millis to fetch executions to be retried by the scheduler
+
+<7> Duration of the clean up poller for the repositories
+
+<8> If set to true, the failed executions will be deleted automatically.
+
+<9> If set to true, the finished executions will be deleted automatically.
+
+<10> If set to true, the lost executions will be deleted automatically.
+
+<11> Duration how long failed executions should be kept before getting deleted automatically.
+
+<12> Duration how long finished executions should be kept before getting deleted automatically.
+
+<13> Duration how long lost executions should be kept before getting deleted automatically.
+
+[IMPORTANT]
+====
+The properties
+
+  create-new-executions-on-failure: false
+
+  create-new-executions-on-lost: false
+
+  fail-on-instance-execution-count: true
+
+are global properties.
+There is the possibility that future releases will support this configuration option per execution.
+====
+
+===== Server Scheduler Jdbc Repositories
+
+The database schema for the repositories are available in the dependency at _org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository_
+
+====== Maven Dependency
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.tuxdevelop</groupId>
+    <artifactId>spring-batch-lightmin-server-scheduler-repository-jdbc</artifactId>
+    <version>${spring-batch-lightmin.version}</version>
+</dependency>
+----
+
+====== Enable the JDBC Repository
+
+[source,java]
+----
+@EnableLightminServer
+@EnableServerSchedulerJdbcRepository
+@SpringBootApplication
+public class MyApplication {
+    ...
+}
+
 ----
 
 ==== Service Discovery

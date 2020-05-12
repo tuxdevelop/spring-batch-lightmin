@@ -99,8 +99,10 @@ public class MetricServiceBean implements MetricService {
             if (!isNull(metricName)) {
                 Gauge.builder(metricName, jobExecutionEventInfo.getExitStatus().getExitCode(),
                         (exitCode) -> (double) LightminExitStatus.getLightminMetricExitIdByExitStatus(exitCode))
-                        .tags(Tags.of(TAG_NAME, jobExecutionEventInfo.getJobName()))
-                        .strongReference(true)
+                        .tags(Tags.of(
+                                Tag.of(TAG_NAME, jobExecutionEventInfo.getJobName()),
+                                Tag.of(TAG_APPNAME, jobExecutionEventInfo.getApplicationName()))
+                        ).strongReference(true)
                         .register(this.registry);
             } else {
                 log.info("{}_{} is unknown by Lightmin Context and is therefore not created.", source, LightminMetricUtils.LightminMetrics.LIGHTMIN_JOB_STATUS);
