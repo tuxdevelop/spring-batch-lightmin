@@ -107,4 +107,5 @@ nb-configuration.xml
 # local
 local.*
 
-*/*data_grafana_local**
+**/data_grafana_local**
+**/data_grafana_local/**

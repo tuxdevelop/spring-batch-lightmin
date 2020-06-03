@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1589203864837,
+  "iteration": 1591172080202,
   "links": [],
   "panels": [
     {
@@ -72,9 +72,15 @@
         "unitFormat": "short"
       },
       "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 0
       },
@@ -116,7 +122,7 @@
       "yAxisSort": "metrics"
     }
   ],
-  "schemaVersion": 22,
+  "schemaVersion": 25,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -124,15 +130,17 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
+          "selected": true,
+          "tags": [],
+          "text": "address-migrator",
+          "value": [
+            "address-migrator"
+          ]
         },
         "datasource": "Prometheus",
         "definition": "label_values(appname)",
         "hide": 0,
         "includeAll": true,
-        "index": -1,
         "label": "Service",
         "multi": true,
         "name": "service",
@@ -147,56 +155,15 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-      },
-      {
-        "allValue": null,
-        "current": {
-          "tags": [],
-          "text": "All",
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": "Prometheus",
-        "definition": "lightmin_server_job_status{appname=~\"$service\"}",
-        "hide": 0,
-        "includeAll": true,
-        "index": -1,
-        "label": "Job Name",
-        "multi": true,
-        "name": "jobName",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "camelLauncherJob",
-            "value": "camelLauncherJob"
-          }
-        ],
-        "query": "lightmin_server_job_status{appname=~\"$service\"}",
-        "refresh": 0,
-        "regex": ".*name=\"(.*?)\".*",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
       }
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
-      "5s",
       "10s",
       "30s",
       "1m",
@@ -211,8 +178,5 @@
   "timezone": "",
   "title": "Spring Batch Lightmin Server Dashboard",
   "uid": "nnhmLMgMz",
-  "variables": {
-    "list": []
-  },
   "version": 1
 }

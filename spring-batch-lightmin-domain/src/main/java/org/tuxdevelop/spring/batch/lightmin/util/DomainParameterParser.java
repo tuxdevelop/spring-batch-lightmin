@@ -146,7 +146,7 @@ public final class DomainParameterParser {
     public static Map<String, Object> parseParameters(final String parameters) {
         final Map<String, Object> parameterMap;
         if (parameters == null || parameters.isEmpty()) {
-            log.info("parameters null or empty, nothing to map!");
+            log.debug("parameters null or empty, nothing to map!");
             parameterMap = new HashMap<>();
         } else {
             final List<String> parameterList = splitParameters(parameters);

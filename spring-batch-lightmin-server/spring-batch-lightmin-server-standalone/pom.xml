@@ -69,7 +69,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- spring batch lightmin -->
         <dependency>
             <groupId>org.tuxdevelop</groupId>
             <artifactId>spring-batch-lightmin-test-api</artifactId>
@@ -86,6 +85,13 @@
         <dependency>
             <groupId>org.fluttercode.datafactory</groupId>
             <artifactId>datafactory</artifactId>
+        </dependency>
+
+        <!-- micrometer prometheus for test apps -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>test</scope>
         </dependency>
 
 

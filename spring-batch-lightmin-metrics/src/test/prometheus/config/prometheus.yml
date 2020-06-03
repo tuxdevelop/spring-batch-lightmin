@@ -9,15 +9,22 @@ global:
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
 scrape_configs:
-  - job_name: "spring boot applications"
+  - job_name: "lightmin client applications"
 
     scrape_interval: 10s
-    metrics_path: /actuator/prometheus
+    metrics_path: /address-migrator/actuator/prometheus
     static_configs:
       - targets:
           [
-            "localhost:9290",
-            "localhost:9190",
-            "localhost:8480",
-            "localhost:8580",
+            "host.docker.internal:9009",
+            "host.docker.internal:9010"
+          ]
+  - job_name: "lightmin server"
+
+    scrape_interval: 10s
+    metrics_path: /server/actuator/prometheus
+    static_configs:
+      - targets:
+          [
+            "host.docker.internal:50100"
           ]
