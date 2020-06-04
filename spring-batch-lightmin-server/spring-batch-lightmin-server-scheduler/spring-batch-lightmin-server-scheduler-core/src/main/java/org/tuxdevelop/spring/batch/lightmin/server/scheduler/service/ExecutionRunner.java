@@ -68,14 +68,12 @@ public class ExecutionRunner implements Runnable {
                 } else {
                     log.info("Not creating new execution for SchedulerConfiguration with the id " + this.schedulerConfiguration.getId() + " ! Reason: Execution status is FAILED!");
                 }
-            } else if (ExecutionStatus.LOST.equals(finalStatus)) {
+            } else {
                 if (this.properties.getCreateNewExecutionsOnLost()) {
                     this.createNextExecution(this.schedulerConfiguration.getCronExpression());
                 } else {
                     log.info("Not creating new execution for SchedulerConfiguration with the id " + this.schedulerConfiguration.getId() + " ! Reason: Execution status is LOST!");
                 }
-            } else {
-                log.warn("Execution Status for SchedulerExecution with the id " + this.schedulerExecution.getId() + "of SchedulerConfiguration with the id " + this.schedulerConfiguration.getId() + " is " + finalStatus + " ! No new execution created!");
             }
         } catch (final Exception e) {
             log.error("Error while processing scheduled job state {} ", this.schedulerExecution, e);
@@ -109,7 +107,7 @@ public class ExecutionRunner implements Runnable {
         if (this.schedulerConfiguration.getRetryable()) {
             final Long retryInterval = this.schedulerConfiguration.getRetryInterval();
             if (retryInterval != null) {
-                //TODO: check is this is a good idea
+                //TODO: check if this is a good idea
                 final Date nextRetry = new Date(System.currentTimeMillis() + retryInterval);
                 schedulerExecution.setNextRetry(nextRetry);
             } else {

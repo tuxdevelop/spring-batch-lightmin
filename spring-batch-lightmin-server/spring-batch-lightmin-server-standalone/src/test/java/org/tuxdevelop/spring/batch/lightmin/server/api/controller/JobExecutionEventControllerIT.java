@@ -38,6 +38,7 @@ public class JobExecutionEventControllerIT {
     @Test
     public void testConsumeJobExecutionFailedEvent() {
         final JobExecutionEventInfo jobExecutionEventInfo = new JobExecutionEventInfo();
+        jobExecutionEventInfo.setApplicationName("testApp");
         jobExecutionEventInfo.setJobName("test");
         jobExecutionEventInfo.setJobExecutionId(1L);
         jobExecutionEventInfo.setEndDate(new Date());

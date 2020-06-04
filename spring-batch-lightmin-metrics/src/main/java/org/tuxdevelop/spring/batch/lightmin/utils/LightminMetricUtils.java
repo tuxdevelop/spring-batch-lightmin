@@ -36,7 +36,7 @@ public class LightminMetricUtils {
     private LightminMetricUtils() {
     }
 
-    public static String getMetricName(final LightminMetricSource source, final LightminMetrics lightminMetricName) {
+    public static String getMetricNameOrNull(final LightminMetricSource source, final LightminMetrics lightminMetricName) {
         if (!Arrays.asList(LightminMetrics.values()).contains(lightminMetricName)) {
             log.info("{} is no METRIC known by Lightmin context with this name.", lightminMetricName.getLightminMetricName());
         } else {
@@ -49,7 +49,6 @@ public class LightminMetricUtils {
                     log.info("{} is no SOURCE known by Lightmin context with this name.", source.name());
             }
         }
-        //TODO adeister: why null and why multiple returns?
         return null;
     }
 }

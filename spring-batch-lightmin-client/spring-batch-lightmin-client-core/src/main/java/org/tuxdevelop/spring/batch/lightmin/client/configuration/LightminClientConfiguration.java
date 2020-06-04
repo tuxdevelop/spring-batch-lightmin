@@ -86,7 +86,11 @@ public class LightminClientConfiguration {
     }
 
     @Configuration
-    @ConditionalOnProperty(prefix = "spring.batch.lightmin.client", name = "metrics-enabled", havingValue = "true")
+    @ConditionalOnProperty(
+            prefix = "spring.batch.lightmin.client",
+            name = "metrics-enabled",
+            havingValue = "true",
+            matchIfMissing = true)
     static class ClientMetricsConfiguration {
 
         @Bean

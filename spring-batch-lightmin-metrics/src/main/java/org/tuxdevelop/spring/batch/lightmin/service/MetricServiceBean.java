@@ -44,7 +44,7 @@ public class MetricServiceBean implements MetricService {
 
         if (LightminExitStatus.FAILED.getExitCode().equals(stepExecutionEventInfo.getExitStatus().getExitCode())) {
 
-            final String dataRollback = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_ROLLBACK);
+            final String dataRollback = LightminMetricUtils.getMetricNameOrNull(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_ROLLBACK);
 
             if (!isNull(dataRollback)) {
                 Gauge.builder(dataRollback, stepExecutionEventInfo.getRollbackCount(), Integer::doubleValue)
@@ -58,7 +58,7 @@ public class MetricServiceBean implements MetricService {
             log.trace("Nothing to handle for ExitCode FAILED");
         }
 
-        final String dataRead = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_READ);
+        final String dataRead = LightminMetricUtils.getMetricNameOrNull(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_READ);
 
         if (!isNull(dataRead)) {
             Gauge.builder(dataRead, stepExecutionEventInfo.getReadCount(), Integer::doubleValue)
@@ -68,7 +68,7 @@ public class MetricServiceBean implements MetricService {
         } else {
             log.info("{}_{} is unknown by Lightmin Context and is therefore not created.", source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_READ);
         }
-        final String dataWrite = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE);
+        final String dataWrite = LightminMetricUtils.getMetricNameOrNull(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE);
 
         if (!isNull(dataWrite)) {
             Gauge.builder(dataWrite, stepExecutionEventInfo.getWriteCount(), Integer::doubleValue)
@@ -78,7 +78,7 @@ public class MetricServiceBean implements MetricService {
         } else {
             log.info("{}_{} is unknown by Lightmin Context and is therefore not created.", source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE);
         }
-        final String dataCommit = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE);
+        final String dataCommit = LightminMetricUtils.getMetricNameOrNull(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_STEP_DATA_WRITE);
 
         if (!isNull(dataCommit)) {
             Gauge.builder(dataCommit, stepExecutionEventInfo.getCommitCount(), Integer::doubleValue)
@@ -95,7 +95,7 @@ public class MetricServiceBean implements MetricService {
         requireNonNull(this.registry, "registry");
 
         if (!LightminExitStatus.UNKNOWN.getExitCode().equals(jobExecutionEventInfo.getExitStatus().getExitCode())) {
-            final String metricName = LightminMetricUtils.getMetricName(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_JOB_STATUS);
+            final String metricName = LightminMetricUtils.getMetricNameOrNull(source, LightminMetricUtils.LightminMetrics.LIGHTMIN_JOB_STATUS);
             if (!isNull(metricName)) {
                 Gauge.builder(metricName, jobExecutionEventInfo.getExitStatus().getExitCode(),
                         (exitCode) -> (double) LightminExitStatus.getLightminMetricExitIdByExitStatus(exitCode))

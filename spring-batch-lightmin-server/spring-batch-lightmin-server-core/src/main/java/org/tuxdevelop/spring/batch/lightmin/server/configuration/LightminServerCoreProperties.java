@@ -32,7 +32,7 @@ public class LightminServerCoreProperties {
 
     @Getter
     @Setter
-    private Boolean metricsEnabled = Boolean.FALSE;
+    private Boolean metricsEnabled = Boolean.TRUE;
 
     @Getter
     @Setter
