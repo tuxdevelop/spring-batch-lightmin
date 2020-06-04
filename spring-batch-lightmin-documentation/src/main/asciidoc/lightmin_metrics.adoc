@@ -14,7 +14,7 @@ spring:
     batch:
         lightmin:
             client:
-                metrics-enabled: true
+                metrics-enabled: true #default true
 ----
 
 [IMPORTANT]
@@ -29,7 +29,7 @@ spring:
     batch:
         lightmin:
             client:
-                publish-job-events: true
+                publish-job-events: true #default true
 ----
 
 === Enabling Server Metrics
@@ -42,7 +42,7 @@ spring:
     batch:
         lightmin:
             server:
-                metrics-enabled: true
+                metrics-enabled: true #default true
 ----
 
 === Exposing Metrics via actuator
@@ -103,15 +103,37 @@ public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
 }
 ----
 
-=== Grafana Dashboard
+=== Grafana Dashboards
 
-Lightmin Metrics introduces a prebuild Grafana Dashboard.
-The json file is available in the resources folder of the lightmin-metrics project.
+Lightmin Metrics introduces prebuild Grafana Dashboards for server and client.
+The json files are available in the resources folder of the lightmin-metrics project.
 In order to use the plugin, please install the following Plugins:
 
 * Statusmap by Flant JSC
 
+==== Lightmin Dashboard
+
+The _Spring Batch Lightmin_ Dashboard provides information about all Lightmin clients which are configured as target in Prometheus.
+The following variables are available:
+
+* Service - taken from the tag _APPLICATION_NAME_ (Lightmin Clients should be listed here)
+* Job Name - Name of all jobs, or all jobs of the selected _Services_
+* Job Count Interval - Time period for the overall _SUCCESSFUL_ and _FAILED_ overview
+
+image::grafana_all.png[]
+
+If a specific Job Name is selected, the details about the job and step execution will be displayed.
+
+image::grafana_job.png[]
+
+==== Lightmin Server Dashboard
+
+The Server Dashboard provides an overview of all Job Executions, which are send from the clients to the server.
+The Lightmin server(s) should be configured as target in Prometheus.
+
+image::grafana_server_all.png[]
+
 [IMPORTANT]
 ====
-The board requires a Prometheus datasource.
+The boards require a Prometheus datasource.
 ====

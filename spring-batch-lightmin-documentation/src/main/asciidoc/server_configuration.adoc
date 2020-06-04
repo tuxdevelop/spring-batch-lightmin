@@ -103,7 +103,7 @@ spring:
     batch:
         lightmin:
             server:
-                metrics-enabled: true
+                metrics-enabled: true # default true
 ----
 
 === Server Scheduler

@@ -535,7 +535,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_enabling_server_metrics">Enabling Server Metrics</a></li>
 <li><a href="#_exposing_metrics_via_actuator">Exposing Metrics via actuator</a></li>
 <li><a href="#_modifying_lighmin_metrics">Modifying Lighmin Metrics</a></li>
-<li><a href="#_grafana_dashboard">Grafana Dashboard</a></li>
+<li><a href="#_grafana_dashboards">Grafana Dashboards</a></li>
 </ul>
 </li>
 <li><a href="#_server_user_interface">Server User Interface</a>
@@ -550,6 +550,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_job_launcher">Job Launcher</a></li>
 <li><a href="#_job_execution_events">Job Execution Events</a></li>
 <li><a href="#_journal">Journal</a></li>
+<li><a href="#_server_scheduler_2">Server Scheduler</a></li>
 </ul>
 </li>
 <li><a href="#_server_configuration">Server Configuration</a>
@@ -561,7 +562,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_server_behind_a_proxy_2">Server behind a Proxy</a></li>
 <li><a href="#_custom_ui_logo_and_text">Custom UI Logo and Text</a></li>
 <li><a href="#_server_metrics">Server Metrics</a></li>
-<li><a href="#_server_scheduler_2">Server Scheduler</a></li>
+<li><a href="#_server_scheduler_3">Server Scheduler</a></li>
 </ul>
 </li>
 <li><a href="#_client_configuration">Client Configuration</a>
@@ -595,7 +596,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_enabling_server_metrics_2">Enabling Server Metrics</a></li>
 <li><a href="#_exposing_metrics_via_actuator_2">Exposing Metrics via actuator</a></li>
 <li><a href="#_modifying_lighmin_metrics_2">Modifying Lighmin Metrics</a></li>
-<li><a href="#_grafana_dashboard_2">Grafana Dashboard</a></li>
+<li><a href="#_grafana_dashboards_2">Grafana Dashboards</a></li>
 </ul>
 </li>
 <li><a href="#_rest_api">REST API</a>
@@ -744,14 +745,13 @@ Also the server cluster scheduler are working totally independent from each othe
 </div>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_cluster">Cluster</h4>
+<div class="sect4">
+<h5 id="_cluster">Cluster</h5>
 <div class="paragraph">
 <p>The project currently provides one cluster implementation based on <em>Infinispan</em>.</p>
 </div>
-<div class="sect4">
-<h5 id="_infinispan">Infinispan</h5>
+<div class="sect5">
+<h6 id="_infinispan">Infinispan</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
@@ -759,6 +759,7 @@ Also the server cluster scheduler are working totally independent from each othe
     <span class="tag">&lt;artifactId&gt;</span>spring-batch-lightmin-server-cluster-infinispan<span class="tag">&lt;/artifactId&gt;</span>
     <span class="tag">&lt;version&gt;</span>${spring-batch-lightmin.version}<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1637,7 +1638,7 @@ The metrics are available for client and server applications.</p>
     <span class="key">batch</span>:
         <span class="key">lightmin</span>:
             <span class="key">client</span>:
-                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
+                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default true</span></code></pre>
 </div>
 </div>
 <div class="admonitionblock important">
@@ -1649,7 +1650,7 @@ The metrics are available for client and server applications.</p>
 <td class="content">
 <div class="paragraph">
 <p>If you want to use runtime information of a client on a server, the following property has to be set to true.
-The send information will be transformed to metrics on the server, if the sever metrics feature is enabled.</p>
+The information send will be transformed to metrics on the server, if the sever metrics feature is enabled.</p>
 </div>
 </td>
 </tr>
@@ -1661,14 +1662,14 @@ The send information will be transformed to metrics on the server, if the sever 
     <span class="key">batch</span>:
         <span class="key">lightmin</span>:
             <span class="key">client</span>:
-                <span class="key">publish-job-events</span>: <span class="string"><span class="content">true</span></span></code></pre>
+                <span class="key">publish-job-events</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default true</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_enabling_server_metrics">Enabling Server Metrics</h3>
 <div class="paragraph">
-<p>In order to collect metrics of a <em>Lightmin</em> server , the following property has to be to <em>true</em>.</p>
+<p>In order to collect metrics of a <em>Lightmin</em> server , the following property has to be set to <em>true</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1676,7 +1677,7 @@ The send information will be transformed to metrics on the server, if the sever 
     <span class="key">batch</span>:
         <span class="key">lightmin</span>:
             <span class="key">server</span>:
-                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
+                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default true</span></code></pre>
 </div>
 </div>
 </div>
@@ -1752,10 +1753,10 @@ Refer to Micrometer Documentation for more information.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_grafana_dashboard">Grafana Dashboard</h3>
+<h3 id="_grafana_dashboards">Grafana Dashboards</h3>
 <div class="paragraph">
-<p>Lightmin Metrics introduces a prebuild Grafana Dashboard.
-The json file is available in the resources folder of the lightmin-metrics project.
+<p>Lightmin Metrics introduces prebuild Grafana Dashboards for server and client.
+The json files are available in the resources folder of the lightmin-metrics project.
 In order to use the plugin, please install the following Plugins:</p>
 </div>
 <div class="ulist">
@@ -1765,6 +1766,50 @@ In order to use the plugin, please install the following Plugins:</p>
 </li>
 </ul>
 </div>
+<div class="sect3">
+<h4 id="_lightmin_dashboard">Lightmin Dashboard</h4>
+<div class="paragraph">
+<p>The <em>Spring Batch Lightmin</em> Dashboard provides information about all Lightmin clients which are configured as target in Prometheus.
+The following variables are available:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Service - taken from the tag <em>APPLICATION_NAME</em> (Lightmin Clients should be listed here)</p>
+</li>
+<li>
+<p>Job Name - Name of all jobs, or all jobs of the selected <em>Services</em></p>
+</li>
+<li>
+<p>Job Count Interval - Time period for the overall <em>SUCCESSFUL</em> and <em>FAILED</em> overview</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/grafana_all.png" alt="grafana all">
+</div>
+</div>
+<div class="paragraph">
+<p>If a specific Job Name is selected, the details about the job and step execution will be displayed.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/grafana_job.png" alt="grafana job">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_lightmin_server_dashboard">Lightmin Server Dashboard</h4>
+<div class="paragraph">
+<p>The Server Dashboard provides an overview of all Job Executions, which are send from the clients to the server.
+The Lightmin server(s) should be configured as target in Prometheus.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/grafana_server_all.png" alt="grafana server all">
+</div>
+</div>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -1773,11 +1818,12 @@ In order to use the plugin, please install the following Plugins:</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>The board requires a Prometheus datasource.</p>
+<p>The boards require a Prometheus datasource.</p>
 </div>
 </td>
 </tr>
 </table>
+</div>
 </div>
 </div>
 </div>
@@ -1913,6 +1959,33 @@ To get details of the job execution, click on the desired id.</p>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_server_scheduler_2">Server Scheduler</h3>
+<div class="sect3">
+<h4 id="_server_scheduler_executions">Server Scheduler Executions</h4>
+<div class="imageblock">
+<div class="content">
+<img src="images/server-scheduler-executions.png" alt="server scheduler executions">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_server_scheduler_configurations">Server Scheduler Configurations</h4>
+<div class="imageblock">
+<div class="content">
+<img src="images/server-scheduler-configurations.png" alt="server scheduler configurations">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_add_server_scheduler_configuration">Add Server Scheduler Configuration</h4>
+<div class="imageblock">
+<div class="content">
+<img src="images/server-scheduler-configuration-add.png" alt="server scheduler configuration add">
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -2036,12 +2109,12 @@ If the logo property is set, the text will be displayed</p>
     <span class="key">batch</span>:
         <span class="key">lightmin</span>:
             <span class="key">server</span>:
-                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
+                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># default true</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_server_scheduler_2">Server Scheduler</h3>
+<h3 id="_server_scheduler_3">Server Scheduler</h3>
 <div class="paragraph">
 <p>The behavior of the <em>Server Scheduler</em> can be changed via application properties.</p>
 </div>
@@ -2997,7 +3070,7 @@ The metrics are available for client and server applications.</p>
     <span class="key">batch</span>:
         <span class="key">lightmin</span>:
             <span class="key">client</span>:
-                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
+                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span> <span class="comment">#default true</span></code></pre>
 </div>
 </div>
 <div class="admonitionblock important">
@@ -3021,7 +3094,7 @@ The send information will be transformed to metrics on the server, if the sever 
     <span class="key">batch</span>:
         <span class="key">lightmin</span>:
             <span class="key">client</span>:
-                <span class="key">publish-job-events</span>: <span class="string"><span class="content">true</span></span></code></pre>
+                <span class="key">publish-job-events</span>: <span class="string"><span class="content">true</span></span> <span class="comment">#default true</span></code></pre>
 </div>
 </div>
 </div>
@@ -3036,7 +3109,7 @@ The send information will be transformed to metrics on the server, if the sever 
     <span class="key">batch</span>:
         <span class="key">lightmin</span>:
             <span class="key">server</span>:
-                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span></code></pre>
+                <span class="key">metrics-enabled</span>: <span class="string"><span class="content">true</span></span> <span class="comment">#default true</span></code></pre>
 </div>
 </div>
 </div>
@@ -3112,10 +3185,10 @@ Refer to Micrometer Documentation for more information.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_grafana_dashboard_2">Grafana Dashboard</h3>
+<h3 id="_grafana_dashboards_2">Grafana Dashboards</h3>
 <div class="paragraph">
-<p>Lightmin Metrics introduces a prebuild Grafana Dashboard.
-The json file is available in the resources folder of the lightmin-metrics project.
+<p>Lightmin Metrics introduces prebuild Grafana Dashboards for server and client.
+The json files are available in the resources folder of the lightmin-metrics project.
 In order to use the plugin, please install the following Plugins:</p>
 </div>
 <div class="ulist">
@@ -3125,6 +3198,50 @@ In order to use the plugin, please install the following Plugins:</p>
 </li>
 </ul>
 </div>
+<div class="sect3">
+<h4 id="_lightmin_dashboard_2">Lightmin Dashboard</h4>
+<div class="paragraph">
+<p>The <em>Spring Batch Lightmin</em> Dashboard provides information about all Lightmin clients which are configured as target in Prometheus.
+The following variables are available:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Service - taken from the tag <em>APPLICATION_NAME</em> (Lightmin Clients should be listed here)</p>
+</li>
+<li>
+<p>Job Name - Name of all jobs, or all jobs of the selected <em>Services</em></p>
+</li>
+<li>
+<p>Job Count Interval - Time period for the overall <em>SUCCESSFUL</em> and <em>FAILED</em> overview</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/grafana_all.png" alt="grafana all">
+</div>
+</div>
+<div class="paragraph">
+<p>If a specific Job Name is selected, the details about the job and step execution will be displayed.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/grafana_job.png" alt="grafana job">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_lightmin_server_dashboard_2">Lightmin Server Dashboard</h4>
+<div class="paragraph">
+<p>The Server Dashboard provides an overview of all Job Executions, which are send from the clients to the server.
+The Lightmin server(s) should be configured as target in Prometheus.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/grafana_server_all.png" alt="grafana server all">
+</div>
+</div>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -3133,11 +3250,12 @@ In order to use the plugin, please install the following Plugins:</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>The board requires a Prometheus datasource.</p>
+<p>The boards require a Prometheus datasource.</p>
 </div>
 </td>
 </tr>
 </table>
+</div>
 </div>
 </div>
 </div>
@@ -3217,20 +3335,20 @@ Content-Length: 790
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Wed, 03 Jun 2020 08:23:24 GMT
+Date: Thu, 04 Jun 2020 12:10:45 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 875
 
 {
-  &quot;id&quot; : &quot;473aeb62&quot;,
+  &quot;id&quot; : &quot;35959c00&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:54566/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:54566/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:54566&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:58060/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:58060/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:58060&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UNKNOWN&quot;,
-    &quot;timeInMills&quot; : 1591172603411
+    &quot;timeInMills&quot; : 1591272643921
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -3254,7 +3372,7 @@ Content-Length: 875
 <h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/473aeb62' -i -X DELETE \
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/35959c00' -i -X DELETE \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
     -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
@@ -3264,7 +3382,7 @@ Content-Length: 875
 <h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/473aeb62 HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/35959c00 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript, text/json
 Content-Type: application/json; charset=UTF-8
 Host: localhost</code></pre>
@@ -3278,20 +3396,20 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Wed, 03 Jun 2020 08:23:24 GMT
+Date: Thu, 04 Jun 2020 12:10:45 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 875
 
 {
-  &quot;id&quot; : &quot;473aeb62&quot;,
+  &quot;id&quot; : &quot;35959c00&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:54566/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:54566/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:54566&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:58060/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:58060/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:58060&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UNKNOWN&quot;,
-    &quot;timeInMills&quot; : 1591172603411
+    &quot;timeInMills&quot; : 1591272643921
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -3339,20 +3457,20 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Wed, 03 Jun 2020 08:23:23 GMT
+Date: Thu, 04 Jun 2020 12:10:43 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 879
 
 [ {
-  &quot;id&quot; : &quot;473aeb62&quot;,
+  &quot;id&quot; : &quot;35959c00&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:54566/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:54566/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:54566&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:58060/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:58060/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:58060&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UNKNOWN&quot;,
-    &quot;timeInMills&quot; : 1591172603411
+    &quot;timeInMills&quot; : 1591272643921
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -3387,8 +3505,8 @@ Content-Length: 879
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1591172605044,
-  &quot;endDate&quot; : 1591172615044
+  &quot;startDate&quot; : 1591272645204,
+  &quot;endDate&quot; : 1591272655204
 }'</code></pre>
 </div>
 </div>
@@ -3411,8 +3529,8 @@ Content-Length: 247
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1591172605044,
-  &quot;endDate&quot; : 1591172615044
+  &quot;startDate&quot; : 1591272645204,
+  &quot;endDate&quot; : 1591272655204
 }</code></pre>
 </div>
 </div>
@@ -3422,7 +3540,7 @@ Content-Length: 247
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Wed, 03 Jun 2020 08:23:24 GMT
+Date: Thu, 04 Jun 2020 12:10:45 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3462,7 +3580,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 03 Jun 2020 08:23:27 GMT
+Date: Thu, 04 Jun 2020 12:10:46 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 1542
@@ -3479,7 +3597,7 @@ Content-Length: 1542
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : &quot;2020/06/03 10:23:27:740[date]&quot;,
+          &quot;parameter&quot; : &quot;2020/06/04 14:10:47:368[date]&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -3502,9 +3620,9 @@ Content-Length: 1542
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : &quot;2020-06-03T08:23:27.748+0000&quot;,
-      &quot;endTime&quot; : &quot;2020-06-03T08:23:27.750+0000&quot;,
-      &quot;lastUpdated&quot; : &quot;2020-06-03T08:23:27.750+0000&quot;,
+      &quot;startTime&quot; : &quot;2020-06-04T12:10:47.372+0000&quot;,
+      &quot;endTime&quot; : &quot;2020-06-04T12:10:47.374+0000&quot;,
+      &quot;lastUpdated&quot; : &quot;2020-06-04T12:10:47.374+0000&quot;,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -3514,10 +3632,10 @@ Content-Length: 1542
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : &quot;2020-06-03T08:23:27.744+0000&quot;,
-    &quot;createTime&quot; : &quot;2020-06-03T08:23:27.743+0000&quot;,
-    &quot;endTime&quot; : &quot;2020-06-03T08:23:27.751+0000&quot;,
-    &quot;lastUpdated&quot; : &quot;2020-06-03T08:23:27.761+0000&quot;,
+    &quot;startTime&quot; : &quot;2020-06-04T12:10:47.370+0000&quot;,
+    &quot;createTime&quot; : &quot;2020-06-04T12:10:47.370+0000&quot;,
+    &quot;endTime&quot; : &quot;2020-06-04T12:10:47.375+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2020-06-04T12:10:47.388+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -3558,7 +3676,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 03 Jun 2020 08:23:27 GMT
+Date: Thu, 04 Jun 2020 12:10:46 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 879
@@ -3575,7 +3693,7 @@ Content-Length: 879
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : &quot;2020/06/03 10:23:27:631[date]&quot;,
+          &quot;parameter&quot; : &quot;2020/06/04 14:10:47:304[date]&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
@@ -3587,10 +3705,10 @@ Content-Length: 879
     },
     &quot;stepExecutions&quot; : [ ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : &quot;2020-06-03T08:23:27.635+0000&quot;,
-    &quot;createTime&quot; : &quot;2020-06-03T08:23:27.634+0000&quot;,
-    &quot;endTime&quot; : &quot;2020-06-03T08:23:27.641+0000&quot;,
-    &quot;lastUpdated&quot; : &quot;2020-06-03T08:23:27.657+0000&quot;,
+    &quot;startTime&quot; : &quot;2020-06-04T12:10:47.306+0000&quot;,
+    &quot;createTime&quot; : &quot;2020-06-04T12:10:47.306+0000&quot;,
+    &quot;endTime&quot; : &quot;2020-06-04T12:10:47.312+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2020-06-04T12:10:47.328+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -3631,7 +3749,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 03 Jun 2020 08:23:27 GMT
+Date: Thu, 04 Jun 2020 12:10:46 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 1291
@@ -3642,7 +3760,7 @@ Content-Length: 1291
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/06/03 10:23:27:920[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/06/04 14:10:47:528[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3665,9 +3783,9 @@ Content-Length: 1291
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : &quot;2020-06-03T08:23:27.925+0000&quot;,
-    &quot;endTime&quot; : &quot;2020-06-03T08:23:27.927+0000&quot;,
-    &quot;lastUpdated&quot; : &quot;2020-06-03T08:23:27.927+0000&quot;,
+    &quot;startTime&quot; : &quot;2020-06-04T12:10:47.533+0000&quot;,
+    &quot;endTime&quot; : &quot;2020-06-04T12:10:47.535+0000&quot;,
+    &quot;lastUpdated&quot; : &quot;2020-06-04T12:10:47.535+0000&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -3677,10 +3795,10 @@ Content-Length: 1291
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-06-03T08:23:27.922+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-06-03T08:23:27.921+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-06-03T08:23:27.927+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-06-03T08:23:27.937+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-06-04T12:10:47.530+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-06-04T12:10:47.530+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-06-04T12:10:47.536+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-06-04T12:10:47.546+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3703,8 +3821,8 @@ Content-Length: 1291
     -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1591172707262,
-  &quot;START_DATE&quot; : 1591172507262
+  &quot;END_DATE&quot; : 1591272746971,
+  &quot;START_DATE&quot; : 1591272546971
 }'</code></pre>
 </div>
 </div>
@@ -3721,8 +3839,8 @@ Content-Length: 95
 
 {
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1591172707262,
-  &quot;START_DATE&quot; : 1591172507262
+  &quot;END_DATE&quot; : 1591272746971,
+  &quot;START_DATE&quot; : 1591272546971
 }</code></pre>
 </div>
 </div>
@@ -3734,7 +3852,7 @@ Content-Length: 95
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 03 Jun 2020 08:23:27 GMT
+Date: Thu, 04 Jun 2020 12:10:46 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 2692
@@ -3745,7 +3863,7 @@ Content-Length: 2692
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/06/03 10:23:27:243[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/06/04 14:10:46:948[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3757,10 +3875,10 @@ Content-Length: 2692
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-06-03T08:23:27.245+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-06-03T08:23:27.244+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-06-03T08:23:27.250+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-06-03T08:23:27.261+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-06-04T12:10:46.951+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-06-04T12:10:46.950+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-06-04T12:10:46.958+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-06-04T12:10:46.970+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3773,7 +3891,7 @@ Content-Length: 2692
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/06/03 10:23:27:243[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/06/04 14:10:46:948[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3785,10 +3903,10 @@ Content-Length: 2692
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-06-03T08:23:27.176+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-06-03T08:23:27.174+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-06-03T08:23:27.182+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-06-03T08:23:27.192+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-06-04T12:10:46.888+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-06-04T12:10:46.886+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-06-04T12:10:46.900+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-06-04T12:10:46.910+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3801,7 +3919,7 @@ Content-Length: 2692
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/06/03 10:23:27:243[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/06/04 14:10:46:948[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3813,10 +3931,10 @@ Content-Length: 2692
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-06-03T08:23:25.326+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-06-03T08:23:25.323+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-06-03T08:23:25.346+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-06-03T08:23:25.362+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-06-04T12:10:45.395+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-06-04T12:10:45.393+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-06-04T12:10:45.410+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-06-04T12:10:45.420+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3829,7 +3947,7 @@ Content-Length: 2692
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2020/06/03 10:23:27:243[date]&quot;,
+        &quot;parameter&quot; : &quot;2020/06/04 14:10:46:948[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3841,10 +3959,10 @@ Content-Length: 2692
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2020-06-03T08:23:25.221+0000&quot;,
-  &quot;createTime&quot; : &quot;2020-06-03T08:23:25.213+0000&quot;,
-  &quot;endTime&quot; : &quot;2020-06-03T08:23:25.244+0000&quot;,
-  &quot;lastUpdated&quot; : &quot;2020-06-03T08:23:25.255+0000&quot;,
+  &quot;startTime&quot; : &quot;2020-06-04T12:10:45.342+0000&quot;,
+  &quot;createTime&quot; : &quot;2020-06-04T12:10:45.337+0000&quot;,
+  &quot;endTime&quot; : &quot;2020-06-04T12:10:45.357+0000&quot;,
+  &quot;lastUpdated&quot; : &quot;2020-06-04T12:10:45.367+0000&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3911,7 +4029,7 @@ Content-Length: 205
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Wed, 03 Jun 2020 08:23:24 GMT
+Date: Thu, 04 Jun 2020 12:10:45 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3949,7 +4067,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 03 Jun 2020 08:23:29 GMT
+Date: Thu, 04 Jun 2020 12:10:47 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 412
@@ -4003,7 +4121,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 03 Jun 2020 08:23:29 GMT
+Date: Thu, 04 Jun 2020 12:10:47 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 951
@@ -4075,7 +4193,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Wed, 03 Jun 2020 08:23:29 GMT
+Date: Thu, 04 Jun 2020 12:10:47 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 951
@@ -4179,7 +4297,7 @@ Content-Length: 424
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Wed, 03 Jun 2020 08:23:29 GMT
+Date: Thu, 04 Jun 2020 12:10:47 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -4250,7 +4368,7 @@ Content-Length: 441
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Wed, 03 Jun 2020 08:23:28 GMT
+Date: Thu, 04 Jun 2020 12:10:46 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -4283,7 +4401,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Wed, 03 Jun 2020 08:23:28 GMT
+Date: Thu, 04 Jun 2020 12:10:46 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -4316,7 +4434,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Wed, 03 Jun 2020 08:23:28 GMT
+Date: Thu, 04 Jun 2020 12:10:47 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -4349,7 +4467,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Wed, 03 Jun 2020 08:23:28 GMT
+Date: Thu, 04 Jun 2020 12:10:47 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
