@@ -2,9 +2,12 @@ package org.tuxdevelop.spring.batch.lightmin.test.configuration;
 
 import org.infinispan.configuration.global.GlobalConfiguration;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
+import org.springframework.boot.actuate.autoconfigure.metrics.CompositeMeterRegistryAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.metrics.MetricsAutoConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.tuxdevelop.spring.batch.lightmin.server.cluster.annotation.EnableServerClusterInfinispan;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.CleanUpRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.DefaultCleanUpRepository;
@@ -14,6 +17,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 
 @Configuration
 @EnableServerClusterInfinispan
+@Import(value = {MetricsAutoConfiguration.class, CompositeMeterRegistryAutoConfiguration.class})
 public class InfinispanITConfiguration {
 
     @MockBean

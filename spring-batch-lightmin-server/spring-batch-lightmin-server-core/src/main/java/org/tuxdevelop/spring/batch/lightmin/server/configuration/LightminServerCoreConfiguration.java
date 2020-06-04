@@ -18,6 +18,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.service.EventServiceBean;
 import org.tuxdevelop.spring.batch.lightmin.server.service.JournalServiceBean;
 import org.tuxdevelop.spring.batch.lightmin.server.service.LightminMetricServerEventListenerBean;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
+import org.tuxdevelop.spring.batch.lightmin.server.support.UrlApplicationRegistrationBean;
 import org.tuxdevelop.spring.batch.lightmin.service.MetricService;
 import org.tuxdevelop.spring.batch.lightmin.service.MetricServiceBean;
 import org.tuxdevelop.spring.batch.lightmin.util.BasicAuthHttpRequestInterceptor;
@@ -39,8 +40,9 @@ public class LightminServerCoreConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(RegistrationBean.class)
     public RegistrationBean registrationBean(final LightminApplicationRepository lightminApplicationRepository) {
-        return new RegistrationBean(lightminApplicationRepository);
+        return new UrlApplicationRegistrationBean(lightminApplicationRepository);
     }
 
     @Bean
@@ -80,7 +82,11 @@ public class LightminServerCoreConfiguration {
     }
 
     @Configuration
-    @ConditionalOnProperty(prefix = "spring.batch.lightmin.server", name = "metrics-enabled", havingValue = "true")
+    @ConditionalOnProperty(
+            prefix = "spring.batch.lightmin.server",
+            name = "metrics-enabled",
+            havingValue = "true",
+            matchIfMissing = true)
     static class ServerMetricsConfiguration {
         @Bean
         @ConditionalOnMissingBean(value = MeterRegistryCustomizer.class)

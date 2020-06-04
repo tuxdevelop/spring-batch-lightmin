@@ -21,7 +21,7 @@ public class LightminClientApplicationFeService extends CommonFeService {
 
     public List<ApplicationClusterModel> getApplicationClusterModels() {
         final List<ApplicationClusterModel> clusterModels = new ArrayList<>();
-        final Map<String, Set<LightminClientApplication>> clusters = this.registrationBean.findAllasMap();
+        final Map<String, Set<LightminClientApplication>> clusters = this.registrationBean.findAllAsMap();
         for (final Map.Entry<String, Set<LightminClientApplication>> cluster : clusters.entrySet()) {
             final ApplicationClusterModel applicationClusterModel = new ApplicationClusterModel();
             applicationClusterModel.setName(cluster.getKey());
