@@ -14,17 +14,17 @@ scrape_configs:
     scrape_interval: 10s
     metrics_path: /address-migrator/actuator/prometheus
     static_configs:
-      - targets: ["host.docker.internal:9009", "host.docker.internal:9010"]
+      - targets: ["localhost:9009", "localhost:9010"]
   - job_name: "lightmin server"
 
     scrape_interval: 10s
     metrics_path: /server/actuator/prometheus
     static_configs:
-      - targets: ["host.docker.internal:50100"]
+      - targets: ["localhost:50100"]
 
   - job_name: "lightmin server cluster"
 
     scrape_interval: 10s
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["host.docker.internal:9091", "host.docker.internal:9291"]
+      - targets: ["localhost:9091", "localhost:9291"]
