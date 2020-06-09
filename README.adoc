@@ -184,7 +184,7 @@ public class MyConfiguration {
 ==== Server Scheduler
 
 Since lightmin version _2.1.1_ the server provides a scheduler to trigger jobs at the clients.
-In order to provide this feature, the scheduler configurations and executions have to stored.
+In order to provide this feature, the scheduler configurations and executions have to be stored.
 
 The _SchedulerConfigurationRepository_ and _SchedulerExecutionRepository_ are responsible for the doing the job.
 Per dafault, the _standalone server_ will configure inmemory repositories, which are cleared after each restart.
