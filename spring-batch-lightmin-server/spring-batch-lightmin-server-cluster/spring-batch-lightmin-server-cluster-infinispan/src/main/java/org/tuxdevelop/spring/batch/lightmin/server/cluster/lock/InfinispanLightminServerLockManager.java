@@ -7,6 +7,7 @@ import org.infinispan.lock.EmbeddedClusteredLockManagerFactory;
 import org.infinispan.lock.api.ClusteredLock;
 import org.infinispan.lock.api.ClusteredLockManager;
 import org.infinispan.manager.EmbeddedCacheManager;
+import org.infinispan.partitionhandling.AvailabilityException;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.util.ArrayList;
@@ -157,8 +158,11 @@ public class InfinispanLightminServerLockManager implements LightminServerLockMa
                     this.checkLockAcquiredResult(clusteredLock, result);
                     //put the lock in the verification cash and the local hashset
                     this.putLock(lockId);
+                } catch (final AvailabilityException availabilityException) {
+                    log.warn("One of the members split from the cluster. Lock with the Id {} is not available.", lockId);
+                    throw new SpringBatchLightminApplicationException("Could not acquire lock for lockId " + lockId);
                 } catch (final Exception e) {
-                    log.warn("Could not get lock for lockId {} retry", lockId);
+                    log.debug("Could not get lock for lockId {} retry", lockId);
                     //lock could not get acquired, if time out is set, retry is possible
                     if (this.timeOutSet()) {
                         this.retry(lockId);
