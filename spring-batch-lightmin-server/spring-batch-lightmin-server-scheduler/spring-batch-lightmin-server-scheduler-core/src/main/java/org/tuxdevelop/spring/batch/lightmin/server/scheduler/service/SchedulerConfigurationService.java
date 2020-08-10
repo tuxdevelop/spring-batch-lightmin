@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerConfigurationRepository;
-import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerValidationException;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerExecutionRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 
 import java.util.List;
@@ -14,9 +14,11 @@ import java.util.List;
 public class SchedulerConfigurationService {
 
     private final SchedulerConfigurationRepository schedulerConfigurationRepository;
+    private final SchedulerExecutionRepository schedulerExecutionRepository;
 
-    public SchedulerConfigurationService(final SchedulerConfigurationRepository schedulerConfigurationRepository) {
+    public SchedulerConfigurationService(final SchedulerConfigurationRepository schedulerConfigurationRepository, SchedulerExecutionRepository schedulerExecutionRepository) {
         this.schedulerConfigurationRepository = schedulerConfigurationRepository;
+        this.schedulerExecutionRepository = schedulerExecutionRepository;
     }
 
     @Transactional(transactionManager = "lightminServerSchedulerTransactionManager", propagation = Propagation.REQUIRED)
@@ -33,7 +35,15 @@ public class SchedulerConfigurationService {
     public void delete(final SchedulerConfiguration schedulerConfiguration) {
         if (schedulerConfiguration == null) {
             throw new SchedulerValidationException("schedulerConfiguration must not be null");
+        } else if (schedulerConfiguration.getStatus().equals(ServerSchedulerStatus.ACTIVE)) {
+            throw new SchedulerValidationException("schedulerConfiguration must be STOPPED before it can be deleted");
         } else {
+            List<SchedulerExecution> bySchedulerConfigurationId = this.schedulerExecutionRepository.findBySchedulerConfigurationId(schedulerConfiguration.getId());
+            boolean isRunningExecution = bySchedulerConfigurationId.stream().anyMatch(schedulerExecution -> schedulerExecution.getState().equals(ExecutionStatus.RUNNING));
+            if (isRunningExecution) {
+                throw new SchedulerValidationException("schedulerExecution is RUNNING. Please stop the execution before it can be deleted");
+            }
+            this.schedulerExecutionRepository.deleteBySchedulerConfigurationId(schedulerConfiguration.getId());
             this.schedulerConfigurationRepository.delete(schedulerConfiguration.getId());
         }
     }
