@@ -9,10 +9,14 @@ import org.tuxdevelop.spring.batch.lightmin.validation.annotation.IsCronExpressi
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Map;
 
 @Data
-public class ServerSchedulerConfigurationModel {
+@NoArgsConstructor
+public class ServerSchedulerConfigurationModel implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     @NotNull
