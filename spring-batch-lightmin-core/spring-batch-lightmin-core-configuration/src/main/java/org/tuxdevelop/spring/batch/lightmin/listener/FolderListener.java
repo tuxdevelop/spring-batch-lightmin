@@ -76,7 +76,7 @@ public class FolderListener extends AbstractListener implements Listener {
 
     }
 
-    private void initFileListFilter() throws Exception {
+    private void initFileListFilter() {
         this.fileFileListFilter = new CompositeFileListFilter<>();
         this.fileFileListFilter.addFilter(new AcceptOnceFileListFilter<>());
         this.fileFileListFilter.addFilter(new IgnoreHiddenFileListFilter());
@@ -85,7 +85,7 @@ public class FolderListener extends AbstractListener implements Listener {
 
     private void initDirectoryScanner() {
         this.directoryScanner = new DefaultDirectoryScanner();
-        this.directoryScanner.setFilter(fileFileListFilter);
+        this.directoryScanner.setFilter(this.fileFileListFilter);
     }
 
     private void initTransformer() {
