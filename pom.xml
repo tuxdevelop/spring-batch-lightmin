@@ -32,7 +32,7 @@
         </developer>
     </developers>
 
-    <version>2.1.2-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
 
     <modules>
         <module>spring-batch-lightmin-core</module>
@@ -51,14 +51,15 @@
     </modules>
 
     <properties>
-        <spring.boot.version>2.2.7.RELEASE</spring.boot.version>
-        <spring-cloud-dependencies.version>Hoxton.SR4</spring-cloud-dependencies.version>
+        <spring.boot.version>2.3.3.RELEASE</spring.boot.version>
+        <spring-cloud-dependencies.version>Hoxton.SR6</spring-cloud-dependencies.version>
         <assertj.version>3.15.0</assertj.version>
         <openpojo.version>0.8.13</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
         <datafactory.version>0.8</datafactory.version>
         <jacoco.version>0.8.5</jacoco.version>
         <infinispan9.version>9.4.18.Final</infinispan9.version>
+        <infinispan.version>${infinispan9.version}</infinispan.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
         <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
@@ -108,6 +109,24 @@
             </dependency>
 
             <!-- infinispan -->
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-commons</artifactId>
+                <version>${infinispan9.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-core</artifactId>
+                <version>${infinispan9.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-spring5-common</artifactId>
+                <version>${infinispan9.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-spring5-embedded</artifactId>
