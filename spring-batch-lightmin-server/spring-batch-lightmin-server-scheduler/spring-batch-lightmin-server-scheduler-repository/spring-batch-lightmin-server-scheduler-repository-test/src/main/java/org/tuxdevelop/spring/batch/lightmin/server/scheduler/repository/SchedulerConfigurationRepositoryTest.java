@@ -5,6 +5,7 @@ import org.assertj.core.api.BDDAssertions;
 import org.junit.After;
 import org.junit.Test;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.SchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.domain.ServerSchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.exception.SchedulerConfigurationNotFoundException;
 
 import java.util.List;
@@ -24,6 +25,21 @@ public abstract class SchedulerConfigurationRepositoryTest extends SchedulerTest
         final SchedulerConfiguration updated = this.getSchedulerConfigurationRepository().save(schedulerConfiguration);
         BDDAssertions.then(updated.getId()).isEqualTo(schedulerConfiguration.getId());
         BDDAssertions.then(updated.getCronExpression()).isEqualTo("changed");
+    }
+
+    @Test
+    public void testSaveUpdateSchedulerWithStatusChangeConfiguration() {
+        final SchedulerConfiguration schedulerConfiguration = this.createSchedulerConfiguration("saveApp");
+        final SchedulerConfiguration schedulerConfiguration2 = this.createSchedulerConfiguration("saveApp");
+        schedulerConfiguration.setStatus(ServerSchedulerStatus.STOPPED);
+
+        final SchedulerConfiguration updated = this.getSchedulerConfigurationRepository().save(schedulerConfiguration);
+        BDDAssertions.then(updated.getStatus()).isEqualTo(ServerSchedulerStatus.STOPPED);
+        try {
+            BDDAssertions.then(schedulerConfiguration2.getStatus()).isEqualTo(this.getSchedulerConfigurationRepository().findById(schedulerConfiguration2.getId()).getStatus());
+        } catch (SchedulerConfigurationNotFoundException e) {
+            BDDAssertions.fail(e.getMessage());
+        }
     }
 
     @Test
