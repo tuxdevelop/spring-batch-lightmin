@@ -51,8 +51,8 @@
     </modules>
 
     <properties>
-        <spring.boot.version>2.2.7.RELEASE</spring.boot.version>
-        <spring-cloud-dependencies.version>Hoxton.SR4</spring-cloud-dependencies.version>
+        <spring.boot.version>2.2.9.RELEASE</spring.boot.version>
+        <spring-cloud-dependencies.version>Hoxton.SR6</spring-cloud-dependencies.version>
         <assertj.version>3.15.0</assertj.version>
         <openpojo.version>0.8.13</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
