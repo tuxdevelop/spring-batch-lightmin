@@ -126,7 +126,9 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
         private static final String UPDATE_STATUS =
                 "UPDATE %s SET "
                         + SchedulerConfigurationDomain.CONFIGURATION_STATUS
-                        + " = ?";
+                        + " = ? "
+                        + " WHERE " + SchedulerConfigurationDomain.ID
+                        + " = ? ";
 
         private final JdbcTemplate jdbcTemplate;
         private final SimpleJdbcInsert simpleJdbcInsert;
@@ -217,7 +219,7 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
 
         SchedulerConfiguration update(final SchedulerConfiguration schedulerConfiguration) {
             this.schedulerConfigurationValueDAO.updateValues(schedulerConfiguration);
-            this.updateStatus(schedulerConfiguration.getStatus().getValue());
+            this.updateStatus(schedulerConfiguration.getId(), schedulerConfiguration.getStatus().getValue());
             this.schedulerConfigurationValueDAO.attachValues(schedulerConfiguration);
             return schedulerConfiguration;
         }
@@ -245,12 +247,12 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
             );
         }
 
-        private void updateStatus(final String status) {
+        private void updateStatus(final Long id, final String status) {
             final String sql = String.format(UPDATE_STATUS, this.tableName);
             this.jdbcTemplate.update(
                     sql,
-                    new Object[]{status},
-                    new int[]{Types.VARCHAR}
+                    new Object[]{status, id},
+                    new int[]{Types.VARCHAR, Types.NUMERIC}
             );
         }
 

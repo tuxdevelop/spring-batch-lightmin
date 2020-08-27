@@ -7,6 +7,8 @@ import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.dsl.MessageChannels;
 import org.springframework.integration.dsl.Pollers;
+import org.springframework.integration.file.DefaultDirectoryScanner;
+import org.springframework.integration.file.DirectoryScanner;
 import org.springframework.integration.file.dsl.Files;
 import org.springframework.integration.file.filters.AcceptOnceFileListFilter;
 import org.springframework.integration.file.filters.CompositeFileListFilter;
@@ -31,6 +33,7 @@ public class FolderListener extends AbstractListener implements Listener {
     public static final String FILE_SOURCE_PARAMETER_NAME = "fileSource";
 
     private CompositeFileListFilter<File> fileFileListFilter;
+    private DirectoryScanner directoryScanner;
     private JobLaunchingMessageHandler jobLaunchingMessageHandler;
     private AbstractFilePayloadTransformer<JobLaunchRequest> transformer;
 
@@ -46,6 +49,7 @@ public class FolderListener extends AbstractListener implements Listener {
         try {
             this.attachJobIncrementer();
             this.initFileListFilter();
+            this.initDirectoryScanner();
             this.initTransformer();
             this.initJobLaunchingMessageHandler();
             this.initIntegrationFlow();
@@ -57,7 +61,7 @@ public class FolderListener extends AbstractListener implements Listener {
     private void initIntegrationFlow() {
         this.integrationFlow = IntegrationFlows
                 .from(Files.inboundAdapter(new File(this.jobListenerConfiguration.getSourceFolder()))
-                        .filter(this.fileFileListFilter)
+                        .scanner(this.directoryScanner)
                         .scanEachPoll(Boolean.TRUE)
                         .get(), e -> {
                     e.poller(Pollers.fixedRate(this.jobListenerConfiguration.getPollerPeriod()).maxMessagesPerPoll(1000));
@@ -72,12 +76,16 @@ public class FolderListener extends AbstractListener implements Listener {
 
     }
 
-    private void initFileListFilter() throws Exception {
+    private void initFileListFilter() {
         this.fileFileListFilter = new CompositeFileListFilter<>();
         this.fileFileListFilter.addFilter(new AcceptOnceFileListFilter<>());
         this.fileFileListFilter.addFilter(new IgnoreHiddenFileListFilter());
-
         this.fileFileListFilter.addFilter(new SimplePatternFileListFilter(this.jobListenerConfiguration.getFilePattern()));
+    }
+
+    private void initDirectoryScanner() {
+        this.directoryScanner = new DefaultDirectoryScanner();
+        this.directoryScanner.setFilter(this.fileFileListFilter);
     }
 
     private void initTransformer() {
