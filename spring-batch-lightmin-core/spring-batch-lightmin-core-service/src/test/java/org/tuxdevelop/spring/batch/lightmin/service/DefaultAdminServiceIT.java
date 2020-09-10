@@ -132,32 +132,6 @@ public class DefaultAdminServiceIT {
                 .isNotNull().startsWith(jobConfiguration.getJobName() + "-" + jobListenerActual.getJobListenerType() + "-");
     }
 
-
-    @Test
-    public void testScaryPathSaveConfigurationWithListener() {
-        // Set Up scary Path
-        try {
-            Collection<JobConfiguration> jobConfigurationsByJobName = adminService.getJobConfigurationsByJobName(JOB_NAME);
-
-            System.out.print("DB wurde nicht ordnungsgemäß abgeräumt");
-            jobConfigurationsByJobName.stream().map(jobConfiguration -> jobConfiguration.toString()).forEach(System.out::println);
-
-        } catch (Exception e) {
-            System.out.print("DB ist leer und wir können weitermachen!");
-        }
-        final JobListenerConfiguration jobListenerConfiguration = DomainTestHelper.createJobListenerConfiguration("/pathXY", "*", JobListenerType.LOCAL_FOLDER_LISTENER);
-        final JobConfiguration jobConfiguration = DomainTestHelper.createJobConfiguration(jobListenerConfiguration);
-        jobConfiguration.setJobName(JOB_NAME);
-        jobConfiguration.getJobListenerConfiguration().setListenerStatus(ListenerStatus.ACTIVE);
-
-        BDDAssertions.assertThatExceptionOfType(SpringBatchLightminConfigurationException.class).isThrownBy(() -> this.adminService.saveJobConfiguration(jobConfiguration));
-        BDDAssertions.assertThatExceptionOfType(SpringBatchLightminApplicationException.class).isThrownBy(() -> this.adminService.getJobConfigurationsByJobName(JOB_NAME));
-
-        Map<String, FolderListener> beansOfType = applicationContext.getBeansOfType(FolderListener.class);
-        BDDAssertions.assertThat(beansOfType).as("Check if Beans were unregistered from context after Application couldn't start bean.").isEmpty();
-
-    }
-
     @Before
     public void init() {
         try {

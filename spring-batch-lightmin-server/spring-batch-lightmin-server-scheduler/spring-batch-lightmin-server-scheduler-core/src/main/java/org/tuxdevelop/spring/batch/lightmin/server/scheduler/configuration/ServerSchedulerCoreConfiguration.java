@@ -36,8 +36,9 @@ public class ServerSchedulerCoreConfiguration {
 
     @Bean
     public SchedulerConfigurationService schedulerConfigurationService(
-            final SchedulerConfigurationRepository schedulerConfigurationRepository) {
-        return new SchedulerConfigurationService(schedulerConfigurationRepository);
+            final SchedulerConfigurationRepository schedulerConfigurationRepository,
+            final SchedulerExecutionRepository schedulerExecutionRepository) {
+        return new SchedulerConfigurationService(schedulerConfigurationRepository, schedulerExecutionRepository);
     }
 
     @Bean
