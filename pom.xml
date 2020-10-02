@@ -51,14 +51,14 @@
     </modules>
 
     <properties>
-        <spring.boot.version>2.3.3.RELEASE</spring.boot.version>
-        <spring-cloud-dependencies.version>Hoxton.SR6</spring-cloud-dependencies.version>
+        <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
+        <spring-cloud-dependencies.version>Hoxton.SR8</spring-cloud-dependencies.version>
         <assertj.version>3.15.0</assertj.version>
         <openpojo.version>0.8.13</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
         <datafactory.version>0.8</datafactory.version>
         <jacoco.version>0.8.5</jacoco.version>
-        <infinispan9.version>9.4.18.Final</infinispan9.version>
+        <infinispan9.version>9.4.20.Final</infinispan9.version>
         <infinispan.version>${infinispan9.version}</infinispan.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
@@ -77,7 +77,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- spring.io plattform -->
+            <!-- spring boot dependencies -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
