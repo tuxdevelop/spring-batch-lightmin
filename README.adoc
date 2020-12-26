@@ -15,7 +15,8 @@ image::lightmin_architecture.001.jpeg[]
 
 The full documentation can be found at
 
-* http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/2.1.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[2.1.x] (Spring Boot 2.2.x)
+* http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/2.1.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[2.2.x] (Spring Boot 2.4.x)
+* http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/2.1.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[2.1.x] (Spring Boot 2.2.x, 2.3.x)
 * http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/2.0.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[2.0.x] (Spring Boot 2.1.x)
 * http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/1.0.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[1.x] (Spring Boot 1.5.x) - End of life
 * http://htmlpreview.github.io/?https://github.com/tuxdevelop/spring-batch-lightmin/blob/0.5.x/spring-batch-lightmin-documentation/src/main/doc/spring_batch_lightmin.html[0.5.x] (old design - Spring Boot 1.5.x) - End of life

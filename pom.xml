@@ -51,15 +51,15 @@
     </modules>
 
     <properties>
-        <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
-        <spring-cloud-dependencies.version>Hoxton.SR8</spring-cloud-dependencies.version>
+        <spring.boot.version>2.4.1</spring.boot.version>
+        <spring-cloud-dependencies.version>2020.0.0</spring-cloud-dependencies.version>
         <assertj.version>3.15.0</assertj.version>
         <openpojo.version>0.8.13</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
         <datafactory.version>0.8</datafactory.version>
         <jacoco.version>0.8.5</jacoco.version>
         <infinispan9.version>9.4.20.Final</infinispan9.version>
-        <infinispan.version>${infinispan9.version}</infinispan.version>
+        <infinispan.version>11.0.8.Final</infinispan.version>
         <!-- plugin versions -->
         <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
         <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
@@ -112,31 +112,31 @@
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-commons</artifactId>
-                <version>${infinispan9.version}</version>
+                <version>${infinispan.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-core</artifactId>
-                <version>${infinispan9.version}</version>
+                <version>${infinispan.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-spring5-common</artifactId>
-                <version>${infinispan9.version}</version>
+                <version>${infinispan.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-spring5-embedded</artifactId>
-                <version>${infinispan9.version}</version>
+                <version>${infinispan.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-clustered-lock</artifactId>
-                <version>${infinispan9.version}</version>
+                <version>${infinispan.version}</version>
             </dependency>
 
         </dependencies>

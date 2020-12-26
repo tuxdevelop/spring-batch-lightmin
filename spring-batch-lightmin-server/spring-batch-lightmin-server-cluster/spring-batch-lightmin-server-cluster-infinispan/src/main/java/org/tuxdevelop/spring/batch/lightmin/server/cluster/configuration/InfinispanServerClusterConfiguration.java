@@ -167,11 +167,10 @@ public class InfinispanServerClusterConfiguration {
                 .cacheMode(CacheMode.REPL_SYNC)
                 .stateTransfer()
                 .awaitInitialTransfer(Boolean.FALSE)
-                .jmxStatistics()
+                .statistics()
                 .enable()
-                .eviction()
-                .type(EvictionType.COUNT)
-                .size(limit)
+                .memory()
+                .maxCount(limit)
                 .build();
     }
 
@@ -181,7 +180,7 @@ public class InfinispanServerClusterConfiguration {
                 .cacheMode(CacheMode.REPL_SYNC)
                 .stateTransfer()
                 .awaitInitialTransfer(Boolean.FALSE)
-                .jmxStatistics()
+                .statistics()
                 .enable()
                 .build();
     }
