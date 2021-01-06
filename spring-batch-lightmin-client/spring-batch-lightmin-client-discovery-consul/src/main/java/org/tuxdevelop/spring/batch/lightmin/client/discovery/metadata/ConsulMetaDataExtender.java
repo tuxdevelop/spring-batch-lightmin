@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Marcel Becker
@@ -29,5 +31,12 @@ public class ConsulMetaDataExtender implements MetaDataExtender {
             this.consulDiscoveryProperties.setTags(metaTags);
         }
         this.consulDiscoveryProperties.getTags().add(consulTag);
+        if(this.consulDiscoveryProperties.getMetadata() != null){
+            log.debug("consul meta data map already initialized");
+        }else{
+            final Map<String,String> metaData = new HashMap<>();
+            this.consulDiscoveryProperties.setMetadata(metaData);
+        }
+        this.consulDiscoveryProperties.getMetadata().put(MetaDataExtender.LIGHTMIN_CLIENT_META_DATA_KEY,LIGHTMIN_CLIENT_META_DATA_VALUE);
     }
 }
