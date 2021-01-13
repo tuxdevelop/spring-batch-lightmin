@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.dao;
+package org.tuxdevelop.spring.batch.lightmin.batch.dao;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,8 +11,6 @@ import org.springframework.batch.core.explore.support.MapJobExplorerFactoryBean;
 import org.springframework.batch.core.repository.dao.JobExecutionDao;
 import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean;
-import org.tuxdevelop.spring.batch.lightmin.batch.dao.MapLightminJobExecutionDao;
-import org.tuxdevelop.spring.batch.lightmin.batch.dao.QueryParameterKey;
 import org.tuxdevelop.spring.batch.lightmin.test.domain.DomainTestHelper;
 
 import java.util.Date;

@@ -3,6 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.batch.configuration;
 import lombok.Data;
 import org.springframework.batch.core.repository.dao.AbstractJdbcBatchMetadataDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
@@ -32,7 +33,7 @@ public class SpringBatchLightminBatchConfigurationProperties {
 
     public void setDatabaseSchema(final String configurationDatabaseSchema) {
         if (configurationDatabaseSchema != null) {
-            if (StringUtils.isEmpty(configurationDatabaseSchema)) {
+            if (!StringUtils.hasText(configurationDatabaseSchema)) {
                 throw new SpringBatchLightminConfigurationException("databaseSchema must not be empty!");
             }
         }
