@@ -168,7 +168,8 @@
                                         <td th:text="${stepExecution.duration}"></td>
                                         <td th:class="${stepExecution.statusClass}"
                                             th:text="${stepExecution.status}"></td>
-                                        <td th:text="${stepExecution.exitMessage}"></td>
+                                        <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;"
+                                            th:text="${stepExecution.exitMessage}"></td>
                                     </tr>
                                     </tbody>
                                 </table>

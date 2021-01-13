@@ -22,10 +22,13 @@ public class AddressMigrationProcessor implements ItemProcessor<BatchTaskAddress
     }
 
     @Override
-    public BatchTaskAddress process(final BatchTaskAddress batchTaskAddress) throws Exception {
-        final Address address = mapToAddress(batchTaskAddress);
-        addressDAO.add(address);
+    public BatchTaskAddress process(final BatchTaskAddress batchTaskAddress) {
+        final Address address = this.mapToAddress(batchTaskAddress);
+        this.addressDAO.add(address);
         batchTaskAddress.setProcessingState(ProcessingState.SUCCESS);
+        if (System.currentTimeMillis() % 2 == 0) {
+            throw new IllegalArgumentException("Unknown Error. Nothing to recover");
+        }
         return batchTaskAddress;
     }
 
