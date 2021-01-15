@@ -12,9 +12,11 @@ import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobOperator;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -51,20 +53,20 @@ public class SpringBatchLightminBatchConfiguration {
         this.properties = properties;
         this.applicationContext = applicationContext;
     }
-
+    
     @Bean
-    @ConditionalOnMissingBean(BatchConfigurer.class)
-    public BatchConfigurer batchConfigurer() {
-        final DefaultSpringBatchLightminBatchConfigurer batchConfigurer;
-        final BatchRepositoryType batchRepositoryType = this.properties.getRepositoryType();
+    @ConditionalOnMissingBean(value = BatchConfigurer.class)
+    public BatchConfigurer batchConfigurer(final ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
+        final BasicSpringBatchLightminBatchConfigurer batchConfigurer;
+        final BatchRepositoryType batchRepositoryType = SpringBatchLightminBatchConfiguration.this.properties.getRepositoryType();
         switch (batchRepositoryType) {
             case JDBC:
-                final DataSource dataSource = this.getDataSource();
-                final String tablePrefix = this.properties.getTablePrefix();
-                batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer(dataSource, tablePrefix);
+                final DataSource dataSource = SpringBatchLightminBatchConfiguration.this.getDataSource();
+                final String tablePrefix = SpringBatchLightminBatchConfiguration.this.properties.getTablePrefix();
+                batchConfigurer = new BasicSpringBatchLightminBatchConfigurer(transactionManagerCustomizers.getIfAvailable(), dataSource, tablePrefix);
                 break;
             case MAP:
-                batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer();
+                batchConfigurer = new BasicSpringBatchLightminBatchConfigurer(transactionManagerCustomizers.getIfAvailable());
                 break;
             default:
                 throw new SpringBatchLightminConfigurationException("Unknown BatchRepositoryType: " + batchRepositoryType);
@@ -164,7 +166,7 @@ public class SpringBatchLightminBatchConfiguration {
         return dao;
     }
 
-    private DataSource getDataSource() {
+    DataSource getDataSource() {
         return this.applicationContext.getBean(this.properties.getDataSourceName(), DataSource.class);
     }
 

@@ -1,6 +1,5 @@
 package org.tuxdevelop.spring.batch.lightmin.batch.configuration;
 
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
@@ -14,23 +13,20 @@ import org.springframework.batch.core.repository.dao.*;
 import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
 import org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean;
 import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
+import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.support.incrementer.AbstractDataFieldMaxValueIncrementer;
 import org.springframework.jdbc.support.incrementer.DataFieldMaxValueIncrementer;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.util.StringUtils;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
-/**
- * @author Marcel Becker
- * @version 0.2
- */
 @Slf4j
-public class DefaultSpringBatchLightminBatchConfigurer implements BatchConfigurer {
+public class BasicSpringBatchLightminBatchConfigurer implements BatchConfigurer, InitializingBean {
 
     @Getter
     private JobInstanceDao jobInstanceDao;
@@ -46,7 +42,9 @@ public class DefaultSpringBatchLightminBatchConfigurer implements BatchConfigure
     private JdbcTemplate jdbcTemplate;
     private PlatformTransactionManager transactionManager;
 
-    private String tablePrefix = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
+    private final TransactionManagerCustomizers transactionManagerCustomizers;
+
+    private String tablePrefix;
 
     private final DataFieldMaxValueIncrementer incrementer = new AbstractDataFieldMaxValueIncrementer() {
         @Override
@@ -55,47 +53,45 @@ public class DefaultSpringBatchLightminBatchConfigurer implements BatchConfigure
         }
     };
 
-    public DefaultSpringBatchLightminBatchConfigurer() {
+    public BasicSpringBatchLightminBatchConfigurer(final TransactionManagerCustomizers transactionManagerCustomizers){
+        this.transactionManagerCustomizers = transactionManagerCustomizers;
     }
 
-    public DefaultSpringBatchLightminBatchConfigurer(final DataSource dataSource,
-                                                     final String tablePrefix) {
-        assert dataSource != null : "DataSource must not be null";
-        assert StringUtils.hasText(tablePrefix) : "tablePrefix must not be null or empty";
+    public BasicSpringBatchLightminBatchConfigurer(final TransactionManagerCustomizers transactionManagerCustomizers,
+                                                   final DataSource dataSource,
+                                                   final String tablePrefix){
         this.setDataSource(dataSource);
         this.tablePrefix = tablePrefix;
+        this.transactionManagerCustomizers = transactionManagerCustomizers;
     }
-
-    private void setDataSource(final DataSource dataSource) {
-        this.dataSource = dataSource;
-        this.transactionManager = new DataSourceTransactionManager(dataSource);
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
-
-
     @Override
-    public JobRepository getJobRepository() throws Exception {
+    public JobRepository getJobRepository() {
         return this.jobRepository;
     }
 
     @Override
-    public PlatformTransactionManager getTransactionManager() throws Exception {
+    public PlatformTransactionManager getTransactionManager() {
         return this.transactionManager;
     }
 
     @Override
-    public JobLauncher getJobLauncher() throws Exception {
+    public JobLauncher getJobLauncher()  {
         return this.jobLauncher;
     }
 
     @Override
-    public JobExplorer getJobExplorer() throws Exception {
+    public JobExplorer getJobExplorer()  {
         return this.jobExplorer;
     }
 
-    @PostConstruct
-    public void initialize() {
+    @Override
+    public void afterPropertiesSet() {
+        initialize();
+    }
+
+    protected void initialize() {
         try {
+            this.transactionManager = buildTransactionManager();
             if (this.dataSource != null) {
                 this.createJdbcComponents();
             } else {
@@ -127,10 +123,8 @@ public class DefaultSpringBatchLightminBatchConfigurer implements BatchConfigure
         this.jobRepository = this.createJobRepository();
     }
 
+    //TODO: redesign with Spring Batch 5
     protected void createMapComponents() throws Exception {
-        if (this.transactionManager == null) {
-            this.transactionManager = new ResourcelessTransactionManager();
-        }
         // jobRepository
         final MapJobRepositoryFactoryBean jobRepositoryFactory = new MapJobRepositoryFactoryBean(
                 this.transactionManager);
@@ -149,21 +143,40 @@ public class DefaultSpringBatchLightminBatchConfigurer implements BatchConfigure
         this.stepExecutionDao = new MapStepExecutionDao();
     }
 
-
     protected JobLauncher createJobLauncher() throws Exception {
-        final SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
-        jobLauncher.setJobRepository(this.jobRepository);
+        SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
+        jobLauncher.setJobRepository(getJobRepository());
         jobLauncher.afterPropertiesSet();
         return jobLauncher;
     }
 
     protected JobRepository createJobRepository() throws Exception {
-        final JobRepositoryFactoryBean jobRepositoryFactoryBean = new JobRepositoryFactoryBean();
-        jobRepositoryFactoryBean.setDataSource(this.dataSource);
-        jobRepositoryFactoryBean.setTransactionManager(this.transactionManager);
-        jobRepositoryFactoryBean.setTablePrefix(this.tablePrefix);
-        jobRepositoryFactoryBean.afterPropertiesSet();
-        return jobRepositoryFactoryBean.getObject();
+        JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
+        PropertyMapper map = PropertyMapper.get();
+        map.from(this.dataSource).to(factory::setDataSource);
+        map.from(this::determineIsolationLevel).whenNonNull().to(factory::setIsolationLevelForCreate);
+        map.from(this.tablePrefix).whenHasText().to(factory::setTablePrefix);
+        map.from(this::getTransactionManager).to(factory::setTransactionManager);
+        factory.afterPropertiesSet();
+        return factory.getObject();
+    }
+
+    /**
+     * Determine the isolation level for create* operation of the {@link JobRepository}.
+     * @return the isolation level or {@code null} to use the default
+     */
+    protected String determineIsolationLevel() {
+        return null;
+    }
+
+    protected PlatformTransactionManager createTransactionManager() {
+        final PlatformTransactionManager transactionManager;
+        if(this.dataSource != null) {
+            transactionManager = new DataSourceTransactionManager(this.dataSource);
+        }else{
+            transactionManager = new ResourcelessTransactionManager();
+        }
+        return transactionManager;
     }
 
     protected JobInstanceDao createJobInstanceDao() throws Exception {
@@ -193,4 +206,17 @@ public class DefaultSpringBatchLightminBatchConfigurer implements BatchConfigure
         return dao;
     }
 
+    private void setDataSource(final DataSource dataSource) {
+        this.dataSource = dataSource;
+        this.transactionManager = new DataSourceTransactionManager(dataSource);
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+    private PlatformTransactionManager buildTransactionManager() {
+        PlatformTransactionManager transactionManager = createTransactionManager();
+        if (this.transactionManagerCustomizers != null) {
+            this.transactionManagerCustomizers.customize(transactionManager);
+        }
+        return transactionManager;
+    }
 }
