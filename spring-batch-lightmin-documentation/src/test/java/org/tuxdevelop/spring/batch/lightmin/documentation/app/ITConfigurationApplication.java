@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin;
+package org.tuxdevelop.spring.batch.lightmin.documentation.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

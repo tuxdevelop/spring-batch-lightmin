@@ -1515,6 +1515,28 @@ For this use case, a property is available.</p>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_lightmin_client_and_jpa">Lightmin Client and JPA</h4>
+<div class="paragraph">
+<p>If your clients uses JPA, the following annotation is required to initialize the <em>JPA</em> specific <em>Lightmin BatchConfigurer</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="annotation">@EnableLightminBatchJpa</span> <b class="conum">(1)</b>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">MyConfiguration</span> {
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>@EnableLightminBatchJpa configures the JPA specific BatchConfigurer</p>
+</li>
+</ol>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -3338,20 +3360,20 @@ Content-Length: 790
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Thu, 07 Jan 2021 08:54:52 GMT
+Date: Thu, 14 Jan 2021 09:19:23 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 875
 
 {
-  &quot;id&quot; : &quot;b9491c04&quot;,
+  &quot;id&quot; : &quot;a0cc7c43&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:42129/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:42129/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:42129&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:37003/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:37003/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:37003&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UNKNOWN&quot;,
-    &quot;timeInMills&quot; : 1610009693180
+    &quot;timeInMills&quot; : 1610615963632
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -3375,7 +3397,7 @@ Content-Length: 875
 <h5 id="_curl_2">Curl</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/b9491c04' -i -X DELETE \
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/applications/a0cc7c43' -i -X DELETE \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
     -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
@@ -3385,7 +3407,7 @@ Content-Length: 875
 <h5 id="_http_request_2">HTTP Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/b9491c04 HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/applications/a0cc7c43 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript, text/json
 Content-Type: application/json; charset=UTF-8
 Host: localhost</code></pre>
@@ -3399,20 +3421,20 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Thu, 07 Jan 2021 08:54:53 GMT
+Date: Thu, 14 Jan 2021 09:19:23 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 875
 
 {
-  &quot;id&quot; : &quot;b9491c04&quot;,
+  &quot;id&quot; : &quot;a0cc7c43&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:42129/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:42129/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:42129&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:37003/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:37003/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:37003&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UNKNOWN&quot;,
-    &quot;timeInMills&quot; : 1610009693180
+    &quot;timeInMills&quot; : 1610615963632
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -3460,20 +3482,20 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Thu, 07 Jan 2021 08:54:52 GMT
+Date: Thu, 14 Jan 2021 09:19:23 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 879
 
 [ {
-  &quot;id&quot; : &quot;b9491c04&quot;,
+  &quot;id&quot; : &quot;a0cc7c43&quot;,
   &quot;name&quot; : &quot;it-application&quot;,
-  &quot;managementUrl&quot; : &quot;http://localhost:42129/actuator&quot;,
-  &quot;healthUrl&quot; : &quot;http://localhost:42129/actuator/health&quot;,
-  &quot;serviceUrl&quot; : &quot;http://localhost:42129&quot;,
+  &quot;managementUrl&quot; : &quot;http://localhost:37003/actuator&quot;,
+  &quot;healthUrl&quot; : &quot;http://localhost:37003/actuator/health&quot;,
+  &quot;serviceUrl&quot; : &quot;http://localhost:37003&quot;,
   &quot;lightminClientApplicationStatus&quot; : {
     &quot;status&quot; : &quot;UNKNOWN&quot;,
-    &quot;timeInMills&quot; : 1610009693180
+    &quot;timeInMills&quot; : 1610615963632
   },
   &quot;lightminClientInformation&quot; : {
     &quot;supportedSchedulerTypes&quot; : [ &quot;CRON&quot;, &quot;PERIOD&quot; ],
@@ -3508,8 +3530,8 @@ Content-Length: 879
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1610009692451,
-  &quot;endDate&quot; : 1610009702451
+  &quot;startDate&quot; : 1610615963813,
+  &quot;endDate&quot; : 1610615973813
 }'</code></pre>
 </div>
 </div>
@@ -3532,8 +3554,8 @@ Content-Length: 247
     &quot;exitCode&quot; : &quot;FAILED&quot;,
     &quot;exitDescription&quot; : &quot;failed for test&quot;
   },
-  &quot;startDate&quot; : 1610009692451,
-  &quot;endDate&quot; : 1610009702451
+  &quot;startDate&quot; : 1610615963813,
+  &quot;endDate&quot; : 1610615973813
 }</code></pre>
 </div>
 </div>
@@ -3543,7 +3565,7 @@ Content-Length: 247
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Thu, 07 Jan 2021 08:54:52 GMT
+Date: Thu, 14 Jan 2021 09:19:23 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -3561,7 +3583,7 @@ Connection: keep-alive</code></pre>
 <h6 id="_curl_5">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages/all?jobinstanceid=24' -i -X GET \
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages/all?jobinstanceid=12' -i -X GET \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
@@ -3570,7 +3592,7 @@ Connection: keep-alive</code></pre>
 <h6 id="_http_request_5">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutionpages/all?jobinstanceid=24 HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutionpages/all?jobinstanceid=12 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
@@ -3583,7 +3605,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Thu, 07 Jan 2021 08:54:56 GMT
+Date: Thu, 14 Jan 2021 09:19:21 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 1549
@@ -3593,27 +3615,27 @@ Content-Length: 1549
   &quot;pageSize&quot; : 1,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;totalJobExecutionCount&quot; : 1,
-  &quot;jobInstanceId&quot; : 24,
+  &quot;jobInstanceId&quot; : 12,
   &quot;jobExecutions&quot; : [ {
-    &quot;id&quot; : 24,
+    &quot;id&quot; : 12,
     &quot;version&quot; : 2,
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : &quot;2021/01/07 09:54:56:573[date]&quot;,
+          &quot;parameter&quot; : &quot;2021/01/14 10:19:22:300[date]&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
     },
     &quot;jobInstance&quot; : {
-      &quot;id&quot; : 24,
+      &quot;id&quot; : 12,
       &quot;version&quot; : 0,
       &quot;jobName&quot; : &quot;simpleJob&quot;
     },
     &quot;stepExecutions&quot; : [ {
-      &quot;id&quot; : 24,
+      &quot;id&quot; : 12,
       &quot;version&quot; : 3,
-      &quot;jobExecutionId&quot; : 24,
+      &quot;jobExecutionId&quot; : 12,
       &quot;stepName&quot; : &quot;simpleStep&quot;,
       &quot;status&quot; : &quot;COMPLETED&quot;,
       &quot;readCount&quot; : 0,
@@ -3623,9 +3645,9 @@ Content-Length: 1549
       &quot;readSkipCount&quot; : 0,
       &quot;processSkipCount&quot; : 0,
       &quot;writeSkipCount&quot; : 0,
-      &quot;startTime&quot; : &quot;2021-01-07T08:54:56.578+00:00&quot;,
-      &quot;endTime&quot; : &quot;2021-01-07T08:54:56.579+00:00&quot;,
-      &quot;lastUpdated&quot; : &quot;2021-01-07T08:54:56.580+00:00&quot;,
+      &quot;startTime&quot; : &quot;2021-01-14T09:19:22.305+00:00&quot;,
+      &quot;endTime&quot; : &quot;2021-01-14T09:19:22.307+00:00&quot;,
+      &quot;lastUpdated&quot; : &quot;2021-01-14T09:19:22.307+00:00&quot;,
       &quot;exitStatus&quot; : {
         &quot;exitCode&quot; : &quot;COMPLETED&quot;,
         &quot;exitDescription&quot; : &quot;&quot;
@@ -3635,10 +3657,10 @@ Content-Length: 1549
       &quot;failureExceptions&quot; : [ ]
     } ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : &quot;2021-01-07T08:54:56.576+00:00&quot;,
-    &quot;createTime&quot; : &quot;2021-01-07T08:54:56.575+00:00&quot;,
-    &quot;endTime&quot; : &quot;2021-01-07T08:54:56.580+00:00&quot;,
-    &quot;lastUpdated&quot; : &quot;2021-01-07T08:54:56.589+00:00&quot;,
+    &quot;startTime&quot; : &quot;2021-01-14T09:19:22.302+00:00&quot;,
+    &quot;createTime&quot; : &quot;2021-01-14T09:19:22.302+00:00&quot;,
+    &quot;endTime&quot; : &quot;2021-01-14T09:19:22.308+00:00&quot;,
+    &quot;lastUpdated&quot; : &quot;2021-01-14T09:19:22.316+00:00&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -3657,7 +3679,7 @@ Content-Length: 1549
 <h6 id="_curl_6">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages?jobinstanceid=23&amp;startindex=0&amp;pagesize=5' -i -X GET \
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutionpages?jobinstanceid=11&amp;startindex=0&amp;pagesize=5' -i -X GET \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
@@ -3666,7 +3688,7 @@ Content-Length: 1549
 <h6 id="_http_request_6">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutionpages?jobinstanceid=23&amp;startindex=0&amp;pagesize=5 HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutionpages?jobinstanceid=11&amp;startindex=0&amp;pagesize=5 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
@@ -3679,7 +3701,7 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Thu, 07 Jan 2021 08:54:56 GMT
+Date: Thu, 14 Jan 2021 09:19:21 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 883
@@ -3689,35 +3711,35 @@ Content-Length: 883
   &quot;pageSize&quot; : 5,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;totalJobExecutionCount&quot; : 1,
-  &quot;jobInstanceId&quot; : 23,
+  &quot;jobInstanceId&quot; : 11,
   &quot;jobExecutions&quot; : [ {
-    &quot;id&quot; : 23,
+    &quot;id&quot; : 11,
     &quot;version&quot; : 2,
     &quot;jobParameters&quot; : {
       &quot;parameters&quot; : {
         &quot;date&quot; : {
-          &quot;parameter&quot; : &quot;2021/01/07 09:54:56:522[date]&quot;,
+          &quot;parameter&quot; : &quot;2021/01/14 10:19:22:256[date]&quot;,
           &quot;parameterType&quot; : &quot;DATE&quot;
         }
       }
     },
     &quot;jobInstance&quot; : {
-      &quot;id&quot; : 23,
+      &quot;id&quot; : 11,
       &quot;version&quot; : 0,
       &quot;jobName&quot; : &quot;simpleJob&quot;
     },
     &quot;stepExecutions&quot; : [ ],
     &quot;status&quot; : &quot;COMPLETED&quot;,
-    &quot;startTime&quot; : &quot;2021-01-07T08:54:56.523+00:00&quot;,
-    &quot;createTime&quot; : &quot;2021-01-07T08:54:56.523+00:00&quot;,
-    &quot;endTime&quot; : &quot;2021-01-07T08:54:56.527+00:00&quot;,
-    &quot;lastUpdated&quot; : &quot;2021-01-07T08:54:56.539+00:00&quot;,
+    &quot;startTime&quot; : &quot;2021-01-14T09:19:22.258+00:00&quot;,
+    &quot;createTime&quot; : &quot;2021-01-14T09:19:22.257+00:00&quot;,
+    &quot;endTime&quot; : &quot;2021-01-14T09:19:22.264+00:00&quot;,
+    &quot;lastUpdated&quot; : &quot;2021-01-14T09:19:22.271+00:00&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
     },
     &quot;failureExceptions&quot; : [ ],
-    &quot;jobConfigurationName&quot; : &quot;23&quot;
+    &quot;jobConfigurationName&quot; : &quot;11&quot;
   } ]
 }</code></pre>
 </div>
@@ -3730,7 +3752,7 @@ Content-Length: 883
 <h6 id="_curl_7">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/28' -i -X GET \
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobexecutions/16' -i -X GET \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
@@ -3739,7 +3761,7 @@ Content-Length: 883
 <h6 id="_http_request_7">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutions/28 HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobexecutions/16 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
@@ -3752,31 +3774,31 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Thu, 07 Jan 2021 08:54:56 GMT
+Date: Thu, 14 Jan 2021 09:19:21 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 1298
 
 {
-  &quot;id&quot; : 28,
+  &quot;id&quot; : 16,
   &quot;version&quot; : 2,
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2021/01/07 09:54:56:720[date]&quot;,
+        &quot;parameter&quot; : &quot;2021/01/14 10:19:22:437[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
   },
   &quot;jobInstance&quot; : {
-    &quot;id&quot; : 27,
+    &quot;id&quot; : 15,
     &quot;version&quot; : 0,
     &quot;jobName&quot; : &quot;simpleJob&quot;
   },
   &quot;stepExecutions&quot; : [ {
-    &quot;id&quot; : 28,
+    &quot;id&quot; : 16,
     &quot;version&quot; : 3,
-    &quot;jobExecutionId&quot; : 28,
+    &quot;jobExecutionId&quot; : 16,
     &quot;stepName&quot; : &quot;simpleStep&quot;,
     &quot;status&quot; : &quot;COMPLETED&quot;,
     &quot;readCount&quot; : 0,
@@ -3786,9 +3808,9 @@ Content-Length: 1298
     &quot;readSkipCount&quot; : 0,
     &quot;processSkipCount&quot; : 0,
     &quot;writeSkipCount&quot; : 0,
-    &quot;startTime&quot; : &quot;2021-01-07T08:54:56.727+00:00&quot;,
-    &quot;endTime&quot; : &quot;2021-01-07T08:54:56.728+00:00&quot;,
-    &quot;lastUpdated&quot; : &quot;2021-01-07T08:54:56.728+00:00&quot;,
+    &quot;startTime&quot; : &quot;2021-01-14T09:19:22.442+00:00&quot;,
+    &quot;endTime&quot; : &quot;2021-01-14T09:19:22.445+00:00&quot;,
+    &quot;lastUpdated&quot; : &quot;2021-01-14T09:19:22.445+00:00&quot;,
     &quot;exitStatus&quot; : {
       &quot;exitCode&quot; : &quot;COMPLETED&quot;,
       &quot;exitDescription&quot; : &quot;&quot;
@@ -3798,10 +3820,10 @@ Content-Length: 1298
     &quot;failureExceptions&quot; : [ ]
   } ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2021-01-07T08:54:56.725+00:00&quot;,
-  &quot;createTime&quot; : &quot;2021-01-07T08:54:56.724+00:00&quot;,
-  &quot;endTime&quot; : &quot;2021-01-07T08:54:56.729+00:00&quot;,
-  &quot;lastUpdated&quot; : &quot;2021-01-07T08:54:56.741+00:00&quot;,
+  &quot;startTime&quot; : &quot;2021-01-14T09:19:22.439+00:00&quot;,
+  &quot;createTime&quot; : &quot;2021-01-14T09:19:22.439+00:00&quot;,
+  &quot;endTime&quot; : &quot;2021-01-14T09:19:22.446+00:00&quot;,
+  &quot;lastUpdated&quot; : &quot;2021-01-14T09:19:22.454+00:00&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
@@ -3824,8 +3846,8 @@ Content-Length: 1298
     -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1610009796233,
-  &quot;START_DATE&quot; : 1610009596233
+  &quot;END_DATE&quot; : 1610616061971,
+  &quot;START_DATE&quot; : 1610615861971
 }'</code></pre>
 </div>
 </div>
@@ -3842,8 +3864,8 @@ Content-Length: 95
 
 {
   &quot;EXIT_STATUS&quot; : &quot;COMPLETED&quot;,
-  &quot;END_DATE&quot; : 1610009796233,
-  &quot;START_DATE&quot; : 1610009596233
+  &quot;END_DATE&quot; : 1610616061971,
+  &quot;START_DATE&quot; : 1610615861971
 }</code></pre>
 </div>
 </div>
@@ -3855,18 +3877,18 @@ Content-Length: 95
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Thu, 07 Jan 2021 08:54:56 GMT
+Date: Thu, 14 Jan 2021 09:19:21 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
-Content-Length: 2714
+Content-Length: 2706
 
 [ {
-  &quot;id&quot; : 18,
+  &quot;id&quot; : 6,
   &quot;version&quot; : 2,
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2021/01/07 09:54:56:214[date]&quot;,
+        &quot;parameter&quot; : &quot;2021/01/14 10:19:21:950[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3878,23 +3900,23 @@ Content-Length: 2714
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2021-01-07T08:54:56.216+00:00&quot;,
-  &quot;createTime&quot; : &quot;2021-01-07T08:54:56.216+00:00&quot;,
-  &quot;endTime&quot; : &quot;2021-01-07T08:54:56.221+00:00&quot;,
-  &quot;lastUpdated&quot; : &quot;2021-01-07T08:54:56.232+00:00&quot;,
+  &quot;startTime&quot; : &quot;2021-01-14T09:19:21.953+00:00&quot;,
+  &quot;createTime&quot; : &quot;2021-01-14T09:19:21.952+00:00&quot;,
+  &quot;endTime&quot; : &quot;2021-01-14T09:19:21.962+00:00&quot;,
+  &quot;lastUpdated&quot; : &quot;2021-01-14T09:19:21.970+00:00&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
   },
   &quot;failureExceptions&quot; : [ ],
-  &quot;jobConfigurationName&quot; : &quot;18&quot;
+  &quot;jobConfigurationName&quot; : &quot;6&quot;
 }, {
-  &quot;id&quot; : 17,
+  &quot;id&quot; : 5,
   &quot;version&quot; : 2,
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2021/01/07 09:54:56:214[date]&quot;,
+        &quot;parameter&quot; : &quot;2021/01/14 10:19:21:950[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3906,23 +3928,23 @@ Content-Length: 2714
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2021-01-07T08:54:56.159+00:00&quot;,
-  &quot;createTime&quot; : &quot;2021-01-07T08:54:56.158+00:00&quot;,
-  &quot;endTime&quot; : &quot;2021-01-07T08:54:56.164+00:00&quot;,
-  &quot;lastUpdated&quot; : &quot;2021-01-07T08:54:56.177+00:00&quot;,
+  &quot;startTime&quot; : &quot;2021-01-14T09:19:21.892+00:00&quot;,
+  &quot;createTime&quot; : &quot;2021-01-14T09:19:21.891+00:00&quot;,
+  &quot;endTime&quot; : &quot;2021-01-14T09:19:21.899+00:00&quot;,
+  &quot;lastUpdated&quot; : &quot;2021-01-14T09:19:21.907+00:00&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
   },
   &quot;failureExceptions&quot; : [ ],
-  &quot;jobConfigurationName&quot; : &quot;17&quot;
+  &quot;jobConfigurationName&quot; : &quot;5&quot;
 }, {
-  &quot;id&quot; : 15,
+  &quot;id&quot; : 3,
   &quot;version&quot; : 2,
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2021/01/07 09:54:56:214[date]&quot;,
+        &quot;parameter&quot; : &quot;2021/01/14 10:19:21:950[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3934,23 +3956,23 @@ Content-Length: 2714
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2021-01-07T08:54:55.004+00:00&quot;,
-  &quot;createTime&quot; : &quot;2021-01-07T08:54:54.998+00:00&quot;,
-  &quot;endTime&quot; : &quot;2021-01-07T08:54:55.032+00:00&quot;,
-  &quot;lastUpdated&quot; : &quot;2021-01-07T08:54:55.054+00:00&quot;,
+  &quot;startTime&quot; : &quot;2021-01-14T09:19:20.764+00:00&quot;,
+  &quot;createTime&quot; : &quot;2021-01-14T09:19:20.762+00:00&quot;,
+  &quot;endTime&quot; : &quot;2021-01-14T09:19:20.775+00:00&quot;,
+  &quot;lastUpdated&quot; : &quot;2021-01-14T09:19:20.783+00:00&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
   },
   &quot;failureExceptions&quot; : [ ],
-  &quot;jobConfigurationName&quot; : &quot;15&quot;
+  &quot;jobConfigurationName&quot; : &quot;3&quot;
 }, {
-  &quot;id&quot; : 14,
+  &quot;id&quot; : 2,
   &quot;version&quot; : 2,
   &quot;jobParameters&quot; : {
     &quot;parameters&quot; : {
       &quot;date&quot; : {
-        &quot;parameter&quot; : &quot;2021/01/07 09:54:56:214[date]&quot;,
+        &quot;parameter&quot; : &quot;2021/01/14 10:19:21:950[date]&quot;,
         &quot;parameterType&quot; : &quot;DATE&quot;
       }
     }
@@ -3962,16 +3984,16 @@ Content-Length: 2714
   },
   &quot;stepExecutions&quot; : [ ],
   &quot;status&quot; : &quot;COMPLETED&quot;,
-  &quot;startTime&quot; : &quot;2021-01-07T08:54:54.948+00:00&quot;,
-  &quot;createTime&quot; : &quot;2021-01-07T08:54:54.942+00:00&quot;,
-  &quot;endTime&quot; : &quot;2021-01-07T08:54:54.970+00:00&quot;,
-  &quot;lastUpdated&quot; : &quot;2021-01-07T08:54:54.984+00:00&quot;,
+  &quot;startTime&quot; : &quot;2021-01-14T09:19:20.626+00:00&quot;,
+  &quot;createTime&quot; : &quot;2021-01-14T09:19:20.624+00:00&quot;,
+  &quot;endTime&quot; : &quot;2021-01-14T09:19:20.639+00:00&quot;,
+  &quot;lastUpdated&quot; : &quot;2021-01-14T09:19:20.647+00:00&quot;,
   &quot;exitStatus&quot; : {
     &quot;exitCode&quot; : &quot;COMPLETED&quot;,
     &quot;exitDescription&quot; : &quot;&quot;
   },
   &quot;failureExceptions&quot; : [ ],
-  &quot;jobConfigurationName&quot; : &quot;14&quot;
+  &quot;jobConfigurationName&quot; : &quot;2&quot;
 } ]</code></pre>
 </div>
 </div>
@@ -4032,7 +4054,7 @@ Content-Length: 205
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Thu, 07 Jan 2021 08:54:54 GMT
+Date: Thu, 14 Jan 2021 09:19:20 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -4048,7 +4070,7 @@ Connection: keep-alive</code></pre>
 <h6 id="_curl_10">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/17' -i -X GET \
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/33' -i -X GET \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
@@ -4057,7 +4079,7 @@ Connection: keep-alive</code></pre>
 <h6 id="_http_request_10">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/jobconfiguration/17 HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/jobconfiguration/33 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
@@ -4070,13 +4092,13 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Thu, 07 Jan 2021 08:54:54 GMT
+Date: Thu, 14 Jan 2021 09:19:23 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 412
 
 {
-  &quot;jobConfigurationId&quot; : 17,
+  &quot;jobConfigurationId&quot; : 33,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;jobSchedulerConfiguration&quot; : {
     &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
@@ -4124,14 +4146,14 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Thu, 07 Jan 2021 08:54:54 GMT
+Date: Thu, 14 Jan 2021 09:19:23 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 951
 
 {
   &quot;jobConfigurations&quot; : [ {
-    &quot;jobConfigurationId&quot; : 24,
+    &quot;jobConfigurationId&quot; : 40,
     &quot;jobName&quot; : &quot;simpleJob&quot;,
     &quot;jobSchedulerConfiguration&quot; : {
       &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
@@ -4147,7 +4169,7 @@ Content-Length: 951
     },
     &quot;jobIncrementer&quot; : &quot;DATE&quot;
   }, {
-    &quot;jobConfigurationId&quot; : 25,
+    &quot;jobConfigurationId&quot; : 41,
     &quot;jobName&quot; : &quot;simpleJob&quot;,
     &quot;jobSchedulerConfiguration&quot; : null,
     &quot;jobListenerConfiguration&quot; : {
@@ -4196,14 +4218,14 @@ Host: localhost</code></pre>
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
-Date: Thu, 07 Jan 2021 08:54:54 GMT
+Date: Thu, 14 Jan 2021 09:19:23 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 951
 
 {
   &quot;jobConfigurations&quot; : [ {
-    &quot;jobConfigurationId&quot; : 19,
+    &quot;jobConfigurationId&quot; : 35,
     &quot;jobName&quot; : &quot;simpleJob&quot;,
     &quot;jobSchedulerConfiguration&quot; : {
       &quot;jobSchedulerType&quot; : &quot;PERIOD&quot;,
@@ -4219,7 +4241,7 @@ Content-Length: 951
     },
     &quot;jobIncrementer&quot; : &quot;DATE&quot;
   }, {
-    &quot;jobConfigurationId&quot; : 20,
+    &quot;jobConfigurationId&quot; : 36,
     &quot;jobName&quot; : &quot;simpleJob&quot;,
     &quot;jobSchedulerConfiguration&quot; : null,
     &quot;jobListenerConfiguration&quot; : {
@@ -4300,7 +4322,7 @@ Content-Length: 424
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Date: Thu, 07 Jan 2021 08:54:54 GMT
+Date: Thu, 14 Jan 2021 09:19:23 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -4317,7 +4339,7 @@ Connection: keep-alive</code></pre>
     -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
     -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{
-  &quot;jobConfigurationId&quot; : 12,
+  &quot;jobConfigurationId&quot; : 28,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;jobSchedulerConfiguration&quot; : null,
   &quot;jobListenerConfiguration&quot; : {
@@ -4347,7 +4369,7 @@ Host: localhost
 Content-Length: 441
 
 {
-  &quot;jobConfigurationId&quot; : 12,
+  &quot;jobConfigurationId&quot; : 28,
   &quot;jobName&quot; : &quot;simpleJob&quot;,
   &quot;jobSchedulerConfiguration&quot; : null,
   &quot;jobListenerConfiguration&quot; : {
@@ -4371,7 +4393,7 @@ Content-Length: 441
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Thu, 07 Jan 2021 08:54:53 GMT
+Date: Thu, 14 Jan 2021 09:19:21 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -4384,7 +4406,7 @@ Connection: keep-alive</code></pre>
 <h6 id="_curl_15">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/10' -i -X DELETE \
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/jobconfiguration/26' -i -X DELETE \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
@@ -4393,7 +4415,7 @@ Connection: keep-alive</code></pre>
 <h6 id="_http_request_15">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/jobconfigurations/jobconfiguration/10 HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">DELETE /api/jobconfigurations/jobconfiguration/26 HTTP/1.1
 Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
@@ -4404,7 +4426,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Thu, 07 Jan 2021 08:54:53 GMT
+Date: Thu, 14 Jan 2021 09:19:21 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -4417,7 +4439,7 @@ Connection: keep-alive</code></pre>
 <h6 id="_curl_16">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/16/start' -i -X GET \
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/32/start' -i -X GET \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
@@ -4426,7 +4448,7 @@ Connection: keep-alive</code></pre>
 <h6 id="_http_request_16">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/16/start HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/32/start HTTP/1.1
 Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
@@ -4437,7 +4459,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Thu, 07 Jan 2021 08:54:53 GMT
+Date: Thu, 14 Jan 2021 09:19:23 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -4450,7 +4472,7 @@ Connection: keep-alive</code></pre>
 <h6 id="_curl_17">Curl</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/14/stop' -i -X GET \
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost/api/jobconfigurations/30/stop' -i -X GET \
     -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
 </div>
 </div>
@@ -4459,7 +4481,7 @@ Connection: keep-alive</code></pre>
 <h6 id="_http_request_17">HTTP Request</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/14/stop HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/jobconfigurations/30/stop HTTP/1.1
 Accept: application/json, application/javascript, text/javascript, text/json
 Host: localhost</code></pre>
 </div>
@@ -4470,7 +4492,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Date: Thu, 07 Jan 2021 08:54:53 GMT
+Date: Thu, 14 Jan 2021 09:19:21 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive</code></pre>
 </div>
@@ -4488,7 +4510,7 @@ Connection: keep-alive</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-01-05 17:03:12 +01:00
+Last updated 2020-12-14 10:35:52 +01:00
 </div>
 </div>
 </body>

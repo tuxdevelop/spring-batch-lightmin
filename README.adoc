@@ -666,6 +666,21 @@ spring:
         hostname: FQDN of the host
 ----
 
+==== Lightmin Client and JPA
+
+If your clients uses JPA, the following annotation is required to initialize the _JPA_ specific _Lightmin BatchConfigurer_.
+
+[source,java]
+----
+@Configuration
+@EnableLightminBatchJpa <1>
+public class MyConfiguration {
+
+}
+----
+
+<1> @EnableLightminBatchJpa configures the JPA specific BatchConfigurer
+
 == Remote Repository Server
 
 The _Remote Repository Server_ is a _Spring Boot_ application which provides a REST API for clients.
