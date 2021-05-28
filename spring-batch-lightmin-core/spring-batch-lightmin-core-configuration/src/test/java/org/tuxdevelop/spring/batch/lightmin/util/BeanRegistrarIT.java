@@ -1,6 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.batch.core.Job;
@@ -19,6 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @Slf4j
 public class BeanRegistrarIT {
@@ -29,11 +31,24 @@ public class BeanRegistrarIT {
     private JobLauncher jobLauncher;
 
     @Test
+    public void registerUnregisteredBean() {
+        this.beanRegistrar.registerBean(String.class, "firstBean", null, null, null, null, null);
+        String registeredBean = (String) this.applicationContext.getBean("firstBean");
+        assertThat(registeredBean).isNotNull();
+
+        this.beanRegistrar.unregisterBean("firstBean");
+        assertFalse(this.applicationContext.containsBeanDefinition("firstBean"));
+
+        this.beanRegistrar.registerBean(String.class, "firstBean", null, null, null, null, null);
+        registeredBean = (String) this.applicationContext.getBean("firstBean");
+        assertThat(registeredBean).isNotNull();
+    }
+
+    @Test
     public void registerBeanStringIT() {
         this.beanRegistrar.registerBean(String.class, "sampleString", null, null, null, null, null);
         final String registeredBean = (String) this.applicationContext.getBean("sampleString");
         assertThat(registeredBean).isNotNull();
-        this.applicationContext.close();
     }
 
     @Test
@@ -44,7 +59,6 @@ public class BeanRegistrarIT {
         final String registeredBean = (String) this.applicationContext.getBean("sampleString");
         assertThat(registeredBean).isNotNull();
         assertThat(registeredBean).isEqualTo("Test");
-        this.applicationContext.close();
     }
 
     @Test(expected = NoSuchBeanDefinitionException.class)
@@ -58,7 +72,6 @@ public class BeanRegistrarIT {
         this.beanRegistrar.unregisterBean("sampleStringSecond");
         final String gotBean = this.applicationContext.getBean("sampleStringSecond", String.class);
         log.info("got: " + gotBean);
-        this.applicationContext.close();
     }
 
     @Test(expected = NoSuchBeanDefinitionException.class)
@@ -88,7 +101,6 @@ public class BeanRegistrarIT {
                 .class);
         assertThat(periodScheduler).isNotNull();
         periodScheduler.schedule();
-        this.applicationContext.close();
     }
 
     @Before
@@ -97,5 +109,10 @@ public class BeanRegistrarIT {
         this.beanRegistrar = this.applicationContext.getBean(BeanRegistrar.class);
         this.simpleJob = this.applicationContext.getBean("simpleJob", Job.class);
         this.jobLauncher = this.applicationContext.getBean("jobLauncher", JobLauncher.class);
+    }
+
+    @After
+    public void tearDown() {
+        this.applicationContext.close();
     }
 }

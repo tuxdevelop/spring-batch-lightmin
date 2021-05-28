@@ -56,10 +56,10 @@ public class LightminServer {
         return jdbcTemplate;
     }
 
-    @Bean
-    public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags(@Value("${spring.application.name}") final String name) {
-        return registry ->
-                registry.config()
-                        .commonTags("APPLICATION_NAME", name);
-    }
+//    @Bean
+//    public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags(@Value("${spring.application.name}") final String name) {
+//        return registry ->
+//                registry.config()
+//                        .commonTags("APPLICATION_NAME", name);
+//    }
 }

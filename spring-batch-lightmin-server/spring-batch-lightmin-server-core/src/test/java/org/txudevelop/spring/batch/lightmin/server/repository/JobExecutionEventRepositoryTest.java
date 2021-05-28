@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.server.repository;
+package org.txudevelop.spring.batch.lightmin.server.repository;
 
 import org.assertj.core.api.BDDAssertions;
 import org.junit.Before;
@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.ExitStatus;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.JobExecutionEventInfo;
 import org.tuxdevelop.spring.batch.lightmin.server.configuration.LightminServerCoreProperties;
+import org.tuxdevelop.spring.batch.lightmin.server.repository.JobExecutionEventRepository;
 
 import java.util.List;
 

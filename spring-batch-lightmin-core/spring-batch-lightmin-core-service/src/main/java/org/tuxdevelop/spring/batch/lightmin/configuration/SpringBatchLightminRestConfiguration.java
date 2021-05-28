@@ -1,8 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.tuxdevelop.spring.batch.lightmin.client.api.controller.JobConfigurationRestController;
@@ -37,13 +35,4 @@ public class SpringBatchLightminRestConfiguration {
     public JobLauncherRestController jobLauncherRestController(final ServiceEntry serviceEntry) {
         return new JobLauncherRestController(serviceEntry);
     }
-
-    @Bean
-    public JobLauncherBean jobLauncherBean(
-            @Qualifier("defaultAsyncJobLauncher") final JobLauncher defaultAsyncJobLauncher,
-            final JobRegistry jobRegistry,
-            final SpringBatchLightminCoreConfigurationProperties properties) {
-        return new JobLauncherBean(defaultAsyncJobLauncher, jobRegistry, properties);
-    }
-
 }

@@ -35,7 +35,6 @@ public class SchedulerConfigurationServiceIT extends CommonServiceIT {
     @MockBean
     private JobServerService jobServerService;
 
-
     @Test
     public void testSave() {
         final SchedulerConfiguration schedulerConfiguration =

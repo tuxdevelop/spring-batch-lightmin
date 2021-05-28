@@ -6,41 +6,42 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.web.client.RestTemplate;
-import org.tuxdevelop.spring.batch.lightmin.server.annotation.EnableLightminServerCore;
-import org.tuxdevelop.spring.batch.lightmin.server.api.controller.JobExecutionEventController;
-import org.tuxdevelop.spring.batch.lightmin.server.api.controller.RegistrationController;
-import org.tuxdevelop.spring.batch.lightmin.server.api.controller.StepExecutionEventController;
 import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnApplicationReadyEventListener;
 import org.tuxdevelop.spring.batch.lightmin.server.event.listener.OnLightminClientApplicationRegisteredEventListener;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.annotation.EnableLightminServerFrontend;
-import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
-import org.tuxdevelop.spring.batch.lightmin.server.service.*;
+import org.tuxdevelop.spring.batch.lightmin.server.repository.*;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.annotation.EnableServerSchedulerMapRepository;
+import org.tuxdevelop.spring.batch.lightmin.server.service.AdminServerService;
+import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
+import org.tuxdevelop.spring.batch.lightmin.server.service.RemoteAdminServerService;
+import org.tuxdevelop.spring.batch.lightmin.server.service.RemoteJobServerService;
+import org.tuxdevelop.spring.batch.lightmin.server.sheduler.StandaloneSchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.support.ClientApplicationStatusUpdater;
-import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 
 /**
  * @author Marcel Becker
  * @since 0.3
  */
 @Configuration
-@EnableLightminServerCore
 @EnableLightminServerFrontend
-@Import(value = {LightminServerStandaloneDiscoveryConfiguration.class})
-public class LightminServerStandaloneConfiguration {
+@EnableServerSchedulerMapRepository
+@Import(value = {LightminServerStandaloneDiscoveryConfiguration.class, StandaloneSchedulerConfiguration.class})
+public class LightminServerStandaloneConfiguration extends BaseStandaloneConfiguration{
+
 
     @Bean
-    public RegistrationController registrationController(final RegistrationBean registrationBean) {
-        return new RegistrationController(registrationBean);
+    public LightminApplicationRepository lightminApplicationRepository() {
+        return new MapLightminApplicationRepository();
     }
 
     @Bean
-    public JobExecutionEventController jobExecutionEventController(final EventService eventService) {
-        return new JobExecutionEventController(eventService);
+    public JobExecutionEventRepository jobExecutionEventRepository(final LightminServerCoreProperties lightminServerCoreProperties) {
+        return new MapJobExecutionEventRepository(lightminServerCoreProperties.getEventRepositorySize());
     }
 
     @Bean
-    public StepExecutionEventController stepExecutionEventController(final EventService eventService) {
-        return new StepExecutionEventController(eventService);
+    public JournalRepository journalRepository() {
+        return new MapJournalRepository();
     }
 
     @Bean
@@ -61,11 +62,6 @@ public class LightminServerStandaloneConfiguration {
     }
 
     @Bean
-    public ScheduledTaskRegistrar serverScheduledTaskRegistrar() {
-        return new ScheduledTaskRegistrar();
-    }
-
-    @Bean
     public OnApplicationReadyEventListener onApplicationReadyEventListener(final ScheduledTaskRegistrar serverScheduledTaskRegistrar,
                                                                            final ClientApplicationStatusUpdater clientApplicationStatusUpdater,
                                                                            final LightminServerCoreProperties lightminServerCoreProperties) {
@@ -76,5 +72,6 @@ public class LightminServerStandaloneConfiguration {
     public OnLightminClientApplicationRegisteredEventListener onLightminClientApplicationRegisteredEventListener(final ClientApplicationStatusUpdater clientApplicationStatusUpdater) {
         return new OnLightminClientApplicationRegisteredEventListener(clientApplicationStatusUpdater);
     }
+
 
 }

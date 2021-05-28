@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.server.configuration.LightminServerCoreProperties;
 import org.tuxdevelop.spring.batch.lightmin.test.configuration.InfinispanITConfiguration;
+import org.txudevelop.spring.batch.lightmin.server.repository.JobExecutionEventRepositoryTest;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {InfinispanITConfiguration.class})

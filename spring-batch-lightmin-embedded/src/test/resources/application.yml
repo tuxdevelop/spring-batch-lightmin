@@ -1,9 +1,7 @@
 server:
-  port: 50111
+  port: 5011
 
 spring:
-  main:
-    allow-bean-definition-overriding: true
   application:
     name: embedded-test-app
   batch:

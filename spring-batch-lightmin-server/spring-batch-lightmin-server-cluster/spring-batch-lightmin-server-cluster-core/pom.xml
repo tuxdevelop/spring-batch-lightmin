@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-batch-lightmin-server-cluster</artifactId>
         <groupId>org.tuxdevelop</groupId>
-        <version>2.2.2-SNAPSHOT</version>
+        <version>2.2.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -29,7 +29,7 @@
         <!-- lightmin -->
         <dependency>
             <groupId>org.tuxdevelop</groupId>
-            <artifactId>spring-batch-lightmin-server-core</artifactId>
+            <artifactId>spring-batch-lightmin-server-standalone</artifactId>
             <version>${project.version}</version>
         </dependency>
 

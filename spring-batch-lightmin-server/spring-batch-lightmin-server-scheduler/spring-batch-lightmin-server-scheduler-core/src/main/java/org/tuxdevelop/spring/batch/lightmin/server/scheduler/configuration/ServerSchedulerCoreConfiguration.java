@@ -1,6 +1,5 @@
 package org.tuxdevelop.spring.batch.lightmin.server.scheduler.configuration;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +9,6 @@ import org.tuxdevelop.spring.batch.lightmin.server.annotation.EnableLightminServ
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.SchedulerExecutionRepository;
-import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.annotation.EnableServerSchedulerMapRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.*;
 import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 
@@ -18,7 +16,6 @@ import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
 @EnableScheduling
 @EnableLightminServerCore
 @ConditionalOnProperty(prefix = "spring.batch.lightmin.server.scheduler", name = "enabled", havingValue = "true", matchIfMissing = true)
-@EnableServerSchedulerMapRepository
 @EnableConfigurationProperties(value = {ServerSchedulerCoreConfigurationProperties.class})
 public class ServerSchedulerCoreConfiguration {
 
@@ -51,21 +48,6 @@ public class ServerSchedulerCoreConfiguration {
     public ServerPollerService serverPollerService(final ExecutionPollerService executionPollerService,
                                                    final ExecutionCleanUpService executionCleanUpService) {
         return new ServerPollerService(executionPollerService, executionCleanUpService);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(ExecutionPollerService.class)
-    public ExecutionPollerService executionPollerService(final ServerSchedulerService serverSchedulerService,
-                                                         final SchedulerExecutionService schedulerExecutionService,
-                                                         final ServerSchedulerCoreConfigurationProperties properties) {
-        return new StandaloneExecutionPollerService(serverSchedulerService, schedulerExecutionService, properties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(ExecutionCleanUpService.class)
-    public ExecutionCleanUpService executionCleanUpService(final SchedulerExecutionRepository schedulerExecutionRepository,
-                                                           final ServerSchedulerCoreConfigurationProperties properties) {
-        return new StandaloneExecutionCleanupService(schedulerExecutionRepository, properties);
     }
 
     @Bean

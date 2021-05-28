@@ -1,8 +1,9 @@
-package org.tuxdevelop.spring.batch.lightmin.server.repository;
+package org.txudevelop.spring.batch.lightmin.server.repository;
 
 import org.assertj.core.api.BDDAssertions;
 import org.junit.Test;
 import org.tuxdevelop.spring.batch.lightmin.server.domain.Journal;
+import org.tuxdevelop.spring.batch.lightmin.server.repository.JournalRepository;
 
 import java.util.List;
 

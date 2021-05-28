@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ApplicationConfig {
 
-    @Bean
-    public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags(@Value("${spring.application.name}") final String name) {
-        return registry ->
-                registry.config()
-                        .commonTags("APPLICATION_NAME", name);
-    }
+//    @Bean
+//    public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags(@Value("${spring.application.name}") final String name) {
+//        return registry ->
+//                registry.config()
+//                        .commonTags("APPLICATION_NAME", name);
+//    }
 }

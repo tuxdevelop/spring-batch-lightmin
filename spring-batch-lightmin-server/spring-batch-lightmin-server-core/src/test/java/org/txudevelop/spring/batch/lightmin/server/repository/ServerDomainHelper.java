@@ -1,4 +1,4 @@
-package org.tuxdevelop.spring.batch.lightmin.server.repository;
+package org.txudevelop.spring.batch.lightmin.server.repository;
 
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.ExitStatus;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.JobExecutionEventInfo;

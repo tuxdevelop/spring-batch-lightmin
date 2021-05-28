@@ -5,7 +5,6 @@ import org.infinispan.Cache;
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfiguration;
-import org.infinispan.eviction.EvictionType;
 import org.infinispan.manager.DefaultCacheManager;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.infinispan.spring.embedded.provider.SpringEmbeddedCacheManager;
@@ -18,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.JobExecutionEventInfo;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
-import org.tuxdevelop.spring.batch.lightmin.server.cluster.annotation.EnableServerClusterCore;
 import org.tuxdevelop.spring.batch.lightmin.server.cluster.lock.InfinispanLightminServerLockManager;
 import org.tuxdevelop.spring.batch.lightmin.server.cluster.lock.LightminServerLockManager;
 import org.tuxdevelop.spring.batch.lightmin.server.cluster.repository.*;
@@ -37,9 +35,8 @@ import static org.tuxdevelop.spring.batch.lightmin.server.cluster.lock.Infinispa
 
 @Slf4j
 @Configuration
-@EnableServerClusterCore
 @EnableConfigurationProperties(value = {InfinispanServerClusterConfigurationProperties.class})
-public class InfinispanServerClusterConfiguration {
+public class InfinispanServerClusterConfiguration extends CommonServerClusterConfiguration {
 
     public static final String INFINISPAN_DEFAULT_CACHE_MANAGER_NAME = "lightminInfinispanCacheManager";
     public static final String REPOSITORY_ID_CACHE_NAME = "lightminInfinispanRepositoryIdCache";

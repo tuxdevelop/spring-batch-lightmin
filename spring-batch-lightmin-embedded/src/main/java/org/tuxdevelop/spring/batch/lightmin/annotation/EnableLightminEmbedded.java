@@ -12,6 +12,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import(value = {LightminEmbeddedConfiguration.class})
+@Import(LightminEmbeddedConfiguration.class)
 public @interface EnableLightminEmbedded {
 }

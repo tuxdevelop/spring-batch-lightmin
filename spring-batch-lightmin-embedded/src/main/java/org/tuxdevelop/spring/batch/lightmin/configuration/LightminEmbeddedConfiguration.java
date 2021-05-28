@@ -3,7 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.configuration;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminCore;
+import org.springframework.context.annotation.Import;
 import org.tuxdevelop.spring.batch.lightmin.client.annotation.EnableLightminClientCore;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.event.EmbeddedJobExecutionEventPublisher;
@@ -11,11 +11,14 @@ import org.tuxdevelop.spring.batch.lightmin.client.event.EmbeddedStepJobExecutio
 import org.tuxdevelop.spring.batch.lightmin.client.publisher.JobExecutionEventPublisher;
 import org.tuxdevelop.spring.batch.lightmin.client.publisher.StepExecutionEventPublisher;
 import org.tuxdevelop.spring.batch.lightmin.event.listener.OnApplicationReadyEventEmbeddedListener;
-import org.tuxdevelop.spring.batch.lightmin.server.annotation.EnableLightminServerCore;
-import org.tuxdevelop.spring.batch.lightmin.server.fe.annotation.EnableLightminServerFrontend;
+import org.tuxdevelop.spring.batch.lightmin.server.configuration.BaseStandaloneConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.server.configuration.LightminServerCoreProperties;
+import org.tuxdevelop.spring.batch.lightmin.server.repository.*;
+import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.annotation.EnableServerSchedulerMapRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.service.AdminServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.service.EventService;
 import org.tuxdevelop.spring.batch.lightmin.server.service.JobServerService;
+import org.tuxdevelop.spring.batch.lightmin.server.sheduler.StandaloneSchedulerConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 import org.tuxdevelop.spring.batch.lightmin.service.EmbeddedAdminServerService;
 import org.tuxdevelop.spring.batch.lightmin.service.EmbeddedJobServerService;
@@ -26,11 +29,10 @@ import org.tuxdevelop.spring.batch.lightmin.service.ServiceEntry;
  * @since 0.3
  */
 @Configuration
-@EnableLightminCore
 @EnableLightminClientCore
-@EnableLightminServerCore
-@EnableLightminServerFrontend
-public class LightminEmbeddedConfiguration {
+@EnableServerSchedulerMapRepository
+@Import(StandaloneSchedulerConfiguration.class)
+public class LightminEmbeddedConfiguration extends BaseStandaloneConfiguration {
 
     @Bean
     public AdminServerService adminServerService(final ServiceEntry serviceEntry) {
@@ -50,7 +52,6 @@ public class LightminEmbeddedConfiguration {
         return new OnApplicationReadyEventEmbeddedListener(registrationBean, jobRegistry, lightminClientProperties);
     }
 
-
     @Bean
     public JobExecutionEventPublisher jobExecutionEventPublisher(final EventService eventService) {
         return new EmbeddedJobExecutionEventPublisher(eventService);
@@ -59,6 +60,21 @@ public class LightminEmbeddedConfiguration {
     @Bean
     public StepExecutionEventPublisher stepExecutionEventPublisher(final EventService eventService) {
         return new EmbeddedStepJobExecutionEventPublisher(eventService);
+    }
+
+    @Bean
+    public LightminApplicationRepository lightminApplicationRepository() {
+        return new MapLightminApplicationRepository();
+    }
+
+    @Bean
+    public JobExecutionEventRepository jobExecutionEventRepository(final LightminServerCoreProperties lightminServerCoreProperties) {
+        return new MapJobExecutionEventRepository(lightminServerCoreProperties.getEventRepositorySize());
+    }
+
+    @Bean
+    public JournalRepository journalRepository() {
+        return new MapJournalRepository();
     }
 }
 

@@ -30,12 +30,10 @@ import java.util.UUID;
 public class DefaultSchedulerService implements SchedulerService {
 
     private static final String EXECUTOR_SUFFIX = "_executor";
-
-    private ApplicationContext applicationContext;
-
     private final BeanRegistrar beanRegistrar;
     private final JobRepository jobRepository;
     private final JobRegistry jobRegistry;
+    private ApplicationContext applicationContext;
 
     public DefaultSchedulerService(final BeanRegistrar beanRegistrar,
                                    final JobRepository jobRepository,
@@ -69,7 +67,9 @@ public class DefaultSchedulerService implements SchedulerService {
 
     @Override
     public void unregisterSchedulerForJob(final String beanName) {
+        //Unregister Scheduler with corresponding ThreadPoolTaskScheduler
         this.beanRegistrar.unregisterBean(beanName);
+        this.beanRegistrar.unregisterBean(beanName + EXECUTOR_SUFFIX);
     }
 
     @Override
