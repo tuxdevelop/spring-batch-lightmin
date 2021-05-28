@@ -21,7 +21,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.incrementer.AbstractDataFieldMaxValueIncrementer;
@@ -90,12 +89,6 @@ public class SpringBatchLightminBatchConfiguration {
         jobLauncher.setJobRepository(jobRepository);
         jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
         return jobLauncher;
-    }
-
-    @Primary
-    @Bean(name = "jobLauncher")
-    public JobLauncher jobLauncher(final BatchConfigurer batchConfigurer) throws Exception {
-        return batchConfigurer.getJobLauncher();
     }
 
     @Bean

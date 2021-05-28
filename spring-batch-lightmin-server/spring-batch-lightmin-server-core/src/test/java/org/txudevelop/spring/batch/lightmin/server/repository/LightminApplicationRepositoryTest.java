@@ -1,10 +1,11 @@
-package org.tuxdevelop.spring.batch.lightmin.server.repository;
+package org.txudevelop.spring.batch.lightmin.server.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.BDDAssertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
+import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 
 import java.util.Collection;
 

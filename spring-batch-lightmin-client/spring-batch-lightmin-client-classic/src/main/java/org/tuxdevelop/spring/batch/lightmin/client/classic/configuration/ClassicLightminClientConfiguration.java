@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.client.annotation.EnableLightminClientCore;
 import org.tuxdevelop.spring.batch.lightmin.client.classic.event.OnClientApplicationReadyEventListener;
@@ -14,12 +15,14 @@ import org.tuxdevelop.spring.batch.lightmin.client.classic.service.LightminClien
 import org.tuxdevelop.spring.batch.lightmin.client.classic.service.LightminClientRegistratorService;
 import org.tuxdevelop.spring.batch.lightmin.client.classic.service.UrlLightminServerLocatorService;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
+import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientPublishEventsConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminServerLocatorService;
 
 @Configuration
 @EnableLightminClientCore
 @EnableConfigurationProperties(
         value = {LightminClientClassicConfigurationProperties.class})
+@Import(LightminClientPublishEventsConfiguration.class)
 public class ClassicLightminClientConfiguration {
 
     @Bean

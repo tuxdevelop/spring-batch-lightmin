@@ -2,7 +2,6 @@ package org.tuxdevelop.spring.batch.lightmin.server.scheduler.annotation;
 
 import org.springframework.context.annotation.Import;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.configuration.ServerSchedulerCoreConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.configuration.ServerSchedulerMapConfiguration;
 
 import java.lang.annotation.*;
 

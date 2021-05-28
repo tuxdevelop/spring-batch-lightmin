@@ -32,7 +32,7 @@
         </developer>
     </developers>
 
-    <version>2.2.2-SNAPSHOT</version>
+    <version>2.2.3-SNAPSHOT</version>
 
     <modules>
         <module>spring-batch-lightmin-core</module>
@@ -48,6 +48,7 @@
         <module>spring-batch-lightmin-embedded</module>
         <module>spring-batch-lightmin-validation</module>
         <module>spring-batch-lightmin-metrics</module>
+        <module>spring-batch-lightmin-bom</module>
     </modules>
 
     <properties>

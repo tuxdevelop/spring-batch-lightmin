@@ -13,8 +13,6 @@ import javax.annotation.PostConstruct;
 @ConfigurationProperties(prefix = "spring.batch.lightmin")
 public class SpringBatchLightminCoreConfigurationProperties {
 
-    private static final String DEFAULT_DATA_SOURCE_NAME = "dataSource";
-
     private final Environment environment;
 
     @Autowired

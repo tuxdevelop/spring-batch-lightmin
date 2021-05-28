@@ -56,38 +56,6 @@ public class LightminClientConfiguration {
     @Configuration
     @ConditionalOnProperty(
             prefix = "spring.batch.lightmin.client",
-            value = "publish-job-events",
-            havingValue = "true",
-            matchIfMissing = true)
-    public static class LightminClientPublishEventsConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(value = {StepExecutionEventPublisher.class})
-        public StepExecutionEventPublisher stepExecutionEventPublisher(
-                final LightminServerLocatorService lightminServerLocator,
-                @Qualifier("serverRestTemplate") final RestTemplate restTemplate) {
-            return new RemoteStepExecutionEventPublisher(restTemplate, lightminServerLocator);
-        }
-
-        @Bean
-        @ConditionalOnMissingBean(value = {JobExecutionEventPublisher.class})
-        public JobExecutionEventPublisher jobExecutionEventPublisher(
-                final LightminServerLocatorService lightminServerLocatorService,
-                @Qualifier("serverRestTemplate") final RestTemplate restTemplate) {
-            return new RemoteJobExecutionEventPublisher(restTemplate, lightminServerLocatorService);
-        }
-
-        @Bean
-        public OnJobExecutionFinishedEventListener onJobExecutionFinishedEventListener(
-                final JobExecutionEventPublisher jobExecutionEventPublisher,
-                final StepExecutionEventPublisher stepExecutionEventPublisher) {
-            return new OnJobExecutionFinishedEventListener(jobExecutionEventPublisher, stepExecutionEventPublisher);
-        }
-    }
-
-    @Configuration
-    @ConditionalOnProperty(
-            prefix = "spring.batch.lightmin.client",
             name = "metrics-enabled",
             havingValue = "true",
             matchIfMissing = true)

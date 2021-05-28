@@ -1,7 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.client.discovery.configuration;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -12,8 +11,6 @@ import org.springframework.context.annotation.Import;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.discovery.listener.DiscoveryListener;
-import org.tuxdevelop.spring.batch.lightmin.client.discovery.metadata.MetaDataExtender;
-import org.tuxdevelop.spring.batch.lightmin.client.discovery.metadata.NoOperationMetaDataExtender;
 import org.tuxdevelop.spring.batch.lightmin.client.discovery.service.DiscoveryLightminServerLocatorService;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminServerLocatorService;
 
@@ -31,12 +28,6 @@ public class LightminClientDiscoveryConfiguration {
     @Bean
     public DiscoveryListener discoveryListener(final LightminClientProperties lightminClientProperties) {
         return new DiscoveryListener(lightminClientProperties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(MetaDataExtender.class)
-    public MetaDataExtender metaDataExtender() {
-        return new NoOperationMetaDataExtender();
     }
 
     @Bean

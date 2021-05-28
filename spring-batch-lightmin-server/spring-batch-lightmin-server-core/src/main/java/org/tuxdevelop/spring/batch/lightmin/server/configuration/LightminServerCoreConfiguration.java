@@ -34,12 +34,6 @@ import java.util.Collections;
 public class LightminServerCoreConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(LightminApplicationRepository.class)
-    public LightminApplicationRepository lightminApplicationRepository() {
-        return new MapLightminApplicationRepository();
-    }
-
-    @Bean
     @ConditionalOnMissingBean(RegistrationBean.class)
     public RegistrationBean registrationBean(final LightminApplicationRepository lightminApplicationRepository) {
         return new UrlApplicationRegistrationBean(lightminApplicationRepository);
@@ -49,18 +43,6 @@ public class LightminServerCoreConfiguration {
     @ConditionalOnMissingBean(value = {EventService.class})
     public EventService eventService(@Qualifier("jobExecutionEventRepository") final JobExecutionEventRepository jobExecutionEventRepository) {
         return new EventServiceBean(jobExecutionEventRepository);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(value = JobExecutionEventRepository.class)
-    public JobExecutionEventRepository jobExecutionEventRepository(final LightminServerCoreProperties lightminServerCoreProperties) {
-        return new MapJobExecutionEventRepository(lightminServerCoreProperties.getEventRepositorySize());
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(value = {JournalRepository.class})
-    public JournalRepository journalRepository() {
-        return new MapJournalRepository();
     }
 
     @Bean
