@@ -1,10 +1,11 @@
 package org.tuxdevelop.spring.batch.lightmin.server.fe.model.common;
 
-import lombok.Data;
+import java.util.Date;
+
 import org.springframework.util.StringUtils;
 import org.tuxdevelop.spring.batch.lightmin.util.DurationHelper;
 
-import java.util.Date;
+import lombok.Data;
 
 @Data
 public abstract class CommonExecutionModel {
@@ -14,6 +15,7 @@ public abstract class CommonExecutionModel {
     protected static final String STARTED = "started";
     protected static final String UNKNOWN = "unknown";
     protected static final String FAILED = "failed";
+    protected static final String STOPPED = "stopped";
 
     protected Long id;
     protected String status;
@@ -31,9 +33,9 @@ public abstract class CommonExecutionModel {
     }
 
     public Boolean getIsFinished() {
-        return StringUtils.hasText(this.exitStatus) ?
-                this.COMPLETED.equalsIgnoreCase(this.exitStatus) || this.FAILED.equalsIgnoreCase(this.exitStatus) :
-                Boolean.FALSE;
+        return StringUtils.hasText(this.exitStatus) ? this.COMPLETED.equalsIgnoreCase(this.exitStatus)
+            || this.FAILED.equalsIgnoreCase(this.exitStatus)
+            || this.STOPPED.equalsIgnoreCase(this.exitStatus) : Boolean.FALSE;
     }
 
     public String getStatusClass() {
