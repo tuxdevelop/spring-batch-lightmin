@@ -91,7 +91,7 @@ public class LightminClientProperties {
                 resultManagementUrl =
                         this.append(
                                 this.append(this.getServiceUrl(),
-                                        this.managementServerProperties.getServlet().getContextPath()),
+                                        this.managementServerProperties.getBasePath()),
                                 this.webEndpointProperties.getBasePath());
             } else {
                 if (this.managementPort == null) {
@@ -103,13 +103,13 @@ public class LightminClientProperties {
                         final String hostAddress = this.getHostAddress(address);
                         resultManagementUrl = this.append(
                                 this.append(this.createLocalUri(hostAddress, this.managementPort),
-                                        this.managementServerProperties.getServlet().getContextPath()),
+                                        this.managementServerProperties.getBasePath()),
                                 this.webEndpointProperties.getBasePath());
 
                     } else {
                         resultManagementUrl = this.append(
                                 this.append(this.createLocalUri(this.determineHost(), this.managementPort),
-                                        this.managementServerProperties.getServlet().getContextPath()),
+                                        this.managementServerProperties.getBasePath()),
                                 this.webEndpointProperties.getBasePath());
                     }
                 }
