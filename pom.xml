@@ -51,8 +51,8 @@
     </modules>
 
     <properties>
-        <spring.boot.version>2.4.1</spring.boot.version>
-        <spring-cloud-dependencies.version>2020.0.0</spring-cloud-dependencies.version>
+        <spring.boot.version>2.6.2</spring.boot.version>
+        <spring-cloud-dependencies.version>2021.0.0</spring-cloud-dependencies.version>
         <assertj.version>3.15.0</assertj.version>
         <openpojo.version>0.8.13</openpojo.version>
         <equalsverifier.version>1.7.5</equalsverifier.version>
@@ -67,8 +67,8 @@
         <nexus-staging-maven-plugin.version>1.6.3</nexus-staging-maven-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
-        <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
-        <maven-failsaife-plugin.version>2.20.1</maven-failsaife-plugin.version>
+        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
+        <maven-failsaife-plugin.version>2.22.1</maven-failsaife-plugin.version>
         <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
         <asciidoctor.version>1.5.2</asciidoctor.version>
         <!-- jacoco -->
