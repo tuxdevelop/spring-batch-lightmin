@@ -2,11 +2,12 @@ package org.tuxdevelop.spring.batch.lightmin.server.scheduler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
@@ -28,15 +29,16 @@ import java.util.Map;
 import static org.mockito.Mockito.when;
 
 @Slf4j
+@Ignore("Manual non-regression scheduler observation test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {ServerSchedulerCoreConfiguration.class})
 public class SchedulerITNR {
 
     private static final String APP_NAME = "IT_NR_APP";
 
-    @MockBean
+    @MockitoBean
     private JobServerService jobServerService;
-    @MockBean
+    @MockitoBean
     private LightminApplicationRepository lightminApplicationRepository;
     @Autowired
     private SchedulerConfigurationService schedulerConfigurationService;

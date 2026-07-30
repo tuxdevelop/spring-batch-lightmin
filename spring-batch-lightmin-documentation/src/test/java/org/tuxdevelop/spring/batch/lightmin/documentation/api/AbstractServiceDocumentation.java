@@ -3,19 +3,20 @@ package org.tuxdevelop.spring.batch.lightmin.documentation.api;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.runner.RunWith;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.explore.JobExplorer;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.job.parameters.JobParametersBuilder;
+import org.springframework.batch.core.repository.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.restdocs.JUnitRestDocumentation;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.classic.configuration.LightminClientClassicConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.classic.service.LightminClientRegistratorService;
@@ -34,11 +35,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
-import static org.junit.Assert.fail;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
 
 @Slf4j
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(
         classes = {ITConfigurationApplication.class, ITJobConfiguration.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -70,8 +71,8 @@ public abstract class AbstractServiceDocumentation {
     @LocalServerPort
     private Integer serverPort;
 
-    @Rule
-    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
+    @RegisterExtension
+    public final RestDocumentationExtension restDocumentation = new RestDocumentationExtension("target/generated-snippets");
 
     protected RequestSpecification documentationSpec;
 
@@ -104,8 +105,10 @@ public abstract class AbstractServiceDocumentation {
 
     protected void launchSimpleJob() {
         try {
-            final JobExecution execution = this.jobLauncher.run(this.simpleJob, new JobParametersBuilder().addDate("date", new
-                    Date()).toJobParameters());
+            final JobExecution execution = this.jobLauncher.run(this.simpleJob, new JobParametersBuilder()
+                    .addDate("date", new Date())
+                    .addLong("run.id", System.nanoTime())
+                    .toJobParameters());
             this.launchedJobExecutionId = execution.getId();
             this.launchedJobInstanceId = execution.getJobInstance().getId();
             this.launchedStepExecutionId = execution.getStepExecutions().iterator().next().getId();
@@ -203,8 +206,8 @@ public abstract class AbstractServiceDocumentation {
         }
     }
 
-    @Before
-    public void init() {
+    @BeforeEach
+    public void init(final RestDocumentationContextProvider restDocumentation) {
         this.cleanUp();
         final int port = this.serverPort;
         this.lightminClientProperties.setServiceUrl("http://localhost:" + port);
@@ -213,7 +216,7 @@ public abstract class AbstractServiceDocumentation {
         this.lightminProperties.getServer().setUrl(new String[]{"http://localhost:" + port});
         //lightminClientRegistrator.register();
         this.addJobConfigurations();
-        this.documentationSpec = new RequestSpecBuilder().addFilter(documentationConfiguration(this.restDocumentation)).build();
+        this.documentationSpec = new RequestSpecBuilder().addFilter(documentationConfiguration(restDocumentation)).build();
         this.launchSimpleJob();
     }
 

@@ -1,19 +1,21 @@
 package org.tuxdevelop.spring.batch.lightmin.test.application;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.Step;
+import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.infrastructure.item.Chunk;
+import org.springframework.batch.infrastructure.item.ItemReader;
+import org.springframework.batch.infrastructure.item.ItemWriter;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.tuxdevelop.spring.batch.lightmin.annotation.EnableLightminEmbedded;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobIncrementer;
 import org.tuxdevelop.spring.batch.lightmin.repository.annotation.EnableLightminMapConfigurationRepository;
@@ -23,7 +25,6 @@ import org.tuxdevelop.spring.batch.lightmin.server.scheduler.service.ServerSched
 import org.tuxdevelop.test.configuration.ITJobConfiguration;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @SpringBootApplication
@@ -64,28 +65,17 @@ public class EmbeddedTestApplication {
     @Configuration
     static class JobConfiguration {
 
-        private final JobBuilderFactory jobBuilderFactory;
-        private final StepBuilderFactory stepBuilderFactory;
-
-        @Autowired
-        JobConfiguration(final JobBuilderFactory jobBuilderFactory, final StepBuilderFactory stepBuilderFactory) {
-            this.jobBuilderFactory = jobBuilderFactory;
-            this.stepBuilderFactory = stepBuilderFactory;
-        }
-
         @Bean
-        public Job simpleJob() {
-            return this.jobBuilderFactory
-                    .get("simpleJob")
-                    .start(this.simpleStep())
+        public Job simpleJob(final JobRepository jobRepository, final Step simpleStep) {
+            return new JobBuilder("simpleJob", jobRepository)
+                    .start(simpleStep)
                     .build();
         }
 
         @Bean
-        public Step simpleStep() {
-            return this.stepBuilderFactory
-                    .get("simpleStep")
-                    .<Long, Long>chunk(1)
+        public Step simpleStep(final JobRepository jobRepository, final PlatformTransactionManager transactionManager) {
+            return new StepBuilder("simpleStep", jobRepository)
+                    .<Long, Long>chunk(1, transactionManager)
                     .reader(new ITJobConfiguration.SimpleReader())
                     .writer(new ITJobConfiguration.SimpleWriter())
                     .allowStartIfComplete(Boolean.TRUE)
@@ -108,8 +98,8 @@ public class EmbeddedTestApplication {
 
         public static class SimpleWriter implements ItemWriter<Long> {
             @Override
-            public void write(final List<? extends Long> list) throws Exception {
-                for (final Long value : list) {
+            public void write(final Chunk<? extends Long> items) throws Exception {
+                for (final Long value : items) {
                     log.info(String.valueOf(value));
                 }
             }
@@ -117,5 +107,4 @@ public class EmbeddedTestApplication {
         }
     }
 }
-
 

@@ -19,7 +19,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.fe.model.scheduler.JobSchedul
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.scheduler.SchedulerTypeModel;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.service.JobSchedulerFeService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Slf4j
 @Controller

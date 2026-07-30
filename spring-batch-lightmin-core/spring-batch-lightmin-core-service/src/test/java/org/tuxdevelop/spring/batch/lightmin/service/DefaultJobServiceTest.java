@@ -7,15 +7,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.batch.core.*;
+import org.springframework.batch.core.job.*;
+import org.springframework.batch.core.job.parameters.*;
+import org.springframework.batch.core.step.*;
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.repository.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobExecutionNotRunningException;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.launch.NoSuchJobExecutionException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
 import org.tuxdevelop.spring.batch.lightmin.batch.dao.LightminJobExecutionDao;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 import org.tuxdevelop.spring.batch.lightmin.test.domain.DomainTestHelper;
@@ -48,7 +48,7 @@ public class DefaultJobServiceTest {
     @Test
     public void getJobInstanceCountTest() throws NoSuchJobException {
         final Integer expectedInstanceCount = 10;
-        when(this.jobExplorer.getJobInstanceCount(JOB_NAME)).thenReturn(expectedInstanceCount);
+        when(this.jobExplorer.getJobInstanceCount(JOB_NAME)).thenReturn(expectedInstanceCount.longValue());
         final Integer instanceCount = this.jobService.getJobInstanceCount(JOB_NAME);
         assertThat(instanceCount).isEqualTo(expectedInstanceCount);
     }
@@ -79,7 +79,7 @@ public class DefaultJobServiceTest {
 
     @Test
     public void getJobByNameNoSuchJobExecptionTest() throws NoSuchJobException {
-        when(this.jobRegistry.getJob(JOB_NAME)).thenThrow(new NoSuchJobException("TEST"));
+        when(this.jobRegistry.getJob(JOB_NAME)).thenReturn(null);
         final Job job = this.jobService.getJobByName(JOB_NAME);
         assertThat(job).isNull();
     }
@@ -162,8 +162,7 @@ public class DefaultJobServiceTest {
 
     @SuppressWarnings("unchecked")
     @Test(expected = SpringBatchLightminApplicationException.class)
-    public void restartJobExecutionExceptionTest() throws JobParametersInvalidException, JobRestartException,
-            JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException {
+    public void restartJobExecutionExceptionTest() throws Exception {
         final Long jobExecutionId = 10L;
         when(this.jobOperator.restart(jobExecutionId)).thenThrow(NoSuchJobExecutionException.class);
         this.jobService.restartJobExecution(jobExecutionId);
@@ -182,9 +181,7 @@ public class DefaultJobServiceTest {
 
     @SuppressWarnings("unchecked")
     @Test(expected = SpringBatchLightminApplicationException.class)
-    public void stopJobExecutionExceptionTest() throws JobParametersInvalidException, JobRestartException,
-            JobInstanceAlreadyCompleteException, NoSuchJobExecutionException, NoSuchJobException,
-            JobExecutionNotRunningException {
+    public void stopJobExecutionExceptionTest() throws Exception {
         final Long jobExecutionId = 10L;
         when(this.jobOperator.stop(jobExecutionId)).thenThrow(NoSuchJobExecutionException.class);
         this.jobService.stopJobExecution(jobExecutionId);
@@ -195,7 +192,7 @@ public class DefaultJobServiceTest {
         final List<JobExecution> jobExecutions = new LinkedList<>();
         final JobParameters jobParameters = new JobParametersBuilder().addLong("long", 1L).addString("String",
                 "someString").toJobParameters();
-        final JobExecution jobExecution = new JobExecution(1L, jobParameters, "test");
+        final JobExecution jobExecution = new JobExecution(1L, new JobInstance(1L, "test"), jobParameters);
         jobExecutions.add(jobExecution);
         when(this.lightminJobExecutionDao.getJobExecutions(anyString(), anyInt(), anyInt())).thenReturn(jobExecutions);
         final JobParameters result = this.jobService.getLastJobParameters("test");

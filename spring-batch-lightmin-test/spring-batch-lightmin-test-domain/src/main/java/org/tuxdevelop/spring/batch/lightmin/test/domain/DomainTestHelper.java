@@ -1,6 +1,8 @@
 package org.tuxdevelop.spring.batch.lightmin.test.domain;
 
-import org.springframework.batch.core.*;
+import org.springframework.batch.core.job.*;
+import org.springframework.batch.core.job.parameters.*;
+import org.springframework.batch.core.step.*;
 import org.tuxdevelop.spring.batch.lightmin.domain.*;
 
 import java.util.*;
@@ -60,7 +62,7 @@ public class DomainTestHelper {
     }
 
     public static JobExecution createJobExecution(final Long jobExecutionId) {
-        return new JobExecution(jobExecutionId);
+        return new JobExecution(jobExecutionId, createJobInstance(jobExecutionId, "test-job"), new JobParameters());
     }
 
     public static StepExecution createStepExecution(final String stepName, final JobExecution jobExecution) {

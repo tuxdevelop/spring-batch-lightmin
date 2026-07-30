@@ -4,7 +4,7 @@ package org.tuxdevelop.spring.batch.lightmin.api.resource.admin;
 import lombok.Data;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.io.Serializable;
 
 /**

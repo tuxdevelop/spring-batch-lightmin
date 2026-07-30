@@ -1,15 +1,13 @@
 package org.tuxdevelop.spring.batch.lightmin.client.api.controller;
 
-import org.springframework.http.MediaType;
-
 /**
  * @author Marcel Becker
  * @version 0.1
  */
 public abstract class AbstractRestController {
 
-    static final String PRODUCES = MediaType.APPLICATION_JSON_UTF8_VALUE;
-    static final String CONSUMES = MediaType.APPLICATION_JSON_UTF8_VALUE;
+    static final String PRODUCES = "application/json";
+    static final String CONSUMES = "application/json";
 
     private static final String ROOT_URI = "/api";
 

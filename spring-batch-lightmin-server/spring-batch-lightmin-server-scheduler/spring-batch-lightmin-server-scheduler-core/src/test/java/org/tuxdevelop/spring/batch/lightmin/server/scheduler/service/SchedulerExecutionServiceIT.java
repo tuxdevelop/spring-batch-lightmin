@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.exception.SchedulerRuntimException;
 import org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository.CleanUpRepository;
@@ -32,7 +32,7 @@ public class SchedulerExecutionServiceIT extends CommonServiceIT {
     @Autowired
     private CleanUpRepository cleanUpRepository;
 
-    @MockBean
+    @MockitoBean
     private JobServerService jobServerService;
 
     @Test

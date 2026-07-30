@@ -9,6 +9,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.util.*;
+import java.time.ZoneId;
 
 @Slf4j
 public final class BatchToResourceMapper {
@@ -16,43 +17,43 @@ public final class BatchToResourceMapper {
     private BatchToResourceMapper() {
     }
 
-    public static List<JobExecution> mapExecutions(final Collection<org.springframework.batch.core.JobExecution>
+    public static List<JobExecution> mapExecutions(final Collection<org.springframework.batch.core.job.JobExecution>
                                                            jobExecutions) {
         final List<JobExecution> response = new LinkedList<>();
-        for (final org.springframework.batch.core.JobExecution jobExecution : jobExecutions) {
+        for (final org.springframework.batch.core.job.JobExecution jobExecution : jobExecutions) {
             response.add(map(jobExecution));
         }
         return response;
     }
 
-    public static JobExecution map(final org.springframework.batch.core.JobExecution jobExecution) {
+    public static JobExecution map(final org.springframework.batch.core.job.JobExecution jobExecution) {
         final JobExecution response = new JobExecution();
         response.setId(jobExecution.getId());
-        response.setCreateTime(jobExecution.getCreateTime());
-        response.setEndTime(jobExecution.getEndTime());
+        response.setCreateTime(toDate(jobExecution.getCreateTime()));
+        response.setEndTime(toDate(jobExecution.getEndTime()));
         response.setExitStatus(map(jobExecution.getExitStatus()));
         response.setFailureExceptions(jobExecution.getFailureExceptions());
-        response.setJobConfigurationName(jobExecution.getJobConfigurationName());
+        response.setJobConfigurationName(jobExecution.getJobInstance().getJobName());
         response.setJobInstance(map(jobExecution.getJobInstance()));
         response.setJobParameters(map(jobExecution.getJobParameters()));
-        response.setLastUpdated(jobExecution.getLastUpdated());
-        response.setStartTime(jobExecution.getStartTime());
+        response.setLastUpdated(toDate(jobExecution.getLastUpdated()));
+        response.setStartTime(toDate(jobExecution.getStartTime()));
         response.setStatus(map(jobExecution.getStatus()));
         response.setStepExecutions(mapStepExecutions(jobExecution.getStepExecutions()));
         response.setVersion(jobExecution.getVersion());
         return response;
     }
 
-    public static List<JobInstance> mapInstances(final Collection<org.springframework.batch.core.JobInstance>
+    public static List<JobInstance> mapInstances(final Collection<org.springframework.batch.core.job.JobInstance>
                                                          jobInstances) {
         final List<JobInstance> response = new LinkedList<>();
-        for (final org.springframework.batch.core.JobInstance jobInstance : jobInstances) {
+        for (final org.springframework.batch.core.job.JobInstance jobInstance : jobInstances) {
             response.add(map(jobInstance));
         }
         return response;
     }
 
-    public static JobInstance map(final org.springframework.batch.core.JobInstance jobInstance) {
+    public static JobInstance map(final org.springframework.batch.core.job.JobInstance jobInstance) {
         final JobInstance response = new JobInstance();
         if (jobInstance != null) {
             response.setVersion(jobInstance.getVersion());
@@ -64,41 +65,41 @@ public final class BatchToResourceMapper {
         return response;
     }
 
-    public static JobParameters map(final org.springframework.batch.core.JobParameters jobParameters) {
+    public static JobParameters map(final org.springframework.batch.core.job.parameters.JobParameters jobParameters) {
         final JobParameters response = new JobParameters();
-        final Map<String, org.springframework.batch.core.JobParameter> parametersMap = jobParameters.getParameters();
-        if (!parametersMap.isEmpty()) {
+        final Set<org.springframework.batch.core.job.parameters.JobParameter<?>> parameters = jobParameters.parameters();
+        if (!parameters.isEmpty()) {
             response.setParameters(new HashMap<>());
-            for (final Map.Entry<String, org.springframework.batch.core.JobParameter> entry : parametersMap.entrySet()) {
+            for (final org.springframework.batch.core.job.parameters.JobParameter<?> entry : parameters) {
                 final JobParameter jobParameter = new JobParameter();
-                jobParameter.setParameter(entry.getValue().getValue());
-                jobParameter.setParameterType(map(entry.getValue().getType()));
-                response.getParameters().put(entry.getKey(), jobParameter);
+                jobParameter.setParameter(entry.value());
+                jobParameter.setParameterType(map(entry.type()));
+                response.getParameters().put(entry.name(), jobParameter);
             }
         }
         return response;
     }
 
-    public static StepExecution map(final org.springframework.batch.core.StepExecution stepExecution) {
+    public static StepExecution map(final org.springframework.batch.core.step.StepExecution stepExecution) {
         final StepExecution response = new StepExecution();
         response.setId(stepExecution.getId());
         response.setVersion(stepExecution.getVersion());
         response.setJobExecutionId(stepExecution.getJobExecutionId());
         response.setStepName(stepExecution.getStepName());
         response.setStatus(map(stepExecution.getStatus()));
-        response.setReadCount(stepExecution.getReadCount());
-        response.setWriteCount(stepExecution.getWriteCount());
-        response.setCommitCount(stepExecution.getCommitCount());
-        response.setRollbackCount(stepExecution.getRollbackCount());
-        response.setReadSkipCount(stepExecution.getReadSkipCount());
-        response.setProcessSkipCount(stepExecution.getProcessSkipCount());
-        response.setWriteSkipCount(stepExecution.getWriteSkipCount());
-        response.setStartTime(stepExecution.getStartTime());
-        response.setEndTime(stepExecution.getEndTime());
-        response.setLastUpdated(stepExecution.getLastUpdated());
+        response.setReadCount(Math.toIntExact(stepExecution.getReadCount()));
+        response.setWriteCount(Math.toIntExact(stepExecution.getWriteCount()));
+        response.setCommitCount(Math.toIntExact(stepExecution.getCommitCount()));
+        response.setRollbackCount(Math.toIntExact(stepExecution.getRollbackCount()));
+        response.setReadSkipCount(Math.toIntExact(stepExecution.getReadSkipCount()));
+        response.setProcessSkipCount(Math.toIntExact(stepExecution.getProcessSkipCount()));
+        response.setWriteSkipCount(Math.toIntExact(stepExecution.getWriteSkipCount()));
+        response.setStartTime(toDate(stepExecution.getStartTime()));
+        response.setEndTime(toDate(stepExecution.getEndTime()));
+        response.setLastUpdated(toDate(stepExecution.getLastUpdated()));
         response.setExitStatus(map(stepExecution.getExitStatus()));
         response.setTerminateOnly(stepExecution.isTerminateOnly());
-        response.setFilterCount(stepExecution.getFilterCount());
+        response.setFilterCount(Math.toIntExact(stepExecution.getFilterCount()));
         response.setFailureExceptions(stepExecution.getFailureExceptions());
         return response;
     }
@@ -142,35 +143,34 @@ public final class BatchToResourceMapper {
         return response;
     }
 
-    public static ParameterType map(final org.springframework.batch.core.JobParameter.ParameterType parameterType) {
-        final ParameterType response;
-        switch (parameterType) {
-            case DATE:
-                response = ParameterType.DATE;
-                break;
-            case STRING:
-                response = ParameterType.STRING;
-                break;
-            case LONG:
-                response = ParameterType.LONG;
-                break;
-            case DOUBLE:
-                response = ParameterType.DOUBLE;
-                break;
-            default:
-                throw new SpringBatchLightminApplicationException("Unknown ParameterType: " + parameterType);
+    public static ParameterType map(final Class<?> parameterType) {
+        if (Date.class.equals(parameterType)) {
+            return ParameterType.DATE;
         }
-        return response;
+        if (String.class.equals(parameterType)) {
+            return ParameterType.STRING;
+        }
+        if (Long.class.equals(parameterType)) {
+            return ParameterType.LONG;
+        }
+        if (Double.class.equals(parameterType)) {
+            return ParameterType.DOUBLE;
+        }
+        throw new SpringBatchLightminApplicationException("Unknown ParameterType: " + parameterType);
     }
 
-    static List<StepExecution> mapStepExecutions(final Collection<org.springframework.batch.core.StepExecution>
+    static List<StepExecution> mapStepExecutions(final Collection<org.springframework.batch.core.step.StepExecution>
                                                          stepExecutions) {
         final List<StepExecution> response = new LinkedList<>();
         if (!stepExecutions.isEmpty()) {
-            for (final org.springframework.batch.core.StepExecution stepExecution : stepExecutions) {
+            for (final org.springframework.batch.core.step.StepExecution stepExecution : stepExecutions) {
                 response.add(map(stepExecution));
             }
         }
         return response;
+    }
+
+    private static Date toDate(final java.time.LocalDateTime dateTime) {
+        return dateTime == null ? null : Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 }

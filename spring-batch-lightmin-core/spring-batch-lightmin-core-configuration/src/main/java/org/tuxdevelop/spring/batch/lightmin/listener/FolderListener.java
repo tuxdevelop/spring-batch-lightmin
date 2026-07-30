@@ -1,10 +1,9 @@
 package org.tuxdevelop.spring.batch.lightmin.listener;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.job.parameters.JobParametersBuilder;
 import org.springframework.batch.integration.launch.JobLaunchRequest;
-import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
-import org.springframework.integration.dsl.IntegrationFlows;
+import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.MessageChannels;
 import org.springframework.integration.dsl.Pollers;
 import org.springframework.integration.file.DefaultDirectoryScanner;
@@ -15,6 +14,7 @@ import org.springframework.integration.file.filters.CompositeFileListFilter;
 import org.springframework.integration.file.filters.IgnoreHiddenFileListFilter;
 import org.springframework.integration.file.filters.SimplePatternFileListFilter;
 import org.springframework.integration.file.transformer.AbstractFilePayloadTransformer;
+import org.springframework.messaging.MessageHandler;
 import org.tuxdevelop.spring.batch.lightmin.domain.ListenerConstructorWrapper;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 
@@ -34,7 +34,7 @@ public class FolderListener extends AbstractListener implements Listener {
 
     private CompositeFileListFilter<File> fileFileListFilter;
     private DirectoryScanner directoryScanner;
-    private JobLaunchingMessageHandler jobLaunchingMessageHandler;
+    private MessageHandler jobLaunchingMessageHandler;
     private AbstractFilePayloadTransformer<JobLaunchRequest> transformer;
 
     public FolderListener(final ListenerConstructorWrapper listenerConstructorWrapper) {
@@ -59,19 +59,15 @@ public class FolderListener extends AbstractListener implements Listener {
     }
 
     private void initIntegrationFlow() {
-        this.integrationFlow = IntegrationFlows
+        this.integrationFlow = IntegrationFlow
                 .from(Files.inboundAdapter(new File(this.jobListenerConfiguration.getSourceFolder()))
                         .scanner(this.directoryScanner)
-                        .scanEachPoll(Boolean.TRUE)
-                        .get(), e -> {
+                        .scanEachPoll(Boolean.TRUE), e -> {
                     e.poller(Pollers.fixedRate(this.jobListenerConfiguration.getPollerPeriod()).maxMessagesPerPoll(1000));
                     e.autoStartup(Boolean.TRUE);
                 })
-                .transform(this.transformer,
-                        e -> e.autoStartup(Boolean.TRUE))
+                .transform(this.transformer)
                 .handle(this.jobLaunchingMessageHandler)
-                .channel(MessageChannels.direct())
-                .handle(new JobExecutionFinishedMessageHandler())
                 .get();
 
     }
@@ -99,7 +95,14 @@ public class FolderListener extends AbstractListener implements Listener {
     }
 
     private void initJobLaunchingMessageHandler() {
-        this.jobLaunchingMessageHandler = new JobLaunchingMessageHandler(this.jobLauncher);
+        this.jobLaunchingMessageHandler = message -> {
+            final JobLaunchRequest request = (JobLaunchRequest) message.getPayload();
+            try {
+                this.jobLauncher.run(request.getJob(), request.getJobParameters());
+            } catch (final Exception e) {
+                throw new SpringBatchLightminConfigurationException(e, "Could not launch job from file listener");
+            }
+        };
     }
 
     private void attachFileSourceToJobParameters(final File file) {

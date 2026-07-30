@@ -9,13 +9,13 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
 import org.tuxdevelop.spring.batch.lightmin.service.ServiceEntry;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 /**
  * @author Marcel Becker
  * @version 0.1
  */
-@ResponseBody
+@RestController
 @RequestMapping("/")
 public class JobConfigurationRestController extends AbstractRestController implements InitializingBean {
 

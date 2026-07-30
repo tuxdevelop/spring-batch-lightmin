@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.event;
 
 import lombok.Getter;
-import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.job.JobExecution;
 import org.springframework.context.ApplicationEvent;
 
 import java.io.Serializable;

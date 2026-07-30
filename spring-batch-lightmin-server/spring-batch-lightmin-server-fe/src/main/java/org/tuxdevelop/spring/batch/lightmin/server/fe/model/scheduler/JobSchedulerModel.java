@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.common.TaskExecutorTypeModel;
 import org.tuxdevelop.spring.batch.lightmin.validation.annotation.IsCronExpression;
 
-import javax.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.AssertTrue;
 
 @Data
 public class JobSchedulerModel {

@@ -2,7 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.pr
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.Address;

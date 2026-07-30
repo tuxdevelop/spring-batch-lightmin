@@ -2,9 +2,16 @@ package org.tuxdevelop.spring.batch.lightmin.batch.dao;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.batch.core.*;
-import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.job.*;
+import org.springframework.batch.core.job.parameters.*;
+import org.springframework.batch.core.step.*;
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.repository.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.infrastructure.item.ExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -38,10 +45,13 @@ public class JdbcLightminJobExecutionDaoIT {
     @Autowired
     private JobLauncher jobLauncher;
 
+    @Autowired
+    private JobRepository jobRepository;
+
     @Test
     public void getJobExecutionCountIT() {
         this.init();
-        final JobInstance jobInstance = this.jobExplorer.getJobInstance(1L);
+        final JobInstance jobInstance = this.jobExplorer.getLastJobInstance("simpleJob");
         final int count = this.jdbcLightminJobExecutionDao.getJobExecutionCount(jobInstance);
         assertThat(count).isEqualTo(JOB_EXECUTION_COUNT);
     }
@@ -57,7 +67,7 @@ public class JdbcLightminJobExecutionDaoIT {
     @Test
     public void findJobExecutionsIT() {
         this.init();
-        final JobInstance jobInstance = this.jobExplorer.getJobInstance(1L);
+        final JobInstance jobInstance = this.jobExplorer.getLastJobInstance("simpleJob");
         final List<JobExecution> jobExecutions = this.jdbcLightminJobExecutionDao.findJobExecutions(jobInstance, 0,
                 JOB_EXECUTION_COUNT);
         assertThat(jobExecutions).isNotNull();
@@ -71,7 +81,7 @@ public class JdbcLightminJobExecutionDaoIT {
     public void findJobExecutionsPageIT() {
         this.init();
         final int count = 5;
-        final JobInstance jobInstance = this.jobExplorer.getJobInstance(1L);
+        final JobInstance jobInstance = this.jobExplorer.getLastJobInstance("simpleJob");
         final List<JobExecution> jobExecutions = this.jdbcLightminJobExecutionDao.findJobExecutions(jobInstance, 0,
                 count);
         assertThat(jobExecutions).isNotNull();
@@ -85,7 +95,7 @@ public class JdbcLightminJobExecutionDaoIT {
     public void getJobExecutionsPageIT() {
         this.init();
         final int count = 5;
-        final JobInstance jobInstance = this.jobExplorer.getJobInstance(1L);
+        final JobInstance jobInstance = this.jobExplorer.getLastJobInstance("simpleJob");
         final List<JobExecution> jobExecutions = this.jdbcLightminJobExecutionDao.getJobExecutions(jobInstance.getJobName(), 0,
                 count);
         assertThat(jobExecutions).isNotNull();
@@ -187,8 +197,19 @@ public class JdbcLightminJobExecutionDaoIT {
 
     private void init() {
         try {
+            final JobParameters parameters = new JobParametersBuilder().toJobParameters();
+            JobInstance jobInstance = this.jobRepository.getJobInstance("simpleJob", parameters);
+            if (jobInstance == null) {
+                jobInstance = this.jobRepository.createJobInstance("simpleJob", parameters);
+            }
             for (int i = 0; i < JOB_EXECUTION_COUNT; i++) {
-                this.jobLauncher.run(this.simpleJob, new JobParametersBuilder().toJobParameters());
+                final JobExecution execution = this.jobRepository.createJobExecution(jobInstance, parameters, new ExecutionContext());
+                final java.time.LocalDateTime now = java.time.LocalDateTime.now();
+                execution.setStartTime(now.minusSeconds(1));
+                execution.setEndTime(now);
+                execution.setStatus(BatchStatus.COMPLETED);
+                execution.setExitStatus(ExitStatus.COMPLETED);
+                this.jobRepository.update(execution);
             }
         } catch (final Exception e) {
             fail(e.getMessage());

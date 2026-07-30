@@ -4,5 +4,9 @@ spring:
   batch:
     job:
       enabled: false
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:org/springframework/batch/core/schema-h2.sql
   main:
     allow-bean-definition-overriding: true

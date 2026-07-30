@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.listener;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.job.JobExecution;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;

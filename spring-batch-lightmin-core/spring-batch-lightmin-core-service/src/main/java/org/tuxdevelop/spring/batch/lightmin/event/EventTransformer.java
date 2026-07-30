@@ -1,11 +1,14 @@
 package org.tuxdevelop.spring.batch.lightmin.event;
 
 
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.step.StepExecution;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.JobExecutionEventInfo;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.StepExecutionEventInfo;
 import org.tuxdevelop.spring.batch.lightmin.client.api.BatchToResourceMapper;
+
+import java.time.ZoneId;
+import java.util.Date;
 
 public final class EventTransformer {
 
@@ -16,8 +19,8 @@ public final class EventTransformer {
         final JobExecutionEventInfo jobExecutionEventInfo = new JobExecutionEventInfo();
         jobExecutionEventInfo.setApplicationName(applicationName);
         jobExecutionEventInfo.setExitStatus(BatchToResourceMapper.map(jobExecution.getExitStatus()));
-        jobExecutionEventInfo.setStartDate(jobExecution.getStartTime());
-        jobExecutionEventInfo.setEndDate(jobExecution.getEndTime());
+        jobExecutionEventInfo.setStartDate(toDate(jobExecution.getStartTime()));
+        jobExecutionEventInfo.setEndDate(toDate(jobExecution.getEndTime()));
         jobExecutionEventInfo.setJobExecutionId(jobExecution.getId());
         jobExecutionEventInfo.setJobName(jobExecution.getJobInstance().getJobName());
         return jobExecutionEventInfo;
@@ -31,13 +34,17 @@ public final class EventTransformer {
         stepExecutionEventInfo.setStepName(stepExecution.getStepName());
         stepExecutionEventInfo.setExitStatus(BatchToResourceMapper.map(stepExecution.getExitStatus()));
 
-        stepExecutionEventInfo.setReadCount(stepExecution.getReadCount());
-        stepExecutionEventInfo.setWriteCount(stepExecution.getWriteCount());
-        stepExecutionEventInfo.setCommitCount(stepExecution.getCommitCount());
-        stepExecutionEventInfo.setRollbackCount(stepExecution.getRollbackCount());
-        stepExecutionEventInfo.setReadSkipCount(stepExecution.getReadSkipCount());
-        stepExecutionEventInfo.setProcessSkipCount(stepExecution.getProcessSkipCount());
-        stepExecutionEventInfo.setWriteSkipCount(stepExecution.getWriteSkipCount());
+        stepExecutionEventInfo.setReadCount(Math.toIntExact(stepExecution.getReadCount()));
+        stepExecutionEventInfo.setWriteCount(Math.toIntExact(stepExecution.getWriteCount()));
+        stepExecutionEventInfo.setCommitCount(Math.toIntExact(stepExecution.getCommitCount()));
+        stepExecutionEventInfo.setRollbackCount(Math.toIntExact(stepExecution.getRollbackCount()));
+        stepExecutionEventInfo.setReadSkipCount(Math.toIntExact(stepExecution.getReadSkipCount()));
+        stepExecutionEventInfo.setProcessSkipCount(Math.toIntExact(stepExecution.getProcessSkipCount()));
+        stepExecutionEventInfo.setWriteSkipCount(Math.toIntExact(stepExecution.getWriteSkipCount()));
         return stepExecutionEventInfo;
+    }
+
+    private static Date toDate(final java.time.LocalDateTime dateTime) {
+        return dateTime == null ? null : Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 }

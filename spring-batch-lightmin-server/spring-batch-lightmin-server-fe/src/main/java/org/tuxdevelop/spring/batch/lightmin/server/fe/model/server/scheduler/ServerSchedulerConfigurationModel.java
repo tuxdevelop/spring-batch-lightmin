@@ -6,9 +6,9 @@ import org.tuxdevelop.spring.batch.lightmin.server.fe.model.common.JobIncremeter
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.validator.ValidJobParameters;
 import org.tuxdevelop.spring.batch.lightmin.validation.annotation.IsCronExpression;
 
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -40,7 +40,7 @@ public class ServerSchedulerConfigurationModel implements Serializable {
     private String parameters;
     private Map<String, Object> parametersRead;
 
-    @AssertTrue(message = "{org.tuxdevelop.spring.batch.lightmin.validation.javax.validator.isMaxRetrySet.message}")
+    @AssertTrue(message = "{org.tuxdevelop.spring.batch.lightmin.validation.jakarta.validator.isMaxRetrySet.message}")
     public boolean isMaxRetrySet() {
         boolean valid = true;
         if (retryable.booleanValue()) {
@@ -49,7 +49,7 @@ public class ServerSchedulerConfigurationModel implements Serializable {
         return valid;
     }
 
-    @AssertTrue(message = "{org.tuxdevelop.spring.batch.lightmin.validation.javax.validator.isRetryIntervalSet.message}")
+    @AssertTrue(message = "{org.tuxdevelop.spring.batch.lightmin.validation.jakarta.validator.isRetryIntervalSet.message}")
     public boolean isRetryIntervalSet() {
         boolean valid = true;
         if (retryable.booleanValue()) {

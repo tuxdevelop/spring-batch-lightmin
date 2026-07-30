@@ -1,11 +1,12 @@
 package org.tuxdevelop.spring.batch.lightmin.batch.dao;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
-import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.job.JobInstance;
+import org.springframework.batch.core.repository.explore.JobExplorer;
 import org.springframework.batch.core.launch.NoSuchJobException;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -36,7 +37,7 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
 
         int jobInstanceCount;
         try {
-            jobInstanceCount = this.jobExplorer.getJobInstanceCount(jobName);
+            jobInstanceCount = Math.toIntExact(this.jobExplorer.getJobInstanceCount(jobName));
         } catch (final NoSuchJobException e) {
             jobInstanceCount = 0;
         }
@@ -107,7 +108,7 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
             result = new ArrayList<>();
             final Date startDate = DaoUtil.castDate(queryParamater.get(QueryParameterKey.START_DATE));
             for (final JobExecution jobExecution : allJobExecutions) {
-                if (startDate.before(jobExecution.getStartTime())) {
+                if (jobExecution.getStartTime() != null && startDate.toInstant().isBefore(jobExecution.getStartTime().atZone(java.time.ZoneId.systemDefault()).toInstant())) {
                     result.add(jobExecution);
                 }
             }
@@ -124,7 +125,7 @@ public class MapLightminJobExecutionDao implements LightminJobExecutionDao {
             result = new ArrayList<>();
             final Date endDate = DaoUtil.castDate(queryParamater.get(QueryParameterKey.END_DATE));
             for (final JobExecution jobExecution : allJobExecutions) {
-                if (endDate.after(jobExecution.getEndTime())) {
+                if (jobExecution.getEndTime() != null && endDate.toInstant().isAfter(jobExecution.getEndTime().atZone(java.time.ZoneId.systemDefault()).toInstant())) {
                     result.add(jobExecution);
                 }
             }

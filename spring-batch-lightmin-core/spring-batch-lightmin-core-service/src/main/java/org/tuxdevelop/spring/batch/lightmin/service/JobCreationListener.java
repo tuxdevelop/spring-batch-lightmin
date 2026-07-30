@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
+import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.configuration.DuplicateJobException;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -12,7 +12,6 @@ import org.tuxdevelop.spring.batch.lightmin.domain.ListenerStatus;
 import org.tuxdevelop.spring.batch.lightmin.domain.SchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.listener.Listener;
 import org.tuxdevelop.spring.batch.lightmin.scheduler.Scheduler;
-import org.tuxdevelop.spring.batch.lightmin.util.CommonJobFactory;
 
 import java.util.Collection;
 import java.util.Map;
@@ -53,9 +52,8 @@ public class JobCreationListener implements ApplicationListener<ApplicationReady
             for (final Map.Entry<String, Job> jobEntry : jobs.entrySet()) {
                 final Job job = jobEntry.getValue();
                 final String jobName = job.getName();
-                final CommonJobFactory commonJobFactory = new CommonJobFactory(job, jobName);
                 try {
-                    this.jobRegistry.register(commonJobFactory);
+                    this.jobRegistry.register(job);
                 } catch (final DuplicateJobException e) {
                     log.error("Job with name: " + jobName + " is already registered!");
                 }

@@ -97,9 +97,9 @@ public class ResourceToDomainMapperTest {
         final JobParameters jobParameters = new JobParameters();
         jobParameters.setParameters(parameterMap);
 
-        final org.springframework.batch.core.JobParameters result = ResourceToDomainMapper.map(jobParameters);
+        final org.springframework.batch.core.job.parameters.JobParameters result = ResourceToDomainMapper.map(jobParameters);
         assertThat(result).isNotNull();
-        assertThat(result.getParameters()).hasSize(2);
+        assertThat(result.parameters()).hasSize(2);
 
         final Date resultDate = result.getDate("date_parameter");
         final Date resultDate2 = result.getDate("second_date");

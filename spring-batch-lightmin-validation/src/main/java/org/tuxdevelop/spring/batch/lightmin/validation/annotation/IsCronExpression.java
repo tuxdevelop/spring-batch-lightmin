@@ -2,8 +2,8 @@ package org.tuxdevelop.spring.batch.lightmin.validation.annotation;
 
 import org.tuxdevelop.spring.batch.lightmin.validation.validator.CronExpressionValidator;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IsCronExpression {
 
-    String message() default "{org.tuxdevelop.spring.batch.lightmin.validation.javax.validator.IsCronExpression.message}";
+    String message() default "{org.tuxdevelop.spring.batch.lightmin.validation.jakarta.validator.IsCronExpression.message}";
 
     Class<?>[] groups() default {};
 

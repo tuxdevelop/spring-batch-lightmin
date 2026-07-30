@@ -1,6 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.util;
 
-import org.springframework.batch.core.Job;
+import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.configuration.JobFactory;
 
 /**

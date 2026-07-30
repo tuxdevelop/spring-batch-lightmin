@@ -2,7 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.scheduler;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
+import org.springframework.batch.core.job.Job;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.domain.JobSchedulerConfiguration;
@@ -46,7 +46,7 @@ public class PeriodScheduler extends AbstractScheduler {
     public void schedule() {
         final Date initialDelay = new Date(System.currentTimeMillis() + this.jobSchedulerConfiguration.getInitialDelay());
         log.debug("Scheduling: " + this.jobRunner.getJob().getName() +
-                " with Parameters: " + this.jobRunner.getJobParameters().toProperties());
+                " with Parameters: " + this.jobRunner.getJobParameters());
         this.threadPoolTaskScheduler.scheduleWithFixedDelay(this.jobRunner, initialDelay, this.jobSchedulerConfiguration.getFixedDelay());
         this.setStatus(SchedulerStatus.RUNNING);
     }

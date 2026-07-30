@@ -1,6 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
-import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.job.JobInstance;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.*;
@@ -95,7 +95,7 @@ public class ControllerServiceEntryBean implements ServiceEntry {
 
     @Override
     public JobExecution getByJobExecutionId(final Long jobExecutionId) {
-        final org.springframework.batch.core.JobExecution jobExecution = this.jobService.getJobExecution(jobExecutionId);
+        final org.springframework.batch.core.job.JobExecution jobExecution = this.jobService.getJobExecution(jobExecutionId);
         this.jobService.attachJobInstance(jobExecution);
         this.stepService.attachStepExecutions(jobExecution);
         return BatchToResourceMapper.map(jobExecution);
@@ -107,7 +107,7 @@ public class ControllerServiceEntryBean implements ServiceEntry {
                                                 final Integer startIndex,
                                                 final Integer pageSize) {
         final JobInstance jobInstance = this.jobService.getJobInstance(jobInstanceId);
-        final Collection<org.springframework.batch.core.JobExecution> jobExecutions = this.jobService.getJobExecutions(jobInstance, startIndex, pageSize);
+        final Collection<org.springframework.batch.core.job.JobExecution> jobExecutions = this.jobService.getJobExecutions(jobInstance, startIndex, pageSize);
         final Integer totalJobExecutionCount = this.jobService.getJobExecutionCount(jobInstance);
         final JobExecutionPage jobExecutionPage = new JobExecutionPage();
         jobExecutionPage.setJobName(jobInstance.getJobName());
@@ -122,7 +122,7 @@ public class ControllerServiceEntryBean implements ServiceEntry {
     @Override
     public JobExecutionPage getJobExecutionPage(final Long jobInstanceId) {
         final JobInstance jobInstance = this.jobService.getJobInstance(jobInstanceId);
-        final Collection<org.springframework.batch.core.JobExecution> jobExecutions = this.jobService.getJobExecutions(jobInstance);
+        final Collection<org.springframework.batch.core.job.JobExecution> jobExecutions = this.jobService.getJobExecutions(jobInstance);
         final Integer totalJobExecutionCount = this.jobService.getJobExecutionCount(jobInstance);
         final JobExecutionPage jobExecutionPage = new JobExecutionPage();
         jobExecutionPage.setJobName(jobInstance.getJobName());
@@ -182,7 +182,7 @@ public class ControllerServiceEntryBean implements ServiceEntry {
 
     @Override
     public StepExecution getStepExecution(final Long jobExecutionId, final Long stepExecutionId) {
-        final org.springframework.batch.core.JobExecution jobExecution = this.jobService.getJobExecution(jobExecutionId);
+        final org.springframework.batch.core.job.JobExecution jobExecution = this.jobService.getJobExecution(jobExecutionId);
         return BatchToResourceMapper.map(this.stepService.getStepExecution(jobExecution, stepExecutionId));
     }
 
@@ -193,13 +193,13 @@ public class ControllerServiceEntryBean implements ServiceEntry {
 
     @Override
     public JobParameters getLastJobParameters(final String jobName) {
-        final org.springframework.batch.core.JobParameters jobParameters = this.jobService.getLastJobParameters(jobName);
+        final org.springframework.batch.core.job.parameters.JobParameters jobParameters = this.jobService.getLastJobParameters(jobName);
         return BatchToResourceMapper.map(jobParameters);
     }
 
     @Override
     public List<JobExecution> findJobExecutions(final String jobName, final Map<String, Object> queryParameter, final Integer resultSize) {
-        final List<org.springframework.batch.core.JobExecution> jobExecutions = this.jobExecutionQueryService.findJobExecutions(jobName, queryParameter, resultSize);
+        final List<org.springframework.batch.core.job.JobExecution> jobExecutions = this.jobExecutionQueryService.findJobExecutions(jobName, queryParameter, resultSize);
         return BatchToResourceMapper.mapExecutions(jobExecutions);
     }
 }

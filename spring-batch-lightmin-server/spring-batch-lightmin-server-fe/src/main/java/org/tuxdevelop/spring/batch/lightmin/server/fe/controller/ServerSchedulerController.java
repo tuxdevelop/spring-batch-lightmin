@@ -20,7 +20,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.fe.model.server.scheduler.Ser
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.server.scheduler.ServerSchedulerInfoPageModel;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.service.ServerSchedulerFeService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class ServerSchedulerController extends CommonController {

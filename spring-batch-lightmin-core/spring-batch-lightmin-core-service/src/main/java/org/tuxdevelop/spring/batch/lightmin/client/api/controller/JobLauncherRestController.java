@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobLaunch;
 import org.tuxdevelop.spring.batch.lightmin.service.ServiceEntry;
 
@@ -13,7 +13,7 @@ import org.tuxdevelop.spring.batch.lightmin.service.ServiceEntry;
  * @author Marcel Becker
  * @version 0.3
  */
-@ResponseBody
+@RestController
 @RequestMapping("/")
 public class JobLauncherRestController extends AbstractRestController {
 

@@ -8,8 +8,9 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.job.JobInstance;
+import org.springframework.batch.core.job.parameters.JobParameters;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.JobExecutionEventInfo;
 import org.tuxdevelop.spring.batch.lightmin.client.publisher.RemoteJobExecutionEventPublisher;
@@ -33,8 +34,7 @@ public class OnJobExecutionFinishedEventListenerTest {
     @Test
     public void testOnApplicationEventJobExecution() {
         final JobInstance instance = new JobInstance(1L, "testJob");
-        final JobExecution jobExecution = new JobExecution(1L);
-        jobExecution.setJobInstance(instance);
+        final JobExecution jobExecution = new JobExecution(1L, instance, new JobParameters());
         jobExecution.setExitStatus(ExitStatus.COMPLETED);
         final JobExecutionEvent jobExecutionEvent = new JobExecutionEvent(jobExecution, "testApplication");
 
@@ -50,4 +50,3 @@ public class OnJobExecutionFinishedEventListenerTest {
     }
 
 }
-

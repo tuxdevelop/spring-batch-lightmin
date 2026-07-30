@@ -8,6 +8,12 @@ import org.tuxdevelop.spring.batch.lightmin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.util.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * @author Marcel Becker
@@ -38,26 +44,25 @@ public final class ResourceToDomainMapper {
         return response;
     }
 
-    public static org.springframework.batch.core.JobParameters map(final JobParameters jobParameters) {
-        final Map<String, org.springframework.batch.core.JobParameter> parametersMap = new HashMap<>();
+    public static org.springframework.batch.core.job.parameters.JobParameters map(final JobParameters jobParameters) {
+        final Map<String, org.springframework.batch.core.job.parameters.JobParameter<?>> parametersMap = new HashMap<>();
         if (jobParameters != null) {
             for (final Map.Entry<String, JobParameter> entry : jobParameters.getParameters().entrySet()) {
-                final org.springframework.batch.core.JobParameter.ParameterType parameterType = map(entry.getValue()
-                        .getParameterType());
-                final org.springframework.batch.core.JobParameter jobParameter;
+                final ParameterType parameterType = entry.getValue().getParameterType();
+                final org.springframework.batch.core.job.parameters.JobParameter<?> jobParameter;
                 final String parameter = String.valueOf(entry.getValue().getParameter());
                 switch (parameterType) {
                     case STRING:
-                        jobParameter = new org.springframework.batch.core.JobParameter(parameter);
+                        jobParameter = new org.springframework.batch.core.job.parameters.JobParameter<>(entry.getKey(), parameter, String.class);
                         break;
                     case DOUBLE:
-                        jobParameter = new org.springframework.batch.core.JobParameter(Double.parseDouble(parameter));
+                        jobParameter = new org.springframework.batch.core.job.parameters.JobParameter<>(entry.getKey(), Double.parseDouble(parameter), Double.class);
                         break;
                     case LONG:
-                        jobParameter = new org.springframework.batch.core.JobParameter(Long.parseLong(parameter));
+                        jobParameter = new org.springframework.batch.core.job.parameters.JobParameter<>(entry.getKey(), Long.parseLong(parameter), Long.class);
                         break;
                     case DATE:
-                        jobParameter = new org.springframework.batch.core.JobParameter((Date) entry.getValue().getParameter());
+                        jobParameter = new org.springframework.batch.core.job.parameters.JobParameter<>(entry.getKey(), parseDate(entry.getValue().getParameter()), Date.class);
                         break;
                     default:
                         throw new SpringBatchLightminApplicationException("Unknown JobParameterType: " + entry.getValue().getParameterType());
@@ -65,7 +70,33 @@ public final class ResourceToDomainMapper {
                 parametersMap.put(entry.getKey(), jobParameter);
             }
         }
-        return new org.springframework.batch.core.JobParameters(parametersMap);
+        return new org.springframework.batch.core.job.parameters.JobParameters(new HashSet<>(parametersMap.values()));
+    }
+
+    private static Date parseDate(final Object value) {
+        if (value instanceof Date) {
+            return (Date) value;
+        }
+        if (value instanceof Number) {
+            return new Date(((Number) value).longValue());
+        }
+        final String text = String.valueOf(value);
+        try {
+            return Date.from(Instant.parse(text));
+        } catch (final DateTimeParseException ignored) {
+            try {
+                return Date.from(LocalDateTime.parse(text).atZone(ZoneId.systemDefault()).toInstant());
+            } catch (final DateTimeParseException ignoredAgain) {
+                for (final String pattern : new String[]{"yyyy/MM/dd HH:mm:ss:SSS", "yyyy/MM/dd"}) {
+                    try {
+                        return new SimpleDateFormat(pattern).parse(text);
+                    } catch (final ParseException ignoredPattern) {
+                        // Try the next legacy format.
+                    }
+                }
+                throw new SpringBatchLightminApplicationException("Unknown date parameter format: " + text);
+            }
+        }
     }
 
     private static JobSchedulerConfiguration map(final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerConfiguration jobSchedulerConfiguration) {
@@ -213,25 +244,5 @@ public final class ResourceToDomainMapper {
         return jobParameterMap;
     }
 
-    private static org.springframework.batch.core.JobParameter.ParameterType map(final ParameterType parameterType) {
-        final org.springframework.batch.core.JobParameter.ParameterType response;
-        switch (parameterType) {
-            case DATE:
-                response = org.springframework.batch.core.JobParameter.ParameterType.DATE;
-                break;
-            case STRING:
-                response = org.springframework.batch.core.JobParameter.ParameterType.STRING;
-                break;
-            case LONG:
-                response = org.springframework.batch.core.JobParameter.ParameterType.LONG;
-                break;
-            case DOUBLE:
-                response = org.springframework.batch.core.JobParameter.ParameterType.DOUBLE;
-                break;
-            default:
-                throw new SpringBatchLightminApplicationException("Unknown ParameterType: " + parameterType);
-        }
-        return response;
-    }
 
 }

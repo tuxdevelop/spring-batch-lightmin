@@ -15,7 +15,7 @@ import java.util.List;
  * @since 0.5
  */
 @Slf4j
-@ResponseBody
+@RestController
 @RequestMapping(value = "api/events/jobexecutions")
 public class JobExecutionEventController {
 

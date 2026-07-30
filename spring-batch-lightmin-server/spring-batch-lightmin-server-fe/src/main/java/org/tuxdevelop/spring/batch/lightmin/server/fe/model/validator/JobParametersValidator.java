@@ -2,8 +2,8 @@ package org.tuxdevelop.spring.batch.lightmin.server.fe.model.validator;
 
 import org.tuxdevelop.spring.batch.lightmin.api.resource.util.ApiParameterParser;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class JobParametersValidator implements ConstraintValidator<ValidJobParameters, String> {
 

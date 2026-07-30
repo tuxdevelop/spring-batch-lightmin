@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.util;
 
 import org.junit.Test;
-import org.springframework.batch.core.Job;
+import org.springframework.batch.core.job.Job;
 import org.tuxdevelop.spring.batch.lightmin.test.domain.DomainTestHelper;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -3,8 +3,8 @@ package org.tuxdevelop.spring.batch.lightmin.validation.validator;
 import org.springframework.util.StringUtils;
 import org.tuxdevelop.spring.batch.lightmin.validation.annotation.IsCronExpression;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class CronExpressionValidator implements ConstraintValidator<IsCronExpression, String> {
 

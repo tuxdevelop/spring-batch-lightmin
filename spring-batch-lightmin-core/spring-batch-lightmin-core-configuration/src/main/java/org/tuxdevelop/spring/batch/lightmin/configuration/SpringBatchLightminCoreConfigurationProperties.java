@@ -7,7 +7,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 @Data
 @ConfigurationProperties(prefix = "spring.batch.lightmin")

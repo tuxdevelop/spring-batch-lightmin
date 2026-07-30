@@ -2,9 +2,9 @@ package org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.item.database.Order;
-import org.springframework.batch.item.database.PagingQueryProvider;
-import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
+import org.springframework.batch.infrastructure.item.database.Order;
+import org.springframework.batch.infrastructure.item.database.PagingQueryProvider;
+import org.springframework.batch.infrastructure.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -188,11 +188,10 @@ public class JdbcSchedulerConfigurationRepository implements SchedulerConfigurat
                 return schedulerConfigurations;
             }
             try {
-                final Long startAfterValue = this.jdbcTemplate.queryForObject(
-                        this.findAllPagingQueryProvider.generateJumpToItemQuery(startIndex, startIndex), Long.class);
+                final List<SchedulerConfiguration> allConfigurations = this.findAll();
+                final int endIndex = Math.min(startIndex + pageSize, allConfigurations.size());
                 final List<SchedulerConfiguration> schedulerConfigurations =
-                        this.jdbcTemplate.query(this.findAllPagingQueryProvider.generateRemainingPagesQuery(pageSize),
-                                this.rowMapper, startAfterValue);
+                        allConfigurations.subList(Math.min(startIndex, allConfigurations.size()), endIndex);
                 for (final SchedulerConfiguration schedulerConfiguration : schedulerConfigurations) {
                     this.schedulerConfigurationValueDAO.attachValues(schedulerConfiguration);
                 }

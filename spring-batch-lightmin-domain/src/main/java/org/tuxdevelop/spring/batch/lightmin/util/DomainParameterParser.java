@@ -1,9 +1,9 @@
 package org.tuxdevelop.spring.batch.lightmin.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.JobParameter;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.job.parameters.JobParameter;
+import org.springframework.batch.core.job.parameters.JobParameters;
+import org.springframework.batch.core.job.parameters.JobParametersBuilder;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.text.ParseException;
@@ -162,10 +162,9 @@ public final class DomainParameterParser {
      * @return a String representation of {@link JobParameters}
      */
     public static String parseJobParametersToString(final JobParameters jobParameters) {
-        final Map<String, JobParameter> jobParametersMap = jobParameters.getParameters();
         final Map<String, Object> paramatersMap = new HashMap<>();
-        for (final Entry<String, JobParameter> entry : jobParametersMap.entrySet()) {
-            paramatersMap.put(entry.getKey(), entry.getValue().getValue());
+        for (final JobParameter<?> parameter : jobParameters) {
+            paramatersMap.put(parameter.name(), parameter.value());
         }
         return parseParameterMapToString(paramatersMap);
     }

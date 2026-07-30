@@ -16,7 +16,7 @@ import java.util.Map;
  * @author Marcel Becker
  * @version 0.1
  */
-@ResponseBody
+@RestController
 @RequestMapping("/")
 public class JobRestController extends AbstractRestController implements InitializingBean {
 

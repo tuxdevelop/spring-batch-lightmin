@@ -2,11 +2,15 @@ package org.tuxdevelop.spring.batch.lightmin.batch.dao;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.*;
-import org.springframework.batch.core.repository.dao.JdbcJobExecutionDao;
-import org.springframework.batch.item.database.Order;
-import org.springframework.batch.item.database.PagingQueryProvider;
-import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.job.*;
+import org.springframework.batch.core.job.parameters.*;
+import org.springframework.batch.core.step.*;
+import org.springframework.batch.core.repository.dao.jdbc.JdbcJobExecutionDao;
+import org.springframework.batch.infrastructure.item.database.Order;
+import org.springframework.batch.infrastructure.item.database.PagingQueryProvider;
+import org.springframework.batch.infrastructure.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,6 +21,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -45,16 +50,10 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements 
             return this.getJdbcTemplate().query(this.byJobInstanceIdExecutionsPagingQueryProvider.generateFirstPageQuery(count),
                     new JobExecutionRowMapper(jobInstance), jobInstance.getInstanceId());
         }
-        try {
-            final Long startAfterValue = this.getJdbcTemplate().queryForObject(
-                    this.byJobInstanceIdExecutionsPagingQueryProvider.generateJumpToItemQuery(start, count), Long.class,
-                    jobInstance.getInstanceId());
-            return this.getJdbcTemplate().query(
-                    this.byJobInstanceIdExecutionsPagingQueryProvider.generateRemainingPagesQuery(count),
-                    new JobExecutionRowMapper(jobInstance), jobInstance.getInstanceId(), startAfterValue);
-        } catch (final IncorrectResultSizeDataAccessException e) {
-            return Collections.emptyList();
-        }
+        final List<JobExecution> executions = this.getJdbcTemplate().query(
+                this.byJobInstanceIdExecutionsPagingQueryProvider.generateFirstPageQuery(start + count),
+                new JobExecutionRowMapper(jobInstance), jobInstance.getInstanceId());
+        return executions.subList(Math.min(start, executions.size()), executions.size());
     }
 
     @Override
@@ -68,14 +67,10 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements 
             return this.getJdbcTemplate().query(this.byJobNamePagingQueryProvider.generateFirstPageQuery(count),
                     new JobExecutionRowMapper(), jobName);
         }
-        try {
-            final Long startAfterValue = this.getJdbcTemplate().queryForObject(
-                    this.byJobNamePagingQueryProvider.generateJumpToItemQuery(start, count), Long.class, jobName);
-            return this.getJdbcTemplate().query(this.byJobNamePagingQueryProvider.generateRemainingPagesQuery(count),
-                    new JobExecutionRowMapper(), jobName, startAfterValue);
-        } catch (final IncorrectResultSizeDataAccessException e) {
-            return Collections.emptyList();
-        }
+        final List<JobExecution> executions = this.getJdbcTemplate().query(
+                this.byJobNamePagingQueryProvider.generateFirstPageQuery(start + count),
+                new JobExecutionRowMapper(), jobName);
+        return executions.subList(Math.min(start, executions.size()), executions.size());
     }
 
     @Override
@@ -115,26 +110,28 @@ public class JdbcLightminJobExecutionDao extends JdbcJobExecutionDao implements 
         @Override
         public JobExecution mapRow(final ResultSet resultSet, final int rowNumber) throws SQLException {
             final Long id = resultSet.getLong(1);
-            final String jobConfigurationLocation = resultSet.getString(10);
             if (this.jobParameters == null) {
                 this.jobParameters = JdbcLightminJobExecutionDao.this.getJobParameters(id);
             }
 
-            final JobExecution jobExecution;
-            if (this.jobInstance == null) {
-                jobExecution = new JobExecution(id, this.jobParameters, jobConfigurationLocation);
-            } else {
-                jobExecution = new JobExecution(this.jobInstance, id, this.jobParameters, jobConfigurationLocation);
-            }
+            final JobInstance instance = this.jobInstance == null
+                    ? new JobInstance(resultSet.getLong(10), resultSet.getString(11))
+                    : this.jobInstance;
+            final JobExecution jobExecution = new JobExecution(id, instance, this.jobParameters);
 
-            jobExecution.setStartTime(resultSet.getTimestamp(2));
-            jobExecution.setEndTime(resultSet.getTimestamp(3));
+            jobExecution.setStartTime(toLocalDateTime(resultSet, 2));
+            jobExecution.setEndTime(toLocalDateTime(resultSet, 3));
             jobExecution.setStatus(BatchStatus.valueOf(resultSet.getString(4)));
             jobExecution.setExitStatus(new ExitStatus(resultSet.getString(5), resultSet.getString(6)));
-            jobExecution.setCreateTime(resultSet.getTimestamp(7));
-            jobExecution.setLastUpdated(resultSet.getTimestamp(8));
+            jobExecution.setCreateTime(toLocalDateTime(resultSet, 7));
+            jobExecution.setLastUpdated(toLocalDateTime(resultSet, 8));
             jobExecution.setVersion(resultSet.getInt(9));
             return jobExecution;
+        }
+
+        private LocalDateTime toLocalDateTime(final ResultSet resultSet, final int column) throws SQLException {
+            final java.sql.Timestamp timestamp = resultSet.getTimestamp(column);
+            return timestamp == null ? null : timestamp.toLocalDateTime();
         }
     }
 

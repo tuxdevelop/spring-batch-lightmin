@@ -7,12 +7,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.parameters.JobParametersBuilder;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.NoSuchJobException;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -121,7 +121,7 @@ public class DefaultListenerServiceTest {
         this.listenerService = new DefaultListenerService(this.beanRegistrar, this.jobRegistry, this.jobRepository);
         ReflectionTestUtils.setField(this.listenerService, "applicationContext", this.applicationContext);
         this.job = DomainTestHelper.createJob("testJob");
-        this.jobLauncher = new SimpleJobLauncher();
+        this.jobLauncher = new TaskExecutorJobLauncher();
     }
 
 }

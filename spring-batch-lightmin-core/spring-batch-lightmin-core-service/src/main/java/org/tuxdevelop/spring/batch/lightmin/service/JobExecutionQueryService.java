@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
 
-import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.job.JobExecution;
 
 import java.util.List;
 import java.util.Map;

@@ -2,7 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.scheduler;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
+import org.springframework.batch.core.job.Job;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
@@ -53,7 +53,7 @@ public class CronScheduler extends AbstractScheduler {
     @Override
     public void schedule() {
         log.info("Scheduling: " + this.jobRunner.getJob().getName() +
-                " with Parameters: " + this.jobRunner.getJobParameters().toProperties());
+                " with Parameters: " + this.jobRunner.getJobParameters());
         this.threadPoolTaskScheduler.schedule(this.jobRunner, this.trigger);
         this.setStatus(SchedulerStatus.RUNNING);
     }

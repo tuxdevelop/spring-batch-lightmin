@@ -20,6 +20,7 @@ public class JdbcTestConfiguration {
     public DataSource dataSource() {
         final EmbeddedDatabaseBuilder embeddedDatabaseBuilder = new EmbeddedDatabaseBuilder();
         return embeddedDatabaseBuilder
+                .setName("scheduler;NON_KEYWORDS=VALUE")
                 .addScript("classpath:org/tuxdevelop/spring/batch/lightmin/server/scheduler/repository/drop_scheduler_schema_h2.sql")
                 .addScript("classpath:org/tuxdevelop/spring/batch/lightmin/server/scheduler/repository/scheduler_schema_h2.sql")
                 .setType(EmbeddedDatabaseType.H2)

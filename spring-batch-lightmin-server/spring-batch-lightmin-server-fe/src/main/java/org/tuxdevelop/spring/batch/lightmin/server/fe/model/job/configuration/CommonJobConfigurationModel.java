@@ -4,7 +4,7 @@ import lombok.Data;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.common.JobIncremeterTypeModel;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.validator.ValidJobParameters;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.Map;
 
 @Data

@@ -8,7 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.view.RedirectView;
 import org.tuxdevelop.spring.batch.lightmin.server.configuration.LightminServerCoreProperties;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @author Marcel Becker

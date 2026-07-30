@@ -4,10 +4,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
 import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServerProperties;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.web.server.autoconfigure.ServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.core.env.Environment;
@@ -62,11 +63,11 @@ public class LightminClientProperties {
     private final WebEndpointProperties webEndpointProperties;
 
     @Autowired
-    public LightminClientProperties(final ManagementServerProperties managementServerProperties,
-                                    final ServerProperties serverProperties,
+    public LightminClientProperties(final ObjectProvider<ManagementServerProperties> managementServerProperties,
+                                    final ObjectProvider<ServerProperties> serverProperties,
                                     @Value("${spring.batch.lightmin.application-name:null}") final String name,
                                     @Value("${endpoints.health.id:health}") final String healthEndpointId,
-                                    final WebEndpointProperties webEndpointProperties,
+                                    final ObjectProvider<WebEndpointProperties> webEndpointProperties,
                                     final Environment environment) {
         if (name == null || "null".equals(name)) {
             this.name = environment.getProperty("spring.application.name", "spring-boot-application");
@@ -74,9 +75,9 @@ public class LightminClientProperties {
             this.name = name;
         }
         this.healthEndpointId = healthEndpointId;
-        this.managementServerProperties = managementServerProperties;
-        this.serverProperties = serverProperties;
-        this.webEndpointProperties = webEndpointProperties;
+        this.managementServerProperties = managementServerProperties.getIfAvailable(ManagementServerProperties::new);
+        this.serverProperties = serverProperties.getIfAvailable(ServerProperties::new);
+        this.webEndpointProperties = webEndpointProperties.getIfAvailable(WebEndpointProperties::new);
     }
 
     public String getManagementUrl() {
@@ -91,7 +92,7 @@ public class LightminClientProperties {
                 resultManagementUrl =
                         this.append(
                                 this.append(this.getServiceUrl(),
-                                        this.managementServerProperties.getServlet().getContextPath()),
+                                        this.managementServerProperties.getBasePath()),
                                 this.webEndpointProperties.getBasePath());
             } else {
                 if (this.managementPort == null) {
@@ -103,13 +104,13 @@ public class LightminClientProperties {
                         final String hostAddress = this.getHostAddress(address);
                         resultManagementUrl = this.append(
                                 this.append(this.createLocalUri(hostAddress, this.managementPort),
-                                        this.managementServerProperties.getServlet().getContextPath()),
+                                        this.managementServerProperties.getBasePath()),
                                 this.webEndpointProperties.getBasePath());
 
                     } else {
                         resultManagementUrl = this.append(
                                 this.append(this.createLocalUri(this.determineHost(), this.managementPort),
-                                        this.managementServerProperties.getServlet().getContextPath()),
+                                        this.managementServerProperties.getBasePath()),
                                 this.webEndpointProperties.getBasePath());
                     }
                 }

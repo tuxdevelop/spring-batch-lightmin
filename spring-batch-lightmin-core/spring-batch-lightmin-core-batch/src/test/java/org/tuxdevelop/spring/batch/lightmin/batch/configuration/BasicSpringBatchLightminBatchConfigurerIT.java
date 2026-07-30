@@ -3,7 +3,6 @@ package org.tuxdevelop.spring.batch.lightmin.batch.configuration;
 import org.assertj.core.api.BDDAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,8 +17,9 @@ public class BasicSpringBatchLightminBatchConfigurerIT {
     private ApplicationContext applicationContext;
 
     @Test
-    public void testBatchConfigurer() {
-        final BatchConfigurer batchConfigurer = this.applicationContext.getBean(BatchConfigurer.class);
-        BDDAssertions.then(batchConfigurer instanceof BasicSpringBatchLightminBatchConfigurer).isTrue();
+    public void testBatchInfrastructure() {
+        final BasicSpringBatchLightminBatchConfigurer infrastructure = this.applicationContext.getBean(BasicSpringBatchLightminBatchConfigurer.class);
+        BDDAssertions.then(infrastructure).isNotNull();
+        BDDAssertions.then(infrastructure.getJobRepository()).isNotNull();
     }
 }

@@ -13,7 +13,7 @@ import org.tuxdevelop.spring.batch.lightmin.repository.JobConfigurationRepositor
 import org.tuxdevelop.spring.batch.lightmin.validation.validator.CronExpressionValidator;
 import org.tuxdevelop.spring.batch.lightmin.validation.validator.PathValidator;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -2,10 +2,10 @@ package org.tuxdevelop.spring.batch.lightmin.service;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.job.parameters.JobParameters;
+import org.springframework.batch.core.job.parameters.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.SyncTaskExecutor;
@@ -23,7 +23,7 @@ final class ServiceUtil {
 
     static JobLauncher createJobLauncher(final TaskExecutorType taskExecutorType,
                                          final JobRepository jobRepository) {
-        final SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
+        final TaskExecutorJobLauncher jobLauncher = new TaskExecutorJobLauncher();
         jobLauncher.setJobRepository(jobRepository);
         if (TaskExecutorType.ASYNCHRONOUS.equals(taskExecutorType)) {
             final SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor();

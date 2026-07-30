@@ -3,13 +3,13 @@ package org.tuxdevelop.spring.batch.lightmin.client.api.controller;
 
 import lombok.Getter;
 import org.junit.runner.RunWith;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.job.parameters.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
@@ -80,8 +80,10 @@ public abstract class CommonControllerIT {
 
     protected void launchSimpleJob() {
         try {
-            final JobExecution execution = this.jobLauncher.run(this.simpleJob, new JobParametersBuilder().addDate("date", new
-                    Date()).toJobParameters());
+            final JobExecution execution = this.jobLauncher.run(this.simpleJob, new JobParametersBuilder()
+                    .addDate("date", new Date())
+                    .addLong("run.id", System.nanoTime())
+                    .toJobParameters());
             this.launchedJobExecutionId = execution.getId();
             this.launchedJobInstanceId = execution.getJobInstance().getId();
             this.launchedStepExecutionId = execution.getStepExecutions().iterator().next().getId();

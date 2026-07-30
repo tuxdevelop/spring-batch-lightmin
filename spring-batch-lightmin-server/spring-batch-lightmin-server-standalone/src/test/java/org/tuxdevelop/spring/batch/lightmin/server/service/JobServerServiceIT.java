@@ -2,8 +2,8 @@ package org.tuxdevelop.spring.batch.lightmin.server.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.parameters.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.*;
@@ -30,7 +30,7 @@ public abstract class JobServerServiceIT {
     private Long launchedJobExecutionId;
     private Long launchedJobInstanceId;
     private Long launchedStepExecutionId;
-    private org.springframework.batch.core.JobExecution jobExecution;
+    private org.springframework.batch.core.job.JobExecution jobExecution;
 
     @Test
     public void testGetJobExecution() {
@@ -126,13 +126,13 @@ public abstract class JobServerServiceIT {
     @Before
     public void init() {
         try {
-            final org.springframework.batch.core.JobExecution execution = this.jobLauncher.run(this.simpleJob, new JobParametersBuilder().addLong("time", System
+            final org.springframework.batch.core.job.JobExecution execution = this.jobLauncher.run(this.simpleJob, new JobParametersBuilder().addLong("time", System
                     .currentTimeMillis())
                     .toJobParameters());
             this.launchedJobExecutionId = execution.getId();
             this.launchedJobInstanceId = execution.getJobInstance().getId();
-            final Collection<org.springframework.batch.core.StepExecution> stepExecutions = execution.getStepExecutions();
-            for (final org.springframework.batch.core.StepExecution stepExecution : stepExecutions) {
+            final Collection<org.springframework.batch.core.step.StepExecution> stepExecutions = execution.getStepExecutions();
+            for (final org.springframework.batch.core.step.StepExecution stepExecution : stepExecutions) {
                 this.launchedStepExecutionId = stepExecution.getId();
             }
             this.jobExecution = execution;

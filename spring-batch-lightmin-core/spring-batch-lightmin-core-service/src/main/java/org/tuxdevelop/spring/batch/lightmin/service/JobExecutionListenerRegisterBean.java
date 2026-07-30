@@ -2,8 +2,8 @@ package org.tuxdevelop.spring.batch.lightmin.service;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecutionListener;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.listener.JobExecutionListener;
 import org.springframework.batch.core.job.SimpleJob;
 import org.springframework.batch.core.job.flow.FlowJob;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;

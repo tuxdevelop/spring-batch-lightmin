@@ -19,7 +19,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.fe.model.listener.JobListener
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.listener.ListenerTypeModel;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.service.JobListenerFeService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @Validated

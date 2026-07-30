@@ -1,6 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.event;
 
-import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.job.JobExecution;
 
 import java.io.Serializable;
 

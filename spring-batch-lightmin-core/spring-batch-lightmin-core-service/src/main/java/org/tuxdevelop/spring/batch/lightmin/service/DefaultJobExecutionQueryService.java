@@ -2,7 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.service;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.job.JobExecution;
 import org.tuxdevelop.spring.batch.lightmin.batch.dao.LightminJobExecutionDao;
 
 import java.util.List;

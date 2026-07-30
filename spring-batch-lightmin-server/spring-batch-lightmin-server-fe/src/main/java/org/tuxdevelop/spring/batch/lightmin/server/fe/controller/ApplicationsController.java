@@ -9,7 +9,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.application.ApplicationClusterModel;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.service.LightminClientApplicationFeService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller

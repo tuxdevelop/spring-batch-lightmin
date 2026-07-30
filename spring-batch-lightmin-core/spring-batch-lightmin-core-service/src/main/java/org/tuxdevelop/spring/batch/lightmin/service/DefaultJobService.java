@@ -1,12 +1,12 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
-import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.job.JobInstance;
+import org.springframework.batch.core.job.parameters.JobParameters;
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.repository.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.util.CollectionUtils;
@@ -41,13 +41,12 @@ public class DefaultJobService implements JobService {
 
     @Override
     public int getJobInstanceCount(final String jobName) {
-        int jobInstanceCount = 0;
         try {
-            jobInstanceCount = this.jobExplorer.getJobInstanceCount(jobName);
+            return Math.toIntExact(this.jobExplorer.getJobInstanceCount(jobName));
         } catch (final NoSuchJobException e) {
             log.info(e.getMessage(), e);
+            return 0;
         }
-        return jobInstanceCount;
     }
 
     @Override
@@ -62,14 +61,7 @@ public class DefaultJobService implements JobService {
 
     @Override
     public Job getJobByName(final String jobName) {
-        Job job;
-        try {
-            job = this.jobRegistry.getJob(jobName);
-        } catch (final NoSuchJobException e) {
-            log.info("Could not find job with jobName: " + jobName);
-            job = null;
-        }
-        return job;
+        return this.jobRegistry.getJob(jobName);
     }
 
     @Override
@@ -110,7 +102,7 @@ public class DefaultJobService implements JobService {
                 final JobInstance jobInstance = this.jobExplorer.getJobInstance(jobExecution.getJobInstance().getId());
                 jobExecution.setJobInstance(jobInstance);
             } else {
-                throw new SpringBatchLightminApplicationException("JobInstance of JobExecution with id:" + jobExecution.getJobId() + "is null, cannot provide information");
+                throw new SpringBatchLightminApplicationException("JobInstance of JobExecution with id:" + jobExecution.getId() + "is null, cannot provide information");
             }
         } else {
             throw new SpringBatchLightminApplicationException("jobExecution is null, cannot provide information");

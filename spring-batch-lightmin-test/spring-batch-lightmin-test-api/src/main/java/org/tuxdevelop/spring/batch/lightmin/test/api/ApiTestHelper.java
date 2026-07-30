@@ -20,7 +20,7 @@ public class ApiTestHelper {
         jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
         return jobConfiguration;
     }
-
+    
     public static JobConfiguration createJobConfiguration(final JobListenerConfiguration jobListenerConfiguration) {
         final org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration jobConfiguration =
                 createJobConfigurationApi();

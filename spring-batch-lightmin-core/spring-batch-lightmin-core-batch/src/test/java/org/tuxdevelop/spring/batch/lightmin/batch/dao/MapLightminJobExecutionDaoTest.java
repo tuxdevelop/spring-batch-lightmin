@@ -3,18 +3,17 @@ package org.tuxdevelop.spring.batch.lightmin.batch.dao;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.explore.JobExplorer;
-import org.springframework.batch.core.explore.support.MapJobExplorerFactoryBean;
-import org.springframework.batch.core.repository.dao.JobExecutionDao;
-import org.springframework.batch.core.repository.dao.JobInstanceDao;
-import org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean;
-import org.tuxdevelop.spring.batch.lightmin.test.domain.DomainTestHelper;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.job.JobInstance;
+import org.springframework.batch.core.job.parameters.JobParametersBuilder;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.repository.explore.JobExplorer;
+import org.springframework.batch.infrastructure.item.ExecutionContext;
+import org.tuxdevelop.spring.batch.lightmin.batch.configuration.BasicSpringBatchLightminBatchConfigurer;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +25,7 @@ public class MapLightminJobExecutionDaoTest {
 
     private MapLightminJobExecutionDao mapLightminJobExecutionDao;
     private JobExplorer jobExplorer;
-    private JobExecutionDao jobExecutionDao;
-    private JobInstanceDao jobInstanceDao;
+    private JobRepository jobRepository;
     private JobInstance jobInstance;
 
     @Test
@@ -168,45 +166,26 @@ public class MapLightminJobExecutionDaoTest {
 
     @Before
     public void init() throws Exception {
-        final MapJobRepositoryFactoryBean mapJobRepositoryFactoryBean = new MapJobRepositoryFactoryBean();
-        mapJobRepositoryFactoryBean.getObject();
-        this.jobExecutionDao = mapJobRepositoryFactoryBean.getJobExecutionDao();
-        this.jobInstanceDao = mapJobRepositoryFactoryBean.getJobInstanceDao();
-        final MapJobExplorerFactoryBean mapJobExplorerFactoryBean = new MapJobExplorerFactoryBean(
-                mapJobRepositoryFactoryBean);
-        this.jobExplorer = mapJobExplorerFactoryBean.getObject();
+        final BasicSpringBatchLightminBatchConfigurer infrastructure = new BasicSpringBatchLightminBatchConfigurer();
+        this.jobRepository = infrastructure.getJobRepository();
+        this.jobExplorer = infrastructure.getJobExplorer();
         this.mapLightminJobExecutionDao = new MapLightminJobExecutionDao(this.jobExplorer);
-        this.jobInstance = this.jobInstanceDao.createJobInstance("someJob", new JobParametersBuilder().toJobParameters());
-        final List<JobExecution> jobExecutions = DomainTestHelper.createJobExecutions(JOB_EXECUTION_COUNT);
-        for (final JobExecution jobExecution : jobExecutions) {
-            jobExecution.setId(null);
-            jobExecution.setJobInstance(this.jobInstance);
-            this.jobExecutionDao.saveJobExecution(jobExecution);
+        this.jobInstance = this.jobRepository.createJobInstance("someJob", new JobParametersBuilder().toJobParameters());
+        for (int i = 0; i < JOB_EXECUTION_COUNT; i++) {
+            this.jobRepository.createJobExecution(this.jobInstance,
+                    new JobParametersBuilder().addLong("run.id", (long) i).toJobParameters(), new ExecutionContext());
         }
     }
 
     private void createJobExecutionsForQuery() {
-        this.jobInstance = this.jobInstanceDao.createJobInstance("queryJob", new JobParametersBuilder().toJobParameters());
-        final List<JobExecution> jobExecutions = DomainTestHelper.createJobExecutions(JOB_EXECUTION_COUNT);
-        for (final JobExecution jobExecution : jobExecutions) {
-            final Date startTime = new Date(System.currentTimeMillis() - 100);
-            final Date endTime = new Date(System.currentTimeMillis() + 100);
-            jobExecution.setId(null);
-            jobExecution.setJobInstance(this.jobInstance);
-            jobExecution.setStartTime(startTime);
-            jobExecution.setEndTime(endTime);
-            jobExecution.setExitStatus(ExitStatus.COMPLETED);
-            this.jobExecutionDao.saveJobExecution(jobExecution);
-        }
-        for (final JobExecution jobExecution : jobExecutions) {
-            final Date startTime = new Date(System.currentTimeMillis() - 100);
-            final Date endTime = new Date(System.currentTimeMillis() + 100);
-            jobExecution.setId(null);
-            jobExecution.setJobInstance(this.jobInstance);
-            jobExecution.setStartTime(startTime);
-            jobExecution.setEndTime(endTime);
-            jobExecution.setExitStatus(ExitStatus.FAILED);
-            this.jobExecutionDao.saveJobExecution(jobExecution);
+        this.jobInstance = this.jobRepository.createJobInstance("queryJob", new JobParametersBuilder().toJobParameters());
+        for (int i = 0; i < JOB_EXECUTION_COUNT * 2; i++) {
+            final JobExecution jobExecution = this.jobRepository.createJobExecution(this.jobInstance,
+                    new JobParametersBuilder().addLong("query.run.id", (long) i).toJobParameters(), new ExecutionContext());
+            jobExecution.setStartTime(LocalDateTime.now().minusSeconds(1));
+            jobExecution.setEndTime(LocalDateTime.now().plusSeconds(1));
+            jobExecution.setExitStatus(i < JOB_EXECUTION_COUNT ? ExitStatus.COMPLETED : ExitStatus.FAILED);
+            this.jobRepository.update(jobExecution);
         }
     }
 

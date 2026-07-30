@@ -1,8 +1,8 @@
 package org.tuxdevelop.spring.batch.lightmin.server.scheduler.repository;
 
-import org.springframework.batch.item.database.Order;
-import org.springframework.batch.item.database.PagingQueryProvider;
-import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
+import org.springframework.batch.infrastructure.item.database.Order;
+import org.springframework.batch.infrastructure.item.database.PagingQueryProvider;
+import org.springframework.batch.infrastructure.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -168,10 +168,9 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
                     this.rowMapper);
         }
         try {
-            final Long startAfterValue = this.jdbcTemplate.queryForObject(
-                    this.findAllPagingQueryProvider.generateJumpToItemQuery(startIndex, pageSize), Long.class);
-            return this.jdbcTemplate.query(this.findAllPagingQueryProvider.generateRemainingPagesQuery(pageSize),
-                    this.rowMapper, startAfterValue);
+            final List<SchedulerExecution> allExecutions = this.findAll();
+            return allExecutions.subList(Math.min(startIndex, allExecutions.size()),
+                    Math.min(startIndex + pageSize, allExecutions.size()));
         } catch (final IncorrectResultSizeDataAccessException e) {
             return Collections.emptyList();
         }
@@ -206,10 +205,9 @@ public class JdbcSchedulerExecutionRepository implements SchedulerExecutionRepos
                     this.rowMapper, state);
         }
         try {
-            final Long startAfterValue = this.jdbcTemplate.queryForObject(
-                    this.byStatePagingQueryProvider.generateJumpToItemQuery(startIndex, pageSize), Long.class, state);
-            return this.jdbcTemplate.query(this.byStatePagingQueryProvider.generateRemainingPagesQuery(pageSize),
-                    this.rowMapper, state, startAfterValue);
+            final List<SchedulerExecution> stateExecutions = this.findByState(state);
+            return stateExecutions.subList(Math.min(startIndex, stateExecutions.size()),
+                    Math.min(startIndex + pageSize, stateExecutions.size()));
         } catch (final IncorrectResultSizeDataAccessException e) {
             return Collections.emptyList();
         }

@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.documentation.api.client;
 
 import io.restassured.http.ContentType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobLaunch;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
@@ -15,7 +15,7 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
+import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
 public class JobLauncherRestControllerDocumentation extends AbstractServiceDocumentation {
 

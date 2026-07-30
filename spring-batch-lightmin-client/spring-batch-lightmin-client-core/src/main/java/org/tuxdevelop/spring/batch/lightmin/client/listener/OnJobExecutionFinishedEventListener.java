@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.client.listener;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.job.JobExecution;
 import org.springframework.context.ApplicationListener;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.JobExecutionEventInfo;
 import org.tuxdevelop.spring.batch.lightmin.client.publisher.JobExecutionEventPublisher;
@@ -29,7 +29,7 @@ public class OnJobExecutionFinishedEventListener implements ApplicationListener<
     public void onApplicationEvent(final JobExecutionEvent jobExecutionEvent) {
         final JobExecution jobExecution = jobExecutionEvent.getJobExecution();
         if (jobExecution != null) {
-            log.info(jobExecution.getJobInstance().getJobName() + ", Status: " + jobExecution.getStatus().getBatchStatus() +
+            log.info(jobExecution.getJobInstance().getJobName() + ", Status: " + jobExecution.getStatus() +
                     ", Exit: " + jobExecution.getExitStatus().getExitCode());
             final JobExecutionEventInfo jobExecutionEventInfo =
                     EventTransformer.transformToJobExecutionEventInfo(

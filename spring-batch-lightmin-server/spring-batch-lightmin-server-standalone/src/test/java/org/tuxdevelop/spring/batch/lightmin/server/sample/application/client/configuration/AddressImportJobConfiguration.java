@@ -1,21 +1,23 @@
 package org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.configuration;
 
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.LineMapper;
-import org.springframework.batch.item.file.mapping.DefaultLineMapper;
-import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.batch.infrastructure.item.ItemWriter;
+import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
+import org.springframework.batch.infrastructure.item.file.LineMapper;
+import org.springframework.batch.infrastructure.item.file.mapping.DefaultLineMapper;
+import org.springframework.batch.infrastructure.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.batch.infrastructure.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.BatchTaskAddress;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.domain.ProcessingState;
 import org.tuxdevelop.spring.batch.lightmin.server.sample.application.client.persistence.dao.BatchTaskAddressDao;
@@ -28,9 +30,8 @@ public class AddressImportJobConfiguration {
     @Bean
     public Job addressImportJob(final Step addressImportStep,
                                 final Step deleteFileStep,
-                                final JobBuilderFactory jobBuilderFactory) {
-        return jobBuilderFactory
-                .get("addressImportJob")
+                                final JobRepository jobRepository) {
+        return new JobBuilder("addressImportJob", jobRepository)
                 .start(addressImportStep)
                 .next(deleteFileStep)
                 .build();
@@ -38,20 +39,20 @@ public class AddressImportJobConfiguration {
 
     @Bean
     public Step deleteFileStep(final Tasklet deleteFileTasklet,
-                               final StepBuilderFactory stepBuilderFactory) {
-        return stepBuilderFactory
-                .get("deleteFileStep")
-                .tasklet(deleteFileTasklet)
+                               final JobRepository jobRepository,
+                               final PlatformTransactionManager transactionManager) {
+        return new StepBuilder("deleteFileStep", jobRepository)
+                .tasklet(deleteFileTasklet, transactionManager)
                 .build();
     }
 
     @Bean
     public Step addressImportStep(final FlatFileItemReader<BatchTaskAddress> fileItemReader,
                                   final ItemWriter<BatchTaskAddress> addressDatabaseWriter,
-                                  final StepBuilderFactory stepBuilderFactory) {
-        return stepBuilderFactory
-                .get("addressImportStep")
-                .<BatchTaskAddress, BatchTaskAddress>chunk(1)
+                                  final JobRepository jobRepository,
+                                  final PlatformTransactionManager transactionManager) {
+        return new StepBuilder("addressImportStep", jobRepository)
+                .<BatchTaskAddress, BatchTaskAddress>chunk(1, transactionManager)
                 .reader(fileItemReader)
                 .writer(addressDatabaseWriter)
                 .build();
@@ -62,12 +63,10 @@ public class AddressImportJobConfiguration {
     public FlatFileItemReader<BatchTaskAddress> fileItemReader(@Value("#{jobParameters['fileSource']}") final String pathToFile,
                                                                final LineMapper<BatchTaskAddress> lineMapper) throws
             Exception {
-        final FlatFileItemReader<BatchTaskAddress> reader = new FlatFileItemReader<>();
+        final FlatFileItemReader<BatchTaskAddress> reader = new FlatFileItemReader<>(lineMapper);
         reader.setEncoding("utf-8");
-        reader.setLineMapper(lineMapper);
         reader.setLinesToSkip(1);
         reader.setResource(new FileSystemResource(pathToFile));
-        reader.afterPropertiesSet();
         return reader;
     }
 

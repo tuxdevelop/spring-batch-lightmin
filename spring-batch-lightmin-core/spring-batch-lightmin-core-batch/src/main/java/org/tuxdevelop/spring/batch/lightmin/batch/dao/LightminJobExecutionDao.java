@@ -1,7 +1,7 @@
 package org.tuxdevelop.spring.batch.lightmin.batch.dao;
 
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.job.JobInstance;
 
 import java.util.List;
 import java.util.Map;

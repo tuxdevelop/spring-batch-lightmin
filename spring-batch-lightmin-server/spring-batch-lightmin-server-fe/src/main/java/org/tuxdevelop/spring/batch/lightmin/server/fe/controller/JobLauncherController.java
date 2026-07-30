@@ -15,7 +15,7 @@ import org.tuxdevelop.spring.batch.lightmin.server.fe.model.common.ApplicationCo
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.job.launcher.JobLauncherModel;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.service.JobLauncherFeService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Slf4j
 @Controller

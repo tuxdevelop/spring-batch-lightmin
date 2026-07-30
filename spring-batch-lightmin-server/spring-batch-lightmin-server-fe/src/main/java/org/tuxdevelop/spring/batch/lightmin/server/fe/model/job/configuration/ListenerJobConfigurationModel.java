@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.tuxdevelop.spring.batch.lightmin.server.fe.model.listener.JobListenerModel;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
